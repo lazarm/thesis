@@ -1,25 +1,9 @@
-#include <CustomPoint.h>
 #include <deque>
 #include <CGAL/intersections.h>
 #include <unordered_map>
+#include <CustomPoint.h>
 
 using namespace std;
-
-class Point
-{
-private:
-	int dist;
-	int Nr;
-	Point_2 p;
-
-public:
-	Point() {};
-	~Point() {};
-	Point(Point_2 point)
-	{
-		p = point;
-	}
-};
 
 template <class Iterator>
 vector< vector<Point_2> > constructW(Iterator begin, Iterator end, Point_2 r, Segment_2 st)
@@ -29,6 +13,7 @@ vector< vector<Point_2> > constructW(Iterator begin, Iterator end, Point_2 r, Se
 	// Delaunay triangulation
 	DT dt;
 	dt.insert(begin, end);
+	cout << dt.number_of_vertices() << " " << dt.number_of_faces() << endl;
 	//while building the tree, we need to set nr value for each p with retrieving p's parent. To do this,
 	// we build a hashmap that for each p stores its parent. We need that information also for optimization problem
 	// FI(A,B), because a and b mustn't be neighbours in a tree (ab € Er)
@@ -77,9 +62,9 @@ vector< vector<Point_2> > constructW(Iterator begin, Iterator end, Point_2 r, Se
 		
 		while (Q.size() > 0) {
 			Delaunay_vertex_handle q = Q.front();
-			cout << q->point().x() << "  " << q->point().y() << endl;
+			//cout << q->point().x() << "  " << q->point().y() << endl;
 			Q.pop_front();
-			cout << "qSize " << Q.size() << endl;
+			//cout << "qSize " << Q.size() << endl;
 			DT::Vertex_circulator p = dt.incident_vertices(q), done(p);
 			do {
 				//std::cout << "q:  " << q->point().x() << ", " << q->point().y() << "   , p: " << p->point().x() << ", " << p->point().y() << std::endl;
@@ -88,7 +73,7 @@ vector< vector<Point_2> > constructW(Iterator begin, Iterator end, Point_2 r, Se
 				Point_2 *pPoint;
 				pPoint = &p->point();
 				tuple<bool, Point_2> nearest = nnWi.query(*pPoint);
-				cout << p->point() << endl;
+				//cout << p->point() << endl;
 				//std::cout << "tocka: " << std::get<1>(nearest).x() << ", " << std::get<1>(nearest).y() << std::endl;
 				if (get<0>(nearest) == true && pPoint->getDist() == numeric_limits<int>::max()) {
 					pPoint->setDist(i);
@@ -96,7 +81,6 @@ vector< vector<Point_2> > constructW(Iterator begin, Iterator end, Point_2 r, Se
 					
 					wii.push_back(p);
 					Q.push_back(p);
-					wipi.push_back(*pPoint);
 					// p is added to Q and Wi either by q € Q and Wi-1 or r € Q and Wi
 					// if former is the case, p's parent is q, if latter, p's parent is r's parent
 					// use that info to check if segment p-parent(p) intersects st;
@@ -105,12 +89,15 @@ vector< vector<Point_2> > constructW(Iterator begin, Iterator end, Point_2 r, Se
 					if (qPoint->getDist() + 1 == i) {
 						parents[idi++] = qPoint;
 						pPoint->setNr(updateNr(qPoint->getNr(), *pPoint, *qPoint, st));
+						cout << "nr: " << pPoint->getNr() << endl;
 					}
 					else if (qPoint->getDist() == i) {
 						Point_2 *qParent = parents[qPoint->getId()];
 						parents[idi++] = qParent;
 						pPoint->setNr(updateNr(qParent->getNr(), *pPoint, *qParent, st));
+						cout << "nr: " << pPoint->getNr() << endl;
 					}
+					wipi.push_back(*pPoint);
 				}
 			} while (++p != done);
 		}
@@ -123,45 +110,49 @@ vector< vector<Point_2> > constructW(Iterator begin, Iterator end, Point_2 r, Se
 		i = i + 1;
 	}
 	for (auto it = parents.begin(); it != parents.end(); ++it) {
-		cout << it->first <<  "  |  " << it->second->x() << " " << it->second->y() << endl;
+		//cout << it->first <<  "  |  " << it->second->x() << " " << it->second->y() << endl;
 	}
 	return GPs;
 }
 
 int updateNr(int nr, Point_2 p, Point_2 q, Segment_2 st)
 {
+	int pnr = nr;
 	Segment_2 s(p, q);
+	//cout << "p: " << p.x() << " " << p.y() << "  |  q: " << q.x() << " " << q.y() << endl;
 	if (CGAL::do_intersect(s, st)) {
-		nr = (nr + 1) % 2;
+		cout << "intersect!" << endl;
+		pnr = (nr + 1) % 2;
 	}
-	return nr;
+	//cout << "pppppppnnnnnnnnrrrrr " << pnr << endl;
+	return pnr;
 }
 
 /*
 after some tree Tr is built and p € P has defined values for dist(r,p) and N(r,p), put each p in L0,L1,R0 or R1
 */
 template <class Iterator>
-vector< vector<CustomPoint> > categorize(Iterator begin, Iterator end, Segment_2 st)
+vector< vector<Site_2> > categorize(Iterator begin, Iterator end, Segment_2 st)
 {
-	vector<CustomPoint> l0;
-	vector<CustomPoint> l1;
-	vector<CustomPoint> r0;
-	vector<CustomPoint> r1;
-	vector< vector<CustomPoint> > allSets;
+	vector<Site_2> l0;
+	vector<Site_2> l1;
+	vector<Site_2> r0;
+	vector<Site_2> r1;
+	vector< vector<Site_2> > allSets;
 
-	for (CustomPoint p = begin; p != end; ++p)
+	for (vector<Point_2>::iterator p = begin; p != end; ++p)
 	{
-		if (p.getNr() == 0 && onLeft(p, st)) {
-			l0.push_back(p);
+		if (p->getNr() == 0 && onLeft(*p, st)) {
+			l0.push_back(Site_2 (*p));
 		}
-		else if (p.getNr() == 1 && onLeft(p, st)) {
-			l1.push_back(p);
+		else if (p->getNr() == 1 && onLeft(*p, st)) {
+			l1.push_back(Site_2(*p));
 		}
-		else if (p.getNr() == 0 && !onLeft(p, st)) {
-			r0.push_back(p);
+		else if (p->getNr() == 0 && !onLeft(*p, st)) {
+			r0.push_back(Site_2 (*p));
 		}
-		else if (p.getNr() == 1 && !onLeft(p, st)) {
-			r1.push_back(p);
+		else if (p->getNr() == 1 && !onLeft(*p, st)) {
+			r1.push_back(Site_2 (*p));
 		}
 	}
 	allSets.push_back(l0);
@@ -171,11 +162,11 @@ vector< vector<CustomPoint> > categorize(Iterator begin, Iterator end, Segment_2
 	return allSets;
 }
 
-bool onLeft(CustomPoint p, Segment_2 st)
+bool onLeft(Point_2 p, Segment_2 st)
 {
 	Line_2 line = st.supporting_line();
 
-	if (line.oriented_side(p.point()) == CGAL::ON_POSITIVE_SIDE) return true;
+	if (line.oriented_side(p) == CGAL::ON_POSITIVE_SIDE) return true;
 	return false;
 
 	// what if a point lies on the line?
