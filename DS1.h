@@ -9,6 +9,7 @@
 #include <CGAL/Point_2.h>
 #include <CGAL/Segment_2.h>
 #include <CGAL/Line_2.h>
+#include <CGAL/Direction_2.h>
 #include <CGAL/spatial_sort.h>
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
 #include <CGAL/Delaunay_triangulation_2.h>
@@ -31,6 +32,7 @@ typedef CGAL::Voronoi_diagram_2<DT, AT, AP>                                    V
 //typedef CGAL::Point_2<Rep_class> Point;
 typedef Rep_class::Segment_2		  Segment_2;
 typedef Rep_class::Line_2			  Line_2;
+typedef Rep_class::Direction_2		  Direction_2;
 typedef AT::Site_2                    Site_2;
 typedef AT::Point_2                   Point_2;
 typedef VD::Locate_result             Locate_result;

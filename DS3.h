@@ -49,7 +49,8 @@ DS2<Iterator>::DS2() {
 
 template <class Iterator>
 void DS2<Iterator>::construct(Iterator begin, Iterator end) {
-	// points are supposed to already be sorted non-descreasingly by their weight
+	// points have to be sorted non-descreasingly by their weight
+	sort(begin, end, sortByDist());
 	setSize(end - begin);
 	// node nd stores ds1root as its value
 	Node<Iterator> *nd = new Node<Iterator>();
@@ -106,3 +107,8 @@ tuple<bool, Point_2> DS2<Iterator>::search(Point_2 q) {
 	Point_2 p = list.pointInsideLeaf();
 	return make_tuple(true, p);
 }
+
+struct sortByDist
+{
+	bool operator() (Point_2 L, Point_2 R) { return L.getDist() < R.getDist(); }
+};
