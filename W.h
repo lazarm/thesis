@@ -50,13 +50,14 @@ vector< vector<Point_2> > constructW(Iterator begin, Iterator end, Point_2 r, Se
 	sPoint = &sVertex->point();
 	sPoint->setDist(0);
 	sPoint->setNr(0);
+	categorize(&l0, &l1, &r0, &r1, sPoint, st);
 	wip.push_back({ *sPoint });
 	wi.push_back(sVertex);
 	int i = 1;
 	
 	while (wi.size() > 0) {
 		DS1<vector<Point_2>::iterator> nnWi;
-
+		cout << "w" << endl;
 		nnWi.construct(wip.begin(), wip.end());
 		deque<Delaunay_vertex_handle> Q;
 		copy(wi.begin(), wi.end(), back_inserter(Q));
@@ -64,16 +65,19 @@ vector< vector<Point_2> > constructW(Iterator begin, Iterator end, Point_2 r, Se
 		vector<Point_2> wipi;
 		
 		while (Q.size() > 0) {
+			cout << "q" << endl;
 			Delaunay_vertex_handle q = Q.front();
 			Q.pop_front();
 			DT::Vertex_circulator p = dt.incident_vertices(q), done(p);
 			do {
+				cout << "p" << endl;
 				// besides usual vertices, DT also stores an infinite vertex, which we have to exclude
 				if (dt.is_infinite(p->handle()) == true) { break; }
 				Point_2 *pPoint;
 				pPoint = &p->point();
 				tuple<bool, Point_2> nearest = nnWi.query(*pPoint);
 				if (get<0>(nearest) == true && pPoint->getDist() == numeric_limits<int>::max()) {
+					cout << "gotcha!" << endl;
 					pPoint->setDist(i);
 					Point_2 w(get<1>(nearest));
 					wii.push_back(p);
@@ -98,24 +102,29 @@ vector< vector<Point_2> > constructW(Iterator begin, Iterator end, Point_2 r, Se
 	return allSets;
 }
 
+bool onLeft(Point_2 *p, Segment_2 st)
+{
+	Line_2 line = st.supporting_line();
+
+	// if the point lies on negative (right side) of the segment, return false
+	// if the point lies on positive side or ON the segment, return true
+	if (line.oriented_side(*p) == CGAL::ON_NEGATIVE_SIDE) return false;
+	return true;
+
+}
+
 int updateNr(int nr, Point_2 p, Point_2 q, Segment_2 st)
 {
 	int pnr = nr;
 	Segment_2 s(p, q);
 	if (CGAL::do_intersect(s, st)) {
-		pnr = (nr + 1) % 2;
+		// it may be the case that p or q lies on the segment st. Poins lying on the segment are categorized as "left"
+		// points so we have to check that one point is left and the other one is right.
+		if ((onLeft(&p, st) && !onLeft(&q, st)) || (!onLeft(&p, st) && onLeft(&q, st))) {
+			pnr = (nr + 1) % 2;
+		}
 	}
 	return pnr;
-}
-
-bool onLeft(Point_2 *p, Segment_2 st)
-{
-	Line_2 line = st.supporting_line();
-
-	if (line.oriented_side(*p) == CGAL::ON_POSITIVE_SIDE) return true;
-	return false;
-
-	// what if a point lies on the line?
 }
 
 
