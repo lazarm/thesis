@@ -49,11 +49,9 @@ typedef DT::Face_handle				  Delaunay_face_handle;
 
 using namespace std;
 template <class Iterator> class DS1
-{
-private:
-	VD vd;
-
+{	
 public:
+	VD vd;
 	DS1() {};
 	~DS1() {};
 	//DS1(Iterator, Iterator);

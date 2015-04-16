@@ -54,16 +54,17 @@ void DS2<Iterator>::construct(Iterator begin, Iterator end) {
 	setSize(end - begin);
 	// node nd stores ds1root as its value
 	Node<Iterator> *nd = new Node<Iterator>();
-	
-	int k = int (ceil(std::distance(begin,end) / 2.0));
-	Iterator begin2 = begin;
-	std::advance(begin2, k);
-	nd->leftChild = construct1(begin, begin2);
-	nd->rightChild = construct1(begin2, end);
+	if (distance(begin, end) > 1) {
+		int k = int(ceil(std::distance(begin, end) / 2.0));
+		Iterator begin2 = begin;
+		std::advance(begin2, k);
+		nd->leftChild = construct1(begin, begin2);
+		nd->rightChild = construct1(begin2, end);
+		CGAL::spatial_sort(begin, end);
+	}
 	DS1<vector<Site_2>::iterator> ds1root;
-	CGAL::spatial_sort(begin, end);
 	ds1root.construct(begin, end);
-	std::cout << ds1root.size() << std::endl;
+	//std::cout << ds1root.size() << std::endl;
 	nd->value = ds1root;
 	setRoot(nd);
 }

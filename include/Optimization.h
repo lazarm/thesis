@@ -75,3 +75,16 @@ Point_2 imagePoint(Point_2 b, Segment_2 st)
 	Point_2 bFI(direction_s.dy() / direction_s.dx(), direction_t.dy() / direction_t.dx());
 	return bFI;
 }
+
+struct DualPoint
+{
+	Point_2 point;
+	Point_2* originalPoint;
+
+	DualPoint(){};
+	DualPoint(Point_2* p, Segment_2 st)
+	{
+		point = imagePoint(*p, st);
+		originalPoint = p;
+	}
+};
