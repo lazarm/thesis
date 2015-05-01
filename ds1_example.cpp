@@ -1,6 +1,6 @@
 
 #include <CGAL/Timer.h>
-#include <bfs.h>
+#include <separationMain.h>
 
 
 int main() {
@@ -75,6 +75,7 @@ int main() {
 
 	Segment_2 st(Point_2(2, 0), Point_2(2, 1));
 	vector< vector<Point_2> > rst = constructW(pst2.begin(), pst2.end(), a1, st);
+	main_procedure(pst2.begin(), pst2.end(), st);
 	
 	constructG(gps.begin(), gps.end());
 	runBfs(&ag1);
@@ -85,6 +86,7 @@ int main() {
 		bool tobreak = false;
 		for (vector< vector<Point_2> >::iterator tz = rst.begin(); tz != rst.end(); ++tz) {
 			for (vector<Point_2>::iterator tz2 = (*tz).begin(); tz2 != (*tz).end(); ++tz2) {
+				Point_2* uiz = tz2._Ptr;
 				if ((*tz2).x() == n->p.x() && (*tz2).y() == n->p.y()) {
 					if ((*gps.at(i)).dist != (*tz2).getDist()) {
 						cout << n->dist << " +-+ " << (*tz2).getDist() << endl;
@@ -119,5 +121,41 @@ int main() {
 
 	tuple<Point_2, Point_2, int> pair3 = bruteForceSegment(rst.at(0).begin(), rst.at(0).end(), rst.at(3).begin(), rst.at(3).end(), st);
 	cout << "RESULT bruteForceSegment: " << get<0>(pair3) << " ,dist: " << get<0>(pair3).getDist() << " |  " << get<1>(pair3) << " ,dist: " << get<1>(pair3).getDist() << "  weight " << get<2>(pair3) << endl;	
+	//example();
+	//kdtree();
+	Point_2 e1(3, 1), e2(3.1, 2), e3(3.5, 0.6), e4(2.3, 0.3), e5(2.4, -0.2), e6(2.8, 0), e7(3.5, -0.4), e8(5, 0.1), e9(2.1,-0.1), 
+		e10(2.01,0.001), e11(2.5,0.2), e12(4.7,1.1), e13(2.2,0.4), e14(2.9,0), e15(2.1,0.5),e16(2.03,0.2),e17(2.04,0.12);
+	Point_2 psts[17] = { e1, e2, e3, e4,e5, e6, e7, e8,e9,e10,e11,e12,e13,e14,e15,e17,e16};
+	vector<Point_2> pss(psts,psts+17);
 
+	RangeTree range_tree = buildRangeTree(rst.at(3).begin(), rst.at(3).end(), st);
+	Point_2* a33 = new Point_2(1.9, 0);
+	Point_2* a22 = new Point_2(1.9, 0);
+	DualPoint* a = new DualPoint(a22, st);
+	cout << "a: " << *a->originalPoint << endl;
+	DualPoint* dp1 = new DualPoint();
+	DualPoint* dp2 = new DualPoint();
+	dp2->point = Point_2(0, -100);
+	dp1->point = Point_2(100, 10);
+	Interval win = Interval(*dp2, *dp1);
+	vector< Point_2* > OutputList;
+	cout << "aleluja" << endl;
+	double x1 = a->originalPoint->x();
+	double y1 = a->originalPoint->y();
+	Point_2* a_orig = new Point_2(x1,y1);
+	range_tree.window_query_modified(win, *a_orig, std::back_inserter(OutputList));
+	cout << "finito" << endl;
+	std::vector<Point_2 *>::iterator current;
+	current = OutputList.begin();
+	
+	while (current != OutputList.end())
+	{
+		try {
+			std::cerr << (**current) << std::endl;
+		}
+		catch (int e) {
+			//std::cerr << (current)._Ptr << std::endl;
+		}
+		current++;
+	}
 }

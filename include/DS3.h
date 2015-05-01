@@ -104,9 +104,13 @@ tuple<bool, Point_2> DS2<Iterator>::search(Point_2 q) {
 		if (std::get<0>(r) == true) { nd = leftC; }
 		else { nd = nd->rightChild; }
 	}
+	// z nd->value.vd.sites_begin in end lahko dobimo ven edini site_2, ki sestavlja vd v listu
+	vector<Site_2> sites(nd->value.vd.sites_begin(), nd->value.vd.sites_end());
+	Point_2 p2 = sites.at(0);
 	DS1<std::vector<Site_2>::iterator> list = nd->value;
 	Point_2 p = list.pointInsideLeaf();
-	return make_tuple(true, p);
+	tuple<bool, Point_2> result = make_tuple(true, p2);
+	return result;
 }
 
 struct sortByDist

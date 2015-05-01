@@ -2,9 +2,28 @@
 
 
 template <class Iterator>
-tuple<Point_2, Point_2> findminpair(Iterator setAbegin, Iterator setAend, Iterator setBbegin, Iterator setBend, Segment_2 st)
+tuple<Point_2, Point_2,int> findminpair(Iterator setAbegin, Iterator setAend, Iterator setBbegin, Iterator setBend, Segment_2 st)
 {
+	RangeTree rangeTree = buildRangeTree(setBbegin, setBend, st);
+	int minWeight = numeric_limits<int>::max();
+	tuple<Point_2, Point_2, int> bestPair;
 	
+	for (Iterator a = setAbegin; a != setAend; ++a)
+	{
+		vector<Point_2 *> queryResults;
+		int weight_a = (*a).getDist();
+		DualPoint* a_dual = new DualPoint(a._Ptr, st);
+		rangeTree_query(&rangeTree, a_dual, back_inserter(queryResults));
+
+		for (vector<Point_2*>::iterator pointB = queryResults.begin(); pointB != queryResults.end(); ++pointB)
+		{
+			if (weight_a + (*pointB)->getDist() < minWeight) { 
+				minWeight = weight_a + (*pointB)->getDist();
+				bestPair = make_tuple(*a, **pointB, minWeight);
+			}
+		}
+	}
+	return bestPair;
 }
 
 template <class Iterator>

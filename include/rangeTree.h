@@ -78,6 +78,7 @@ RangeTree buildRangeTree(Iterator begin, Iterator end, Segment_2 st)
 		DS2<vector<Site_2>::iterator> ds2; //PAZI DA TO NE BO VEDNO REFERENCA NA ISTI OBJEKT!!!
 		Point_2 pt = *it;
 		RangePure_key *dp = new RangePure_key(it._Ptr, st);
+		cout << "point: " << pt << "  /  dual: " << dp->point << endl;
 		inputList.push_back(RangeKey(*dp, ds2));
 	}
 	RangeTree rangeTree(inputList.begin(), inputList.end());
@@ -89,8 +90,9 @@ RangeTree buildRangeTree(Iterator begin, Iterator end, Segment_2 st)
 /*
 Takes a node of a secondary range tree and builds DS2 structures bottom-up: based on structures of its left and right child it
 effectively retrieves all points contained in its left and right subtree and build DS2 structure with them.
-Sites are created only at leaf nodes based on dual points of b and they get associated with original points so that when a query is
-run and some site/point is returned, we can retrieve its original point b with all attributes contained in it (such as weight).
+Sites are created only at leaf nodes based on dual points of b and they get associated with original points so that when a 
+query is run and some site/point is returned, we can retrieve its original point b with all attributes contained in it 
+(such as weight).
 */
 void ds2ObjectsConstruction(RangeNode1* node)
 {
@@ -98,11 +100,9 @@ void ds2ObjectsConstruction(RangeNode1* node)
 	if (node->left_link == 0) {
 		// leaf node
 		DualPoint point = node->object.first;
-		DualPoint p2 = node->key;
-		Site_2 site(point.point.x(), point.point.y());
-		site.dual = point.originalPoint;
-		vector<Site_2> vdSites;
-		vdSites.push_back(site);
+		
+		vector<Point_2> vdSites;
+		vdSites.push_back(*point.originalPoint);
 		node->object.second.construct(vdSites.begin(), vdSites.end());
 		return;
 	}
@@ -113,9 +113,6 @@ void ds2ObjectsConstruction(RangeNode1* node)
 	// root node of DS2 structure representing the object of left and right child of node
 	Node< vector<Site_2>::iterator > *ds2LeftRootNode = node->left_link->object.second.getRoot();
 	Node< vector<Site_2>::iterator > *ds2RightRootNode = node->right_link->object.second.getRoot();
-	//cout << "left: " << ds2LeftRootNode->value.size() << endl;
-	//cout << "left1: " << rangeTree->range_tree_2->left(node)->object.second.getSize() << endl;
-	//cout << "right: " << ds2RightRootNode->value.size() << endl;
 	// vector of voronoi sites of VD at root node of DS2 structure
 	vector<Site_2> leftVoronoiSites(ds2LeftRootNode->value.vd.sites_begin(),ds2LeftRootNode->value.vd.sites_end());
 	vector<Site_2> rightVoronoiSites(ds2RightRootNode->value.vd.sites_begin(), ds2RightRootNode->value.vd.sites_end());
@@ -166,15 +163,22 @@ Iterator rangeTree_query(RangeTree* rangeTree, DualPoint* a, Iterator it)
 	DualPoint* dp2 = new DualPoint();
 	DualPoint* dp3 = new DualPoint();
 	DualPoint* dp4 = new DualPoint();
-	dp1->point = Point_2(numeric_limits<int>::min(), a->point.y);
-	dp2->point = Point_2(a->point.x, numeric_limits<int>::max());
-	dp1->point = Point_2(a->point.x, numeric_limits<int>::min());
-	dp2->point = Point_2(numeric_limits<int>::max(), a->point.y);
+	dp1->point = Point_2(numeric_limits<int>::min(), a->point.y());
+	dp2->point = Point_2(a->point.x(), numeric_limits<int>::max());
+	dp1->point = Point_2(a->point.x(), numeric_limits<int>::min());
+	dp2->point = Point_2(numeric_limits<int>::max(), a->point.y());
 
 	Interval win1 = Interval(*dp1, *dp2);
 	Interval win2 = Interval(*dp3, *dp4);
 
-	rangeTree->window_query(win1, it);
-	rangeTree->window_query(win2, it);
+	double x1 = a->originalPoint->x();
+	double y1 = a->originalPoint->y();
+	Point_2* a_orig = new Point_2(x1, y1);
+
+	rangeTree->window_query_modified(win1, *a_orig, it);
+	rangeTree->window_query_modified(win2, *a_orig, it);
+
 	return it;
 }
+
+
