@@ -8,7 +8,6 @@ using namespace std;
 /*
 source point r has to be one of the points in the array defined by begin and end
 */
-
 template <class Iterator>
 vector< vector<Point_2> > constructW(Iterator begin, Iterator end, Point_2 r, Segment_2 st)
 {
@@ -50,6 +49,7 @@ vector< vector<Point_2> > constructW(Iterator begin, Iterator end, Point_2 r, Se
 	sPoint = &sVertex->point();
 	sPoint->setDist(0);
 	sPoint->setNr(0);
+	sPoint->setParent(NULL);
 	categorize(&l0, &l1, &r0, &r1, sPoint, st);
 	wip.push_back({ *sPoint });
 	wi.push_back(sVertex);
@@ -80,9 +80,14 @@ vector< vector<Point_2> > constructW(Iterator begin, Iterator end, Point_2 r, Se
 					cout << "gotcha!" << endl;
 					pPoint->setDist(i);
 					Point_2 w(get<1>(nearest));
+					Point_2* pParent = new Point_2(w.x(), w.y());
+					pParent->setDist(w.getDist());
+					pParent->setNr(w.getNr());
+					pParent->setParent(w.getParent());
 					wii.push_back(p);
 					Q.push_back(p);
 					pPoint->setNr(updateNr(w.getNr(), *pPoint, w, st));
+					pPoint->setParent(pParent);
 					wipi.push_back(*pPoint);
 					categorize(&l0, &l1, &r0, &r1, pPoint,st);
 				}

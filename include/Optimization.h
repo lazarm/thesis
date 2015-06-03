@@ -2,16 +2,17 @@
 
 
 template <class Iterator>
-tuple<Point_2, Point_2,int> findminpair(Iterator setAbegin, Iterator setAend, Iterator setBbegin, Iterator setBend, Segment_2 st)
+tuple<Point_2, Point_2,int> findminpair(Iterator setAbegin, Iterator setAend, Iterator setBbegin, Iterator setBend, Segment_2 st, 
+	tuple<Point_2, Point_2, int> bestR)
 {
 	RangeTree rangeTree = buildRangeTree(setBbegin, setBend, st);
-	int minWeight = numeric_limits<int>::max();
-	tuple<Point_2, Point_2, int> bestPair;
+	int minWeight = get<2>(bestR);
 	
 	for (Iterator a = setAbegin; a != setAend; ++a)
 	{
 		vector<Point_2 *> queryResults;
 		int weight_a = (*a).getDist();
+		if (weight_a >= minWeight) { continue; }
 		DualPoint* a_dual = new DualPoint(a._Ptr, st);
 		rangeTree_query(&rangeTree, a_dual, back_inserter(queryResults));
 
@@ -19,34 +20,36 @@ tuple<Point_2, Point_2,int> findminpair(Iterator setAbegin, Iterator setAend, It
 		{
 			if (weight_a + (*pointB)->getDist() < minWeight) { 
 				minWeight = weight_a + (*pointB)->getDist();
-				bestPair = make_tuple(*a, **pointB, minWeight);
+				bestR = make_tuple(*a, **pointB, minWeight);
 			}
 		}
 	}
-	return bestPair;
+	return bestR;
 }
 
 template <class Iterator>
-tuple<Point_2, Point_2, int> findMinPair(Iterator setAbegin, Iterator setAend, Iterator setBbegin, Iterator setBend)
+tuple<Point_2, Point_2, int> findMinPair(Iterator setAbegin, Iterator setAend, Iterator setBbegin, Iterator setBend, 
+	tuple<Point_2, Point_2, int> bestR)
 {
 	DS2<vector<Site_2>::iterator> ds2;
 	ds2.construct(setBbegin, setBend);
-	tuple<Point_2, Point_2, int> bestPair;
-	int minWeight = numeric_limits<int>::max();
+	int minWeight = get<2>(bestR);
 	for (Iterator a = setAbegin; a != setAend; ++a)
 	{
-		tuple<bool, Point_2> query = ds2.search(Point_2(*a));
-		if (get<0>(query)) 
-		{
-			Point_2 bStar(get<1>(query));
-			int weight = (*a).getDist() + bStar.getDist();
-			if (weight < minWeight) {
-				bestPair = make_tuple(*a, bStar, weight);
-				minWeight = weight;
+		if (a->getDist() < minWeight) {
+			tuple<bool, Point_2> query = ds2.search(Point_2(*a));
+			if (get<0>(query))
+			{
+				Point_2 bStar(get<1>(query));
+				int weight = (*a).getDist() + bStar.getDist();
+				if (weight < minWeight) {
+					bestR = make_tuple(*a, bStar, weight);
+					minWeight = weight;
+				}
 			}
 		}
 	}
-	return bestPair;
+	return bestR;
 }
 
 template <class Iterator>
