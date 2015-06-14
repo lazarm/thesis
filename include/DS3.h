@@ -39,7 +39,7 @@ public:
 		if (nd->value.size() == 1) return true;
 		return false;
 	};
-	std::tuple<bool, Point_2> search(Point_2 q);
+	std::tuple<bool, Point_2*> search(Point_2 q);
 };
 
 template <class Iterator>
@@ -91,26 +91,28 @@ Node<Iterator> *DS2<Iterator>::construct1(Iterator begin, Iterator end) {
 }
 
 template <class Iterator>
-tuple<bool, Point_2> DS2<Iterator>::search(Point_2 q) {
+tuple<bool, Point_2*> DS2<Iterator>::search(Point_2 q) {
 	Node<Iterator> *nd = getRoot();
 	Point_2 ps(0, 0);
-	std::tuple<bool, Point_2> res = (nd->value).query(q);
+	std::tuple<bool, Point_2*> res = (nd->value).query(q);
 	if (std::get<0>(res) == false) {
 		return res;
 	}
+	// naredi while nd->left ali right nista null
 	while (list(nd) == false) {
 		Node<Iterator> *leftC = nd->leftChild;
-		tuple<bool, Point_2> r = leftC->value.query(q);
+		tuple<bool, Point_2*> r = leftC->value.query(q); // zakaj ne res namesto r?
 		if (std::get<0>(r) == true) { nd = leftC; }
 		else { nd = nd->rightChild; }
 	}
 	// z nd->value.vd.sites_begin in end lahko dobimo ven edini site_2, ki sestavlja vd v listu
-	vector<Site_2> sites(nd->value.vd.sites_begin(), nd->value.vd.sites_end());
-	Point_2 p2 = sites.at(0);
-	DS1<std::vector<Site_2>::iterator> list = nd->value;
-	Point_2 p = list.pointInsideLeaf();
-	tuple<bool, Point_2> result = make_tuple(true, p2);
-	return result;
+	//vector<Site_2> sites(nd->value.vd.sites_begin(), nd->value.vd.sites_end());
+	//Point_2 p2 = sites.at(0);
+	//DS1<std::vector<Site_2>::iterator> list = nd->value;
+	//Point_2 p = list.pointInsideLeaf();
+	//tuple<bool, Point_2> result = make_tuple(true, p2);
+	res = (nd->value).query(q);
+	return res;
 }
 
 struct sortByDist

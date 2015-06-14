@@ -72,13 +72,13 @@ template <class Iterator>
 RangeTree buildRangeTree(Iterator begin, Iterator end, Segment_2 st)
 {
 	vector<RangeKey> inputList;
-	cout << distance(begin, end) << endl;
+	//cout << distance(begin, end) << endl;
 	for (Iterator it = begin; it != end; ++it)
 	{
 		DS2<vector<Site_2>::iterator> ds2; //PAZI DA TO NE BO VEDNO REFERENCA NA ISTI OBJEKT!!!
 		Point_2 pt = *it;
 		RangePure_key *dp = new RangePure_key(it._Ptr, st);
-		cout << "point: " << pt << "  /  dual: " << dp->point << endl;
+		//cout << "point: " << pt << "  /  dual: " << dp->point << endl;
 		inputList.push_back(RangeKey(*dp, ds2));
 	}
 	RangeTree rangeTree(inputList.begin(), inputList.end());

@@ -82,7 +82,6 @@ void make_cycle(tuple<Point_2, Point_2, int> pair, vector<Point_2> cycle)
 		ps.push_back(p);
 		Point_2 pi = p;
 		while (pi.getParent() != 0) {
-
 			pi = *(pi.getParent());
 			ps.push_back(pi);
 		}
@@ -100,13 +99,12 @@ void make_cycle(tuple<Point_2, Point_2, int> pair, vector<Point_2> cycle)
 	}
 	vector<Point_2>::reverse_iterator longer;
 	vector<Point_2>::reverse_iterator shorter;
-	Point_2 lca = *ps.end();
+	Point_2 lca = *(ps.end()-1);
 	for (longer = ps.rbegin(), shorter = qs.rbegin(); (longer != ps.rend() && shorter != qs.rend()); ++longer, ++shorter)
 	{
 		if (*longer == *shorter) { lca = *longer; }
 		else { break; }
 	}
-
 	int lca_dist = lca.getDist();
 	vector<Point_2> p_to_lca(ps.begin(), ps.begin() + (ps.size() - lca_dist)); //  to get [p,lca)
 	vector<Point_2> q_to_lca(qs.rbegin() + lca_dist+1, qs.rend()); // get (lca, q]
@@ -115,11 +113,23 @@ void make_cycle(tuple<Point_2, Point_2, int> pair, vector<Point_2> cycle)
 	cycle.insert(cycle.end(), q_to_lca.begin(), q_to_lca.end()); // (lca,q]
 	cycle.insert(cycle.end(), p_to_lca.begin(), p_to_lca.end()); // [p,lca)
 	// merge p_to_lca and q_to_lca, kako je s clear in reserve, shrink to fit, reserve itd
-	
+	/*
 	for (auto i : ps)
 	{
 		cout << i << endl;
 	}
+	cout << "qs" << endl;
+	for (auto i : qs)
+	{
+		cout << i << endl;
+	}*/
+
+	/*
+	cout << "cycle" << endl;
+	for (auto i : cycle)
+	{
+		cout << i << endl;
+	}*/
 }
 
 
@@ -130,9 +140,29 @@ void main_procedure(vector<Point_2>::iterator begin, vector<Point_2>::iterator e
 	// reserve n memory cells. Maximum number of used cells is n, but probably less of them will be filled.
 	// It's probably better to do reserve only once with big value , and clear each time in the loop
 	cycle.reserve(distance(begin,end));
+	int k = 0;
 	for (auto p = begin; p != end; ++p)
 	{
+		k = k + 1;
+		if (k != 16) { continue; }
+		cout << (k-1) << endl;
+		
+		//cout << "root = " << *p << endl;
 		vector< vector<Point_2> > rst = constructW(begin, end, *p, st);
+		int ii = 0;/*
+		for (vector< vector<Point_2> >::iterator tz = rst.begin(); tz != rst.end(); ++tz) {
+			std::cout << ii << std::endl;
+			++ii;
+			for (vector<Point_2>::iterator tz2 = (*tz).begin(); tz2 != (*tz).end(); ++tz2) {
+				std::cout << (*tz2).x() << "   " << (*tz2).y() << "  dist: " << (*tz2).getDist() << "  nr: " << (*tz2).getNr() << std::endl;
+				cout << *(tz2->getParent()) << "  dist: " << tz2->getParent()->getDist() << "  nr: " << tz2->getParent()->getNr() << endl;
+			}
+		}*/
+		cout << "st" << endl;
+		cout << st.source().x() << "," << st.target().x() << endl;
+		cout << st.source().y() << "," << st.target().y() << endl;
+
+
 		Line_2 st_line = Line_2(st);
 		tuple<Segment_2, Segment_2> rays = getRays(st, st_line);
 		tuple<Point_2, Point_2, int> bestR = make_tuple(Point_2(), Point_2(), numeric_limits<int>::max());
@@ -148,15 +178,21 @@ void main_procedure(vector<Point_2>::iterator begin, vector<Point_2>::iterator e
 
 		tuple<Point_2, Point_2, int>  l0l1 = findMinPair(rst.at(0).begin(), rst.at(0).end(), rst.at(1).begin(), rst.at(1).end(), l1r0_s);
 		tuple<Point_2, Point_2, int>  r0r1 = findMinPair(rst.at(2).begin(), rst.at(2).end(), rst.at(3).begin(), rst.at(3).end(), l0l1);
-
 		tuple<Point_2, Point_2, int> result = r0r1;
 		// if result < best_result, ga obdrzi, sicer ne
 		if (get<2>(result) < get<2>(best_r)) { 
 			best_r = result;
 			cycle.clear();
+			//cout << get<0>(best_r) << "  -   " << get<1>(best_r) << " , dist= " << get<2>(best_r) << endl;
+			//cout << *(get<0>(best_r).getParent()) << "  -  " << *(get<1>(best_r).getParent()) << endl;
+			cout << get<0>(best_r).x() << "," << get<1>(best_r).x() << endl;
+			cout << get<0>(best_r).y() << "," << get<1>(best_r).y() << endl;
+			shared_ptr<Point_2> pp = get<0>(best_r).getParent();
+			//cout << pp->getParent() << endl;
 			make_cycle(result, cycle);
 		}
-		
+		break;
+		//cout << "make_cycle" << endl;
 		resetPointDistances(begin, end);
 	}
 	/*
@@ -166,4 +202,3 @@ void main_procedure(vector<Point_2>::iterator begin, vector<Point_2>::iterator e
 	kaj pa optimizacija? ce prides recimo do a-ja na levi strani, ki ima dist >= min_dist-1, ga lahko kar zavrzes
 	*/
 }
-

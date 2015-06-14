@@ -44,6 +44,7 @@ typedef VD::Face_iterator             Face_iterator;
 typedef DT::Vertex_handle             Delaunay_vertex_handle;
 typedef DT::Locate_type				  Locate_type;
 typedef DT::Face_handle				  Delaunay_face_handle;
+typedef DT::Vertex_circulator         Vertex_circulator;
 
 
 
@@ -56,20 +57,20 @@ public:
 	~DS1() {};
 	//DS1(Iterator, Iterator);
 	void construct(Iterator begin, Iterator end);
-	std::tuple<bool, Point_2> query(Point_2 q);
+	std::tuple<bool, Point_2*> query(Point_2 q);
 	Point_2 pointInsideLeaf();
 	int size() { return vd.number_of_faces(); }
 };
 
 template <class Iterator>
 void DS1<Iterator>::construct(Iterator first, Iterator beyond) {
-	
+	//CGAL::spatial_sort(first, beyond);
 	vd.insert(first, beyond);
 	//assert(vd.is_valid());
 }
 
 template <class Iterator> 
-std::tuple<bool, Point_2> DS1<Iterator>::query(Point_2 q) {
+std::tuple<bool, Point_2*> DS1<Iterator>::query(Point_2 q) {
 	
 	Locate_result lr = vd.locate(q);
 	// delaunay vertex == voronoi site
@@ -88,14 +89,15 @@ std::tuple<bool, Point_2> DS1<Iterator>::query(Point_2 q) {
 		df = (*e)->up();
 	}
 	Point_2 faceSitePoint = df->point();
+	Point_2 *fcp = &df->point();
 	// use squared distance
-	double dist = CGAL::squared_distance(faceSitePoint, q);
+	double dist = CGAL::squared_distance(*fcp, q);
 	
 	if (dist <= 1) {
-		return std::tuple<bool, Point_2> {true, faceSitePoint};
+		return std::tuple<bool, Point_2*> {true, fcp};
 	}
 	else {
-		return std::tuple<bool, Point_2> {false, faceSitePoint};
+		return std::tuple<bool, Point_2*> {false, fcp};
 	}
 }
 
