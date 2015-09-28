@@ -165,8 +165,8 @@ Iterator rangeTree_query(RangeTree* rangeTree, DualPoint* a, Iterator it)
 	DualPoint* dp4 = new DualPoint();
 	dp1->point = Point_2(numeric_limits<int>::min(), a->point.y());
 	dp2->point = Point_2(a->point.x(), numeric_limits<int>::max());
-	dp1->point = Point_2(a->point.x(), numeric_limits<int>::min());
-	dp2->point = Point_2(numeric_limits<int>::max(), a->point.y());
+	dp3->point = Point_2(a->point.x(), numeric_limits<int>::min());
+	dp4->point = Point_2(numeric_limits<int>::max(), a->point.y());
 
 	Interval win1 = Interval(*dp1, *dp2);
 	Interval win2 = Interval(*dp3, *dp4);
