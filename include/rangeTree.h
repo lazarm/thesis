@@ -11,64 +11,64 @@
 #include <windows.h>
 
 
-typedef CGAL::Range_tree_map_traits_2<DualPoint, DS2<vector<Site_2>::iterator> > rangeTraits;
+typedef CGAL::Range_tree_map_traits_2<DualPoint, VoronoiTree<vector<Site_2>::iterator> > rangeTraits;
 typedef rangeTraits::Key RangeKey;
 typedef rangeTraits::Pure_key RangePure_key;
 typedef rangeTraits::Interval Interval;
 typedef CGAL::Range_tree_2<rangeTraits> RangeTree;
 
 typedef CGAL::Range_tree_node<
-	std::pair<DualPoint, DS2<vector<Site_2>::iterator>>,
+	std::pair<DualPoint, VoronoiTree<vector<Site_2>::iterator>>,
 	std::pair<DualPoint, DualPoint>,
 	CGAL::tree_point_traits<
-		std::pair<DualPoint, DS2<vector<Site_2>::iterator>>,
+		std::pair<DualPoint, VoronoiTree<vector<Site_2>::iterator>>,
 		std::pair<DualPoint, DualPoint>,
 		DualPoint,
-		CGAL::T_Key_1<DualPoint, std::pair<DualPoint, DS2<vector<Site_2>::iterator>>>,
+		CGAL::T_Key_1<DualPoint, std::pair<DualPoint, VoronoiTree<vector<Site_2>::iterator>>>,
 		CGAL::C_Low_1<DualPoint, std::pair<DualPoint, DualPoint >>,
 		CGAL::C_High_1<DualPoint, std::pair<DualPoint, DualPoint >>,
 		CGAL::C_Compare_1<DualPoint >>
 	> RangeNode;
 
 typedef CGAL::Range_tree_node<
-	std::pair<DualPoint, DS2<vector<Site_2>::iterator>>,
+	std::pair<DualPoint, VoronoiTree<vector<Site_2>::iterator>>,
 	std::pair<DualPoint, DualPoint>,
 	CGAL::tree_point_traits<
-		std::pair<DualPoint, DS2<vector<Site_2>::iterator>>,
+		std::pair<DualPoint, VoronoiTree<vector<Site_2>::iterator>>,
 		std::pair<DualPoint, DualPoint>,
 		DualPoint,
-		CGAL::T_Key_2<DualPoint, std::pair<DualPoint, DS2<vector<Site_2>::iterator>>>,
+		CGAL::T_Key_2<DualPoint, std::pair<DualPoint, VoronoiTree<vector<Site_2>::iterator>>>,
 		CGAL::C_Low_2<DualPoint, std::pair<DualPoint, DualPoint >>,
 		CGAL::C_High_2<DualPoint, std::pair<DualPoint, DualPoint >>,
 		CGAL::C_Compare_2<DualPoint >>
 	> RangeNode1;
 
 typedef CGAL::Range_tree_d<
-	std::pair<DualPoint, DS2<vector<Site_2>::iterator>>,
+	std::pair<DualPoint, VoronoiTree<vector<Site_2>::iterator>>,
 	std::pair<DualPoint, DualPoint>,
 	CGAL::tree_point_traits<
-		std::pair<DualPoint, DS2<vector<Site_2>::iterator>>,
+		std::pair<DualPoint, VoronoiTree<vector<Site_2>::iterator>>,
 		std::pair<DualPoint, DualPoint>,
 		DualPoint,
-		CGAL::T_Key_2<DualPoint, std::pair<DualPoint, DS2<vector<Site_2>::iterator>>>,
+		CGAL::T_Key_2<DualPoint, std::pair<DualPoint, VoronoiTree<vector<Site_2>::iterator>>>,
 			CGAL::C_Low_2<DualPoint, std::pair<DualPoint, DualPoint >>,
 		CGAL::C_High_2<DualPoint, std::pair<DualPoint, DualPoint >>,
 		CGAL::C_Compare_2<DualPoint >>
 	> RangeTree1;
 
 typedef CGAL::Tree_base <
-	std::pair<DualPoint, DS2<vector<Site_2>::iterator>>,
+	std::pair<DualPoint, VoronoiTree<vector<Site_2>::iterator>>,
 	std::pair<DualPoint, DualPoint>
 	> Tree_base;
 
 /* From a vector of type Point_2 representing a group of points R_ make a vector of type Key storing
-a pair of DualPoint and empty class DS2. Build range tree from that.
+a pair of DualPoint and empty class VoronoiTree. Build range tree from that.
 
 
 after that, for each a from L_ make a query with this tree(two queries, one with interval((-inf,-inf),(ax,ay)),
 the other one with interval((ax,ay),(inf,inf)). Modify range tree so that when it hits an internal node
 s.t. all the points in its subtree are contained in the interval, the query stops at this internal node and the algorithm
-runs DS2 query with the original point of a. Return the pair resulting from this query.
+runs VoronoiTree query with the original point of a. Return the pair resulting from this query.
 */
 template <class Iterator>
 RangeTree buildRangeTree(Iterator begin, Iterator end, Segment_2 st)
@@ -77,7 +77,7 @@ RangeTree buildRangeTree(Iterator begin, Iterator end, Segment_2 st)
 	//cout << distance(begin, end) << endl;
 	for (Iterator it = begin; it != end; ++it)
 	{
-		DS2<vector<Site_2>::iterator> ds2; //PAZI DA TO NE BO VEDNO REFERENCA NA ISTI OBJEKT!!!
+		VoronoiTree<vector<Site_2>::iterator> ds2; //PAZI DA TO NE BO VEDNO REFERENCA NA ISTI OBJEKT!!!
 		Point_2 pt = *it;
 		unique_ptr < RangePure_key> dp(new RangePure_key(it._Ptr, st));
 		//cout << "point: " << pt << "  /  dual: " << dp->point << endl;
@@ -90,8 +90,8 @@ RangeTree buildRangeTree(Iterator begin, Iterator end, Segment_2 st)
 }
 
 /*
-Takes a node of a secondary range tree and builds DS2 structures bottom-up: based on structures of its left and right child it
-effectively retrieves all points contained in its left and right subtree and build DS2 structure with them.
+Takes a node of a secondary range tree and builds VoronoiTree structures bottom-up: based on structures of its left and right child it
+effectively retrieves all points contained in its left and right subtree and build VoronoiTree structure with them.
 Sites are created only at leaf nodes based on dual points of b and they get associated with original points so that when a 
 query is run and some site/point is returned, we can retrieve its original point b with all attributes contained in it 
 (such as weight).
@@ -108,14 +108,14 @@ void ds2ObjectsConstruction(RangeNode1* node)
 		node->object.second.construct(vdSites.begin(), vdSites.end());
 		return;
 	}
-	// recursively construct DS2 structures for both childs of node
+	// recursively construct VoronoiTree structures for both childs of node
 	ds2ObjectsConstruction(node->left_link);
 	ds2ObjectsConstruction(node->right_link);
 
-	// root node of DS2 structure representing the object of left and right child of node
+	// root node of VoronoiTree structure representing the object of left and right child of node
 	shared_ptr< Node< vector<Site_2>::iterator> > ds2LeftRootNode = node->left_link->object.second.getRoot();
 	shared_ptr< Node< vector<Site_2>::iterator> > ds2RightRootNode = node->right_link->object.second.getRoot();
-	// vector of voronoi sites of VD at root node of DS2 structure
+	// vector of voronoi sites of VD at root node of VoronoiTree structure
 	vector<Site_2> leftVoronoiSites(ds2LeftRootNode->value.vd.sites_begin(),ds2LeftRootNode->value.vd.sites_end());
 	vector<Site_2> rightVoronoiSites(ds2RightRootNode->value.vd.sites_begin(), ds2RightRootNode->value.vd.sites_end());
 	vector<Site_2> vdSites;
@@ -130,7 +130,7 @@ void ds2ObjectsConstruction(RangeNode1* node)
 
 
 /*
-Takes a node of a primary range tree and constructs DS2 structures for all nodes in secondary range tree coming from this node.
+Takes a node of a primary range tree and constructs VoronoiTree structures for all nodes in secondary range tree coming from this node.
 Recursively does the same for its left and right child.
 */
 void ds2ObjectsConstruction1(RangeNode* node)
@@ -187,7 +187,7 @@ void ds2ObjectsConstruction1(RangeNode* node)
 From dual point a_dual make two interval windows - bounding boxes, corresponding to the upper left and the lower right quadrant, where
 a_dual is the origin. Windows are [(-inf,ay), (ax,inf)] and [(ax,-inf), (inf,ay)]. Original queries are modified at the point where the 
 algorithm hits a node such that all points in its subtree should be contained in a result. The modified version runs a query on 
-node's DS2 structure and if the query is successful, we get some point b*, from which we can retrieve the dual point (dual of dual is
+node's VoronoiTree structure and if the query is successful, we get some point b*, from which we can retrieve the dual point (dual of dual is
 original point). That point is contained in the iterator (result).
 At the end we are left with a set of points s.t. dist(a,b) <= 1 and ab intersects the segment st. We choose b* with minimum
 w_a + w_b*. 

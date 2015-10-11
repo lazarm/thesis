@@ -1,7 +1,7 @@
 #include <deque>
 #include <CGAL/intersections.h>
 #include <unordered_map>
-#include<DS3.h>
+#include <VoronoiTree.h>
 
 using namespace std;
 

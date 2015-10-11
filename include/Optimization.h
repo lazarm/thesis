@@ -33,7 +33,7 @@ template <class Iterator>
 tuple<Point_2, Point_2, int> findMinPair(Iterator setAbegin, Iterator setAend, Iterator setBbegin, Iterator setBend, 
 	tuple<Point_2, Point_2, int> bestR)
 {
-	DS2<vector<Site_2>::iterator> ds2;
+	VoronoiTree<vector<Site_2>::iterator> ds2;
 	ds2.construct(setBbegin, setBend);
 	int minWeight = get<2>(bestR);
 	if (ds2.getSize() == 0) { return bestR; }

@@ -18,7 +18,7 @@ struct Node {
 	}
 };
 
-template <class Iterator> class DS2
+template <class Iterator> class VoronoiTree
 {
 private:
 	vector<VoronoiDiagram <Iterator> > A;
@@ -26,8 +26,8 @@ private:
 	int size;
 
 public:
-	DS2();
-	~DS2(){};
+	VoronoiTree();
+	~VoronoiTree(){};
 	shared_ptr<Node<Iterator>> getRoot(){ return root; };
 	void setRoot(shared_ptr<Node<Iterator>> nd) { root = nd; };
 	void construct(Iterator begin, Iterator beyond);
@@ -43,12 +43,12 @@ public:
 };
 
 template <class Iterator>
-DS2<Iterator>::DS2() {
+VoronoiTree<Iterator>::VoronoiTree() {
 	setRoot(NULL);
 }
 
 template <class Iterator>
-void DS2<Iterator>::construct(Iterator begin, Iterator end) {
+void VoronoiTree<Iterator>::construct(Iterator begin, Iterator end) {
 	// points have to be sorted non-descreasingly by their weight
 	sort(begin, end, sortByDist());
 	setSize(end - begin);
@@ -70,7 +70,7 @@ void DS2<Iterator>::construct(Iterator begin, Iterator end) {
 }
 
 template <class Iterator>
-shared_ptr<Node<Iterator>> DS2<Iterator>::construct1(Iterator begin, Iterator end) {
+shared_ptr<Node<Iterator>> VoronoiTree<Iterator>::construct1(Iterator begin, Iterator end) {
 	VoronoiDiagram<vector<Site_2>::iterator> ds1node;
 	
 	if (std::distance(begin,end) == 1) {
@@ -91,7 +91,7 @@ shared_ptr<Node<Iterator>> DS2<Iterator>::construct1(Iterator begin, Iterator en
 }
 
 template <class Iterator>
-tuple<bool, Point_2*> DS2<Iterator>::search(Point_2 q) {
+tuple<bool, Point_2*> VoronoiTree<Iterator>::search(Point_2 q) {
 	shared_ptr<Node<Iterator>> nd = getRoot();
 	Point_2 ps(0, 0);
 	std::tuple<bool, Point_2*> res = (nd->value).query(q);
