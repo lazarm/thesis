@@ -75,7 +75,7 @@ vector< vector<Point_2> > constructW(Iterator begin, Iterator end, Point_2 r, Se
 				if (pPoint->getDist() == numeric_limits<int>::max()) {
 					tuple<bool, Point_2*> nearest = vd_nearestNeighbour.query(*pPoint);
 					if (get<0>(nearest) == true) {
-						shared_ptr<Point_2> par2(new Point_2(*(get<1>(nearest))));
+						shared_ptr<Point_2> par2 = make_shared<Point_2(*(get<1>(nearest)))>;
 						
 						wi_delaunayVertices.push_back(p);
 						queue.push_back(p);
@@ -83,7 +83,7 @@ vector< vector<Point_2> > constructW(Iterator begin, Iterator end, Point_2 r, Se
 						pPoint->setDist(i);
 						pPoint->setNr(updateNr(par2->getNr(), *pPoint, *par2, st));
 						pPoint->setParent(par2);
-						cout << pPoint->x() << "," << par2->x() << " - " << pPoint->y() << "," << par2->y() << endl;
+						//cout << pPoint->x() << "," << par2->x() << " - " << pPoint->y() << "," << par2->y() << endl;
 						
 						wi_points.push_back(*pPoint);
 						categorize(&l0, &l1, &r0, &r1, pPoint, st);

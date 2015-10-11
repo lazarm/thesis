@@ -6,7 +6,9 @@
 #include <iostream>
 #include <utility>
 #include <vector>
+#include <queue>
 #include <iterator>
+#include <windows.h>
 
 
 typedef CGAL::Range_tree_map_traits_2<DualPoint, DS2<vector<Site_2>::iterator> > rangeTraits;
@@ -77,13 +79,13 @@ RangeTree buildRangeTree(Iterator begin, Iterator end, Segment_2 st)
 	{
 		DS2<vector<Site_2>::iterator> ds2; //PAZI DA TO NE BO VEDNO REFERENCA NA ISTI OBJEKT!!!
 		Point_2 pt = *it;
-		RangePure_key *dp = new RangePure_key(it._Ptr, st);
+		unique_ptr < RangePure_key> dp(new RangePure_key(it._Ptr, st));
 		//cout << "point: " << pt << "  /  dual: " << dp->point << endl;
 		inputList.push_back(RangeKey(*dp, ds2));
 	}
+	
 	RangeTree rangeTree(inputList.begin(), inputList.end());
 	ds2ObjectsConstruction1(rangeTree.range_tree_2->root());
-	
 	return rangeTree;
 }
 
@@ -111,8 +113,8 @@ void ds2ObjectsConstruction(RangeNode1* node)
 	ds2ObjectsConstruction(node->right_link);
 
 	// root node of DS2 structure representing the object of left and right child of node
-	Node< vector<Site_2>::iterator > *ds2LeftRootNode = node->left_link->object.second.getRoot();
-	Node< vector<Site_2>::iterator > *ds2RightRootNode = node->right_link->object.second.getRoot();
+	shared_ptr< Node< vector<Site_2>::iterator> > ds2LeftRootNode = node->left_link->object.second.getRoot();
+	shared_ptr< Node< vector<Site_2>::iterator> > ds2RightRootNode = node->right_link->object.second.getRoot();
 	// vector of voronoi sites of VD at root node of DS2 structure
 	vector<Site_2> leftVoronoiSites(ds2LeftRootNode->value.vd.sites_begin(),ds2LeftRootNode->value.vd.sites_end());
 	vector<Site_2> rightVoronoiSites(ds2RightRootNode->value.vd.sites_begin(), ds2RightRootNode->value.vd.sites_end());
@@ -137,14 +139,48 @@ void ds2ObjectsConstruction1(RangeNode* node)
 	// za node klici sublayer, dobis range_tree_d=1
 	// potem lahko klices zgornjo funkcijo
 	if (node->left_link == 0) { return; }
+	MEMORYSTATUSEX memInfo;
+	memInfo.dwLength = sizeof(MEMORYSTATUSEX);
+	GlobalMemoryStatusEx(&memInfo);
+	DWORDLONG totalPhysMem = memInfo.ullTotalPhys;
 
+	queue<RangeNode*> nodes_to_visit;
+	nodes_to_visit.push(node);
+	
+	while (!nodes_to_visit.empty()) {
+		//cout << "haha0" << endl;
+		RangeNode* nd = nodes_to_visit.front();
+		//cout << "haha1" << endl;
+		nodes_to_visit.pop();
+		//cout << "haha2" << endl;
+		if (nd->left_link != 0) {
+			Tree_base* baseTree = nd->sublayer;
+			//cout << "haha3" << endl;
+			RangeTree1* secondaryTree = dynamic_cast<RangeTree1 *>(baseTree);
+			//cout << "haha4" << endl;
+			RangeNode1* secondaryRoot = secondaryTree->root();
+			
+			ds2ObjectsConstruction(secondaryRoot);
+			DWORDLONG used = totalPhysMem - memInfo.ullAvailPhys;
+			cout << "used: " << used * 100 / totalPhysMem << endl;
+			//cout << "haha5" << endl;
+			nodes_to_visit.push(nd->left_link);
+			nodes_to_visit.push(nd->right_link);
+			
+		}
+		else {
+			
+		}
+	}
+	/*
 	Tree_base* baseTree = node->sublayer;
 	RangeTree1* secondaryTree = dynamic_cast<RangeTree1 *>(baseTree);
 	RangeNode1* secondaryRoot = secondaryTree->root();
-	ds2ObjectsConstruction(secondaryRoot);
+
 	ds2ObjectsConstruction1(node->left_link);
 	ds2ObjectsConstruction1(node->right_link);
 
+	ds2ObjectsConstruction(secondaryRoot);*/
 }
 
 /*
@@ -159,24 +195,24 @@ w_a + w_b*.
 template <class Iterator>
 Iterator rangeTree_query(RangeTree* rangeTree, DualPoint* a, Iterator it)
 {
-	DualPoint* dp1 = new DualPoint();
-	DualPoint* dp2 = new DualPoint();
-	DualPoint* dp3 = new DualPoint();
-	DualPoint* dp4 = new DualPoint();
-	dp1->point = Point_2(numeric_limits<int>::min(), a->point.y());
-	dp2->point = Point_2(a->point.x(), numeric_limits<int>::max());
-	dp3->point = Point_2(a->point.x(), numeric_limits<int>::min());
-	dp4->point = Point_2(numeric_limits<int>::max(), a->point.y());
+	DualPoint dp1 = DualPoint();
+	DualPoint dp2 = DualPoint();
+	DualPoint dp3 = DualPoint();
+	DualPoint dp4 = DualPoint();
+	dp1.point = Point_2((numeric_limits<int>::min)(), a->point.y());
+	dp2.point = Point_2(a->point.x(), (numeric_limits<int>::max)());
+	dp3.point = Point_2(a->point.x(), (numeric_limits<int>::min)());
+	dp4.point = Point_2((numeric_limits<int>::max)(), a->point.y());
 
-	Interval win1 = Interval(*dp1, *dp2);
-	Interval win2 = Interval(*dp3, *dp4);
+	Interval win1 = Interval(dp1, dp2);
+	Interval win2 = Interval(dp3, dp4);
 
 	double x1 = a->originalPoint->x();
 	double y1 = a->originalPoint->y();
-	Point_2* a_orig = new Point_2(x1, y1);
+	Point_2 a_orig = *(a->originalPoint);
 
-	rangeTree->window_query_modified(win1, *a_orig, it);
-	rangeTree->window_query_modified(win2, *a_orig, it);
+	rangeTree->window_query_modified(win1, a_orig, it);
+	rangeTree->window_query_modified(win2, a_orig, it);
 
 	return it;
 }

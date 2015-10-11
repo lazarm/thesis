@@ -3,8 +3,8 @@
 template <class Iterator>
 struct Node {
 	DS1<Iterator> value;
-	Node *leftChild;
-	Node *rightChild;
+	shared_ptr<Node> leftChild;
+	shared_ptr<Node> rightChild;
 
 	Node(){};
 	~Node(){};
@@ -22,20 +22,20 @@ template <class Iterator> class DS2
 {
 private:
 	vector<DS1 <Iterator> > A;
-	Node<Iterator> *root;
+	shared_ptr<Node<Iterator>> root;
 	int size;
 
 public:
 	DS2();
 	~DS2(){};
-	Node<Iterator> *getRoot(){ return root; };
-	void setRoot(Node<Iterator> *nd) { root = nd; };
+	shared_ptr<Node<Iterator>> getRoot(){ return root; };
+	void setRoot(shared_ptr<Node<Iterator>> nd) { root = nd; };
 	void construct(Iterator begin, Iterator beyond);
-	Node<Iterator> *construct1(Iterator begin, Iterator end);
+	shared_ptr<Node<Iterator>> construct1(Iterator begin, Iterator end);
 	
 	int getSize() { return size; };
 	void setSize(int s) { size = s; };
-	bool list(Node<Iterator> *nd) {
+	bool list(shared_ptr<Node<Iterator>> nd) {
 		if (nd->value.size() == 1) return true;
 		return false;
 	};
@@ -53,7 +53,7 @@ void DS2<Iterator>::construct(Iterator begin, Iterator end) {
 	sort(begin, end, sortByDist());
 	setSize(end - begin);
 	// node nd stores ds1root as its value
-	Node<Iterator> *nd = new Node<Iterator>();
+	shared_ptr< Node<Iterator> > nd = make_shared<Node<Iterator>>();
 	if (distance(begin, end) > 1) {
 		int k = int(ceil(std::distance(begin, end) / 2.0));
 		Iterator begin2 = begin;
@@ -70,15 +70,15 @@ void DS2<Iterator>::construct(Iterator begin, Iterator end) {
 }
 
 template <class Iterator>
-Node<Iterator> *DS2<Iterator>::construct1(Iterator begin, Iterator end) {
+shared_ptr<Node<Iterator>> DS2<Iterator>::construct1(Iterator begin, Iterator end) {
 	DS1<vector<Site_2>::iterator> ds1node;
 	
 	if (std::distance(begin,end) == 1) {
 		ds1node.construct(begin, end);
-		Node<Iterator> *nd = new Node<Iterator>(ds1node);
+		shared_ptr< Node<Iterator> > nd = make_shared<Node<Iterator>>(ds1node);
 		return nd;
 	}
-	Node<Iterator> *nd = new Node<Iterator>();
+	shared_ptr< Node<Iterator> > nd = make_shared<Node<Iterator>>();
 	int k = int(ceil(std::distance(begin,end) / 2.0));
 	Iterator begin2 = begin;
 	std::advance(begin2, k);
@@ -92,7 +92,7 @@ Node<Iterator> *DS2<Iterator>::construct1(Iterator begin, Iterator end) {
 
 template <class Iterator>
 tuple<bool, Point_2*> DS2<Iterator>::search(Point_2 q) {
-	Node<Iterator> *nd = getRoot();
+	shared_ptr<Node<Iterator>> nd = getRoot();
 	Point_2 ps(0, 0);
 	std::tuple<bool, Point_2*> res = (nd->value).query(q);
 	if (std::get<0>(res) == false) {
@@ -100,7 +100,7 @@ tuple<bool, Point_2*> DS2<Iterator>::search(Point_2 q) {
 	}
 	// naredi while nd->left ali right nista null
 	while (list(nd) == false) {
-		Node<Iterator> *leftC = nd->leftChild;
+		shared_ptr<Node<Iterator>> leftC = nd->leftChild;
 		tuple<bool, Point_2*> r = leftC->value.query(q); // zakaj ne res namesto r?
 		if (std::get<0>(r) == true) { nd = leftC; }
 		else { nd = nd->rightChild; }
