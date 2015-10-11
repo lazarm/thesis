@@ -139,7 +139,7 @@ void main_procedure(vector<Point_2>::iterator begin, vector<Point_2>::iterator e
 	vector<Point_2> cycle;
 	// reserve n memory cells. Maximum number of used cells is n, but probably less of them will be filled.
 	// It's probably better to do reserve only once with big value , and clear each time in the loop
-	cycle.reserve(distance(begin,end));
+	//cycle.reserve(distance(begin,end));
 	int k = 0;
 	for (auto p = begin; p != end; ++p)
 	{

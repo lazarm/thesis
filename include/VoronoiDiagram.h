@@ -49,13 +49,13 @@ typedef DT::Vertex_circulator         Vertex_circulator;
 
 
 using namespace std;
-template <class Iterator> class DS1
+template <class Iterator> class VoronoiDiagram
 {	
 public:
 	VD vd;
-	DS1() {};
-	~DS1() {};
-	//DS1(Iterator, Iterator);
+	VoronoiDiagram() {};
+	~VoronoiDiagram() {};
+	//VoronoiDiagram(Iterator, Iterator);
 	void construct(Iterator begin, Iterator end);
 	std::tuple<bool, Point_2*> query(Point_2 q);
 	Point_2 pointInsideLeaf();
@@ -63,14 +63,14 @@ public:
 };
 
 template <class Iterator>
-void DS1<Iterator>::construct(Iterator first, Iterator beyond) {
+void VoronoiDiagram<Iterator>::construct(Iterator first, Iterator beyond) {
 	//CGAL::spatial_sort(first, beyond);
 	vd.insert(first, beyond);
 	//assert(vd.is_valid());
 }
 
 template <class Iterator> 
-std::tuple<bool, Point_2*> DS1<Iterator>::query(Point_2 q) {
+std::tuple<bool, Point_2*> VoronoiDiagram<Iterator>::query(Point_2 q) {
 	
 	Locate_result lr = vd.locate(q);
 	// delaunay vertex == voronoi site
@@ -103,7 +103,7 @@ std::tuple<bool, Point_2*> DS1<Iterator>::query(Point_2 q) {
 
 // should be used only for trivial vd with one site and face
 template <class Iterator>
-Point_2 DS1<Iterator>::pointInsideLeaf() {
+Point_2 VoronoiDiagram<Iterator>::pointInsideLeaf() {
 	// use face to get the site and its point
 	Face_iterator fi = vd.faces_begin();
 	Point_2 p = fi->dual()->point();

@@ -1,19 +1,19 @@
-#include <DS1.h>
+#include <VoronoiDiagram.h>
 
 template <class Iterator>
 struct Node {
-	DS1<Iterator> value;
+	VoronoiDiagram<Iterator> value;
 	shared_ptr<Node> leftChild;
 	shared_ptr<Node> rightChild;
 
 	Node(){};
 	~Node(){};
-	Node(DS1<Iterator> val) {
+	Node(VoronoiDiagram<Iterator> val) {
 		value = val;
 		leftChild = NULL;
 		rightChild = NULL;
 	}
-    void setValue(DS1<Iterator> val) {
+    void setValue(VoronoiDiagram<Iterator> val) {
 		value = val;
 	}
 };
@@ -21,7 +21,7 @@ struct Node {
 template <class Iterator> class DS2
 {
 private:
-	vector<DS1 <Iterator> > A;
+	vector<VoronoiDiagram <Iterator> > A;
 	shared_ptr<Node<Iterator>> root;
 	int size;
 
@@ -62,7 +62,7 @@ void DS2<Iterator>::construct(Iterator begin, Iterator end) {
 		nd->rightChild = construct1(begin2, end);
 		CGAL::spatial_sort(begin, end);
 	}
-	DS1<vector<Site_2>::iterator> ds1root;
+	VoronoiDiagram<vector<Site_2>::iterator> ds1root;
 	ds1root.construct(begin, end);
 	//std::cout << ds1root.size() << std::endl;
 	nd->value = ds1root;
@@ -71,7 +71,7 @@ void DS2<Iterator>::construct(Iterator begin, Iterator end) {
 
 template <class Iterator>
 shared_ptr<Node<Iterator>> DS2<Iterator>::construct1(Iterator begin, Iterator end) {
-	DS1<vector<Site_2>::iterator> ds1node;
+	VoronoiDiagram<vector<Site_2>::iterator> ds1node;
 	
 	if (std::distance(begin,end) == 1) {
 		ds1node.construct(begin, end);
@@ -108,7 +108,7 @@ tuple<bool, Point_2*> DS2<Iterator>::search(Point_2 q) {
 	// z nd->value.vd.sites_begin in end lahko dobimo ven edini site_2, ki sestavlja vd v listu
 	//vector<Site_2> sites(nd->value.vd.sites_begin(), nd->value.vd.sites_end());
 	//Point_2 p2 = sites.at(0);
-	//DS1<std::vector<Site_2>::iterator> list = nd->value;
+	//VoronoiDiagram<std::vector<Site_2>::iterator> list = nd->value;
 	//Point_2 p = list.pointInsideLeaf();
 	//tuple<bool, Point_2> result = make_tuple(true, p2);
 	res = (nd->value).query(q);

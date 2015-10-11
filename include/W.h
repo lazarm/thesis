@@ -57,7 +57,7 @@ vector< vector<Point_2> > constructW(Iterator begin, Iterator end, Point_2 r, Se
 	int i = 1;
 	
 	while (wi_1_delaunayVertices.size() > 0) {
-		DS1<vector<Point_2>::iterator> vd_nearestNeighbour;
+		VoronoiDiagram<vector<Point_2>::iterator> vd_nearestNeighbour;
 		vd_nearestNeighbour.construct(wi_1_points.begin(), wi_1_points.end());
 		deque<Delaunay_vertex_handle> queue;
 		copy(wi_1_delaunayVertices.begin(), wi_1_delaunayVertices.end(), back_inserter(queue));
@@ -75,7 +75,7 @@ vector< vector<Point_2> > constructW(Iterator begin, Iterator end, Point_2 r, Se
 				if (pPoint->getDist() == numeric_limits<int>::max()) {
 					tuple<bool, Point_2*> nearest = vd_nearestNeighbour.query(*pPoint);
 					if (get<0>(nearest) == true) {
-						shared_ptr<Point_2> par2 = make_shared<Point_2(*(get<1>(nearest)))>;
+						shared_ptr<Point_2> par2 = make_shared<Point_2>(*(get<1>(nearest)));
 						
 						wi_delaunayVertices.push_back(p);
 						queue.push_back(p);
