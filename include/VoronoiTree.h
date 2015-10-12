@@ -24,14 +24,15 @@ private:
 	vector<VoronoiDiagram <Iterator> > A;
 	shared_ptr<Node<Iterator>> root;
 	int size;
+	shared_ptr<Node<Iterator>> insert_subtree(Iterator begin, Iterator end);
 
 public:
 	VoronoiTree();
+	VoronoiTree(Iterator begin, Iterator end);
 	~VoronoiTree(){};
 	shared_ptr<Node<Iterator>> getRoot(){ return root; };
 	void setRoot(shared_ptr<Node<Iterator>> nd) { root = nd; };
-	void construct(Iterator begin, Iterator beyond);
-	shared_ptr<Node<Iterator>> construct1(Iterator begin, Iterator end);
+	void insert(Iterator begin, Iterator beyond);
 	
 	int getSize() { return size; };
 	void setSize(int s) { size = s; };
@@ -48,7 +49,12 @@ VoronoiTree<Iterator>::VoronoiTree() {
 }
 
 template <class Iterator>
-void VoronoiTree<Iterator>::construct(Iterator begin, Iterator end) {
+VoronoiTree<Iterator>::VoronoiTree(Iterator begin, Iterator end) {
+	insert(begin, end);
+}
+
+template <class Iterator>
+void VoronoiTree<Iterator>::insert(Iterator begin, Iterator end) {
 	// points have to be sorted non-descreasingly by their weight
 	sort(begin, end, sortByDist());
 	setSize(end - begin);
@@ -58,35 +64,35 @@ void VoronoiTree<Iterator>::construct(Iterator begin, Iterator end) {
 		int k = int(ceil(std::distance(begin, end) / 2.0));
 		Iterator begin2 = begin;
 		std::advance(begin2, k);
-		nd->leftChild = construct1(begin, begin2);
-		nd->rightChild = construct1(begin2, end);
+		nd->leftChild = insert_subtree(begin, begin2);
+		nd->rightChild = insert_subtree(begin2, end);
 		CGAL::spatial_sort(begin, end);
 	}
-	VoronoiDiagram<vector<Site_2>::iterator> ds1root;
-	ds1root.insert(begin, end);
+	VoronoiDiagram<vector<Site_2>::iterator> vd_root;
+	vd_root.insert(begin, end);
 	//std::cout << ds1root.size() << std::endl;
-	nd->value = ds1root;
+	nd->value = vd_root;
 	setRoot(nd);
 }
 
 template <class Iterator>
-shared_ptr<Node<Iterator>> VoronoiTree<Iterator>::construct1(Iterator begin, Iterator end) {
-	VoronoiDiagram<vector<Site_2>::iterator> ds1node;
+shared_ptr<Node<Iterator>> VoronoiTree<Iterator>::insert_subtree(Iterator begin, Iterator end) {
+	VoronoiDiagram<vector<Site_2>::iterator> vd_node;
 	
 	if (std::distance(begin,end) == 1) {
-		ds1node.insert(begin, end);
-		shared_ptr< Node<Iterator> > nd = make_shared<Node<Iterator>>(ds1node);
+		vd_node.insert(begin, end);
+		shared_ptr< Node<Iterator> > nd = make_shared<Node<Iterator>>(vd_node);
 		return nd;
 	}
 	shared_ptr< Node<Iterator> > nd = make_shared<Node<Iterator>>();
 	int k = int(ceil(std::distance(begin,end) / 2.0));
 	Iterator begin2 = begin;
 	std::advance(begin2, k);
-	nd->leftChild = construct1(begin, begin2);
-	nd->rightChild = construct1(begin2, end);
+	nd->leftChild = insert_subtree(begin, begin2);
+	nd->rightChild = insert_subtree(begin2, end);
 	CGAL::spatial_sort(begin, end);
-	ds1node.insert(begin, end);
-	nd->value = ds1node;
+	vd_node.insert(begin, end);
+	nd->value = vd_node;
 	return nd;
 }
 

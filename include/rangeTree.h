@@ -77,15 +77,15 @@ RangeTree buildRangeTree(Iterator begin, Iterator end, Segment_2 st)
 	//cout << distance(begin, end) << endl;
 	for (Iterator it = begin; it != end; ++it)
 	{
-		VoronoiTree<vector<Site_2>::iterator> ds2; //PAZI DA TO NE BO VEDNO REFERENCA NA ISTI OBJEKT!!!
+		VoronoiTree<vector<Site_2>::iterator> voronoiTree; //PAZI DA TO NE BO VEDNO REFERENCA NA ISTI OBJEKT!!!
 		Point_2 pt = *it;
 		unique_ptr < RangePure_key> dp(new RangePure_key(it._Ptr, st));
 		//cout << "point: " << pt << "  /  dual: " << dp->point << endl;
-		inputList.push_back(RangeKey(*dp, ds2));
+		inputList.push_back(RangeKey(*dp, voronoiTree));
 	}
 	
 	RangeTree rangeTree(inputList.begin(), inputList.end());
-	ds2ObjectsConstruction1(rangeTree.range_tree_2->root());
+	traverse_and_populate_with_data(rangeTree.range_tree_2->root());
 	return rangeTree;
 }
 
@@ -96,7 +96,7 @@ Sites are created only at leaf nodes based on dual points of b and they get asso
 query is run and some site/point is returned, we can retrieve its original point b with all attributes contained in it 
 (such as weight).
 */
-void ds2ObjectsConstruction(RangeNode1* node)
+void build_VD_trees_on_layer2(RangeNode1* node)
 {
 
 	if (node->left_link == 0) {
@@ -105,25 +105,25 @@ void ds2ObjectsConstruction(RangeNode1* node)
 		
 		vector<Point_2> vdSites;
 		vdSites.push_back(*point.originalPoint);
-		node->object.second.construct(vdSites.begin(), vdSites.end());
+		node->object.second.insert(vdSites.begin(), vdSites.end());
 		return;
 	}
 	// recursively construct VoronoiTree structures for both childs of node
-	ds2ObjectsConstruction(node->left_link);
-	ds2ObjectsConstruction(node->right_link);
+	build_VD_trees_on_layer2(node->left_link);
+	build_VD_trees_on_layer2(node->right_link);
 
 	// root node of VoronoiTree structure representing the object of left and right child of node
-	shared_ptr< Node< vector<Site_2>::iterator> > ds2LeftRootNode = node->left_link->object.second.getRoot();
-	shared_ptr< Node< vector<Site_2>::iterator> > ds2RightRootNode = node->right_link->object.second.getRoot();
+	shared_ptr< Node< vector<Site_2>::iterator> > voronoi_left_subtree = node->left_link->object.second.getRoot();
+	shared_ptr< Node< vector<Site_2>::iterator> > voronoi_right_subtree = node->right_link->object.second.getRoot();
 	// vector of voronoi sites of VD at root node of VoronoiTree structure
-	vector<Site_2> leftVoronoiSites(ds2LeftRootNode->value.sites_begin(),ds2LeftRootNode->value.sites_end());
-	vector<Site_2> rightVoronoiSites(ds2RightRootNode->value.sites_begin(), ds2RightRootNode->value.sites_end());
+	vector<Site_2> leftVoronoiSites(voronoi_left_subtree->value.sites_begin(), voronoi_left_subtree->value.sites_end());
+	vector<Site_2> rightVoronoiSites(voronoi_right_subtree->value.sites_begin(), voronoi_right_subtree->value.sites_end());
 	vector<Site_2> vdSites;
 	
 	vdSites.reserve(leftVoronoiSites.size() + rightVoronoiSites.size());
 	vdSites.insert(vdSites.end(), leftVoronoiSites.begin(), leftVoronoiSites.end());
 	vdSites.insert(vdSites.end(), rightVoronoiSites.begin(), rightVoronoiSites.end());
-	node->object.second.construct(vdSites.begin(), vdSites.end());
+	node->object.second.insert(vdSites.begin(), vdSites.end());
 	
 	
 }
@@ -133,7 +133,7 @@ void ds2ObjectsConstruction(RangeNode1* node)
 Takes a node of a primary range tree and constructs VoronoiTree structures for all nodes in secondary range tree coming from this node.
 Recursively does the same for its left and right child.
 */
-void ds2ObjectsConstruction1(RangeNode* node)
+void traverse_and_populate_with_data(RangeNode* node)
 {
 	//rekurzivno klici left in right node, prej ali po node, nima veze
 	// za node klici sublayer, dobis range_tree_d=1
@@ -160,7 +160,7 @@ void ds2ObjectsConstruction1(RangeNode* node)
 			//cout << "haha4" << endl;
 			RangeNode1* secondaryRoot = secondaryTree->root();
 			
-			ds2ObjectsConstruction(secondaryRoot);
+			build_VD_trees_on_layer2(secondaryRoot);
 			DWORDLONG used = totalPhysMem - memInfo.ullAvailPhys;
 			cout << "used: " << used * 100 / totalPhysMem << endl;
 			//cout << "haha5" << endl;
