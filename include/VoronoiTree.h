@@ -63,7 +63,7 @@ void VoronoiTree<Iterator>::construct(Iterator begin, Iterator end) {
 		CGAL::spatial_sort(begin, end);
 	}
 	VoronoiDiagram<vector<Site_2>::iterator> ds1root;
-	ds1root.construct(begin, end);
+	ds1root.insert(begin, end);
 	//std::cout << ds1root.size() << std::endl;
 	nd->value = ds1root;
 	setRoot(nd);
@@ -74,7 +74,7 @@ shared_ptr<Node<Iterator>> VoronoiTree<Iterator>::construct1(Iterator begin, Ite
 	VoronoiDiagram<vector<Site_2>::iterator> ds1node;
 	
 	if (std::distance(begin,end) == 1) {
-		ds1node.construct(begin, end);
+		ds1node.insert(begin, end);
 		shared_ptr< Node<Iterator> > nd = make_shared<Node<Iterator>>(ds1node);
 		return nd;
 	}
@@ -85,7 +85,7 @@ shared_ptr<Node<Iterator>> VoronoiTree<Iterator>::construct1(Iterator begin, Ite
 	nd->leftChild = construct1(begin, begin2);
 	nd->rightChild = construct1(begin2, end);
 	CGAL::spatial_sort(begin, end);
-	ds1node.construct(begin, end);
+	ds1node.insert(begin, end);
 	nd->value = ds1node;
 	return nd;
 }

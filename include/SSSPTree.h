@@ -58,7 +58,7 @@ vector< vector<Point_2> > constructW(Iterator begin, Iterator end, Point_2 r, Se
 	
 	while (wi_1_delaunayVertices.size() > 0) {
 		VoronoiDiagram<vector<Point_2>::iterator> vd_nearestNeighbour;
-		vd_nearestNeighbour.construct(wi_1_points.begin(), wi_1_points.end());
+		vd_nearestNeighbour.insert(wi_1_points.begin(), wi_1_points.end());
 		deque<Delaunay_vertex_handle> queue;
 		copy(wi_1_delaunayVertices.begin(), wi_1_delaunayVertices.end(), back_inserter(queue));
 		vector<Delaunay_vertex_handle> wi_delaunayVertices;

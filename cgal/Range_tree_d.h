@@ -532,7 +532,7 @@ class Range_tree_d: public Tree_base< C_Data,  C_Window>
 			  //cout << "evo ga!" << endl;
 			  //cout << (w)->object.second.getSize() << endl;
 			  //cout << "size: " << ds2LeftRootNode->value.size() << endl;
-			  vector<Site_2> at1(ds2LeftRootNode->value.vd.sites_begin(), ds2LeftRootNode->value.vd.sites_end());  // lazar
+			  vector<Site_2> at1(ds2LeftRootNode->value.sites_begin(), ds2LeftRootNode->value.sites_end());  // lazar
 			  //cout << "ds2size: " << at1.size() << endl;
 			  for (vector<Site_2>::iterator it = at1.begin(); it != at1.end(); ++it) { //lazar
 			    //cout << (*it).x() << "  |+|  " << (*it).y() << endl; //lazar

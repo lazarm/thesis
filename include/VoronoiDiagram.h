@@ -49,30 +49,22 @@ typedef DT::Vertex_circulator         Vertex_circulator;
 
 
 using namespace std;
-template <class Iterator> class VoronoiDiagram
+template <class Iterator> class VoronoiDiagram: public VD
 {	
 public:
-	VD vd;
 	VoronoiDiagram() {};
 	~VoronoiDiagram() {};
 	//VoronoiDiagram(Iterator, Iterator);
-	void construct(Iterator begin, Iterator end);
 	std::tuple<bool, Point_2*> query(Point_2 q);
 	Point_2 pointInsideLeaf();
-	int size() { return vd.number_of_faces(); }
+	int size() { return number_of_faces(); }
 };
 
-template <class Iterator>
-void VoronoiDiagram<Iterator>::construct(Iterator first, Iterator beyond) {
-	//CGAL::spatial_sort(first, beyond);
-	vd.insert(first, beyond);
-	//assert(vd.is_valid());
-}
 
 template <class Iterator> 
 std::tuple<bool, Point_2*> VoronoiDiagram<Iterator>::query(Point_2 q) {
 	
-	Locate_result lr = vd.locate(q);
+	Locate_result lr = locate(q);
 	// delaunay vertex == voronoi site
 	Delaunay_vertex_handle df;
 	if (Vertex_handle* v = boost::get<Vertex_handle>(&lr)) {

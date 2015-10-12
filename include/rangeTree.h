@@ -116,8 +116,8 @@ void ds2ObjectsConstruction(RangeNode1* node)
 	shared_ptr< Node< vector<Site_2>::iterator> > ds2LeftRootNode = node->left_link->object.second.getRoot();
 	shared_ptr< Node< vector<Site_2>::iterator> > ds2RightRootNode = node->right_link->object.second.getRoot();
 	// vector of voronoi sites of VD at root node of VoronoiTree structure
-	vector<Site_2> leftVoronoiSites(ds2LeftRootNode->value.vd.sites_begin(),ds2LeftRootNode->value.vd.sites_end());
-	vector<Site_2> rightVoronoiSites(ds2RightRootNode->value.vd.sites_begin(), ds2RightRootNode->value.vd.sites_end());
+	vector<Site_2> leftVoronoiSites(ds2LeftRootNode->value.sites_begin(),ds2LeftRootNode->value.sites_end());
+	vector<Site_2> rightVoronoiSites(ds2RightRootNode->value.sites_begin(), ds2RightRootNode->value.sites_end());
 	vector<Site_2> vdSites;
 	
 	vdSites.reserve(leftVoronoiSites.size() + rightVoronoiSites.size());
