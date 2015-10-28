@@ -56,7 +56,6 @@ public:
 	~VoronoiDiagram() {};
 	//VoronoiDiagram(Iterator, Iterator);
 	std::tuple<bool, Point_2*> query(Point_2 q);
-	Point_2 pointInsideLeaf();
 	int size() { return number_of_faces(); }
 };
 
@@ -91,13 +90,4 @@ std::tuple<bool, Point_2*> VoronoiDiagram<Iterator>::query(Point_2 q) {
 	else {
 		return std::tuple<bool, Point_2*> {false, fcp};
 	}
-}
-
-// should be used only for trivial vd with one site and face
-template <class Iterator>
-Point_2 VoronoiDiagram<Iterator>::pointInsideLeaf() {
-	// use face to get the site and its point
-	Face_iterator fi = vd.faces_begin();
-	Point_2 p = fi->dual()->point();
-	return p;
 }
