@@ -63,9 +63,7 @@ typedef CGAL::Tree_base <
 
 /* From a vector of type Point_2 representing a group of points R_ make a vector of type Key storing
 a pair of DualPoint and empty class VoronoiTree. Build range tree from that.
-
-
-after that, for each a from L_ make a query with this tree(two queries, one with interval((-inf,-inf),(ax,ay)),
+After that, for each a from L_ make a query with this tree(two queries, one with interval((-inf,-inf),(ax,ay)),
 the other one with interval((ax,ay),(inf,inf)). Modify range tree so that when it hits an internal node
 s.t. all the points in its subtree are contained in the interval, the query stops at this internal node and the algorithm
 runs VoronoiTree query with the original point of a. Return the pair resulting from this query.
@@ -74,7 +72,7 @@ template <class Iterator>
 RangeTree buildRangeTree(Iterator begin, Iterator end, Segment_2 st)
 {
 	vector<RangeKey> inputList;
-	//cout << distance(begin, end) << endl;
+	cout << distance(begin, end) << endl;
 	for (Iterator it = begin; it != end; ++it)
 	{
 		VoronoiTree<vector<Site_2>::iterator> voronoiTree; //PAZI DA TO NE BO VEDNO REFERENCA NA ISTI OBJEKT!!!
@@ -83,9 +81,11 @@ RangeTree buildRangeTree(Iterator begin, Iterator end, Segment_2 st)
 		//cout << "point: " << pt << "  /  dual: " << dp->point << endl;
 		inputList.push_back(RangeKey(*dp, voronoiTree));
 	}
-	
+	cout << inputList.size() << endl;
 	RangeTree rangeTree(inputList.begin(), inputList.end());
 	traverse_and_populate_with_data(rangeTree.range_tree_2->root());
+	cout << "evo" << endl;
+	this_thread::sleep_for(chrono::seconds(5));
 	return rangeTree;
 }
 
@@ -97,8 +97,7 @@ query is run and some site/point is returned, we can retrieve its original point
 (such as weight).
 */
 void build_VD_trees_on_layer2(RangeNode1* node)
-{
-
+{	
 	if (node->left_link == 0) {
 		// leaf node
 		DualPoint point = node->object.first;
@@ -113,19 +112,18 @@ void build_VD_trees_on_layer2(RangeNode1* node)
 	build_VD_trees_on_layer2(node->right_link);
 
 	// root node of VoronoiTree structure representing the object of left and right child of node
-	shared_ptr< Node< vector<Site_2>::iterator> > voronoi_left_subtree = node->left_link->object.second.getRoot();
-	shared_ptr< Node< vector<Site_2>::iterator> > voronoi_right_subtree = node->right_link->object.second.getRoot();
+	vector<VoronoiDiagram <vector<Site_2>::iterator> > voronoi_left_subtree = node->left_link->object.second.getA();
+	vector<VoronoiDiagram <vector<Site_2>::iterator> > voronoi_right_subtree = node->right_link->object.second.getA();
 	// vector of voronoi sites of VD at root node of VoronoiTree structure
-	vector<Site_2> leftVoronoiSites(voronoi_left_subtree->value.sites_begin(), voronoi_left_subtree->value.sites_end());
-	vector<Site_2> rightVoronoiSites(voronoi_right_subtree->value.sites_begin(), voronoi_right_subtree->value.sites_end());
+
+	vector<Site_2> leftVoronoiSites(voronoi_left_subtree[0].sites_begin(), voronoi_left_subtree[0].sites_end());
+	vector<Site_2> rightVoronoiSites(voronoi_right_subtree[0].sites_begin(), voronoi_right_subtree[0].sites_end());
 	vector<Site_2> vdSites;
 	
 	vdSites.reserve(leftVoronoiSites.size() + rightVoronoiSites.size());
 	vdSites.insert(vdSites.end(), leftVoronoiSites.begin(), leftVoronoiSites.end());
 	vdSites.insert(vdSites.end(), rightVoronoiSites.begin(), rightVoronoiSites.end());
 	node->object.second.insert(vdSites.begin(), vdSites.end());
-	
-	
 }
 
 
@@ -148,39 +146,19 @@ void traverse_and_populate_with_data(RangeNode* node)
 	nodes_to_visit.push(node);
 	
 	while (!nodes_to_visit.empty()) {
-		//cout << "haha0" << endl;
 		RangeNode* nd = nodes_to_visit.front();
-		//cout << "haha1" << endl;
 		nodes_to_visit.pop();
-		//cout << "haha2" << endl;
 		if (nd->left_link != 0) {
 			Tree_base* baseTree = nd->sublayer;
-			//cout << "haha3" << endl;
 			RangeTree1* secondaryTree = dynamic_cast<RangeTree1 *>(baseTree);
-			//cout << "haha4" << endl;
 			RangeNode1* secondaryRoot = secondaryTree->root();
 			
 			build_VD_trees_on_layer2(secondaryRoot);
-			DWORDLONG used = totalPhysMem - memInfo.ullAvailPhys;
-			cout << "used: " << used * 100 / totalPhysMem << endl;
-			//cout << "haha5" << endl;
+
 			nodes_to_visit.push(nd->left_link);
 			nodes_to_visit.push(nd->right_link);
-			
-		}
-		else {
-			
 		}
 	}
-	/*
-	Tree_base* baseTree = node->sublayer;
-	RangeTree1* secondaryTree = dynamic_cast<RangeTree1 *>(baseTree);
-	RangeNode1* secondaryRoot = secondaryTree->root();
-
-	ds2ObjectsConstruction1(node->left_link);
-	ds2ObjectsConstruction1(node->right_link);
-
-	ds2ObjectsConstruction(secondaryRoot);*/
 }
 
 /*

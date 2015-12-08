@@ -1,124 +1,102 @@
 #include <VoronoiDiagram.h>
+#include <math.h>
 
-template <class Iterator>
-struct Node {
-	VoronoiDiagram<Iterator> value;
-	shared_ptr<Node> leftChild;
-	shared_ptr<Node> rightChild;
-
-	Node(){};
-	~Node(){};
-	Node(VoronoiDiagram<Iterator> val) {
-		value = val;
-		leftChild = NULL;
-		rightChild = NULL;
-	}
-    void setValue(VoronoiDiagram<Iterator> val) {
-		value = val;
-	}
-};
 
 template <class Iterator> class VoronoiTree
 {
 private:
 	vector<VoronoiDiagram <Iterator> > A;
-	shared_ptr<Node<Iterator>> root;
 	int size;
-	shared_ptr<Node<Iterator>> insert_subtree(Iterator begin, Iterator end);
-
 public:
 	VoronoiTree();
 	VoronoiTree(Iterator begin, Iterator end);
 	~VoronoiTree(){};
-	shared_ptr<Node<Iterator>> getRoot(){ return root; };
-	void setRoot(shared_ptr<Node<Iterator>> nd) { root = nd; };
+	vector<VoronoiDiagram <Iterator> > getA() { return A; }
 	void insert(Iterator begin, Iterator beyond);
 	
 	int getSize() { return size; };
 	void setSize(int s) { size = s; };
-	bool list(shared_ptr<Node<Iterator>> nd) {
-		if (nd->value.size() == 1) return true;
-		return false;
-	};
+
 	std::tuple<bool, Point_2*> search(Point_2 q);
 };
 
 template <class Iterator>
 VoronoiTree<Iterator>::VoronoiTree() {
-	setRoot(NULL);
+	return;
 }
 
 template <class Iterator>
 VoronoiTree<Iterator>::VoronoiTree(Iterator begin, Iterator end) {
+	int treeSize = 2*nextPowerOfTwo(int(distance(begin,end))) - 1;
+	A.reserve(treeSize);
 	insert(begin, end);
 }
 
 template <class Iterator>
 void VoronoiTree<Iterator>::insert(Iterator begin, Iterator end) {
+	
+	if (A.size() == 0) {
+		int treeSize = 2 * nextPowerOfTwo(int(distance(begin, end))) - 1;
+		A.reserve(treeSize);
+	}
+	
 	// points have to be sorted non-descreasingly by their weight
 	sort(begin, end, sortByDist());
-	setSize(end - begin);
-	// node nd stores ds1root as its value
-	shared_ptr< Node<Iterator> > nd = make_shared<Node<Iterator>>();
-	if (distance(begin, end) > 1) {
-		int k = int(ceil(std::distance(begin, end) / 2.0));
-		Iterator begin2 = begin;
-		std::advance(begin2, k);
-		nd->leftChild = insert_subtree(begin, begin2);
-		nd->rightChild = insert_subtree(begin2, end);
-		CGAL::spatial_sort(begin, end);
-	}
+	setSize(A.capacity());
 	VoronoiDiagram<vector<Site_2>::iterator> vd_root;
 	vd_root.insert(begin, end);
-	//std::cout << ds1root.size() << std::endl;
-	nd->value = vd_root;
-	setRoot(nd);
-}
-
-template <class Iterator>
-shared_ptr<Node<Iterator>> VoronoiTree<Iterator>::insert_subtree(Iterator begin, Iterator end) {
-	VoronoiDiagram<vector<Site_2>::iterator> vd_node;
-	
-	if (std::distance(begin,end) == 1) {
-		vd_node.insert(begin, end);
-		shared_ptr< Node<Iterator> > nd = make_shared<Node<Iterator>>(vd_node);
-		return nd;
+	A.push_back(vd_root);
+	int i = 1;
+	int size = A.capacity();
+	for (int v = 1; v < log2(A.capacity() + 1); v++) {
+		int line_sum = 0;
+		for (int k = 0; k < pow(2, v); k = k + 2) {
+			int parent_size = A[(i-1)/2].size();
+			if (parent_size > 1) {
+				VoronoiDiagram<vector<Site_2>::iterator> vd_left;
+				VoronoiDiagram<vector<Site_2>::iterator> vd_right;
+				vd_left.insert(begin + line_sum, begin + line_sum + int(ceil(parent_size / 2)));
+				vd_right.insert(begin + line_sum + int(ceil(parent_size / 2)), begin + line_sum + parent_size);
+				A.push_back(vd_left);
+				//A[i] = vd_left;
+				A.push_back(vd_right);
+				//A[i + 1] = vd_right;
+			}
+			i += 2;
+			line_sum += parent_size;
+		}
 	}
-	shared_ptr< Node<Iterator> > nd = make_shared<Node<Iterator>>();
-	int k = int(ceil(std::distance(begin,end) / 2.0));
-	Iterator begin2 = begin;
-	std::advance(begin2, k);
-	nd->leftChild = insert_subtree(begin, begin2);
-	nd->rightChild = insert_subtree(begin2, end);
-	CGAL::spatial_sort(begin, end);
-	vd_node.insert(begin, end);
-	nd->value = vd_node;
-	return nd;
 }
 
 template <class Iterator>
 tuple<bool, Point_2*> VoronoiTree<Iterator>::search(Point_2 q) {
-	shared_ptr<Node<Iterator>> nd = getRoot();
-	Point_2 ps(0, 0);
-	std::tuple<bool, Point_2*> res = (nd->value).query(q);
+	tuple<bool, Point_2*> res = A[0].query(q);
 	if (std::get<0>(res) == false) {
 		return res;
 	}
-	// naredi while nd->left ali right nista null
-	while (list(nd) == false) {
-		shared_ptr<Node<Iterator>> leftC = nd->leftChild;
-		tuple<bool, Point_2*> r = leftC->value.query(q); // zakaj ne res namesto r?
-		if (std::get<0>(r) == true) { nd = leftC; }
-		else { nd = nd->rightChild; }
+	
+	int i = 0;
+	while (2*i+1 < A.size()) {
+		res = A[2 * i + 1].query(q);
+		if (get<0>(res) == true)
+			i = 2 * i + 1;
+		else
+			i = 2 * i + 2;
 	}
-	// z nd->value.vd.sites_begin in end lahko dobimo ven edini site_2, ki sestavlja vd v listu
-	//vector<Site_2> sites(nd->value.vd.sites_begin(), nd->value.vd.sites_end());
-	//Point_2 p2 = sites.at(0);
-	//VoronoiDiagram<std::vector<Site_2>::iterator> list = nd->value;
-	//Point_2 p = list.pointInsideLeaf();
-	//tuple<bool, Point_2> result = make_tuple(true, p2);
-	res = (nd->value).query(q);
+	// same value as in last loop iteration, if leaf node is left child
+	res = A[i].query(q);
 	return res;
+}
+
+int nextPowerOfTwo(int val) {
+	val--;
+	val = (val >> 1) | val;
+	val = (val >> 2) | val;
+	val = (val >> 4) | val;
+	val = (val >> 8) | val;
+	val = (val >> 16) | val;
+	val++; // Val is now the next highest power of 2.
+	return val;
 }
 
 struct sortByDist
