@@ -1,4 +1,4 @@
-#include <VoronoiDiagram.h>
+#include <DualPoint.h>
 #include <math.h>
 
 
