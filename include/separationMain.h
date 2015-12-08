@@ -148,7 +148,8 @@ void main_procedure(vector<Point_2>::iterator begin, vector<Point_2>::iterator e
 		cout << (k-1) << endl;
 		
 		//cout << "root = " << *p << endl;
-		vector< vector<Point_2> > rst = constructW(begin, end, *p, st);
+		SSSPTree<vector<Point_2>::iterator> ssspTree(begin, end, *p, st);
+		vector< vector<Point_2> > rst = ssspTree.getAllSets();
 		int ii = 0;/*
 		for (vector< vector<Point_2> >::iterator tz = rst.begin(); tz != rst.end(); ++tz) {
 			std::cout << ii << std::endl;
@@ -161,7 +162,7 @@ void main_procedure(vector<Point_2>::iterator begin, vector<Point_2>::iterator e
 		cout << "st" << endl;
 		cout << st.source().x() << "," << st.target().x() << endl;
 		cout << st.source().y() << "," << st.target().y() << endl;
-
+		cout << rst.at(0).size() << ", " << rst.at(1).size() << ", " << rst.at(2).size() << ", " << rst.at(3).size() << endl;
 
 		Line_2 st_line = Line_2(st);
 		tuple<Segment_2, Segment_2> rays = getRays(st, st_line);
@@ -169,15 +170,17 @@ void main_procedure(vector<Point_2>::iterator begin, vector<Point_2>::iterator e
 
 		tuple<Point_2, Point_2, int>  l0r0 = findminpair(rst.at(0).begin(), rst.at(0).end(), rst.at(2).begin(), rst.at(2).end(),st, bestR);
 		tuple<Point_2, Point_2, int>  l1r1 = findminpair(rst.at(1).begin(), rst.at(1).end(), rst.at(3).begin(), rst.at(3).end(), st,l0r0);
-
+		cout << "1" << endl;
 		tuple<Point_2, Point_2, int>  l0r1_t = findminpair(rst.at(0).begin(), rst.at(0).end(), rst.at(3).begin(), rst.at(3).end(), get<0>(rays), l1r1);
 		tuple<Point_2, Point_2, int>  l0r1_s = findminpair(rst.at(0).begin(), rst.at(0).end(), rst.at(3).begin(), rst.at(3).end(), get<1>(rays), l0r1_t);
-
+		cout << "2" << endl;
 		tuple<Point_2, Point_2, int>  l1r0_t = findminpair(rst.at(1).begin(), rst.at(1).end(), rst.at(2).begin(), rst.at(2).end(), get<0>(rays), l0r1_s);
 		tuple<Point_2, Point_2, int>  l1r0_s = findminpair(rst.at(1).begin(), rst.at(1).end(), rst.at(2).begin(), rst.at(2).end(), get<1>(rays), l1r0_t);
-
+		cout << "3" << endl;
 		tuple<Point_2, Point_2, int>  l0l1 = findMinPair(rst.at(0).begin(), rst.at(0).end(), rst.at(1).begin(), rst.at(1).end(), l1r0_s);
+		cout << "4" << endl;
 		tuple<Point_2, Point_2, int>  r0r1 = findMinPair(rst.at(2).begin(), rst.at(2).end(), rst.at(3).begin(), rst.at(3).end(), l0l1);
+		cout << "5" << endl;
 		tuple<Point_2, Point_2, int> result = r0r1;
 		// if result < best_result, ga obdrzi, sicer ne
 		if (get<2>(result) < get<2>(best_r)) { 

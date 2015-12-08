@@ -5,20 +5,28 @@
 
 using namespace std;
 
-/*
-source point r has to be one of the points in the vector defined by begin and end
-*/
-template <class Iterator>
-vector< vector<Point_2> > constructW(Iterator begin, Iterator end, Point_2 r, Segment_2 st)
+template <class Iterator> class SSSPTree
 {
-	// whenever we get to a point from source r and add it to SSSP, we add it into one of the four sets based on
-	// its Nr attribute and its relative position to segment st
+private:
 	vector<Point_2> l0;
 	vector<Point_2> l1;
 	vector<Point_2> r0;
 	vector<Point_2> r1;
-	vector< vector<Point_2> > allSets;
+public:
+	SSSPTree();
+	SSSPTree(Iterator begin, Iterator end, Point_2 r, Segment_2 st);
+	~SSSPTree(){};
+	vector< vector<Point_2> > getAllSets();
+};
 
+/*
+source point r has to be one of the points in the vector defined by begin and end
+*/
+template <class Iterator>
+SSSPTree<Iterator>::SSSPTree(Iterator begin, Iterator end, Point_2 r, Segment_2 st)
+{
+	// whenever we get to a point from source r and add it to SSSP, we add it into one of the four sets based on
+	// its Nr attribute and its relative position to segment st
 	// Delaunay triangulation
 	DT dt;
 	dt.insert(begin, end);
@@ -103,6 +111,12 @@ vector< vector<Point_2> > constructW(Iterator begin, Iterator end, Point_2 r, Se
 		std::cout << (**tz2).x() << "   " << (**tz2).y() << "  dist: " << (**tz2).getDist() << "  nr: " << (**tz2).getNr() << std::endl;
 		cout << *((*tz2)->getParent()) << "  dist: " << (*tz2)->getParent()->getDist() << "  ad: " << (*tz2)->getParent() << endl;
 	}*/
+}
+
+template <class Iterator>
+vector< vector<Point_2> > SSSPTree<Iterator>::getAllSets()
+{
+	vector< vector<Point_2> > allSets;
 	allSets.push_back(l0);
 	allSets.push_back(l1);
 	allSets.push_back(r0);
@@ -153,4 +167,3 @@ void categorize(vector<Point_2>* l0, vector<Point_2>* l1, vector<Point_2>* r0, v
 		r1->push_back(*p);
 	}
 }
-
