@@ -85,7 +85,7 @@ RangeTree buildRangeTree(Iterator begin, Iterator end, Segment_2 st)
 	RangeTree rangeTree(inputList.begin(), inputList.end());
 	traverse_and_populate_with_data(rangeTree.range_tree_2->root());
 	cout << "evo" << endl;
-	this_thread::sleep_for(chrono::seconds(5));
+	this_thread::sleep_for(chrono::seconds(10));
 	return rangeTree;
 }
 
@@ -112,12 +112,12 @@ void build_VD_trees_on_layer2(RangeNode1* node)
 	build_VD_trees_on_layer2(node->right_link);
 
 	// root node of VoronoiTree structure representing the object of left and right child of node
-	vector<VoronoiDiagram <vector<Site_2>::iterator> > voronoi_left_subtree = node->left_link->object.second.getA();
-	vector<VoronoiDiagram <vector<Site_2>::iterator> > voronoi_right_subtree = node->right_link->object.second.getA();
+	vector<vector<Point_2> > voronoi_left_subtree = node->left_link->object.second.getA();
+	vector<vector<Point_2> > voronoi_right_subtree = node->right_link->object.second.getA();
 	// vector of voronoi sites of VD at root node of VoronoiTree structure
 
-	vector<Site_2> leftVoronoiSites(voronoi_left_subtree[0].sites_begin(), voronoi_left_subtree[0].sites_end());
-	vector<Site_2> rightVoronoiSites(voronoi_right_subtree[0].sites_begin(), voronoi_right_subtree[0].sites_end());
+	vector<Site_2> leftVoronoiSites(voronoi_left_subtree[0].begin(), voronoi_left_subtree[0].end());
+	vector<Site_2> rightVoronoiSites(voronoi_right_subtree[0].begin(), voronoi_right_subtree[0].end());
 	vector<Site_2> vdSites;
 	
 	vdSites.reserve(leftVoronoiSites.size() + rightVoronoiSites.size());

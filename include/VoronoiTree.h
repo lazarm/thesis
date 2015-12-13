@@ -5,13 +5,13 @@
 template <class Iterator> class VoronoiTree
 {
 private:
-	vector<VoronoiDiagram <Iterator> > A;
+	vector<vector<Point_2> > A;
 	int size;
 public:
 	VoronoiTree();
 	VoronoiTree(Iterator begin, Iterator end);
 	~VoronoiTree(){};
-	vector<VoronoiDiagram <Iterator> > getA() { return A; }
+	vector<vector<Point_2> > getA() { return A; }
 	void insert(Iterator begin, Iterator beyond);
 	
 	int getSize() { return size; };
@@ -43,8 +43,8 @@ void VoronoiTree<Iterator>::insert(Iterator begin, Iterator end) {
 	// points have to be sorted non-descreasingly by their weight
 	sort(begin, end, sortByDist());
 	setSize(A.capacity());
-	VoronoiDiagram<vector<Site_2>::iterator> vd_root;
-	vd_root.insert(begin, end);
+	vector<Point_2> vd_root;
+	vd_root.insert(vd_root.end(), begin, end);
 	A.push_back(vd_root);
 	int i = 1;
 	int size = A.capacity();
@@ -53,10 +53,10 @@ void VoronoiTree<Iterator>::insert(Iterator begin, Iterator end) {
 		for (int k = 0; k < pow(2, v); k = k + 2) {
 			int parent_size = A[(i-1)/2].size();
 			if (parent_size > 1) {
-				VoronoiDiagram<vector<Site_2>::iterator> vd_left;
-				VoronoiDiagram<vector<Site_2>::iterator> vd_right;
-				vd_left.insert(begin + line_sum, begin + line_sum + int(ceil(parent_size / 2)));
-				vd_right.insert(begin + line_sum + int(ceil(parent_size / 2)), begin + line_sum + parent_size);
+				vector<Point_2> vd_left;
+				vector<Point_2> vd_right;
+				vd_left.insert(vd_left.end(), begin + line_sum, begin + line_sum + int(ceil(parent_size / 2)));
+				vd_right.insert(vd_right.end(), begin + line_sum + int(ceil(parent_size / 2)), begin + line_sum + parent_size);
 				A.push_back(vd_left);
 				//A[i] = vd_left;
 				A.push_back(vd_right);
@@ -70,6 +70,8 @@ void VoronoiTree<Iterator>::insert(Iterator begin, Iterator end) {
 
 template <class Iterator>
 tuple<bool, Point_2*> VoronoiTree<Iterator>::search(Point_2 q) {
+	tuple<bool, Point_2*> res = make_tuple(true, new Point_2(0, 0));
+	/*
 	tuple<bool, Point_2*> res = A[0].query(q);
 	if (std::get<0>(res) == false) {
 		return res;
@@ -84,7 +86,7 @@ tuple<bool, Point_2*> VoronoiTree<Iterator>::search(Point_2 q) {
 			i = 2 * i + 2;
 	}
 	// same value as in last loop iteration, if leaf node is left child
-	res = A[i].query(q);
+	res = A[i].query(q);*/
 	return res;
 }
 
