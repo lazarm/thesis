@@ -11,53 +11,53 @@
 #include <windows.h>
 
 
-typedef CGAL::Range_tree_map_traits_2<DualPoint, VoronoiTree<vector<Site_2>::iterator> > rangeTraits;
+typedef CGAL::Range_tree_map_traits_2<DualPoint, VoronoiTree> rangeTraits;
 typedef rangeTraits::Key RangeKey;
 typedef rangeTraits::Pure_key RangePure_key;
 typedef rangeTraits::Interval Interval;
 typedef CGAL::Range_tree_2<rangeTraits> RangeTree;
 
 typedef CGAL::Range_tree_node<
-	std::pair<DualPoint, VoronoiTree<vector<Site_2>::iterator>>,
+	std::pair<DualPoint, VoronoiTree>,
 	std::pair<DualPoint, DualPoint>,
 	CGAL::tree_point_traits<
-		std::pair<DualPoint, VoronoiTree<vector<Site_2>::iterator>>,
+		std::pair<DualPoint, VoronoiTree>,
 		std::pair<DualPoint, DualPoint>,
 		DualPoint,
-		CGAL::T_Key_1<DualPoint, std::pair<DualPoint, VoronoiTree<vector<Site_2>::iterator>>>,
+		CGAL::T_Key_1<DualPoint, std::pair<DualPoint, VoronoiTree>>,
 		CGAL::C_Low_1<DualPoint, std::pair<DualPoint, DualPoint >>,
 		CGAL::C_High_1<DualPoint, std::pair<DualPoint, DualPoint >>,
 		CGAL::C_Compare_1<DualPoint >>
 	> RangeNode;
 
 typedef CGAL::Range_tree_node<
-	std::pair<DualPoint, VoronoiTree<vector<Site_2>::iterator>>,
+	std::pair<DualPoint, VoronoiTree>,
 	std::pair<DualPoint, DualPoint>,
 	CGAL::tree_point_traits<
-		std::pair<DualPoint, VoronoiTree<vector<Site_2>::iterator>>,
+		std::pair<DualPoint, VoronoiTree>,
 		std::pair<DualPoint, DualPoint>,
 		DualPoint,
-		CGAL::T_Key_2<DualPoint, std::pair<DualPoint, VoronoiTree<vector<Site_2>::iterator>>>,
+		CGAL::T_Key_2<DualPoint, std::pair<DualPoint, VoronoiTree>>,
 		CGAL::C_Low_2<DualPoint, std::pair<DualPoint, DualPoint >>,
 		CGAL::C_High_2<DualPoint, std::pair<DualPoint, DualPoint >>,
 		CGAL::C_Compare_2<DualPoint >>
 	> RangeNode1;
 
 typedef CGAL::Range_tree_d<
-	std::pair<DualPoint, VoronoiTree<vector<Site_2>::iterator>>,
+	std::pair<DualPoint, VoronoiTree>,
 	std::pair<DualPoint, DualPoint>,
 	CGAL::tree_point_traits<
-		std::pair<DualPoint, VoronoiTree<vector<Site_2>::iterator>>,
+		std::pair<DualPoint, VoronoiTree>,
 		std::pair<DualPoint, DualPoint>,
 		DualPoint,
-		CGAL::T_Key_2<DualPoint, std::pair<DualPoint, VoronoiTree<vector<Site_2>::iterator>>>,
+		CGAL::T_Key_2<DualPoint, std::pair<DualPoint, VoronoiTree>>,
 			CGAL::C_Low_2<DualPoint, std::pair<DualPoint, DualPoint >>,
 		CGAL::C_High_2<DualPoint, std::pair<DualPoint, DualPoint >>,
 		CGAL::C_Compare_2<DualPoint >>
 	> RangeTree1;
 
 typedef CGAL::Tree_base <
-	std::pair<DualPoint, VoronoiTree<vector<Site_2>::iterator>>,
+	std::pair<DualPoint, VoronoiTree>,
 	std::pair<DualPoint, DualPoint>
 	> Tree_base;
 
@@ -73,19 +73,27 @@ RangeTree buildRangeTree(Iterator begin, Iterator end, Segment_2 st)
 {
 	vector<RangeKey> inputList;
 	cout << distance(begin, end) << endl;
+	CGAL::Timer cost;
+	cost.reset(); cost.start();
 	for (Iterator it = begin; it != end; ++it)
 	{
-		VoronoiTree<vector<Site_2>::iterator> voronoiTree; //PAZI DA TO NE BO VEDNO REFERENCA NA ISTI OBJEKT!!!
+		VoronoiTree voronoiTree; //PAZI DA TO NE BO VEDNO REFERENCA NA ISTI OBJEKT!!!
 		Point_2 pt = *it;
 		unique_ptr < RangePure_key> dp(new RangePure_key(it._Ptr, st));
 		//cout << "point: " << pt << "  /  dual: " << dp->point << endl;
 		inputList.push_back(RangeKey(*dp, voronoiTree));
 	}
-	cout << inputList.size() << endl;
+	cost.stop();
+	cout << "inputList: " << cost.time() << endl;
+	cost.reset(); cost.start();
 	RangeTree rangeTree(inputList.begin(), inputList.end());
+	cost.stop();
+	cout << "build range tree: " << cost.time() << endl;
+	cost.reset(); cost.start();
 	traverse_and_populate_with_data(rangeTree.range_tree_2->root());
-	cout << "evo" << endl;
-	this_thread::sleep_for(chrono::seconds(10));
+	cost.stop();
+	cout << "traverse range tree: " << cost.time() << endl;
+	//this_thread::sleep_for(chrono::seconds(2));
 	return rangeTree;
 }
 
@@ -101,7 +109,6 @@ void build_VD_trees_on_layer2(RangeNode1* node)
 	if (node->left_link == 0) {
 		// leaf node
 		DualPoint point = node->object.first;
-		
 		vector<Point_2> vdSites;
 		vdSites.push_back(*point.originalPoint);
 		node->object.second.insert(vdSites.begin(), vdSites.end());
@@ -111,18 +118,11 @@ void build_VD_trees_on_layer2(RangeNode1* node)
 	build_VD_trees_on_layer2(node->left_link);
 	build_VD_trees_on_layer2(node->right_link);
 
-	// root node of VoronoiTree structure representing the object of left and right child of node
-	vector<vector<Point_2> > voronoi_left_subtree = node->left_link->object.second.getA();
-	vector<vector<Point_2> > voronoi_right_subtree = node->right_link->object.second.getA();
-	// vector of voronoi sites of VD at root node of VoronoiTree structure
-
-	vector<Site_2> leftVoronoiSites(voronoi_left_subtree[0].begin(), voronoi_left_subtree[0].end());
-	vector<Site_2> rightVoronoiSites(voronoi_right_subtree[0].begin(), voronoi_right_subtree[0].end());
 	vector<Site_2> vdSites;
-	
-	vdSites.reserve(leftVoronoiSites.size() + rightVoronoiSites.size());
-	vdSites.insert(vdSites.end(), leftVoronoiSites.begin(), leftVoronoiSites.end());
-	vdSites.insert(vdSites.end(), rightVoronoiSites.begin(), rightVoronoiSites.end());
+	shared_ptr<KDTree> root_left = node->left_link->object.second.getRoot();
+	shared_ptr<KDTree> root_right = node->right_link->object.second.getRoot();
+	vdSites.insert(vdSites.end(), root_left->begin(), root_left->end());
+	vdSites.insert(vdSites.end(), root_right->begin(), root_right->end());
 	node->object.second.insert(vdSites.begin(), vdSites.end());
 }
 
@@ -137,14 +137,15 @@ void traverse_and_populate_with_data(RangeNode* node)
 	// za node klici sublayer, dobis range_tree_d=1
 	// potem lahko klices zgornjo funkcijo
 	if (node->left_link == 0) { return; }
-	MEMORYSTATUSEX memInfo;
+	/*MEMORYSTATUSEX memInfo;
 	memInfo.dwLength = sizeof(MEMORYSTATUSEX);
 	GlobalMemoryStatusEx(&memInfo);
 	DWORDLONG totalPhysMem = memInfo.ullTotalPhys;
-
+	*/
 	queue<RangeNode*> nodes_to_visit;
 	nodes_to_visit.push(node);
-	
+	CGAL::Timer cost;
+	double total_cast = 0;
 	while (!nodes_to_visit.empty()) {
 		RangeNode* nd = nodes_to_visit.front();
 		nodes_to_visit.pop();
@@ -152,13 +153,15 @@ void traverse_and_populate_with_data(RangeNode* node)
 			Tree_base* baseTree = nd->sublayer;
 			RangeTree1* secondaryTree = dynamic_cast<RangeTree1 *>(baseTree);
 			RangeNode1* secondaryRoot = secondaryTree->root();
-			
+			cost.reset(); cost.start();
 			build_VD_trees_on_layer2(secondaryRoot);
-
+			cost.stop();
+			total_cast += cost.time();
 			nodes_to_visit.push(nd->left_link);
 			nodes_to_visit.push(nd->right_link);
 		}
 	}
+	cout << "total cast: " << total_cast << endl;
 }
 
 /*

@@ -6,25 +6,41 @@ tuple<Point_2, Point_2,int> findminpair(Iterator setAbegin, Iterator setAend, It
 	tuple<Point_2, Point_2, int> bestR)
 {
 	if (setBend - setBbegin == 0) { return bestR; }
+	CGAL::Timer cost;
+	CGAL::Timer all;
+	cost.reset(); cost.start(); all.start();
 	RangeTree rangeTree = buildRangeTree(setBbegin, setBend, st);
+	cost.stop();
+	cout << "build rangeTree total: " << cost.time() << endl;
 	int minWeight = get<2>(bestR);
+	
+	cost.reset(); cost.start();
 	for (Iterator a = setAbegin; a != setAend; ++a)
 	{
-		vector<Point_2 *> queryResults;
+		vector<Point_2> queryResults;
 		int weight_a = (*a).getDist();
 		if (weight_a >= minWeight) { continue; }
 		DualPoint* a_dual = new DualPoint(a._Ptr, st);
+		//cout << "begin query" << endl;
 		rangeTree_query(&rangeTree, a_dual, back_inserter(queryResults));
 		delete(a_dual);
-		for (vector<Point_2*>::iterator pointB = queryResults.begin(); pointB != queryResults.end(); ++pointB)
+		//cout << "query res size: " << queryResults.size() << endl;
+		for (vector<Point_2>::iterator pointB = queryResults.begin(); pointB != queryResults.end(); ++pointB)
 		{
-			if (weight_a + (*pointB)->getDist() < minWeight) { 
-				minWeight = weight_a + (*pointB)->getDist();
-				bestR = make_tuple(*a, **pointB, minWeight);
+			//cout << "it" << endl;
+			//cout << "min w: " << minWeight << endl;
+			//cout << "w-a: " << weight_a << endl;
+
+			if (weight_a + pointB->getDist() < minWeight) { 
+				minWeight = weight_a + pointB->getDist();
+				bestR = make_tuple(*a, *pointB, minWeight);
 			}
 		}
-		
 	}
+	cost.stop();
+	cout << "range tree query: " << cost.time() << endl;
+	all.stop();
+	cout << "findminpair in timer: " << all.time() << endl;
 	return bestR;
 }
 
@@ -33,19 +49,19 @@ tuple<Point_2, Point_2, int> findMinPair(Iterator setAbegin, Iterator setAend, I
 	tuple<Point_2, Point_2, int> bestR)
 {
 	if (setBbegin == setBend || setAbegin == setAend) { return bestR; }
-	VoronoiTree<vector<Site_2>::iterator> ds2(setBbegin, setBend);
+	VoronoiTree ds2(setBbegin, setBend);
 	//ds2.construct(setBbegin, setBend);
 	int minWeight = get<2>(bestR);
 	for (Iterator a = setAbegin; a != setAend; ++a)
 	{
 		if (a->getDist() < minWeight) {
-			tuple<bool, Point_2*> query = ds2.search(Point_2(*a));
+			tuple<bool, Point_2> query = ds2.search(Point_2(*a));
 			if (get<0>(query))
 			{
-				Point_2 *bStar(get<1>(query));
-				int weight = (*a).getDist() + bStar->getDist();
+				Point_2 bStar = get<1>(query);
+				int weight = (*a).getDist() + bStar.getDist();
 				if (weight < minWeight) {
-					bestR = make_tuple(*a, *bStar, weight);
+					bestR = make_tuple(*a, bStar, weight);
 					minWeight = weight;
 				}
 			}
