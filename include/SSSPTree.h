@@ -1,7 +1,7 @@
 #include <deque>
 #include <CGAL/intersections.h>
 #include <unordered_map>
-#include <VoronoiTree.h>
+#include <NNTree.h>
 
 using namespace std;
 

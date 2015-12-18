@@ -49,7 +49,7 @@ tuple<Point_2, Point_2, int> findMinPair(Iterator setAbegin, Iterator setAend, I
 	tuple<Point_2, Point_2, int> bestR)
 {
 	if (setBbegin == setBend || setAbegin == setAend) { return bestR; }
-	VoronoiTree ds2(setBbegin, setBend);
+	NNTree ds2(setBbegin, setBend);
 	//ds2.construct(setBbegin, setBend);
 	int minWeight = get<2>(bestR);
 	for (Iterator a = setAbegin; a != setAend; ++a)

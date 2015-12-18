@@ -12,16 +12,16 @@ typedef CGAL::Fuzzy_sphere<NNTreeTraits> Fuzzy_circle;
 typedef CGAL::Kd_tree<NNTreeTraits> KDTree;
 
 
-class VoronoiTree
+class NNTree
 {
 private:
 	vector<shared_ptr<KDTree>> A;
 	int size;
 public:
-	VoronoiTree();
+	NNTree();
 	template <class Iterator>
-	VoronoiTree(Iterator begin, Iterator end);
-	~VoronoiTree(){};
+	NNTree(Iterator begin, Iterator end);
+	~NNTree(){};
 	vector<shared_ptr<KDTree>> getA() { return A; }
 	template <class Iterator>
 	void insert(Iterator begin, Iterator beyond);
@@ -33,19 +33,19 @@ public:
 	tuple<bool, Point_2> query(Point_2 q, int index);
 };
 
-VoronoiTree::VoronoiTree() {
+NNTree::NNTree() {
 	return;
 }
 
 template <class Iterator>
-VoronoiTree::VoronoiTree(Iterator begin, Iterator end) {
+NNTree::NNTree(Iterator begin, Iterator end) {
 	int treeSize = 2*nextPowerOfTwo(int(distance(begin,end))) - 1;
 	A.reserve(treeSize);
 	insert(begin, end);
 }
 
 template <class Iterator>
-void VoronoiTree::insert(Iterator begin, Iterator end) {
+void NNTree::insert(Iterator begin, Iterator end) {
 	
 	if (A.size() == 0) {
 		int treeSize = 2 * nextPowerOfTwo(int(distance(begin, end))) - 1;
@@ -76,7 +76,7 @@ void VoronoiTree::insert(Iterator begin, Iterator end) {
 	}
 }
 
-tuple<bool, Point_2> VoronoiTree::search(Point_2 q) {
+tuple<bool, Point_2> NNTree::search(Point_2 q) {
 	//tuple<bool, Point_2*> res = make_tuple(true, new Point_2(0, 0));
 	tuple<bool, Point_2> res = query(q, 0);
 	if (std::get<0>(res) == false) {
@@ -107,7 +107,7 @@ int nextPowerOfTwo(int val) {
 	return val;
 }
 
-tuple<bool, Point_2> VoronoiTree::query(Point_2 q, int idx)
+tuple<bool, Point_2> NNTree::query(Point_2 q, int idx)
 {
 	Fuzzy_circle exact_range(q, 1);
 	list<Point_2> result;
