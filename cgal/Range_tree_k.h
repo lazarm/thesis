@@ -187,9 +187,9 @@ public:
     return range_tree_2->window_query(win, result);
   }
   //lazar begin
-  std::back_insert_iterator< std::vector< Point_2<CGAL::Cartesian<double> > *> > window_query_modified
+  std::back_insert_iterator< std::vector< Point_2<CGAL::Cartesian<double> > > > window_query_modified
           ( Interval const &win, Point_2<CGAL::Cartesian<double> > a,
-	    std::back_insert_iterator< std::vector< Point_2<CGAL::Cartesian<double> > *> > out){
+	    std::back_insert_iterator< std::vector< Point_2<CGAL::Cartesian<double> > > > out){
     return range_tree_2->window_query_impl_modified(win, a, out);
   }
   //lazar end
