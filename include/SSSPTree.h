@@ -60,6 +60,7 @@ SSSPTree<Iterator>::SSSPTree(Iterator begin, Iterator end, Point_2 r, Segment_2 
 	shared_ptr<Point_2> rootParent(nullptr);
 	rPoint->setParent(rootParent);
 	
+	categorize(&l0, &l1, &r0, &r1, rPoint, st);
 	wi_1_points.push_back({ *rPoint });
 	wi_1_delaunayVertices.push_back(rVertex);
 	int i = 1;
