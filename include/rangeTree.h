@@ -72,7 +72,7 @@ template <class Iterator>
 RangeTree buildRangeTree(Iterator begin, Iterator end, Segment_2 st)
 {
 	vector<RangeKey> inputList;
-	cout << distance(begin, end) << endl;
+	//cout << distance(begin, end) << endl;
 	CGAL::Timer cost;
 	cost.reset(); cost.start();
 	for (Iterator it = begin; it != end; ++it)
@@ -84,15 +84,15 @@ RangeTree buildRangeTree(Iterator begin, Iterator end, Segment_2 st)
 		inputList.push_back(RangeKey(*dp, voronoiTree));
 	}
 	cost.stop();
-	cout << "inputList: " << cost.time() << endl;
+	//cout << "inputList: " << cost.time() << endl;
 	cost.reset(); cost.start();
 	RangeTree rangeTree(inputList.begin(), inputList.end());
 	cost.stop();
-	cout << "build range tree: " << cost.time() << endl;
+	//cout << "build range tree: " << cost.time() << endl;
 	cost.reset(); cost.start();
 	traverse_and_populate_with_data(rangeTree.range_tree_2->root());
 	cost.stop();
-	cout << "traverse range tree: " << cost.time() << endl;
+	//cout << "traverse range tree: " << cost.time() << endl;
 	//this_thread::sleep_for(chrono::seconds(2));
 	return rangeTree;
 }
@@ -104,7 +104,7 @@ Sites are created only at leaf nodes based on dual points of b and they get asso
 query is run and some site/point is returned, we can retrieve its original point b with all attributes contained in it 
 (such as weight).
 */
-void build_VD_trees_on_layer2(RangeNode1* node)
+vector<Site_2> build_VD_trees_on_layer2(RangeNode1* node)
 {	
 	if (node->left_link == 0) {
 		// leaf node
@@ -112,18 +112,16 @@ void build_VD_trees_on_layer2(RangeNode1* node)
 		vector<Point_2> vdSites;
 		vdSites.push_back(*point.originalPoint);
 		node->object.second.insert(vdSites.begin(), vdSites.end());
-		return;
+		return vdSites;
 	}
 	// recursively construct NNTree structures for both childs of node
-	build_VD_trees_on_layer2(node->left_link);
-	build_VD_trees_on_layer2(node->right_link);
-
+	vector<Point_2> v1 = build_VD_trees_on_layer2(node->left_link);
+	vector<Point_2> v2 = build_VD_trees_on_layer2(node->right_link);
 	vector<Site_2> vdSites;
-	shared_ptr<KDTree> root_left = node->left_link->object.second.getRoot();
-	shared_ptr<KDTree> root_right = node->right_link->object.second.getRoot();
-	vdSites.insert(vdSites.end(), root_left->begin(), root_left->end());
-	vdSites.insert(vdSites.end(), root_right->begin(), root_right->end());
+	vdSites.insert(vdSites.end(), v1.begin(), v1.end());
+	vdSites.insert(vdSites.end(), v2.begin(), v2.end());
 	node->object.second.insert(vdSites.begin(), vdSites.end());
+	return vdSites;
 }
 
 
@@ -161,7 +159,7 @@ void traverse_and_populate_with_data(RangeNode* node)
 			nodes_to_visit.push(nd->right_link);
 		}
 	}
-	cout << "total cast: " << total_cast << endl;
+	//cout << "total cast: " << total_cast << endl;
 }
 
 /*
@@ -180,10 +178,10 @@ Iterator rangeTree_query(RangeTree* rangeTree, DualPoint* a, Iterator it)
 	DualPoint dp2 = DualPoint();
 	DualPoint dp3 = DualPoint();
 	DualPoint dp4 = DualPoint();
-	dp1.point = Point_2((numeric_limits<int>::min)(), a->point.y());
-	dp2.point = Point_2(a->point.x(), (numeric_limits<int>::max)());
-	dp3.point = Point_2(a->point.x(), (numeric_limits<int>::min)());
-	dp4.point = Point_2((numeric_limits<int>::max)(), a->point.y());
+	dp1.point = Point_2(-(numeric_limits<double>::infinity)(), a->point.y());
+	dp2.point = Point_2(a->point.x(), (numeric_limits<double>::infinity)());
+	dp3.point = Point_2(a->point.x(), -(numeric_limits<double>::infinity)());
+	dp4.point = Point_2((numeric_limits<double>::infinity)(), a->point.y());
 
 	Interval win1 = Interval(dp1, dp2);
 	Interval win2 = Interval(dp3, dp4);
