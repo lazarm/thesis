@@ -66,7 +66,7 @@ SSSPTree<Iterator>::SSSPTree(Iterator begin, Iterator end, Point_2 r, Segment_2 
 	int i = 1;
 	
 	while (wi_1_delaunayVertices.size() > 0) {
-		VoronoiDiagram<vector<Point_2>::iterator> vd_nearestNeighbour;
+		VoronoiDiagram vd_nearestNeighbour;
 		vd_nearestNeighbour.insert(wi_1_points.begin(), wi_1_points.end());
 		deque<Delaunay_vertex_handle> queue;
 		copy(wi_1_delaunayVertices.begin(), wi_1_delaunayVertices.end(), back_inserter(queue));
@@ -141,7 +141,7 @@ int updateNr(int nr, Point_2 p, Point_2 q, Segment_2 st)
 	int pnr = nr;
 	Segment_2 s(p, q);
 	if (CGAL::do_intersect(s, st)) {
-		// it may be the case that p or q lies on the segment st. Poins lying on the segment are categorized as "left"
+		// it may be the case that p or q lies on the segment st. Points lying on the segment are categorized as "left"
 		// points so we have to check that one point is left and the other one is right.
 		if ((onLeft(&p, st) && !onLeft(&q, st)) || (!onLeft(&p, st) && onLeft(&q, st))) {
 			pnr = (nr + 1) % 2;

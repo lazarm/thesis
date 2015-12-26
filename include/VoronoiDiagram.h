@@ -34,7 +34,7 @@ typedef Rep_class::Segment_2		  Segment_2;
 typedef Rep_class::Line_2			  Line_2;
 typedef Rep_class::Direction_2		  Direction_2;
 typedef AT::Site_2                    Site_2;
-typedef AT::Point_2                   Point_2;
+typedef Rep_class::Point_2             Point_2;
 typedef VD::Locate_result             Locate_result;
 typedef VD::Vertex_handle             Vertex_handle;
 typedef VD::Face_handle               Face_handle;
@@ -49,7 +49,7 @@ typedef DT::Vertex_circulator         Vertex_circulator;
 
 
 using namespace std;
-template <class Iterator> class VoronoiDiagram: public VD
+class VoronoiDiagram: public VD
 {	
 public:
 	VoronoiDiagram() {};
@@ -60,8 +60,7 @@ public:
 };
 
 
-template <class Iterator> 
-std::tuple<bool, Point_2*> VoronoiDiagram<Iterator>::query(Point_2 q) {
+std::tuple<bool, Point_2*> VoronoiDiagram::query(Point_2 q) {
 	
 	Locate_result lr = locate(q);
 	// delaunay vertex == voronoi site
