@@ -1,0 +1,657 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% datoteka diploma-vzorec.tex
+%
+% vzorčna datoteka za pisanje diplomskega dela v formatu LaTeX
+% na UL Fakulteti za računalništvo in informatiko
+%
+% vkup spravil Gašper Fijavž, december 2010
+% množica popravkov v januarju, februarju marcu 2011
+% verzija 29. marec 2011
+
+\documentclass[a4paper, 12pt]{book}
+
+\usepackage[utf8x]{inputenc}   % omogoča uporabo slovenskih črk kodiranih v formatu UTF-8 
+\usepackage[slovene,english]{babel}    % naloži, med drugim, slovenske delilne vzorce
+\usepackage[pdftex]{graphicx}  % omogoča vlaganje slik različnih formatov 
+\usepackage{fancyhdr}          % poskrbi, na primer, za glave strani
+\usepackage{amssymb}           % dodatni simboli
+\usepackage{amsmath}           % eqref, npr.
+\usepackage{amsthm}
+\usepackage{listings}
+\usepackage{float}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{textcomp}
+\usepackage{latexsym}
+\usepackage{ifthen}
+\usepackage[mathlines]{lineno}
+
+%\newtheorem{theorem}{Theorem}
+%\newtheorem{corollary}[theorem]{Corollary}
+%\newtheorem{lemma}[theorem]{Lemma}
+%\newtheorem{problem}[theorem]{Problem}
+%\newtheorem{proposition}[theorem]{Proposition}
+%\newtheorem{conjecture}[theorem]{Conjecture}
+
+\renewcommand{\baselinestretch}{1.3} % ustrezen razmik med vrsticami
+
+%oznake strani
+\renewcommand{\chaptermark}[1]%
+{\markboth{\MakeUppercase{\thechapter.\ #1}}{}} \renewcommand{\sectionmark}[1]%
+{\markright{\MakeUppercase{\thesection.\ #1}}} \renewcommand{\headrulewidth}{0.5pt} \renewcommand{\footrulewidth}{0pt} 
+\fancyhf{}
+\fancyhead[LE,RO]{\sl \thepage} \fancyhead[LO]{\sl \rightmark} \fancyhead[RE]{\sl \leftmark}
+
+\newcommand{\BibTeX}{{\sc Bib}\TeX}
+
+\newcommand{\autfont}{\Large}
+\newcommand{\titfont}{\LARGE\bf}
+\newcommand{\D}{\ensuremath{\mathcal{D}}} 
+\newcommand{\LL}{\ensuremath{\mathbb L}}
+\newcommand{\RR}{\ensuremath{\mathbb R}}  % real numbers 
+\newcommand{\T}{\ensuremath{\mathcal{T}}} 
+\newcommand{\clearemptydoublepage}{\newpage{\pagestyle{empty}\cleardoublepage}}
+\setcounter{tocdepth}{1}	      % globina kazala
+
+% konstrukti
+\newtheorem{izrek}{Izrek}[chapter]
+%\newtheorem{trditev}{Trditev}[izrek]
+\newtheorem{lema}[izrek]{Lema}
+\newenvironment{dokaz}{\emph{Dokaz.}\ }{\hspace{\fill}{$\Box$}}
+
+\definecolor{listinggray}{gray}{0.9}
+\definecolor{lbcolor}{rgb}{0.9,0.9,0.9}
+\definecolor{darkgreen}{rgb}{0.0, 0.2, 0.13}
+\lstdefinestyle{customc}{
+  belowcaptionskip=1\baselineskip,
+  breaklines=true,
+  frame=L,
+  xleftmargin=\parindent,
+  language=C,
+  showstringspaces=false,
+  basicstyle=\footnotesize\ttfamily,
+  keywordstyle=\bfseries\color{red},
+  commentstyle=\itshape\color{green},
+  identifierstyle=\color{blue},
+  stringstyle=\color{orange},
+}
+
+\lstset{escapechar=@,style=customc}
+\lstset{
+%backgroundcolor=\color{lbcolor},
+    tabsize=4,    
+%   rulecolor=,
+    language=C++,
+        basicstyle=\scriptsize,
+        upquote=true,
+        aboveskip={1.5\baselineskip},
+        columns=fixed,
+        showstringspaces=false,
+        extendedchars=false,
+        breaklines=true,
+        prebreak = \raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+        frame=single,
+        numbers=left,
+        showtabs=false,
+        showspaces=false,
+        showstringspaces=false
+%        \lstdefinestyle{C++}{language=C++,style=numbers}’.
+}
+\lstset{
+    %backgroundcolor=\color{lbcolor},
+    tabsize=4,
+  language=C++,
+  captionpos=b,
+  tabsize=3,
+  frame=lines,
+  numbers=left,
+  numberstyle=\tiny,
+  numbersep=5pt,
+  breaklines=true,
+  showstringspaces=false
+}
+
+\begin{document}
+\selectlanguage{slovene}
+\frontmatter
+\setcounter{tocdepth}{2}
+\setcounter{page}{1} %
+\renewcommand{\thepage}{}       % preprecimo težave s številkami strani v kazalu 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%naslovnica
+ \thispagestyle{empty}%
+   \begin{center}
+    {\large\sc Univerza v Ljubljani\\%
+      Fakulteta za matematiko in fiziko\\
+      Fakulteta za računalništvo in informatiko}%
+    \vskip 10em%
+    {\autfont Lazar Milinković\par}%
+    {\titfont Implementacija algoritmov za probleme najkrajših poti v geometrijskih grafih \par}%
+    {\vskip 2em \textsc{MAGISTRSKO DELO\\[2mm] 
+    UNIVERZITETNI ŠTUDIJSKI PROGRAM DRUGE STOPNJE RAČUNALNIŠTVO IN MATEMATIKA}\par}%
+    \vfill\null%
+    {\large \textsc{Mentor}: dr. Sergio Cabello \par}%
+    {\vskip 2em \large Ljubljana 2016 \par}%
+\end{center}
+% prazna stran
+\clearemptydoublepage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%copyright stran
+\thispagestyle{empty}
+\vspace*{8cm}
+{\small \noindent
+Rezultati diplomskega dela so intelektualna lastnina avtorja in Fakultete za ma\-te\-ma\-ti\-ko in fiziko Univerze v Ljubljani. 
+Za objavljanje ali izkoriščanje rezultatov di\-plom\-ske\-ga dela je potrebno pisno soglasje avtorja, Fakultete za ma\-te\-ma\-ti\-ko in 
+fiziko ter mentorja.}
+
+
+\begin{center} 
+\mbox{}\vfill
+\emph{Besedilo je oblikovano z urejevalnikom besedil \LaTeX.} 
+\end{center}
+% prazna stran
+\clearemptydoublepage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% stran 3 med uvodnimi listi
+\noindent
+Namesto te strani {\bf vstavite} original izdane teme diplomskega 
+dela s podpisom mentorja in dekana ter žigom fakultete, ki ga diplomant
+dvigne v študent\-skem referatu,  preden odda izdelek v vezavo!
+
+% prazna stran
+\clearemptydoublepage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% izjava o avtorstvu
+\vspace*{1cm}
+\begin{center} 
+{\Large \textbf{\sc Izjava o avtorstvu magistrskega dela}}
+\end{center}
+
+\vspace{1cm}
+\noindent Spodaj podpisani Lazar Milinković,
+z vpisno številko \textbf{27122037}, sem avtor magistrskega dela z naslovom:
+   
+\vspace{0.5cm}
+\emph{Implementacija algoritmov za probleme najkrajših poti v geometrijskih grafih}
+
+\vspace{1.5cm}
+\noindent S svojim podpisom zagotavljam, da:
+\begin{itemize}
+	\item sem magistrsko delo izdelal samostojno pod mentorstvom 
+		dr.\ Sergia Cabella,
+
+	\item	so elektronska oblika magistrskega dela, naslov (slov., angl.), povzetek (slov., angl.) ter ključne besede (slov., angl.) identični s tiskano obliko magistrskega dela
+	\item soglašam z javno objavo elektronske oblike diplomskega dela v zbirki ''Dela FRI''.
+\end{itemize}
+
+\vspace{1cm}
+\noindent V Ljubljani, dne 11. januarja 2016 \hfill Podpis avtorja:
+
+% prazna stran
+\clearemptydoublepage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% zahvala
+\thispagestyle{empty}\mbox{}\vfill\null\it%
+ 
+\rm\normalfont
+
+% prazna stran
+\clearemptydoublepage
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% kazalo
+\def\thepage{}% preprecimo tezave s stevilkami strani v kazalu 
+\tableofcontents{}
+
+
+% prazna stran
+\clearemptydoublepage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% povzetek 
+\addcontentsline{toc}{chapter}{Povzetek}
+\chapter*{Povzetek}
+ 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% abstract
+\selectlanguage{english}
+\addcontentsline{toc}{chapter}{Abstract}
+\chapter*{Abstract}
+
+
+\selectlanguage{slovene}
+% prazna stran
+\clearemptydoublepage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\mainmatter
+\setcounter{page}{1}
+\pagestyle{fancy}
+
+\chapter{Uvod}
+V poglavju 2 je na kratko opisana programska knjižnica CGAL. Osredotočili smo se na osrednje ideje, uporabljene pri jedru knjižnice, na katerem temeljijo vsi ostali deli paketa, ter tiste strukture, ki so bile uporabljene pri implementaciji našega algoritma. V poglavju 3 je predstavljen teoretični del algoritma. Podrobno so opisane vse podatkovne strukture, celotni potek algoritma ter njegova časovna in prostorska kompleksnost. V poglavju 4 je predstavljena implementacija algoritma. Ponovno so opisane vse uporabljene podatkovne strukture in nekatere spremembe v header datotekah CGAL-a z razredi, ki predstavljajo te strukture. Podrobno so opisani tudi deli algoritma, kjer se pojavijo razlike med teoretičnim opisom in implementacijo. V poglavju 5 so predstavljeni rezultati; prikazani so časi izvajanja in prostorska poraba celotnega algoritma za različno število vhodnih točk. Enako smo storili posebej za nekatere podatkovne strukture, npr. Kd drevesa, Voronoijev diagram in SSSP drevesa.
+
+\clearemptydoublepage
+
+
+\chapter{CGAL in uporabljene matematične strukture}
+\label{ch1}
+
+V tem poglavju so na kratko opisani programska knjižnica CGAL in podatkovne strukture, uporabljene v naših algoritmih. Za bolj podroben opis glej (citiraj van kreveld, cgal.org in nekaj za bfs, sssp in grid graf). Vse podatkovne strukture so opisane za dvodimenzionalni primer.
+\section{CGAL}
+CGAL (Computational Geometry Algorithms Library) je programski paket, ki omogoča enostaven dostop do učinkovitih in zanesljivih geometrijskih algoritmov v obliki C++ knjižnice. Uporablja se na različnih področjih, ki potrebujejo geometrijsko računanje, kot so geografski informacijski sistemi, računalniško podprto načrtovanje, molekularna biologija, medicina, računalniška grafika in robotika. Knjižnica vsebuje:
+
+\begin{itemize}
+\item jedro z geometrijskimi osnovami, kot so točke, vektorji, črte, predikati za preizkušanje stvari (na primer relativni položaji točk) in opravila, kot so izračunavanje presekov ter razdalj
+\item osnovno knjižnico, ki je zbirka standardnih podatkovnih struktur in geometrijskih algoritmov, kot so konveksna ovojnica v 2D/3D, Delaunayova triangulacija v 2D/3D, ravninski zemljevid, polieder, Voronoijev diagram, območna drevesa (range trees) itd.
+\item podporna knjižnica, ki ponuja vmesnike do drugih paketov, na primer za V/I in vizualizacijo. 
+\end{itemize}
+
+Ker cilj magistrske naloge ni bila implementacija osnovnih geometrijskih struktur, ki sicer predstavljajo pomembno osnovo našega algoritma, smo se odločili uporabiti omenjeno knjižnico in si s tem prihraniti čas in odvečno delo. Posledično je seveda celoten algoritem implementiran v jeziku C++.
+
+Pri nekaterih razredih knjižnice smo morali spremeniti kodo ali dodati kaj novega. Podrobnosti so razložene v nadaljevanju opisa implementacije pri ustreznih delih algoritma.
+
+??? 
+natancnost: cartesian, kaj pa leda, homogenous?
+povej kaj o traits, templated strukturami ($Point_2$) 
+
+\section{BFS drevesa}
+\section{SSSP drevesa}
+\section{Graf kvadratne mreže}
+$https://en.wikipedia.org/wiki/Lattice_graph_Square_grid_graph$
+
+\section{Delaunayeva triangulacija}
+\subsection{Implementacija v CGAL}
+
+
+\section{Voronoijev diagram}
+\begin{figure}
+\centerline{\includegraphics[scale=0.8]{vd-sredisce.jpg}}
+\caption{Evklidski Voronoijev diagram brez degeneracij.}
+\label{vd}
+\end{figure}
+
+Voronoijev diagram ~\cite{cgalVor} je definiran na množici točk, imenovanih Voronoijeva središča (angleško $sites$), ki ležijo v nekem prostoru $\sum$, in z metriko oziroma funkcijo razdalje med točkami. Za ravninski Voronoijev diagram, opisan v nadaljevanju, velja $\sum = \mathbb{R}^2$.
+
+Naj bo S = $S = \{S_1,S_2,...,S_n\}$ množica Voroijevih središč in naj bo $\delta(x,S_i)$ funkcija razdalje med središčem $S_i$ in neko točko $x \in \mathbb{R}^2$. Množica točk $V_{ij}$, ki so bližje središču $S_i$ kot središču $S_2$ na podlagi funkcije $\delta(x,\cdot)$, je množica:
+
+\begin{equation}
+V_{ij} = \{x \in \mathbb{R}^2: \delta(x,S_i) < \delta(x,S_j)\}. 
+\end{equation}
+
+Množico $V_i$ točk, ki so bližje središču $S_i$ kot kateremu koli drugemu središču, lahko potem definiramo kot množico:
+
+\begin{equation}
+V_i = \bigcap_{i \neq j} V_{ij} .
+\end{equation}
+
+
+
+Množico $V_i$ imenujemo tudi Voronoijeva celica ali Voronijevo lice središča $S_i$. Lokus točk, ki so enako oddaljene od dveh središč, se imenuje Voronijev bisektor. Povezani podmnožici slednjega pravimo Voronoijev rob. Točki, ki je enako oddaljena od treh ali več središč, pravimo Voronoijevo vozlišče. Voronoijev diagram na množici $S$ in z metriko $\delta(x,\cdot)$ je zbirka Voronoijevih celic, robov in vozlišč ter je primer ravninskega grafa.
+
+Celice si ponavadi predstavljamo kot 2-dimenzionalne, robove kot 1-dimenzionalne in vozlišča kot 0-dimenzionalne objekte. Za določene kombinacije središč in metrik to ne drži. Voronijev diagram z metriko $L_1$ ali $L_{\infty}$ lahko na primer vsebuje dvodimenzionalne robove. Takim Voronoijevim diagramom, za katere zgornja omejitev drži in imajo lastnost, da so njihove celice preprosto povezano območje v ravnini, pravimo preprosti Voronoijevi diagrami. Najbolj tipičen primer slednjih je evklidski Voronoijev diagram (slika ~\ref{vd}), ki ga uporabljamo v napem algoritmu.
+
+\subsection{Voronoijev diagram v CGAL}
+Knjižnica CGAL ponuja razred Voronoi\texttt{\_}diagram\texttt{\_}2$<DG,AT,AP>$, ki deluje kot prilagoditveni paket. Ta Delaunayevo triangulacijo na podlagi podanih kriterijev prilagodi pripadajočemu Voronoijevemu diagramu, ki je predstavljen kot DCEL (doubly connected edge list) struktura. Paket je torej zasnovan tako, da na zunaj deluje kot DCEL struktura, znotraj pa v resnici hrani strukturo grafa, ki predstavlja graf triangulacije.
+
+Razred je parametriziran s tremi predlogami. Prvi, DT, mora biti primerek, ki predstavlja koncept razreda DelaunayGraph\texttt{\_}2. Primeri takih struktur so Delaunayeva triangulacija, navadna triangulacija in Apollonov graf. Druga predloga, AT, predstavlja lastnosti prilagoditve ter definira tipe struktur in funktorje, ki jih razred potrebuje za dostop do geometrijskih lastnosti Delaunayeve triangulacije. Funktor mora biti recimo definiran za konstrukcijo Voronoijevih vozlišč iz njihovih dualnih lic v Delaunayevi triangulaciji. Za našo implementacijo algoritma ločevanja z diski je pomemben funktor za poizvedbe najbližjih središč, ki kot rezultat vrne informacijo o tem, koliko in katera središča so enako oddaljena od točke poizvedbe. Bolj konkretno, rezultat je Delaunayevo vozlišče, lice ali rob, na katerem točka poizvedbe leži oziroma z njim sovpada. Če je na primer točka poizvedbe $q$, enako oddaljena od treh središč, potem sovpada z nekim Voronoijevim vozliščem, zato funktor vrne Delaunayevo lice, ki je dualno temu vozlišču. Razred, ki predstavlja Delaunayevo lice, omogoča iteracijo po Delaunayevih vozliščih, ki definirajo lice, ta pa so dualna trem Voronoijevim središčem.
+
+Tretja predloga predstavlja režim adaptacije Delaunayeve triangulacije Voronoijevemu diagramu. 
+Če množica središč, ki določa graf Delaunayeve triangulacije, vsebuje podmmnožice središč, ki so v degeneriranem položaju, potem ima dualni graf - Voronoijev diagram - lahko robove dolžine nič in po možnosti tudi celice s ploščino nič. Režim adaptacije določa, kaj storiti v takih primerih. V našem projektu smo uporabili tip režima, imenovan $Delaunay\texttt{\_}triangulation\texttt{\_}caching\texttt{\_}degeneracy\texttt{\_}removal\texttt{\_}policy\texttt{\_}2$. Kot pove že ime, ta tip poskrbi, da so vse zgoraj opisane celice in robovi odstranjeni iz Voronoijevega diagrama. Poleg tega uporablja $cache$ pri ugotavljanju, ali ima določena celica oziroma rob degenerirane lastnosti. Ker je slednje precej zahtevna operacija, se ta tip izplača pri vhodnih podatkih (središčih) z veliko degeneriranimi primeri.
+ 
+
+\section{Območna drevesa}
+Območna drevesa so še ena podatkovna struktura za poizvedbe nad pravokotnimi območji. V primerjavi s kd drevesi imajo boljši čas poizvedbe ($O(\log^2 n)$), ampak slabšo prostorsko kompleksnost ($O(n\log n)$).
+
+
+\section{Kd-drevesa}\begin{equation}
+\end{equation}
+
+
+\chapter{Teorija}
+\section{Predstavitev problema}
+Naj bo $\D$ množica skladnih enotskih krogov na Evklidski ravnini, ki jih definirajo njihove središčne točke.  $z$ in $z'$ naj bosta dve dani točki, ki nista vsebovani v nobenem krogu. Za $\D$ rečemo, da ločuje $z$ in $z'$, če vsaka pot v ravnini od $z$ do $z'$ seka nek krog v $\D$.
+
+Problem iskanja minimalne kardinalne podmnožice $\D$, ki ločuje $z$ in $z'$, lahko formalno zapišemo kot:
+
+\begin{align*}
+	\min ~~		& |\D'|\\
+	 \mbox{tako da}~~ & \D'\subset \D\\
+				&	\D'\text{ ločuje $z$ in $z'$}. 
+\end{align*}
+
+Cilj našega algoritma za ločevanje enotskih krogov je rešiti ta problem v skoraj kvadratičnem času. Do take časovne kompleksnosti pridemo tudi s pomočjo še enega našega algoritma za izgradnjo drevesa najkrajših poti iz enega, danega izhodišča. Oba algoritma sta opisana v nadaljevanju, prav tako dokaza za njuno časovno kompleksnost.
+
+Naj bo $P$ množica točk, ki predstavljajo središča krogov $\D$. $P$ predstavlja vhod našega algoritma in vse operacije ter uporabljene podatkovne strukture se vrtijo okoli te množice. Kardinalnost množice je enaka $n$. 
+
+Naj bo $G(P)$ graf z množico vozlišč $P$ s povezavo med točkama $p,q \in P$, če velja $|pq| <= 1$ z evklidsko metriko. Vse povezave so neobtežene.
+
+V nadaljevanju bomo namesto $G(P)$ pisali preprosto $G$, brez izgube splošnosti pa predpostavili, da je $z=(0,0)$ in $z'=(0,s)$. $zz'$ je torej daljica, v nadaljevanju imenovana $\sigma$, ki je vsebovana v koordinatni osi $y$. Če dana vhodna daljica ne leži na osi $y$, lahko naredimo translacijo nad $\sigma$ in $P$; če poleg tega tudi vertikalna ni, naredimo še rotacijo (kjer pa lahko pride do numeričnih napak). 
+\section{SSSP drevo}
+
+V tem poglavju je opisan algoritem za drevo SSSP (ang. single source shortest path). Gre za preiskovanje v širino nad grafom $G(P)$ brez dejanske izgradnje grafa. Vhod algoritma je torej $P$, pri izgradnji drevesa pa se uporablja abstrakten graf G(P).
+
+Algoritem dobi kot vhod poleg množice $P$ izvorno točko $s\in P$ in nato inkrementalno v vsaki iteraciji dodaja točke h grafu. Množico točk, dodanih k drevesu v $i$-ti iteraciji, označimo kot
+\[	W_i = \{ p\in P \mid d_{G(P)}(s,p) = i\}.
+	\]
+
+Velja torej $W_0 = \{s\}$. Za izgradnjo $W_i$ ne potrebujemo celotnega grafa, zgrajenega do $i-1$-te iteracije, temveč samo množico $W_{i-1}$.  Za vsak $q\in W_i$ velja, da je povezan s točko $p = NN(q, W_{i-1})$. $p$ je torej izmed točk v $W_{i-1}$ najbližje $q$.
+
+Pri izgradnji $W_i$ ne pregledujemo vseh še ne dodanih točk. Že v samem začetku najprej zgradimo Delaunayevo triangulacijo $DT(P)$, ki nam je v pomoč pri iskanju primernih kandidatov za $W_i$. To so:
+
+\begin{itemize}
+\item točke sosednje $W_{i-1}$ v $DT(P)$
+\item točke sosednje (do tega trenutka zgrajeni) $W_i$ v $DT(P)$.
+\end{itemize} 
+
+\begin{lema}
+Naj bo $p\in W_i$. V $G(P)\cap DT(P)$ obstaja pot $q_1,...,q_k = p$, kjer $q_1\in W_{i-1}$ in $q_2,...,q_k\in W_i$.
+\end{lema}
+
+\begin{figure}
+\centerline{\includegraphics[scale=0.5]{qp_path_proof.png}}
+\caption{aa}
+\label{c1c2}
+\end{figure}
+
+\begin{proof}
+???
+\end{proof}
+
+Da dobimo odgovor na vprašanje, ali je nek kandidat $p\in W_i$, uporabimo podatkovno strukturo, ki zna v zglednem času najti najbližjega soseda $q$ in preveriti, če je razdalja med njima manjša ali enaka 1.
+
+Celotna psevdokoda algoritma za izgradnjo drevesa je opisana spodaj.
+
+\makeatletter
+\def\BState{\State\hskip-\ALG@thistlm}
+\makeatother
+
+\begin{algorithm}
+\caption{Algoritem za izgradnjo SSSP drevesa}\label{euclid}
+\begin{algorithmic}[1]
+\Procedure{buildTree}{}
+\For {p $\in$ P}
+\State dist$[p] \gets \infty$
+\EndFor
+\State dist$[r] \gets$ 0
+\State zgradi Delaunayevo triangulacijo $DT(P)$
+\State $W_{0} \gets \{ s \}$
+\State $i \gets$ 1
+\While {$W_{i-1} \neq \emptyset $}
+\State zgradi pod. strukturo za poizvedbe najbližjega soseda v $W_{i-1}$
+\State $Q \gets W_{i-1}$ ($\star$ generator točk kandidatk $\star$)
+\State $W_{i} \gets \emptyset$
+\While {$Q \neq \emptyset$}
+\State $q$ naj bo poljubna točka v $Q$
+\State odstrani $q$ iz $Q$
+\For {povezava $qp$ v $DT(P)$}
+
+\If {dist$[p] = \infty$}
+\State $w \gets$ NN($W_{i-1},p$)
+\If {$|pw| \leq$ 1}
+\State dist$[p] \gets i$
+\State dodaj $p$ v $Q$ in $W_{i}$
+\EndIf
+\EndIf
+\EndFor
+\EndWhile
+\State $i \gets i + 1$
+\EndWhile
+\State \Return dist$[\cdot]$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\begin{lema}
+Za izgradnjo drevesa SSSP potrebuje algoritem $O(n)$ prostora in $O(n\log n)$ časa.
+\end{lema}
+
+\begin{proof}
+???
+\end{proof}
+
+
+\section{Drevo najbližjega soseda}
+
+Uravnoteženo binarno iskalno drevo. Opis vzami iz "main", namesto VD pa reci vd oz drugo primerno strukturo za iskanje najbližjega soseda. Omeni, da je bil izbran kd-tree.
+
+\begin{lema}
+\label{le:ds2}
+    Naj bo $P$ množica uteženih točk na ravnini. V času $O(n\log n)$ lahko konstruiramo t\^{a}ko podatkovno strukturo, ki v času $O(\log^2 n)$ za točko poizvedbe $q$ najde točko v 
+	\[	\arg\min \{ w_p \mid p\in P,~|pq|\le 1\}.
+	\]
+\end{lema}
+\begin{proof}
+Točke $P$ sortiramo nepadajoče po njihovih utežeh in zgradimo uravnoteženo binarno iskalno drevo $\T$. Točke P vstavimo v liste $\T$ tako, da se zaporedji, ki izhajata iz $\T$ in sortirane množice $P$, ujemata.
+
+Za vsako vozlišče $\nu$ v $\T$:
+\begin{itemize}
+\item Označimo $P(\nu)$ kot množico točk, shranjenih v poddrevesu s korenom $\nu$. Taki množici rečemo \emph{kanonična podmnožica}.
+\item Označimo $U(\nu)$ kot unijo enotskih krogov s središči $P(\nu)$.
+\item Zgradimo point-location podatkovno strukturo $DS(P(\nu))$, ki v ozadju uporablja Voronoijev diagram ali kakšno drugo podobno podatkovno strukturo za iskanje najbližjega soseda. Za dano točko poizvedbe $q$ $DS$ pove, če se nahaja v $U(\nu)$. Najprej poišče najbližjega soseda $q$ tako, da najde celico $c$ Voronoijevega diagrama, v kateri se nahaja $q$ in s tem središče $S_i$, ki definira $c$. Nato preveri, če je razdalja med $q$ in $S_i$ največ ena merska enota.
+
+Čas predprocesiranja vozlišča $\nu$ je $O(|P(\nu)|)$, čas poizvedbe pa $O(\log |P(\nu)|)= O(\log n)$.
+\end{itemize}
+
+Analizirajmo čas izgradnje naše podatkovne strukture. Točke $P$ sortiramo leksikografsko v korenu drevesa $\T$, točke $P(\nu)$ pa za vsak $\nu$ dobimo že sortirane od starša $\nu$. Ker so kanonične podmnožice na vsakem nivoju drevesa med seboj disjunktne, porabimo za vsak nivo $O(n)$ časa. Uravnoteženost $\T$ zagotavlja, da je $O(\log n)$ nivojev, tako da skupaj za izgradnjo potrebujemo $O(n\log n)$ časa.
+
+Potrebna je še analiza časa poizvedbe. Za točko poizvedbe $q$ preverimo, če je vsebovana v $U(r)$, kjer je $r$ koren drevesa. Če ni, potem nobena točka iz $P$ ni dovolj blizu $q$. Sicer označimo $\nu = r$ in nadaljujemo z iskanjem od vrha navzdol po $T$, dokler ne pridemo do listov drevesa. Ko $\nu$ ni list, označimo njegovega levega in desnega otroka z $\nu_\ell$ in $\nu_r$. Če se $q$ nahaja v $U(\nu_\ell)$, označimo $\nu = \nu_\ell$ in nadaljujemo navzdol po poddrevesu otroka $\nu_\ell$, sicer to storimo za desnega otroka. V vsakem trenutku poizvedbe ohranjamo sledečo invarianto:
+\[	P(\nu) \cap \arg\min \{ w_p \mid p\in P,~|pq|\le 1\} ~\not=~ \emptyset.
+	\]	
+Pot poizvedbe v $T$ ima $O(\log n)$ vozlišč, za vsako vozlišče pa porabimo $O(\log n)$ časa, da ugotovimo, če se $q$ nahaja v $U(\nu)$. Skupni čas poizvedbe je torej $O(\log^2 n)$.
+\end{proof}
+
+\subsection{Optimizacijski problem 1}
+Obravnavajmo sledeč optimizacijski problem dveh množic uteženih točk $A$ in $B$:
+
+\begin{align*}
+	\Phi(A,B) :=\min ~~		& w_a+w_b\\
+	 \mbox{s.t.}~~ & a \in A, b\in B\\
+				&	|ab|\le 1. 
+\end{align*}
+
+\begin{lema}
+\label{le:within}
+	Naj bosta $A$ and $B$ množici največ $n$ uteženih točk v ravnini.
+	$\Phi(A,B)$ lahko izračunamo v času $O(n\log^2 n)$.
+\end{lema}
+\begin{proof}
+Za $B$ zgradimo podatkovno strukturo iz prejšnje leme. Za vsak $a\in A$  naredimo poizvedbo na podatkovni strukturi, da dobimo
+\[	
+		b^*(a) \in \arg\min \{ w_b \mid b\in B,~|ab|\le 1\}.
+	\]
+	
+Nato najdemo tak $a$, ki minimizira vsoto $w_a+w_{b^*(a)}$.
+
+$O(n\log n)$ časa rabimo za izgradnjo podatkovne strukture, $O(\log^2 n)$ pa za vsako poizvedbo. Ker je poizvedb največ $n$, je časovna kompleksnost enaka $O(n\log^2 n)$.
+\end{proof}
+
+
+
+\subsection{Optimizacijski problem 2}
+
+Naj bo $\sigma$ daljica v ravnini in brez izgube splošnosti lahko predpostavimo, da $\sigma$ leži na osi $y$ s krajiščema $(0,0)$ in $(0,s)$. Naj bo $A$ množica točk z negativno koordinato $x$ in $B$ množica točk z nenegativno koordinato $x$. Vsaka točka $p$ množice $A \cup B$ ima utež $\omega_p$. Minimizirati hočemo vsoto $\omega_a + \omega_b$ za vse take pare $(a,b) \in A \times B$, pri katerih je daljica $ab$ dolžine največ 1 in seka daljico $\sigma$:
+
+\begin{align*}
+	\Phi_\sigma(A,B) :=\min ~~		& w_a+w_b\\
+	 \mbox{s.t.}~~ & a\in A, b\in B\\
+				&	|ab|\le 1\\
+				&	\mbox{$ab$ seka $\sigma$}. 
+\end{align*}
+
+Za vsako točko $a\in A$ definiramo množici
+
+\begin{align*}
+	B(a)~&=~\{ b\in B\mid \text{$ab$ seka $\sigma$}\},\\
+	B_{\le 1}(a)~&=~ \{ b\in B\mid \text{$ab$ seka $\sigma$ in $|ab|\le 1$}\} 
+			~=~ \{ b\in B(a)\mid |ab|\le 1\}
+\end{align*}
+in optimizacijski problem
+\begin{align*}
+	\Phi_\sigma(a,B) = w_a + \min \{ w_b\mid b\in B_{\le 1}(a)\}.
+\end{align*}
+
+Če združimo oba optimizacijska problema skupaj, dobimo
+
+\begin{align*}
+	\Phi_\sigma(A,B) = \min_{a\in A} \Phi_\sigma(a,B).
+\end{align*}
+
+V nadaljevanju bomo opisali podatkovno strukturo, s katero lahko kompaktno dobimo množico $B(\cdot)$ in pokazali, da njene lastnosti ustrezajo lastnostim območnih dreves.
+
+\subsubsection{Dualnost in dualni prostor}
+Opiši iz poglavja knjige.
+
+\begin{lema}
+	Obstaja družina $\{ B_1,\dots, B_t\}$ podmnožic množice $B$ in 			podatkovna struktura $\D (B)$ z naslednjimi lastnostmi
+	\begin{itemize}
+		\item $\sum_{i=1}^t |B_i| = O(n\log n)$;
+		\item $\D (B)$ je velikosti $O(n\log n)$ in se jo da 					konstruirati v času $O(n\log n)$;
+		\item za vsako točko $a$ z negativno koordinato $x$ obstaja 			podmnožica indeksov $I(a)\subset \{ 1,\dots,t\}$, tako da velja 		$|I(a)|=O(\log^2 n)$, $B(a)$ pa je disjunktna unija množic $\{ 			B_i \}_{i\in I(a)}$;
+		\item za vsako točko poizvedbe $a$ z $a_x<0$ podatkovna 				struktura $\D (B)$ vrne $I(a)$ v $O(\log^2 n)$ času.
+	\end{itemize}
+\end{lema}
+\begin{proof}
+Za potrebe dokaza uporabimo dualnost, opisano zgoraj.
+
+Naj bo $\LL$ množica nevertikalnih premic, $\sigma^*$ pa množica točk dualnih nevertikalnim daljicam, ki sekajo daljico $\sigma$:
+
+\[
+		\sigma^* ~=~ \{ l^* \mid \ell\in \LL, \ell\cap \sigma\neq \emptyset\} 
+\]
+
+V dualnem prostoru je množica $\sigma^*$ $horizontal slab$
+
+\[
+		\sigma^* ~=~ \{ (m,-c)\in \RR^2\mid 0\le c\le s\}.
+\]
+
+Za vsako točko $b\in B$ naj bo $L^* _b$ množica točk, dualnih premicam, ki gredo skozi $b$ in sekajo $\sigma$:
+
+\[
+		L^*_b=\{ \ell^* \mid \ell\in \LL, b \in \ell, \text{ and } \sigma\cap \ell\not= \emptyset\}.
+	\]
+
+V dualnem prostoru je $L^* _b$ daljica, ki je popolnoma vsebovana v slabu in ima krajišči $(\varphi_1(b),0)$ in $(\varphi_2(b),s)$ na obeh njegovih mejah. $\varphi_1(b)$ predstavlja smerni koeficient premice, ki seka točki $(0,s)$ in $b$, $\varphi_2(b)$ pa smerni koeficient premice, ki seka točki $(0,0)$ in $b$.
+
+Definirajmo točko preslikave $\varphi(b)=(\varphi_1(b),\varphi_2(b))$. Funkcija preslikave $\varphi$ torej preslika točke na desni strani koordinatne osi $y$ v točke v ravnini.
+
+Za vsak $b\in B$ velja neenakost $\varphi_1(b) \geq \varphi_2(b)$. Točke $B$ lahko razdelimo v tri skupine glede na predznaka koordinat točke preslikave $\varphi(b)$ in za vsako skupino je neenakost očitna:
+
+\begin{align*}
+    b_1 \in \{ (x,y) \mid (x,y) \in B, y < 0 \} \Rightarrow \varphi_1(b),\varphi_2(b) < 0 \text{ and } \varphi_1(b) > \varphi_2(b) \\
+b_2 \in \{ (x,y) \mid (x,y) \in B, 0 <= y < s \} \Rightarrow \varphi_1(b) > 0, \text{ } \varphi_2(b) < 0 \\
+    b_3 \in \{ (x,y) \mid (x,y) \in B, y >= s \} \Rightarrow \varphi_1(b) > 0, \text{ } \varphi_2(b) >= 0 \text{ and } \varphi_1(b) > \varphi_2(b)
+\end{align*}
+
+Enakost velja le v primeru, ko sta premici, ki definirata obe koordinati, isti. Do slednjega pride pri točkah $b$ s koordinato $x$ enako $0$. 
+
+Iz zgornje neenakosti sledi, da točke preslikave $\varphi(b)$ vedno ležijo na polravnini $\varphi_1(b) >= \varphi_2(b)$ in da je smerni koeficient premice, na kateri leži daljica $L^*_b$, nepozitiven. Podobno lahko ugotovimo, da za vsak $a \in A$ točka $\varphi(a)$ leži na polravnini $\varphi_2(a) > \varphi_1(a)$ in da ima premica, na kateri leži daljica $L^*_a$, pozitiven smerni koeficient.
+
+Naj bo $a \in A$ in $b \in B$. Daljica $ab$ seka daljico $\sigma$ natanko takrat, ko $L^*_a$ seka $L^*_b$, ker daljico $ab$ v dualnem prostoru predstavlja ravno presečišče $L^*_a$ in $L^*_b$. Iz tega sledi naslednja lastnost:
+
+\begin{align*}
+		ab \cap \sigma \neq \emptyset ~\Longleftrightarrow ~ 
+		(\varphi_1(a)-\varphi_1(b)) \cdot (\varphi_2(a)- \varphi_2(b)) < 0\\
+				&	\varphi_1(a) <= \varphi_1(b)\\
+				&	\varphi_2(a) >= \varphi_2(b).
+\end{align*}
+Z drugimi besedami: za točko $a \in A$ množico točk $b \in B$, kjer $ab$ seka $\sigma$, sestavljajo točke $b$, pri katerih se $\varphi(b)$ nahaja v drugem kvadrantu koordinatnega sistema z izhodiščem $\varphi(a)$. (Bolj natančno, gre za točke $\varphi(b)$, ki se nahajajo v preseku drugega kvadranta omenjenega koordinatnega sistema s polravnino $\varphi_1(b) >= \varphi_2(b)$. Glej sliko.)
+
+Za shranjevanje množice točk $\varphi(B)$, kjer je vsaka točka $b \in B$ asociirana s točko preslikave $\varphi(b)$, lahko uporabimo dvodimenzionalno območno drevo. Za vsako točko poizvedbe $a \in A$ lahko točke $b \in B$, kjer $ab$ seka $\sigma$, dobimo s poizvedbo na območnem drevesu, ki vrne točke $\varphi(B)$ v kvadrantu
+
+\[
+		\{(x,y)\mid  \varphi_1(a) < x \text{ and } \varphi_2(a) > y\}.
+	\]
+Območna drevesa so bolj podrobno opisana v poglavju x.
+
+\end{proof}
+
+\chapter{Implementacija algoritma}
+\label{ch3}
+
+
+\section{SSSP drevo}
+
+Algoritem za izgradnjo drevesa SSSP smo implementirali z mislijo na možnost njegove neposredne uporabe v algoritmu za ločevanje z diski. Posledično smo spustili nekaj funkcionalnosti dreves, ki jih kasneje v programu ne potrebujemo, po drugi strani pa dodali stvari, ki se ne tičejo drevesa, so pa potrebne kasneje. Tako na primer ne moremo dostopati do otrok vozlišč drevesa, po drugi strani pa pri dodajanju točk k drevesu te sproti tudi uvrstimo v eno izmed množic $L0$, $L1$, $R0$ in $R1$.
+
+Za implementacijo smo uporabili razred $SSSPTree$ s štirimi zasebnimi atributi. Vsi so seznami točk tipa vector in vsaka hrani eno izmed omenjenih množic. Konstruktor kot vhodne parametre sprejme seznam točk $P$, točko izvora $r$ in daljico $st$ ter zgradi drevo. Metoda $getAllSets$ v seznamu vrne vse štiri atribute.
+
+\subsection{Dodatki v razredu Point\texttt{\_}2}
+Algoritem zgradi drevo implicitno. To pomeni, da kot rezultat ne dobimo nobene nove strukture, ampak konstruktor vsako točko doda v enega od štirih seznamov in pri tem spremeni vrednost dveh njenih atributov:
+
+\begin{itemize}
+\item dist: hrani razdaljo do korena drevesa in je tipa $unsigned\texttt{\_}int$
+\item parent: hrani svojega starša in je tipa deljen kazalec ($ang.$ shared pointer) - zakaj že shared???
+\end{itemize}
+
+Noben imed omenjenih atributov ni del razreda $Point\texttt{\_}2$ v CGAL, zato smo jih sami dodali. S pomočjo kazalca na starša se je tako od vsake točke drevesa možno sprehoditi do korena, nasprotno pa to ne velja.
+
+\subsection{Voronoijev diagram za iskanje najbližjega soseda}
+
+Kot smo omenili pri opisu algoritma v prejšnjem poglavju, pri gradnji množice $W_i$ točke kandidatke testiramo tako, da poiščemo njihove najbližje sosede v množici $W_{i-1}$. Nad slednjo zgradimo VD, točke kandidatke pa uporabimo za poizvedbe nad tako strukturo.
+
+Vse potrebne objekte in funkcije nam nudi že CGAL. Nad objektom razreda Voronoi\texttt{\_}Diagram\texttt{\_}2 lahko delamo poizvedbe s funkcijo locate(Point\texttt{\_}2 q), ki vrne objekt tipa Locate\texttt{\_}result. Za slednjega je potrebno ugotoviti, v katerega izmed treh tipov objekta, ki so del strukture VD, se ga da pretvoriti: lice, vozlišče ali enosmerno povezavo. Ker kot rezultat hočemo vrniti VD središče, ga moramo dobiti prek takega objekta. Razred tipa Face\texttt{\_}handle ima funkcijo $dual$, ki vrne vozlišče v DT, dualno takemu licu. Prek vozlišča VD lahko pridemo do dualnega lica v DT in nato iteratorja vozlišč, ki ga definirajo. Enosmerna povezava Halfedge\texttt{\_}handle ima funkciji $up$ in $down$, ki vrneta vozlišče v DT, dualno licu v VD nad oziroma pod povezavo.
+
+Da dobimo dejanski objekt tipa Point\texttt{\_}2, ki definira vozlišče v DT oziroma središče v VD, uporabimo funkcijo $point()$. Na koncu moramo samo še preveriti evklidsko razdaljo med dobljeno točko in točko poizvedbe.
+
+Opisano proceduro smo združili pod funkcijo $query$ in jo dodali v našemu razredu $VoronoiDiagram$, razširjenem nad Voronoi\texttt{\_}Diagram\texttt{\_}2. Koda funkcije $query$ je prikazana spodaj.
+
+\lstinputlisting[language=C++, firstline=63, lastline=86]{VoronoiDiagram.h}
+
+Kot vidimo v kodi, metoda poleg najbližjega soseda vrne tudi spremenljivko logičnega tipa, ki nam pove, če je razdalja med točko poizvedbe in njenim najbližjim sosedom manjša ali enaka 1. 
+
+Naš razred ima še eno dodatno funkcijo. $Voronoi\texttt{\_}Diagram\texttt{\_}2$ omogoča vstavljanje samo objektov tipa $Site\texttt{\_}2$ (in $Point\texttt{\_}2$, ker zna CGAL samodejno pretvarjati med obema tipoma). Za potrebe drevesa SSSP smo v razredu $VoronoiDiagram$ omogočili tudi vstavljanje objektov tipa $Delaunay\texttt{\_}Vertex\texttt{\_}Handle$, iz katerega je moč enostavno dostopati do točke tipa $Point\texttt{\_}2$.
+\subsection{Izgradnja drevesa} 
+
+Konstruktor najprej zgradi DT nad $P$. Nato za izvorno točko $r\in P$ s pomočjo metode $locate$ poišče vozlišče v DT, s katerim sovpada. Pri tem preventivno preveri, da je tip rezultata, ki ga vrne $locate$, resnično \\ 
+$Delaunay\texttt{\_}Vertex\texttt{\_}Handle$, sicer $r\notin P$. Za vse točke v $P$ velja predpostavka, da sta vrednosti njihovih atributov $dist$ in $parent$ ponastavljeni. Velja torej $\forall p\in P:$ $p.dist = \infty$ $\wedge$ $p.parent = nullptr$. 
+
+Za generatorja točk kandidatk uporabljamo objekt tipa $deque$, primeren za hranjenje elementov v vrsti. Manjša razlika se potem pojavi pri dostopanju do točk v vrsti. V psevdokodi algoritma (vrstica 13) je $q$ poljubna točka v $Q$, medtem ko je v kodi $q$ vedno prva točka v vrsti (priklicana z metodo $front$, $pop\texttt{\_}front$ pa jo nato tudi odstrani iz vrste). Za $W_i$ in $W_{i-1}$ v zanki hranimo seznam Delaunayevih vozlišč (objekte tipa $Vertex\texttt{\_}Handle$). Voronoijev Diagram tipa $VoronoiDiagram$ zgradimo s seznamom $W_{i-1}$.
+
+Povezave oziroma sosede točke $q$ najdemo s pomočjo metode v DT \\ $incident\texttt{\_}vertices(q)$. Ker ima v CGAL implementaciji DT poleg standardnih vozlišč še eno neskončno vozlišče, ki je sosedno vsem ostalim, takega soseda ne obravnavamo. Za ostale sosede $p$ najprej preverimo, če je njihova razdalja do $r$ $\infty$ (oziroma bolj konkretno, enaka numeric\texttt{\_}limits$\langle$int$\rangle$ ::max()), potem pa poiščemo njihovega najbližjega soseda $w$ v $W_{i-1}$ z metodo $query$ našega razreda $VoronoiDiagram$. Če $|pw| <= 1$, naredimo naslednje:
+
+\begin{itemize}
+\item $p.setDist(i)$
+\item $Q.insert(p)$
+\item $Wi.insert(p)$
+\item $p.setParent(shared\texttt{\_}ptr\langle Point\texttt{\_}2\rangle  $ $w)$
+\item $p.setNr(updateNr(w,$ $p,$ $st))$
+\item $categorize(p,$ $st)$
+\end{itemize}
+
+Zadnji dve točki nista omenjeni v psevdokodi, ker njuna uporabnost pride v poštev šele kasneje pri separaciji z diski. $updateNr$ vrne novo vrednost za atribut $nr$ točke $p$. Funkcija preveri, če daljica $pw$ seka $st$ in če jo, vrne $(w.getNr() + 1)$ $\%$ $2$, sicer vrne $w.getNr()$. $categorize$ točko $p$ na podlagi njenega atributa $nr$ in relativnega položaja glede na $st$ (ki je ali levo ali desno) doda v enega od štirih seznamov l0, l1, r0 ali r1.
+
+\section{Drevo najbližjega soseda}
+Omeni, zakaj kd tree in ne vd, in zakaj kljub temu vd pri sssp tree (manj konstrukcij in manj vhodnih točk, razlika ni bistvena). Povej, da so primerjave med izgradnjo (cpu in ram) prikazane pod rezultati. Opiši prilagojen disk query za kd drevesa, ki ne vrne vseh točk znotraj diska (to bi pomenilo drugačen query time complexity, zelo odvisen od vhoda), ampak samo prvega, ki ga najde, ker nas v internal vozliščih nn drevesa zanima le, če disk vsebuje kako točko ali ne, šele pri listih nas zanima konkretna točka.
+
+
+\chapter{Rezultati}
+\label{ch3}
+\section{Drevo najkrajših poti}
+Algoritem za izgradnjo drevesa smo pognali na različnem številu vhodnih točk (glej tabelo). V prvem primeru so točke naključno generirane znotraj pravokotnika dimenzij 4x1. S tem 
+\begin{figure}
+\centerline{\includegraphics[scale=0.3]{w_points5000-1.png}}
+\caption{Točke v 4x1 pravokotniku.}
+\label{adsr}
+\end{figure}
+
+
+\chapter{Sklepne ugotovitve}
+\label{ch4}
+
+\addcontentsline{toc}{chapter}{Literatura}
+\begin{thebibliography}{99}
+\bibitem{cgalVor}CGAL 4.6 - 2D Voronoi Diagram Adaptor: User Manual. Dostopno na:\\ http://doc.cgal.org/latest/Voronoi\texttt{\_}diagram\texttt{\_}2/index.html
+
+\end{thebibliography}
+\end{document}
