@@ -57,30 +57,29 @@ public:
 	//VoronoiDiagram(Iterator, Iterator);
 	std::tuple<bool, Point_2*> query(Point_2 q);
 	int size() { return number_of_faces(); }
+	Face_handle insert(const Delaunay_vertex_handle& t);
+	Face_handle insert(const Site_2& t);
+	template<class Iterator>
+	size_type insert(Iterator first, Iterator beyond);
+
 };
 
 
-std::tuple<bool, Point_2*> VoronoiDiagram::query(Point_2 q) {
+tuple<bool, Point_2*> VoronoiDiagram::query(Point_2 q) {
 	
 	Locate_result lr = locate(q);
-	// delaunay vertex == voronoi site
 	Delaunay_vertex_handle df;
 	if (Vertex_handle* v = boost::get<Vertex_handle>(&lr)) {
-		// query point coincides with a voronoi vertex
-		// vertex is built based on at most three sites, return the first one
 		df = (*v)->site(0);
 	}
 	else if (Face_handle* f = boost::get<Face_handle>(&lr)) {
-		// if query point lies on Voronoi face, return DT vertex inside that face
 		df = (*f)->dual();
 	}
 	else if (Halfedge_handle* e = boost::get<Halfedge_handle>(&lr)) {
-		// query point lies on Voronoi edge, return the site above it
 		df = (*e)->up();
 	}
 	Point_2 faceSitePoint = df->point();
 	Point_2 *fcp = &df->point();
-	// use squared distance
 	double dist = CGAL::squared_distance(*fcp, q);
 	
 	if (dist <= 1) {
@@ -89,4 +88,23 @@ std::tuple<bool, Point_2*> VoronoiDiagram::query(Point_2 q) {
 	else {
 		return std::tuple<bool, Point_2*> {false, fcp};
 	}
+}
+
+inline Face_handle VoronoiDiagram::insert(const Delaunay_vertex_handle& t) {
+
+    return VD::insert(t->point(), Has_site_inserter());
+}
+
+inline Face_handle VoronoiDiagram::insert(const Site_2& t) {
+
+    return VD::insert(t, Has_site_inserter());
+}
+
+template<class Iterator>
+inline VD::size_type VoronoiDiagram::insert(Iterator first, Iterator beyond) {
+	VD::size_type counter = 0;
+	for (Iterator it = first; it != beyond; ++it, ++counter) {
+		insert(*it);
+	}
+	return counter;
 }

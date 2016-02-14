@@ -34,7 +34,6 @@ SSSPTree<Iterator>::SSSPTree(Iterator begin, Iterator end, Point_2 r, Segment_2 
 	// wip and wi are vectors that in i-th iteration store points/vertices with dist=i
 	// we want to store and return points of Point_2 type, but we also need vertex handles
 	// in order to retrieve neighbours of a vertex in DT
-	vector<Point_2> wi_1_points;
 	vector<Delaunay_vertex_handle> wi_1_delaunayVertices;
 
 	// we have to retrieve vertex handle in DT that corresponds to the point r of type Point_2
@@ -61,17 +60,15 @@ SSSPTree<Iterator>::SSSPTree(Iterator begin, Iterator end, Point_2 r, Segment_2 
 	rPoint->setParent(rootParent);
 	
 	categorize(&l0, &l1, &r0, &r1, rPoint, st);
-	wi_1_points.push_back({ *rPoint });
 	wi_1_delaunayVertices.push_back(rVertex);
 	int i = 1;
 	
 	while (wi_1_delaunayVertices.size() > 0) {
 		VoronoiDiagram vd_nearestNeighbour;
-		vd_nearestNeighbour.insert(wi_1_points.begin(), wi_1_points.end());
+		vd_nearestNeighbour.insert(wi_1_delaunayVertices.begin(), wi_1_delaunayVertices.end());
 		deque<Delaunay_vertex_handle> queue;
 		copy(wi_1_delaunayVertices.begin(), wi_1_delaunayVertices.end(), back_inserter(queue));
 		vector<Delaunay_vertex_handle> wi_delaunayVertices;
-		vector<Point_2> wi_points;
 		while (queue.size() > 0) {
 			Delaunay_vertex_handle q = queue.front();
 			queue.pop_front();
@@ -94,7 +91,6 @@ SSSPTree<Iterator>::SSSPTree(Iterator begin, Iterator end, Point_2 r, Segment_2 
 						pPoint->setParent(par2);
 						//cout << pPoint->x() << "," << par2->x() << " - " << pPoint->y() << "," << par2->y() << endl;
 						
-						wi_points.push_back(*pPoint);
 						categorize(&l0, &l1, &r0, &r1, pPoint, st);
 					}
 				}
@@ -102,9 +98,7 @@ SSSPTree<Iterator>::SSSPTree(Iterator begin, Iterator end, Point_2 r, Segment_2 
 		}
 
 		wi_1_delaunayVertices.clear();
-		wi_1_points.clear();
 		wi_1_delaunayVertices = wi_delaunayVertices;
-		wi_1_points = wi_points;
 
 		i++;
 	}/*
