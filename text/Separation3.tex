@@ -51,7 +51,9 @@
 \newcommand{\D}{\ensuremath{\mathcal{D}}} 
 \newcommand{\LL}{\ensuremath{\mathbb L}}
 \newcommand{\RR}{\ensuremath{\mathbb R}}  % real numbers 
+\newcommand{\NN}{\ensuremath{\mathbb N}}  % natural numbers 
 \newcommand{\T}{\ensuremath{\mathcal{T}}} 
+\newcommand{\OO}{\ensuremath{\mathcal{O}}} % big O notation
 \newcommand{\clearemptydoublepage}{\newpage{\pagestyle{empty}\cleardoublepage}}
 \setcounter{tocdepth}{1}	      % globina kazala
 
@@ -266,6 +268,7 @@ povej kaj o traits, templated strukturami ($Point_2$)
 
 \section{BFS drevesa}
 \section{SSSP drevesa}
+Drevo najkrajših poti z eno izvorno točko je vpeto drevo $T$ grafa $G$ s korenom $v$, za katerega velja, da je razdalja poti od $v$ do $u \in T$ enaka razdalji najkrajše poti od $v$ do $u$. Tako drevo lahko zgradimo s pomočjo algoritma za iskanje najkrajše poti med dvema danima točkama (tipična primera sta Dijsktrov in Bellman-Fordov algoritem). Izvorno točko $v$ fiksiramo in poženemo algoritem za vse pare $(v, u), v,u \in G.$ Časovna kompleksnost Dijkstrovega algoritma je $\OO((m+n)\log n)$, kjer je $n$ število vozlišč, $m$ pa število povezav v $G$. Ker moramo algoritem pognati za $n-1$ parov, lahko drevo zgradimo v času $\OO((n^2 + nm)\log n)$. Če predpostavimo, da za vhodni graf $G$ veljajo določene omejitve (v primeru našega algoritma povezava med vozliščema v grafu obstaja samo, če je njuna razdalja največ 1), ki se jih da izkoristiti pri izgradnji hitrejšega algoritma, se časovna kompleksnost lahko izboljša.
 \section{Graf kvadratne mreže}
 $https://en.wikipedia.org/wiki/Lattice_graph_Square_grid_graph$
 
@@ -310,7 +313,7 @@ Tretja predloga predstavlja režim adaptacije Delaunayeve triangulacije Voronoij
  
 
 \section{Območna drevesa}
-Območna drevesa so še ena podatkovna struktura za poizvedbe nad pravokotnimi območji. V primerjavi s kd drevesi imajo boljši čas poizvedbe ($O(\log^2 n)$), ampak slabšo prostorsko kompleksnost ($O(n\log n)$).
+Območna drevesa so še ena podatkovna struktura za poizvedbe nad pravokotnimi območji. V primerjavi s kd drevesi imajo boljši čas poizvedbe ($\OO(\log^2 n)$), ampak slabšo prostorsko kompleksnost ($\OO(n\log n)$).
 
 
 \section{Kd-drevesa}\begin{equation}
@@ -354,7 +357,8 @@ Pri izgradnji $W_i$ ne pregledujemo vseh še ne dodanih točk. Že v samem zače
 \end{itemize} 
 
 \begin{lema}
-Naj bo $p\in W_i$. V $G(P)\cap DT(P)$ obstaja pot $q_1,...,q_k = p$, kjer $q_1\in W_{i-1}$ in $q_2,...,q_k\in W_i$.
+\label{lema1}
+Naj bo $p$ točka v $P\backslash \{s\}$, za katero velja $d(s,p) < \infty$. Obstajata točka $w$ v $P$ in pot $\Pi$ v $DT(P)$ od $w$ do $p$, za kateri velja $d(s,w)+1 = d(s,p)$ in $d(s,p_j) = d(s,p)$ za vsako notranje vozlišče $p_j$ v $\Pi$.
 \end{lema}
 
 \begin{figure}
@@ -364,7 +368,48 @@ Naj bo $p\in W_i$. V $G(P)\cap DT(P)$ obstaja pot $q_1,...,q_k = p$, kjer $q_1\i
 \end{figure}
 
 \begin{proof}
-???
+Naj bo $i = d(s,p)$, $w$ pa naj bo točka z $d(s,w) = i - 1$, ki je najbližje $p$ po evklidski razdalji. Ker $d(s,p) \le \infty$, mora veljati $\|w - p\| \leq 1$. Naj bo $D_{wp}$ krog s premerom $wp$.
+
+Predpostavimo, da segment $wp$ ne gre skozi nobeno vozlišče VD nad $P$.  Pobliže si poglejmo zaporedje Voronoijevih celic $cell(p_1, P),..., cell(p_k, P)$, ki ga seka segment $wp$, ko se sprehodimo od $w$ do $p$. Očitno velja $w = p_1$ in $p = p_k$. Za vsak $1 \leq j \le k$ je povezava $p_jp_{j+1}$ v $DT(P)$, ker sta si celici $cell(p_j, P)$ in $cell(p_{j+1}, P)$ sosedni prek neke točke v $wp$. Pot $\pi = p_1p_2...p_k$ je zato vsebovana v $DT(P)$ in povezuje $w$ s $p$. Za katerikoli indeks $j$, kjer $1 \le j \le k$, naj bo $a_j$ katerakoli točka v $wp \cap cell(p_j, P)$. Ker velja $\|a_jp_j\| \leq \{\|a_jw\|, \|a_jp\|\}$, je točka $p_j$ vsebovana v $D_{wp}$. Potem je celotna pot $\pi$ vsebovana v $D_{wp}$, in ker je premer $D_{wp}$ največ 1, je vsaka povezava poti $\pi$ tudi v $G(P)$. S tem sklenemo, da je $\pi$ pot v $DT(P) \cap G(P)$.
+
+Vzemimo katerokoli točko $p_j$ v $\pi$, ki je potem vsebovana v $D_{wp}$. Ker $\|w - p_j\| \leq \|w - p\| \leq 1$, velja $d(s, p_j) \leq d(s, w) + 1 = i$. Ker $\|p_j - p\| \leq \|w - p\| \leq 1$, velja $d(s, p_j) \geq d(s, p) - 1 = i - 1$. Ampak izbira $w$ kot točke najbližje $p$ pomeni, da $d(s, p_j) \neq i - 1$, ker $\|p_j - p\| \le \|w - p\|$. Zato velja $d(s, p_j) = i$. Iz tega sklenemo, da za vsa notranja vozlišča $p_j$ v $\pi$ velja $d(s, p_j) = i$. 
+\end{proof}
+
+\begin{lema}
+\label{lema2}
+Na koncu algoritma $UnweightedShortestPath(P, s)$ velja:
+
+\begin{equation}
+\forall i \in \NN \cup \{0\}:  W_i = \{p\in P \mid d(s, p) = i\}.
+\end{equation}
+
+Poleg tega za vsako točko $p \in P \backslash \{s\}$ velja $dist[p] = d(s,p)$ in če velja $d(s,p) \le \infty$, potem obstaja najkrajša pot v $G(P)$ od $s$ do $p$, v kateri je zadnja povezava $\pi [p]p$.
+\end{lema}
+
+\begin{proof}
+Za dokaz uporabimo indukcijo nad $i$. $W_0 = \{s\}$ je nastavljen v vrstici 6 in kasneje ne spremeni vrednosti. Za $i = 0$ potem izjava velja.
+
+Preden obravnavamo indukcijski korak, izpostavimo, da so množice $W_0, W_1,...$ parno disjunktne. To je razvidno tudi iz psevdokode. Točka $p$  je v vrstici 21 dodana v nek $W_i$, po tem, ko nastavimo $dist[p] = i$ v vrstici 18. Po tem je pogoj v vrstici 17 vedno neresničen in $p$ ni dodan v nobeno drugo množico $W_j$.
+
+Vzemimo katerikoli $i \ge 0$. Po indukcijski predpostavki velja
+
+\begin{equation}
+W_{i-1} = \{p \in P \mid d(s,p) = i - 1\}.
+\end{equation}
+
+V algoritmu dodamo točke v $W_i$ samo v vrstici 21. Če je $p$ dodan v $W_i$, potem velja $\|p - w\| \leq 1$ za nek $w \in W_{i-1}$ zaradi pogoja v vrstici 17. Potem vsak $p$, dodan v $W_i$, zadostuje pogoju $d(s,p) \leq i$. Ker $p \notin W_{i-1}$, iz disjunkcije množic $W_0, W_1,...$ sledi $d(s,p) = i$. Sklenemo, da
+
+\begin{equation}
+W_i \subseteq \{p \in P \mid d(s,p) = i\}.
+\end{equation}
+
+Da dobimo vsebovanost v drugo smer, naj bo $p$ neka točka, za katero velja $d(s,p) = i$. Pokazati moramo, da je z algoritmom $p$ dodan v $W_i$. Vzemimo točko $w$ in pot $\pi = p_1...p_k$, zagotovljeno z lemo ~\ref{lema1}. Z indukcijsko hipotezo imamo $w = p_1 \in W_{i-1}$ in zato je $w$ dodan v $Q$ v vrstici 10. V nekem trenutku je povezava $p_1p_2$ obravnavana v vrstici 15 in točka $p2$ je dodana v $W_i$ in $Q$. Po $indukcijski tezi$(!!!) so potem vse točke $p_3,...,p_k$ dodane v $W_i$ in $Q$ (po možnosti v različnem vrstnem redu). Sledi, da je $p_k = p$ dodan v $W_i$ in zato
+
+\begin{equation}
+W_i = \{p \in P \mid d(s,p) = i \}.
+\end{equation}
+
+Ker je $p$ dodan v $W_i$ ob istem času, ko je nastavljen $dist[p] = i$, sledi, da $dist[p] = i = d(s,p)$. Ker $\pi[p] \in W_{i-1}$ in $\|p - \pi[p] \| \leq 1$ (vrstice 16, 17 in 19), obstaja najkrajša pot v $G(P)$ od $s$ do $p$, ki uporablja $(i-1)$-to povezavo poti od $s$ do $\pi[p]$, po indukciji pa ji sledi povezava $\pi[p]p$.
 \end{proof}
 
 Da dobimo odgovor na vprašanje, ali je nek kandidat $p\in W_i$, uporabimo podatkovno strukturo, ki zna v zglednem času najti najbližjega soseda $q$ in preveriti, če je razdalja med njima manjša ali enaka 1.
@@ -394,13 +439,12 @@ Celotna psevdokoda algoritma za izgradnjo drevesa je opisana spodaj.
 \State $q$ naj bo poljubna točka v $Q$
 \State odstrani $q$ iz $Q$
 \For {povezava $qp$ v $DT(P)$}
-
-\If {dist$[p] = \infty$}
 \State $w \gets$ NN($W_{i-1},p$)
-\If {$|pw| \leq$ 1}
+\If {dist$[p] = \infty$ and $|pw| \leq$ 1}
 \State dist$[p] \gets i$
-\State dodaj $p$ v $Q$ in $W_{i}$
-\EndIf
+\State $\pi[p] \gets w$
+\State dodaj $p$ v $Q$
+\State dodaj $p$ v $W_{i}$
 \EndIf
 \EndFor
 \EndWhile
@@ -412,13 +456,47 @@ Celotna psevdokoda algoritma za izgradnjo drevesa je opisana spodaj.
 \end{algorithm}
 
 \begin{lema}
-Za izgradnjo drevesa SSSP potrebuje algoritem $O(n)$ prostora in $O(n\log n)$ časa.
+\label{lema3}
+Za izgradnjo drevesa SSSP potrebuje algoritem $UnweightedShortestPath(P,s)$ $\OO(n\log n)$ časa, kjer je $n$ velikost množice $P$.
 \end{lema}
 
 \begin{proof}
-???
+Glavne opazke, uporabljene v dokazu, so sledeče: vsaka točka v $P$ je dodana v $Q$ največ enkrat v vrstici 10 in enkrat v vrstici 20, izvajanje vrstic 13-21 za točko $q$ vzame $\OO(deg_{DT(P)}(q)\log n)$, vsota stopenj v $DT(P)$ je $\OO(n)$, in v vrstici 9 porabimo $\OO(n\log n)$ časa skupaj za vse iteracije. Sledijo podrobnosti.
+
+Delaunayeva triangulacija nad $n$ točkami se lahko izračuna v času $\OO(n\log n)$. Inicializacija v vrsticah 1-7 tako vzame $\OO(n\log n)$ času. Dokazati moramo še, da zanka v vrsticah 8-22 vzame $\OO(n\log n)$ časa.
+
+Izvajanje vrstic 9-11 vzame $\OO(|W_{i-1}|\log |W_{i-1}|) = \OO(|W_{i-1}|\log n)$ časa. Vsaka kasnejša poizvedba najbližjega soseda se izvede v času $\OO(\log n)$.
+
+Vsaka izvedba vrstic 16-21 se izvede v času $\OO(\log n)$, kjer je najbolj zahteven korak poizvedba v vrstici 16. Vsaka izvedba vrstic 13-21 se izvede v času $\OO(deg_{DT(P)}(q)\cdot\log n)$, ker se vrstice 16-21 izvedejo $deg_{DT(P)}(q)$-krat.
+
+Obravnavajmo eno izvedbo vrstic 9-22. Točke so dodane v $Q$ v vrsticah 10 in 20. V slednji je točka $p$ dodana v $Q$ natanko takrat, ko je dodana v $W_i$ (v vrstici 21). Iz tega sledi, da je $p$ dodana v $Q$ natanko takrat, ko pripada množici $W_{i-1}\cup W_i$. Poleg tega je vsaka točka iz $W_{i-1}\cup W_i$ dodana v $Q$ natanko enkrat: za vsako točko $p$, ki je dodana v $Q$, velja $dist[p]\leq i \le \infty$, in da ne bo dodana nikoli več zaradi pogoja v vrstici 17.Iz tega sledi, da se zanka v vrsticah 12-22 izvede v času
+
+\begin{equation}
+\sum_{q\in W_{i-1}\cup W_i} \OO(deg_{DT(P)}(q) \cdot \log n).
+\end{equation}
+
+Tako lahko omejimo porabljen čas v zanki v vrsticah 8-22 z
+
+\begin{equation}
+\label{bigo1}
+\sum_i \OO \left( |W_i|\log n + \sum_{q\in W_{i-1}\cup W_i} (deg_{DT(P)}(q) \cdot \log n) \right) .
+\end{equation}
+
+Z uporabo leme ~\ref{lema2}, ki pravi, da so množice $W_0,W_1,...$ parno disjunktne, ter relacijama $\sum_i |W_i| \leq n$ in 
+
+\begin{equation}
+\sum_{q \in P} deg_{DT(P)}(q) = 2 \cdot |E(DT(P))| = \OO(n),
+\end{equation}
+časovna kompleksnost iz ~\ref{bigo1} postane $\OO(n\log n)$.
 \end{proof}
 
+\begin{izrek}
+Naj bo $P$ množica $n$ točk v ravnini in naj bo $s$ točka v $P$. V času $\OO(n\log n)$ lahko iz neuteženega grafa $G(P)$ izračunamo drevo najkrajših poti s korenom $s$.
+\end{izrek}
+
+\begin{proof}
+Zaradi leme ~\ref{lema3} porabi algoritem $UnweightedShortestPath(P,s)$ $\OO(n\log n)$ časa. Zaradi leme ~\ref{lema2} tabela $\pi[\cdot]$ pravilno opisuje drevo najkrajših poti v $G(P)$ s korenom $s$ in $dist[\cdot]$ pravilno opisuje razdalje najkrajših poti v $G(P)$.
+\end{proof}
 
 \section{Drevo najbližjega soseda}
 
@@ -426,7 +504,7 @@ Uravnoteženo binarno iskalno drevo. Opis vzami iz "main", namesto VD pa reci vd
 
 \begin{lema}
 \label{le:ds2}
-    Naj bo $P$ množica uteženih točk na ravnini. V času $O(n\log n)$ lahko konstruiramo t\^{a}ko podatkovno strukturo, ki v času $O(\log^2 n)$ za točko poizvedbe $q$ najde točko v 
+    Naj bo $P$ množica uteženih točk na ravnini. V času $\OO(n\log n)$ lahko konstruiramo t\^{a}ko podatkovno strukturo, ki v času $\OO(\log^2 n)$ za točko poizvedbe $q$ najde točko v 
 	\[	\arg\min \{ w_p \mid p\in P,~|pq|\le 1\}.
 	\]
 \end{lema}
@@ -439,15 +517,15 @@ Za vsako vozlišče $\nu$ v $\T$:
 \item Označimo $U(\nu)$ kot unijo enotskih krogov s središči $P(\nu)$.
 \item Zgradimo point-location podatkovno strukturo $DS(P(\nu))$, ki v ozadju uporablja Voronoijev diagram ali kakšno drugo podobno podatkovno strukturo za iskanje najbližjega soseda. Za dano točko poizvedbe $q$ $DS$ pove, če se nahaja v $U(\nu)$. Najprej poišče najbližjega soseda $q$ tako, da najde celico $c$ Voronoijevega diagrama, v kateri se nahaja $q$ in s tem središče $S_i$, ki definira $c$. Nato preveri, če je razdalja med $q$ in $S_i$ največ ena merska enota.
 
-Čas predprocesiranja vozlišča $\nu$ je $O(|P(\nu)|)$, čas poizvedbe pa $O(\log |P(\nu)|)= O(\log n)$.
+Čas predprocesiranja vozlišča $\nu$ je $ \OO(|P(\nu)|)$, čas poizvedbe pa $\OO(\log |P(\nu)|)= \OO(\log n)$.
 \end{itemize}
 
-Analizirajmo čas izgradnje naše podatkovne strukture. Točke $P$ sortiramo leksikografsko v korenu drevesa $\T$, točke $P(\nu)$ pa za vsak $\nu$ dobimo že sortirane od starša $\nu$. Ker so kanonične podmnožice na vsakem nivoju drevesa med seboj disjunktne, porabimo za vsak nivo $O(n)$ časa. Uravnoteženost $\T$ zagotavlja, da je $O(\log n)$ nivojev, tako da skupaj za izgradnjo potrebujemo $O(n\log n)$ časa.
+Analizirajmo čas izgradnje naše podatkovne strukture. Točke $P$ sortiramo leksikografsko v korenu drevesa $\T$, točke $P(\nu)$ pa za vsak $\nu$ dobimo že sortirane od starša $\nu$. Ker so kanonične podmnožice na vsakem nivoju drevesa med seboj disjunktne, porabimo za vsak nivo $\OO(n)$ časa. Uravnoteženost $\T$ zagotavlja, da je $\OO(\log n)$ nivojev, tako da skupaj za izgradnjo potrebujemo $\OO(n\log n)$ časa.
 
 Potrebna je še analiza časa poizvedbe. Za točko poizvedbe $q$ preverimo, če je vsebovana v $U(r)$, kjer je $r$ koren drevesa. Če ni, potem nobena točka iz $P$ ni dovolj blizu $q$. Sicer označimo $\nu = r$ in nadaljujemo z iskanjem od vrha navzdol po $T$, dokler ne pridemo do listov drevesa. Ko $\nu$ ni list, označimo njegovega levega in desnega otroka z $\nu_\ell$ in $\nu_r$. Če se $q$ nahaja v $U(\nu_\ell)$, označimo $\nu = \nu_\ell$ in nadaljujemo navzdol po poddrevesu otroka $\nu_\ell$, sicer to storimo za desnega otroka. V vsakem trenutku poizvedbe ohranjamo sledečo invarianto:
 \[	P(\nu) \cap \arg\min \{ w_p \mid p\in P,~|pq|\le 1\} ~\not=~ \emptyset.
 	\]	
-Pot poizvedbe v $T$ ima $O(\log n)$ vozlišč, za vsako vozlišče pa porabimo $O(\log n)$ časa, da ugotovimo, če se $q$ nahaja v $U(\nu)$. Skupni čas poizvedbe je torej $O(\log^2 n)$.
+Pot poizvedbe v $T$ ima $\OO(\log n)$ vozlišč, za vsako vozlišče pa porabimo $\OO(\log n)$ časa, da ugotovimo, če se $q$ nahaja v $U(\nu)$. Skupni čas poizvedbe je torej $\OO(\log^2 n)$.
 \end{proof}
 
 \subsection{Optimizacijski problem 1}
@@ -462,7 +540,7 @@ Obravnavajmo sledeč optimizacijski problem dveh množic uteženih točk $A$ in 
 \begin{lema}
 \label{le:within}
 	Naj bosta $A$ and $B$ množici največ $n$ uteženih točk v ravnini.
-	$\Phi(A,B)$ lahko izračunamo v času $O(n\log^2 n)$.
+	$\Phi(A,B)$ lahko izračunamo v času $\OO(n\log^2 n)$.
 \end{lema}
 \begin{proof}
 Za $B$ zgradimo podatkovno strukturo iz prejšnje leme. Za vsak $a\in A$  naredimo poizvedbo na podatkovni strukturi, da dobimo
@@ -472,7 +550,7 @@ Za $B$ zgradimo podatkovno strukturo iz prejšnje leme. Za vsak $a\in A$  naredi
 	
 Nato najdemo tak $a$, ki minimizira vsoto $w_a+w_{b^*(a)}$.
 
-$O(n\log n)$ časa rabimo za izgradnjo podatkovne strukture, $O(\log^2 n)$ pa za vsako poizvedbo. Ker je poizvedb največ $n$, je časovna kompleksnost enaka $O(n\log^2 n)$.
+$\OO(n\log n)$ časa rabimo za izgradnjo podatkovne strukture, $\OO(\log^2 n)$ pa za vsako poizvedbo. Ker je poizvedb največ $n$, je časovna kompleksnost enaka $\OO(n\log^2 n)$.
 \end{proof}
 
 
@@ -514,10 +592,10 @@ Opiši iz poglavja knjige.
 \begin{lema}
 	Obstaja družina $\{ B_1,\dots, B_t\}$ podmnožic množice $B$ in 			podatkovna struktura $\D (B)$ z naslednjimi lastnostmi
 	\begin{itemize}
-		\item $\sum_{i=1}^t |B_i| = O(n\log n)$;
-		\item $\D (B)$ je velikosti $O(n\log n)$ in se jo da 					konstruirati v času $O(n\log n)$;
-		\item za vsako točko $a$ z negativno koordinato $x$ obstaja 			podmnožica indeksov $I(a)\subset \{ 1,\dots,t\}$, tako da velja 		$|I(a)|=O(\log^2 n)$, $B(a)$ pa je disjunktna unija množic $\{ 			B_i \}_{i\in I(a)}$;
-		\item za vsako točko poizvedbe $a$ z $a_x<0$ podatkovna 				struktura $\D (B)$ vrne $I(a)$ v $O(\log^2 n)$ času.
+		\item $\sum_{i=1}^t |B_i| = \OO(n\log n)$;
+		\item $\D (B)$ je velikosti $\OO(n\log n)$ in se jo da 					konstruirati v času $\OO(n\log n)$;
+		\item za vsako točko $a$ z negativno koordinato $x$ obstaja 			podmnožica indeksov $I(a)\subset \{ 1,\dots,t\}$, tako da velja 		$|I(a)|=\OO(\log^2 n)$, $B(a)$ pa je disjunktna unija množic $\{ 			B_i \}_{i\in I(a)}$;
+		\item za vsako točko poizvedbe $a$ z $a_x<0$ podatkovna 				struktura $\D (B)$ vrne $I(a)$ v $\OO(\log^2 n)$ času.
 	\end{itemize}
 \end{lema}
 \begin{proof}
@@ -633,18 +711,20 @@ Zadnji dve točki nista omenjeni v psevdokodi, ker njuna uporabnost pride v poš
 
 \section{Drevo najbližjega soseda}
 
-Drevo najbližjega soseda, opisano v poglavju 3.3, bi lahko implementirali s kazalci ali seznamom. Odločili smo se slednjega. Seznam hrani objekte podatkovne strukture $DS(P(\nu))$ za poizvedbe najbližjega soseda. Velikost seznama, ki hrani $n$ točk, je enaka $2^{\lceil \log_2n \rceil+1}-1$. Nekatera vozlišča na najnižjem nivoju drevesa so lahko tudi prazna (torej brez objektov). Primer takega drevesa je prikazan na sliki ?. Otroka vozlišča, ki se v seznamu nahaja na mestu $i$, se nahajata na mestu $2i+1$ in $2i+2$. Podobno se starš vozlišča na mestu $i$ nahaja na mestu $\lfloor(i-1)/2\rfloor$.
+Drevo najbližjega soseda, opisano v poglavju 3.3, bi lahko implementirali s kazalci ali seznamom. Odločili smo se slednjega. Seznam hrani kazalce ($shared{\_}ptr$) na objekte podatkovne strukture $DS(P(\nu))$ za poizvedbe najbližjega soseda. Velikost seznama, ki hrani $n$ točk, je enaka $2^{\lceil \log_2n \rceil+1}-1$. Nekatera vozlišča na najnižjem nivoju drevesa so lahko tudi prazna (torej brez objektov). Primer takega drevesa je prikazan na sliki ?. Otroka vozlišča, ki se v seznamu nahaja na mestu $i$, se nahajata na mestu $2i+1$ in $2i+2$. Podobno se starš vozlišča na mestu $i$ nahaja na mestu $\lfloor(i-1)/2\rfloor$.
 
 
-Za podatkovno strukturo s poizvedbami najbližjega soseda smo sprva hoteli uporabiti VD, vendar smo se kasneje odločili za Kd drevo. Razlog za to je implementacija VD v knjižnici CGAL. Ker je prostorska kompleksnost VD $O(n)$, bi pričakovali, da poraba prostora raste linearno z večanjem VD. Izkaže se, da je rast počasnejša od linearne, kar pomeni, da na primer 100 VD objektov velikosti 10 porabi več prostora kot 10 objektov velikosti 100. Posledično poraba prostora ni enaka za vsak nivo drevesa, temveč z globino raste. Razlike se v celotnem algoritmu potem še potencirajo, ker zgradimo VD v (skoraj) vsakem vozlišču drevesa najbližjega soseda, vsako tako drevo pa v vsakem vozlišču sekundarnega drevesa v območnem drevesu. Ko smo testirali implementacijo Kd dreves v CGAL, smo ugotovili tudi, da je čas konstrukcije bistveno krajši kot pri VD. Primerjave med konstrukcijama obeh podatkovnih struktur (procesorski čas in poraba RAM-a) so prikazane v poglavju Rezultati.
+Za podatkovno strukturo s poizvedbami najbližjega soseda smo sprva hoteli uporabiti VD, vendar smo se kasneje odločili za Kd drevo. Razlog za to je implementacija VD v knjižnici CGAL. Ker je prostorska kompleksnost VD $\OO(n)$, bi pričakovali, da poraba prostora raste linearno z večanjem VD. Izkaže se, da je rast počasnejša od linearne, kar pomeni, da na primer 100 VD objektov velikosti 10 porabi več prostora kot 10 objektov velikosti 100. Posledično poraba prostora ni enaka za vsak nivo drevesa, temveč z globino raste. Razlike se v celotnem algoritmu potem še potencirajo, ker zgradimo VD v (skoraj) vsakem vozlišču drevesa najbližjega soseda, vsako tako drevo pa v vsakem vozlišču sekundarnega drevesa v območnem drevesu. Ko smo testirali implementacijo Kd dreves v CGAL, smo ugotovili tudi, da je čas konstrukcije bistveno krajši kot pri VD. Primerjave med konstrukcijama obeh podatkovnih struktur (procesorski čas in poraba RAM-a) so prikazane v poglavju Rezultati.
 
 \subsection{Kd drevo}
 
-Kot osnovo smo za poizvedbe najbližjega soseda uporabili funkcijo $search$ v razredu $Kd{\_}tree$, ki kot argument sprejme $OutputIterator$, kamor se shranjujejo objekti, ki jih poizvedba vrne, in $FuzzyQueryItem$, ki je v dvodimenzionalnem primeru lahko krog ali pravokotnik in določa območje iskanja. Kot argument med drugim sprejme vrednost $\epsilon$, ki določa stopnjo mehkosti (ang. fuzzyness) in se jo uporablja pri aproksimacijskih poizvedbah. Časovna kompleksnost take poizvedbe je enaka $O(\log n + k)$, kjer je $k$ število vrnjenih točk znotraj območja iskanja. Ker naš algoritem zahteva $O(\log n)$, smo razredu $Kd{\_}tree$ dodali podobno funkcijo, ki pa iskanje zaključi v istem trenutku, ko ugotovi, da se vsaj ena točka nahaja znotraj območja iskanja. Če na primer za neko notranje vozlišče Kd drevesa ugotovi, da vse točke v njegovem poddrevesu ustrezajo kriterijem iskanja, jih ne doda enega po enega v $OutputIterator$, temveč doda samo "dummy" točko in zaključi. Če najde samo eno točko (ko pride do lista Kd drevesa), potem tako točko tudi vrne. To si lahko privoščimo, ker nas v notranjih vozliščih drevesa najbližjega soseda ne zanimajo konkretne točke, ampak samo informacija, ali se vsaj ena točka nahaja v območju iskanja. Šele ko pridemo do lista NN drevesa, nas zanima konkretna točka. S tem, ko je vedno vrnjena ena točka, se časovna kompleksnost spremeni v $O(\log n)$. 
+Kot osnovo smo za poizvedbe najbližjega soseda uporabili funkcijo $search$ v razredu $Kd{\_}tree$, ki kot argument sprejme $OutputIterator$, kamor se shranjujejo objekti, ki jih poizvedba vrne, in $FuzzyQueryItem$, ki je v dvodimenzionalnem primeru lahko krog ali pravokotnik in določa območje iskanja. Kot argument med drugim sprejme vrednost $\epsilon$, ki določa stopnjo mehkosti (ang. fuzzyness) in se jo uporablja pri aproksimacijskih poizvedbah. Časovna kompleksnost take poizvedbe je enaka $\OO(\log n + k)$, kjer je $k$ število vrnjenih točk znotraj območja iskanja. Ker naš algoritem zahteva $\OO(\log n)$, smo razredu $Kd{\_}tree$ dodali podobno funkcijo, ki pa iskanje zaključi v istem trenutku, ko ugotovi, da se vsaj ena točka nahaja znotraj območja iskanja. Če na primer za neko notranje vozlišče Kd drevesa ugotovi, da vse točke v njegovem poddrevesu ustrezajo kriterijem iskanja, jih ne doda enega po enega v $OutputIterator$, temveč doda samo "dummy" točko in zaključi. Če najde samo eno točko (ko pride do lista Kd drevesa), potem tako točko tudi vrne. To si lahko privoščimo, ker nas v notranjih vozliščih drevesa najbližjega soseda ne zanimajo konkretne točke, ampak samo informacija, ali se vsaj ena točka nahaja v območju iskanja. Šele ko pridemo do lista NN drevesa, nas zanima konkretna točka. S tem, ko je vedno vrnjena ena točka, se časovna kompleksnost spremeni v $\OO(\log n)$. 
 
 \lstinputlisting[language=C++, firstline=1, lastline=37]{KdTreeQuery.h}
 
 \lstinputlisting[language=C++, firstline=1, lastline=33]{NNquery.h}
+
+
 
 \chapter{Rezultati}
 \label{ch3}
