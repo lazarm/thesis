@@ -500,8 +500,6 @@ Zaradi leme ~\ref{lema3} porabi algoritem $UnweightedShortestPath(P,s)$ $\OO(n\l
 
 \section{Drevo najbližjega soseda}
 
-Uravnoteženo binarno iskalno drevo. Opis vzami iz "main", namesto VD pa reci vd oz drugo primerno strukturo za iskanje najbližjega soseda. Omeni, da je bil izbran kd-tree.
-
 \begin{lema}
 \label{le:ds2}
     Naj bo $P$ množica uteženih točk na ravnini. V času $\OO(n\log n)$ lahko konstruiramo t\^{a}ko podatkovno strukturo, ki v času $\OO(\log^2 n)$ za točko poizvedbe $q$ najde točko v 
@@ -711,14 +709,31 @@ Zadnji dve točki nista omenjeni v psevdokodi, ker njuna uporabnost pride v poš
 
 \section{Drevo najbližjega soseda}
 
-Drevo najbližjega soseda, opisano v poglavju 3.3, bi lahko implementirali s kazalci ali seznamom. Odločili smo se slednjega. Seznam hrani kazalce ($shared{\_}ptr$) na objekte podatkovne strukture $DS(P(\nu))$ za poizvedbe najbližjega soseda. Velikost seznama, ki hrani $n$ točk, je enaka $2^{\lceil \log_2n \rceil+1}-1$. Nekatera vozlišča na najnižjem nivoju drevesa so lahko tudi prazna (torej brez objektov). Primer takega drevesa je prikazan na sliki ?. Otroka vozlišča, ki se v seznamu nahaja na mestu $i$, se nahajata na mestu $2i+1$ in $2i+2$. Podobno se starš vozlišča na mestu $i$ nahaja na mestu $\lfloor(i-1)/2\rfloor$.
+\begin{figure}
+\centerline{\includegraphics[scale=0.5]{pics/nntree-png.png}}
+\caption{Drevo najbližjega soseda, ki hrani 6 točk, prikazano v drevesni strukturi. Vrednosti vozlišč ponazarjajo število točk, shranjenih v objektu, ki omogoča poizvedbe najbližjega soseda, pod vozlišči pa so nanizane konkretne točke.}
+\label{nntree}
+\end{figure}
+
+\begin{figure}
+\centerline{\includegraphics[scale=0.5]{pics/nnarray-png.png}}
+\caption{Drevo najbližjega soseda, ki hrani 6 točk, predstavljeno v obliki seznama. Za vsako celico so prikazani indeksi točk, ki jih hrani objekt v njej.}
+\label{nnarray}
+\end{figure}
+
+Drevo najbližjega soseda, opisano v poglavju 3.3, bi lahko implementirali s kazalci ali seznamom. Odločili smo se slednjega. Seznam hrani kazalce ($shared{\_}ptr$) na objekte podatkovne strukture $DS(P(\nu))$ za poizvedbe najbližjega soseda. Velikost seznama, ki hrani $n$ točk, je enaka $2^{\lceil \log_2n \rceil+1}-1$. Nekatera vozlišča na najnižjem nivoju drevesa so lahko tudi prazna (torej brez objektov). Primer takega drevesa je prikazan na sliki ~\ref{nntree}. Otroka vozlišča, ki se v seznamu nahaja na mestu $i$, se nahajata na mestu $2i+1$ in $2i+2$. Podobno se starš vozlišča na mestu $i$ nahaja na mestu $\lfloor(i-1)/2\rfloor$.
+
 
 
 Za podatkovno strukturo s poizvedbami najbližjega soseda smo sprva hoteli uporabiti VD, vendar smo se kasneje odločili za Kd drevo. Razlog za to je implementacija VD v knjižnici CGAL. Ker je prostorska kompleksnost VD $\OO(n)$, bi pričakovali, da poraba prostora raste linearno z večanjem VD. Izkaže se, da je rast počasnejša od linearne, kar pomeni, da na primer 100 VD objektov velikosti 10 porabi več prostora kot 10 objektov velikosti 100. Posledično poraba prostora ni enaka za vsak nivo drevesa, temveč z globino raste. Razlike se v celotnem algoritmu potem še potencirajo, ker zgradimo VD v (skoraj) vsakem vozlišču drevesa najbližjega soseda, vsako tako drevo pa v vsakem vozlišču sekundarnega drevesa v območnem drevesu. Ko smo testirali implementacijo Kd dreves v CGAL, smo ugotovili tudi, da je čas konstrukcije bistveno krajši kot pri VD. Primerjave med konstrukcijama obeh podatkovnih struktur (procesorski čas in poraba RAM-a) so prikazane v poglavju Rezultati.
 
 \subsection{Kd drevo}
 
-Kot osnovo smo za poizvedbe najbližjega soseda uporabili funkcijo $search$ v razredu $Kd{\_}tree$, ki kot argument sprejme $OutputIterator$, kamor se shranjujejo objekti, ki jih poizvedba vrne, in $FuzzyQueryItem$, ki je v dvodimenzionalnem primeru lahko krog ali pravokotnik in določa območje iskanja. Kot argument med drugim sprejme vrednost $\epsilon$, ki določa stopnjo mehkosti (ang. fuzzyness) in se jo uporablja pri aproksimacijskih poizvedbah. Časovna kompleksnost take poizvedbe je enaka $\OO(\log n + k)$, kjer je $k$ število vrnjenih točk znotraj območja iskanja. Ker naš algoritem zahteva $\OO(\log n)$, smo razredu $Kd{\_}tree$ dodali podobno funkcijo, ki pa iskanje zaključi v istem trenutku, ko ugotovi, da se vsaj ena točka nahaja znotraj območja iskanja. Če na primer za neko notranje vozlišče Kd drevesa ugotovi, da vse točke v njegovem poddrevesu ustrezajo kriterijem iskanja, jih ne doda enega po enega v $OutputIterator$, temveč doda samo "dummy" točko in zaključi. Če najde samo eno točko (ko pride do lista Kd drevesa), potem tako točko tudi vrne. To si lahko privoščimo, ker nas v notranjih vozliščih drevesa najbližjega soseda ne zanimajo konkretne točke, ampak samo informacija, ali se vsaj ena točka nahaja v območju iskanja. Šele ko pridemo do lista NN drevesa, nas zanima konkretna točka. S tem, ko je vedno vrnjena ena točka, se časovna kompleksnost spremeni v $\OO(\log n)$. 
+Kot osnovo smo za poizvedbe najbližjega soseda uporabili funkcijo $search$ v razredu $Kd{\_}tree$, ki kot argument sprejme $OutputIterator$, kamor se shranjujejo objekti, ki jih poizvedba vrne, in $FuzzyQueryItem$, ki je v dvodimenzionalnem primeru lahko krog ali pravokotnik in določa območje iskanja. Kot argument lahko sprejme vrednost $\epsilon$, ki določa stopnjo mehkosti (ang. fuzzyness) in se jo uporablja pri aproksimacijskih poizvedbah, ki pa jih v našem algoritmu nismo potrebovali. Časovna kompleksnost funkcije $search$ je enaka $\OO(\log n + k)$, kjer je $k$ število vrnjenih točk znotraj območja iskanja. Ker naš algoritem zahteva $\OO(\log n)$, smo razredu $Kd{\_}tree$ dodali podobno funkcijo, ki pa iskanje zaključi v istem trenutku, ko ugotovi, da se vsaj ena točka nahaja znotraj območja iskanja. Če na primer za neko notranje vozlišče Kd drevesa ugotovi, da vse točke v njegovem poddrevesu ustrezajo kriterijem iskanja, jih ne doda enega po enega v $OutputIterator$, temveč doda samo "dummy" točko in zaključi. Če najde samo eno točko (ko pride do lista Kd drevesa), potem tako točko tudi vrne. To si lahko privoščimo, ker nas v notranjih vozliščih drevesa najbližjega soseda ne zanimajo konkretne točke, ampak samo informacija, ali se vsaj ena točka nahaja v območju iskanja. Šele ko pridemo do lista NN drevesa, nas zanima konkretna točka. S tem, ko je vedno vrnjena ena točka, se časovna kompleksnost spremeni v $\OO(\log n)$.
+
+\section{Območno drevo}
+
+
 
 \lstinputlisting[language=C++, firstline=1, lastline=37]{KdTreeQuery.h}
 
