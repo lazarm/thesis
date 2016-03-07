@@ -332,16 +332,40 @@ Problem iskanja minimalne kardinalne podmnožice $\D$, ki ločuje $z$ in $z'$, l
 				&	\D'\text{ ločuje $z$ in $z'$}. 
 \end{align*}
 
+\begin{figure}
+\centerline{\includegraphics[scale=0.5]{pics/separation.png}}
+\caption{Slikovna predstavitev problema. Točki $s$ in $t$ ločuje množica krogov, definiranih z njihovimi središčnimi točkami.}
+\label{separation}
+\end{figure}
+
 Cilj našega algoritma za ločevanje enotskih krogov je rešiti ta problem v skoraj kvadratičnem času. Do take časovne kompleksnosti pridemo tudi s pomočjo še enega našega algoritma za izgradnjo drevesa najkrajših poti iz enega, danega izhodišča. Oba algoritma sta opisana v nadaljevanju, prav tako dokaza za njuno časovno kompleksnost.
 
-Naj bo $P$ množica točk, ki predstavljajo središča krogov $\D$. $P$ predstavlja vhod našega algoritma in vse operacije ter uporabljene podatkovne strukture se vrtijo okoli te množice. Kardinalnost množice je enaka $n$. 
+Naj bo $P$ množica točk, ki predstavljajo središča krogov $\D$. $P$ predstavlja vhod našega algoritma in vse operacije ter uporabljene podatkovne strukture se vrtijo okoli te množice. Kardinalnost množice je enaka $n$.
+
+\begin{figure}
+\centerline{\includegraphics[scale=0.6]{pics/g-disks2.png}}
+\caption{Graf $G(P)$, zgrajen nad množico $P$ v sliki ~\ref{separation}.}
+\label{gdisks}
+\end{figure}
 
 Naj bo $G(P)$ graf z množico vozlišč $P$ s povezavo med točkama $p,q \in P$, če velja $|pq| <= 1$ z evklidsko metriko. Vse povezave so neobtežene.
+
+\begin{figure}
+\centerline{\includegraphics[scale=0.6]{pics/walk.png}}
+\caption{Minimalna podmnožica točk iz slike ~\ref{separation}, ki ločuje $s$ in $t$, med seboj povezanih z modrimi povezavami. Podmnožica je vedno zaprta pot.}
+\label{walk}
+\end{figure}
 
 V nadaljevanju bomo namesto $G(P)$ pisali preprosto $G$, brez izgube splošnosti pa predpostavili, da je $z=(0,0)$ in $z'=(0,s)$. $zz'$ je torej daljica, v nadaljevanju imenovana $\sigma$, ki je vsebovana v koordinatni osi $y$. Če dana vhodna daljica ne leži na osi $y$, lahko naredimo translacijo nad $\sigma$ in $P$; če poleg tega tudi vertikalna ni, naredimo še rotacijo (kjer pa lahko pride do numeričnih napak). 
 \section{SSSP drevo}
 
 V tem poglavju je opisan algoritem za drevo SSSP (ang. single source shortest path). Gre za preiskovanje v širino nad grafom $G(P)$ brez dejanske izgradnje grafa. Vhod algoritma je torej $P$, pri izgradnji drevesa pa se uporablja abstrakten graf G(P).
+
+\begin{figure}
+\centerline{\includegraphics[scale=0.6]{pics/sssptree.png}}
+\caption{Drevo najbližjega soseda, ki hrani 6 točk, predstavljeno v obliki seznama. Za vsako celico so prikazani indeksi točk, ki jih hrani objekt v njej.}
+\label{nnarray}
+\end{figure}
 
 Algoritem dobi kot vhod poleg množice $P$ izvorno točko $s\in P$ in nato inkrementalno v vsaki iteraciji dodaja točke h grafu. Množico točk, dodanih k drevesu v $i$-ti iteraciji, označimo kot
 \[	W_i = \{ p\in P \mid d_{G(P)}(s,p) = i\}.
@@ -554,6 +578,7 @@ $\OO(n\log n)$ časa rabimo za izgradnjo podatkovne strukture, $\OO(\log^2 n)$ p
 
 
 \subsection{Optimizacijski problem 2}
+\label{opt2}
 
 Naj bo $\sigma$ daljica v ravnini in brez izgube splošnosti lahko predpostavimo, da $\sigma$ leži na osi $y$ s krajiščema $(0,0)$ in $(0,s)$. Naj bo $A$ množica točk z negativno koordinato $x$ in $B$ množica točk z nenegativno koordinato $x$. Vsaka točka $p$ množice $A \cup B$ ima utež $\omega_p$. Minimizirati hočemo vsoto $\omega_a + \omega_b$ za vse take pare $(a,b) \in A \times B$, pri katerih je daljica $ab$ dolžine največ 1 in seka daljico $\sigma$:
 
@@ -731,9 +756,23 @@ Za podatkovno strukturo s poizvedbami najbližjega soseda smo sprva hoteli upora
 
 Kot osnovo smo za poizvedbe najbližjega soseda uporabili funkcijo $search$ v razredu $Kd{\_}tree$, ki kot argument sprejme $OutputIterator$, kamor se shranjujejo objekti, ki jih poizvedba vrne, in $FuzzyQueryItem$, ki je v dvodimenzionalnem primeru lahko krog ali pravokotnik in določa območje iskanja. Kot argument lahko sprejme vrednost $\epsilon$, ki določa stopnjo mehkosti (ang. fuzzyness) in se jo uporablja pri aproksimacijskih poizvedbah, ki pa jih v našem algoritmu nismo potrebovali. Časovna kompleksnost funkcije $search$ je enaka $\OO(\log n + k)$, kjer je $k$ število vrnjenih točk znotraj območja iskanja. Ker naš algoritem zahteva $\OO(\log n)$, smo razredu $Kd{\_}tree$ dodali podobno funkcijo, ki pa iskanje zaključi v istem trenutku, ko ugotovi, da se vsaj ena točka nahaja znotraj območja iskanja. Če na primer za neko notranje vozlišče Kd drevesa ugotovi, da vse točke v njegovem poddrevesu ustrezajo kriterijem iskanja, jih ne doda enega po enega v $OutputIterator$, temveč doda samo "dummy" točko in zaključi. Če najde samo eno točko (ko pride do lista Kd drevesa), potem tako točko tudi vrne. To si lahko privoščimo, ker nas v notranjih vozliščih drevesa najbližjega soseda ne zanimajo konkretne točke, ampak samo informacija, ali se vsaj ena točka nahaja v območju iskanja. Šele ko pridemo do lista NN drevesa, nas zanima konkretna točka. S tem, ko je vedno vrnjena ena točka, se časovna kompleksnost spremeni v $\OO(\log n)$.
 
-\section{Območno drevo}
+\section{Implementacija optimizacijskega problema 2}
+
+Za rešitev optimizacijskega problema, predstavljenega v poglavju ~\ref{opt2}, smo uporabili implementacijo območnih dreves v CGAL, za uporabo dualnosti pa napisali lasten razred (bolj natančno $struct$) $DualPoint$ za točke v dualnem prostoru.
+
+\subsection{DualPoint - implementacija dualne točke}
+
+Odločili smo se razlikovati po tipu med navadnimi točkami in točkami v dualnem prostoru, ki izhajajo iz premic v primarnem prostoru. Razred $DualPoint$ hrani dva atributa. Prvi je točka v dualnem prostoru tipa $Point\texttt{\_}2$, poimenovan $point$. Drugi je kazalec na točko tipa $Point\texttt{\_}2$, poimenovan $originalPoint$. Če $point$ predstavlja točko $(\phi_1(b), \phi_2(b))$ (glej poglavje ~\ref{opt2}), potem $originalPoint$ predstavlja točko $b$. Konstruktor razreda kot argumenta sprejme točko $b$ in daljico $\sigma$ in s pomočjo funkcije $imagePoint$ izračuna točko preslikave.
 
 
+\subsection{Območno drevo}
+Za dvodimenzionalna območna drevesa smo uporabili implementacijo v knjižnici CGAL, ki jo predstavlja razred $Range\texttt{\_}tree\texttt{\_}2$. Vsako vozlišče hrani par $<kljuc, vrednost>$. Vrednost dodatno opisuje vozlišče in je lahko tudi prazna, ključ pa se uporablja pri izgradnji drevesa in poizvedbah. Oba argumenta sta v razredu podana kot $template$, kar pomeni, da moramo pri konstrukciji drevesa zanju podati konkretna tipa. 
+Za ključ smo uporabili naš razred $Dual\texttt{\_}Point$, kot vrednost pa vsako vozlišče hrani svoje drevo NN.
+
+Pri inicializaciji drevesu podamo seznam parov dualnih točk in praznega drevesa NN. Nato se iterativno sprehodimo po prvem nivoju drevesa (primarnem drevesu) - tako kot pri preiskovanju v širino - s funkcijo $traverse\texttt{\_}and\texttt{\_}populate\texttt{\_}with\texttt{\_}data$. Za vsako vozlišče pokličemo funkcijo $build\texttt{\_}NN\texttt{\_}Tree\texttt{\_}on\texttt{\_}layer2$, ki rekurzivno  od spodaj navzgor za vsako vozlišče v sekundarnem drevesu, na katerega kaže vozlišče v primarnem drevesu, vstavi v (v tistem trenutku prazno) njegovo drevo NN točke, ki jih hranita drevesi NN njegovih otrok. Pri listih je v drevo NN vstavljena točka, čigar dualna točka je uporabljena kot ključ vozlišča. Rekurzivni klic funkcije se torej kliče pred vstavljanjem točk v drevo NN. S pomočjo rekurzije je vsakemu notranjemu vozlišču v sekundarnem drevesu seznam točk v njegovem poddrevesu, ki ga potrebujemo za izgradnjo njegovega drevesa NN, implicitno podan preko dreves NN njegovih otrok. Če bi drevesa NN gradili od zgoraj navzdol v sekundarnem drevesu, bi morali za vsako vozlišče narediti sprehod po njegovem poddrevesu.
+
+\subsubsection{Poizvedbe v območnem drevesu}
+Razredu $Range\texttt{\_}tree\texttt{\_}d$ smo za poizvedbe dodali funkcijo $window\texttt{\_}query\texttt{\_}impl\texttt{\_}modified$, ki  kot osnovo uporablja obstoječo funkcijo $window\texttt{\_}query\texttt{\_}impl$. Argumenti funkcije so $OutputIterator$, kamor se vstavljajo vrnjene točke, interval, ki ga definirata dve dualni točki, tretji argument, ki ga v obstoječi funkciji ni, pa je dualna točka, ki jo uporabimo za poizvedbe najbližjega soseda v drevesih NN. 
 
 \lstinputlisting[language=C++, firstline=1, lastline=37]{KdTreeQuery.h}
 
@@ -758,6 +797,8 @@ Algoritem za izgradnjo drevesa smo pognali na različnem številu vhodnih točk 
 \addcontentsline{toc}{chapter}{Literatura}
 \begin{thebibliography}{99}
 \bibitem{cgalVor}CGAL 4.6 - 2D Voronoi Diagram Adaptor: User Manual. Dostopno na:\\ http://doc.cgal.org/latest/Voronoi\texttt{\_}diagram\texttt{\_}2/index.html
+\bibitem{hal}Jean-Daniel Boissonnat, Olivier Devillers, Sylvain Pion, Monique Teillaud, Mariette Yvinec.
+Triangulations in CGAL. Computational Geometry, Elsevier, 2002, 22, pp.5-19. $<$inria-00167199$>$.
 
 \end{thebibliography}
 \end{document}
