@@ -57,6 +57,8 @@
 \newcommand{\clearemptydoublepage}{\newpage{\pagestyle{empty}\cleardoublepage}}
 \setcounter{tocdepth}{1}	      % globina kazala
 
+\def\length{\mathrm{len}}
+
 % konstrukti
 \newtheorem{izrek}{Izrek}[chapter]
 %\newtheorem{trditev}{Trditev}[izrek]
@@ -392,11 +394,11 @@ Naj bo $p$ točka v $P\backslash \{s\}$, za katero velja $d(s,p) < \infty$. Obst
 \end{figure}
 
 \begin{proof}
-Naj bo $i = d(s,p)$, $w$ pa naj bo točka z $d(s,w) = i - 1$, ki je najbližje $p$ po evklidski razdalji. Ker $d(s,p) \le \infty$, mora veljati $\|w - p\| \leq 1$. Naj bo $D_{wp}$ krog s premerom $wp$.
+Naj bo $i = d(s,p)$, $w$ pa naj bo točka z $d(s,w) = i - 1$, ki je najbližje $p$ po evklidski razdalji. Ker $d(s,p) < \infty$, mora veljati $\|w - p\| \leq 1$. Naj bo $D_{wp}$ krog s premerom $wp$.
 
-Predpostavimo, da segment $wp$ ne gre skozi nobeno vozlišče VD nad $P$.  Pobliže si poglejmo zaporedje Voronoijevih celic $cell(p_1, P),..., cell(p_k, P)$, ki ga seka segment $wp$, ko se sprehodimo od $w$ do $p$. Očitno velja $w = p_1$ in $p = p_k$. Za vsak $1 \leq j \le k$ je povezava $p_jp_{j+1}$ v $DT(P)$, ker sta si celici $cell(p_j, P)$ in $cell(p_{j+1}, P)$ sosedni prek neke točke v $wp$. Pot $\pi = p_1p_2...p_k$ je zato vsebovana v $DT(P)$ in povezuje $w$ s $p$. Za katerikoli indeks $j$, kjer $1 \le j \le k$, naj bo $a_j$ katerakoli točka v $wp \cap cell(p_j, P)$. Ker velja $\|a_jp_j\| \leq \{\|a_jw\|, \|a_jp\|\}$, je točka $p_j$ vsebovana v $D_{wp}$. Potem je celotna pot $\pi$ vsebovana v $D_{wp}$, in ker je premer $D_{wp}$ največ 1, je vsaka povezava poti $\pi$ tudi v $G(P)$. S tem sklenemo, da je $\pi$ pot v $DT(P) \cap G(P)$.
+Predpostavimo, da segment $wp$ ne gre skozi nobeno vozlišče VD nad $P$.  Pobliže si poglejmo zaporedje Voronoijevih celic $cell(p_1, P),..., cell(p_k, P)$, ki ga seka segment $wp$, ko se sprehodimo od $w$ do $p$. Očitno velja $w = p_1$ in $p = p_k$. Za vsak $1 \leq j < k$ je povezava $p_jp_{j+1}$ v $DT(P)$, ker sta si celici $cell(p_j, P)$ in $cell(p_{j+1}, P)$ sosedni prek neke točke v $wp$. Pot $\pi = p_1p_2...p_k$ je zato vsebovana v $DT(P)$ in povezuje $w$ s $p$. Za katerikoli indeks $j$, kjer $1 < j < k$, naj bo $a_j$ katerakoli točka v $wp \cap cell(p_j, P)$. Ker velja $\|a_jp_j\| \leq \{\|a_jw\|, \|a_jp\|\}$, je točka $p_j$ vsebovana v $D_{wp}$. Potem je celotna pot $\pi$ vsebovana v $D_{wp}$, in ker je premer $D_{wp}$ največ 1, je vsaka povezava poti $\pi$ tudi v $G(P)$. S tem sklenemo, da je $\pi$ pot v $DT(P) \cap G(P)$.
 
-Vzemimo katerokoli točko $p_j$ v $\pi$, ki je potem vsebovana v $D_{wp}$. Ker $\|w - p_j\| \leq \|w - p\| \leq 1$, velja $d(s, p_j) \leq d(s, w) + 1 = i$. Ker $\|p_j - p\| \leq \|w - p\| \leq 1$, velja $d(s, p_j) \geq d(s, p) - 1 = i - 1$. Ampak izbira $w$ kot točke najbližje $p$ pomeni, da $d(s, p_j) \neq i - 1$, ker $\|p_j - p\| \le \|w - p\|$. Zato velja $d(s, p_j) = i$. Iz tega sklenemo, da za vsa notranja vozlišča $p_j$ v $\pi$ velja $d(s, p_j) = i$. 
+Vzemimo katerokoli točko $p_j$ v $\pi$, ki je potem vsebovana v $D_{wp}$. Ker $\|w - p_j\| \leq \|w - p\| \leq 1$, velja $d(s, p_j) \leq d(s, w) + 1 = i$. Ker $\|p_j - p\| \leq \|w - p\| \leq 1$, velja $d(s, p_j) \geq d(s, p) - 1 = i - 1$. Ampak izbira $w$ kot točke najbližje $p$ pomeni, da $d(s, p_j) \neq i - 1$, ker $\|p_j - p\| < \|w - p\|$. Zato velja $d(s, p_j) = i$. Iz tega sklenemo, da za vsa notranja vozlišča $p_j$ v $\pi$ velja $d(s, p_j) = i$. 
 \end{proof}
 
 \begin{lema}
@@ -407,7 +409,7 @@ Na koncu algoritma $UnweightedShortestPath(P, s)$ velja:
 \forall i \in \NN \cup \{0\}:  W_i = \{p\in P \mid d(s, p) = i\}.
 \end{equation}
 
-Poleg tega za vsako točko $p \in P \backslash \{s\}$ velja $dist[p] = d(s,p)$ in če velja $d(s,p) \le \infty$, potem obstaja najkrajša pot v $G(P)$ od $s$ do $p$, v kateri je zadnja povezava $\pi [p]p$.
+Poleg tega za vsako točko $p \in P \backslash \{s\}$ velja $dist[p] = d(s,p)$ in če velja $d(s,p) < \infty$, potem obstaja najkrajša pot v $G(P)$ od $s$ do $p$, v kateri je zadnja povezava $\pi [p]p$.
 \end{lema}
 
 \begin{proof}
@@ -493,7 +495,7 @@ Izvajanje vrstic 9-11 vzame $\OO(|W_{i-1}|\log |W_{i-1}|) = \OO(|W_{i-1}|\log n)
 
 Vsaka izvedba vrstic 16-21 se izvede v času $\OO(\log n)$, kjer je najbolj zahteven korak poizvedba v vrstici 16. Vsaka izvedba vrstic 13-21 se izvede v času $\OO(deg_{DT(P)}(q)\cdot\log n)$, ker se vrstice 16-21 izvedejo $deg_{DT(P)}(q)$-krat.
 
-Obravnavajmo eno izvedbo vrstic 9-22. Točke so dodane v $Q$ v vrsticah 10 in 20. V slednji je točka $p$ dodana v $Q$ natanko takrat, ko je dodana v $W_i$ (v vrstici 21). Iz tega sledi, da je $p$ dodana v $Q$ natanko takrat, ko pripada množici $W_{i-1}\cup W_i$. Poleg tega je vsaka točka iz $W_{i-1}\cup W_i$ dodana v $Q$ natanko enkrat: za vsako točko $p$, ki je dodana v $Q$, velja $dist[p]\leq i \le \infty$, in da ne bo dodana nikoli več zaradi pogoja v vrstici 17.Iz tega sledi, da se zanka v vrsticah 12-22 izvede v času
+Obravnavajmo eno izvedbo vrstic 9-22. Točke so dodane v $Q$ v vrsticah 10 in 20. V slednji je točka $p$ dodana v $Q$ natanko takrat, ko je dodana v $W_i$ (v vrstici 21). Iz tega sledi, da je $p$ dodana v $Q$ natanko takrat, ko pripada množici $W_{i-1}\cup W_i$. Poleg tega je vsaka točka iz $W_{i-1}\cup W_i$ dodana v $Q$ natanko enkrat: za vsako točko $p$, ki je dodana v $Q$, velja $dist[p]\leq i < \infty$, in da ne bo dodana nikoli več zaradi pogoja v vrstici 17.Iz tega sledi, da se zanka v vrsticah 12-22 izvede v času
 
 \begin{equation}
 \sum_{q\in W_{i-1}\cup W_i} \OO(deg_{DT(P)}(q) \cdot \log n).
@@ -527,7 +529,7 @@ Zaradi leme ~\ref{lema3} porabi algoritem $UnweightedShortestPath(P,s)$ $\OO(n\l
 \begin{lema}
 \label{le:ds2}
     Naj bo $P$ množica uteženih točk na ravnini. V času $\OO(n\log n)$ lahko konstruiramo t\^{a}ko podatkovno strukturo, ki v času $\OO(\log^2 n)$ za točko poizvedbe $q$ najde točko v 
-	\[	\arg\min \{ w_p \mid p\in P,~|pq|\le 1\}.
+	\[	\arg\min \{ w_p \mid p\in P,~|pq|< 1\}.
 	\]
 \end{lema}
 \begin{proof}
@@ -545,7 +547,7 @@ Za vsako vozlišče $\nu$ v $\T$:
 Analizirajmo čas izgradnje naše podatkovne strukture. Točke $P$ sortiramo leksikografsko v korenu drevesa $\T$, točke $P(\nu)$ pa za vsak $\nu$ dobimo že sortirane od starša $\nu$. Ker so kanonične podmnožice na vsakem nivoju drevesa med seboj disjunktne, porabimo za vsak nivo $\OO(n)$ časa. Uravnoteženost $\T$ zagotavlja, da je $\OO(\log n)$ nivojev, tako da skupaj za izgradnjo potrebujemo $\OO(n\log n)$ časa.
 
 Potrebna je še analiza časa poizvedbe. Za točko poizvedbe $q$ preverimo, če je vsebovana v $U(r)$, kjer je $r$ koren drevesa. Če ni, potem nobena točka iz $P$ ni dovolj blizu $q$. Sicer označimo $\nu = r$ in nadaljujemo z iskanjem od vrha navzdol po $T$, dokler ne pridemo do listov drevesa. Ko $\nu$ ni list, označimo njegovega levega in desnega otroka z $\nu_\ell$ in $\nu_r$. Če se $q$ nahaja v $U(\nu_\ell)$, označimo $\nu = \nu_\ell$ in nadaljujemo navzdol po poddrevesu otroka $\nu_\ell$, sicer to storimo za desnega otroka. V vsakem trenutku poizvedbe ohranjamo sledečo invarianto:
-\[	P(\nu) \cap \arg\min \{ w_p \mid p\in P,~|pq|\le 1\} ~\not=~ \emptyset.
+\[	P(\nu) \cap \arg\min \{ w_p \mid p\in P,~|pq|< 1\} ~\not=~ \emptyset.
 	\]	
 Pot poizvedbe v $T$ ima $\OO(\log n)$ vozlišč, za vsako vozlišče pa porabimo $\OO(\log n)$ časa, da ugotovimo, če se $q$ nahaja v $U(\nu)$. Skupni čas poizvedbe je torej $\OO(\log^2 n)$.
 \end{proof}
@@ -613,6 +615,7 @@ V nadaljevanju bomo opisali podatkovno strukturo, s katero lahko kompaktno dobim
 Opiši iz poglavja knjige.
 
 \begin{lema}
+\label{dualnost}
 	Obstaja družina $\{ B_1,\dots, B_t\}$ podmnožic množice $B$ in 			podatkovna struktura $\D (B)$ z naslednjimi lastnostmi
 	\begin{itemize}
 		\item $\sum_{i=1}^t |B_i| = \OO(n\log n)$;
@@ -636,6 +639,12 @@ V dualnem prostoru je množica $\sigma^*$ $horizontal slab$
 		\sigma^* ~=~ \{ (m,-c)\in \RR^2\mid 0\le c\le s\}.
 \]
 
+\begin{figure}
+\centerline{\includegraphics[scale=0.5]{pics/dual_problem4.png}}
+\caption{Množici $A$ (rdeči točki) ter $B$ (zelene točke) levo in desno od daljice $st$ (zgornja slika). Črtkani črti predstavljata premici, čigar koeficienta sta uporabljena za izračun koordinat dualne točke $\varphi (a_1)$, predstavljata pa tudi vidno polje točke $a_1$. Spodaj so prikazane točke iz zgornje slike v dualnem prostoru. Obarvano območje v sredini predstavlja prostor, v katerem se nahajajo vse take dualne točke $\varphi (b)$, za katere velja $b \in B(a_1)$. Obarvani območji levo in zgoraj predstavljata prostor dualnih točk $\varphi (b)$, za katere velja, da je presečišče premice $a_1b$ z osjo $y$ pod oziroma nad daljico $st$.} 
+\label{dualp}
+\end{figure}
+
 Za vsako točko $b\in B$ naj bo $L^* _b$ množica točk, dualnih premicam, ki gredo skozi $b$ in sekajo $\sigma$:
 
 \[
@@ -656,7 +665,7 @@ b_2 \in \{ (x,y) \mid (x,y) \in B, 0 <= y < s \} \Rightarrow \varphi_1(b) > 0, \
 
 Enakost velja le v primeru, ko sta premici, ki definirata obe koordinati, isti. Do slednjega pride pri točkah $b$ s koordinato $x$ enako $0$. 
 
-Iz zgornje neenakosti sledi, da točke preslikave $\varphi(b)$ vedno ležijo na polravnini $\varphi_1(b) >= \varphi_2(b)$ in da je smerni koeficient premice, na kateri leži daljica $L^*_b$, nepozitiven. Podobno lahko ugotovimo, da za vsak $a \in A$ točka $\varphi(a)$ leži na polravnini $\varphi_2(a) > \varphi_1(a)$ in da ima premica, na kateri leži daljica $L^*_a$, pozitiven smerni koeficient.
+Iz zgornje neenakosti sledi, da točke preslikave $\varphi(b)$ vedno ležijo na polravnini $x \geq y$ in da je smerni koeficient premice, na kateri leži daljica $L^*_b$, nepozitiven. Podobno lahko ugotovimo, da za vsak $a \in A$ točka $\varphi(a)$ leži na polravnini $\varphi_2(a) > \varphi_1(a)$ in da ima premica, na kateri leži daljica $L^*_a$, pozitiven smerni koeficient.
 
 Naj bo $a \in A$ in $b \in B$. Daljica $ab$ seka daljico $\sigma$ natanko takrat, ko $L^*_a$ seka $L^*_b$, ker daljico $ab$ v dualnem prostoru predstavlja ravno presečišče $L^*_a$ in $L^*_b$. Iz tega sledi naslednja lastnost:
 
@@ -666,7 +675,7 @@ Naj bo $a \in A$ in $b \in B$. Daljica $ab$ seka daljico $\sigma$ natanko takrat
 				&	\varphi_1(a) <= \varphi_1(b)\\
 				&	\varphi_2(a) >= \varphi_2(b).
 \end{align*}
-Z drugimi besedami: za točko $a \in A$ množico točk $b \in B$, kjer $ab$ seka $\sigma$, sestavljajo točke $b$, pri katerih se $\varphi(b)$ nahaja v drugem kvadrantu koordinatnega sistema z izhodiščem $\varphi(a)$. (Bolj natančno, gre za točke $\varphi(b)$, ki se nahajajo v preseku drugega kvadranta omenjenega koordinatnega sistema s polravnino $\varphi_1(b) >= \varphi_2(b)$. Glej sliko.)
+Z drugimi besedami: za točko $a \in A$ množico točk $b \in B$, kjer $ab$ seka $\sigma$, sestavljajo točke $b$, pri katerih se $\varphi(b)$ nahaja v drugem kvadrantu koordinatnega sistema z izhodiščem $\varphi(a)$. (Bolj natančno, gre za točke $\varphi(b)$, ki se nahajajo v preseku drugega kvadranta omenjenega koordinatnega sistema s polravnino $x \geq y$. Glej sliko.)
 
 Za shranjevanje množice točk $\varphi(B)$, kjer je vsaka točka $b \in B$ asociirana s točko preslikave $\varphi(b)$, lahko uporabimo dvodimenzionalno območno drevo. Za vsako točko poizvedbe $a \in A$ lahko točke $b \in B$, kjer $ab$ seka $\sigma$, dobimo s poizvedbo na območnem drevesu, ki vrne točke $\varphi(B)$ v kvadrantu
 
@@ -675,6 +684,119 @@ Za shranjevanje množice točk $\varphi(B)$, kjer je vsaka točka $b \in B$ asoc
 	\]
 Območna drevesa so bolj podrobno opisana v poglavju x.
 
+\end{proof}
+
+\begin{lema}
+\label{lema4}
+$\Phi_\sigma(A,B)$ lahko izračunamo v času $\OO (n\log^4 n)$.
+\end{lema}
+
+\begin{proof}
+Zgradimo množice $\{B_1,...,B_t\}$ in podatkovno strukturo $\D (B)$, opisano v lemi ~\ref{dualnost}. Za vsak $B_j$, kjer $j = 1,...,t$, zgradimo podatkovno strukturo, opisano v lemi ~\ref{lema1}. Ker velja $\sum_{i=1}^t |B_i|\log |B_i| = \OO (n\log n)$, potrebujemo za to
+\[
+		\sum_{i=1}^t O(|B_i| \log |B_i|) ~=~ O(n\log^2 n)
+	\]
+
+časa.
+
+Obravnavajmo poljubno točko $a \in A$. Naredimo poizvedbo na $\D (B)$, ki nam vrne množico indeksov $I(a)$, za katero velja
+\[
+		B(a) ~=~ \bigcup_{i\in I(a)} B_i.
+	\]
+
+Za vsak $i\in I(a)$ naredimo poizvedbo s točko $a$ nad podatkovno strukturo, asociirano z $B_i$, da dobimo
+
+\[	
+		b_i^*(a) \in \arg\min \{ w_b \mid b\in B_i,~|ab|\le 1\}.
+	\]
+
+Potem velja
+\begin{align*}
+\min \{ w_b \mid b\in B_{\le 1}(a)\} ~=~ \min \{ w_{b_i^*(a)}\mid i\in I(a) \},
+\end{align*}
+s čimer lahko dobimo $\Phi_\sigma(a,B)$ iz točk $b_i^*(a)$, $i\in I(a)$.
+
+Za točko $a$ potrebujemo $\OO (\log^2 n)$ časa, da izračunamo $I(a)$, in nato $\OO (\log^2 n)$ časa za vsak indeks $i$ v $I(a)$. Skupna časovna kompleksnost za vsako točko $a\in A$ je tako $\OO (\log^4 n)$.
+\end{proof}
+
+\subsection{Sekanje nepremične daljice}
+
+Naj bo $G(P)$ neutežen graf nad množico točk $P$ (v nadaljevanju samo $G$), in naj bo $d_G(r,p)$ dolžina najkrajše poti v $G$ med $r$ in $p$.
+
+Za vsako točko $r\in P$ naj bo $T_r$ drevo najkrajših poti v $G$ iz $r$. S $T_r[p]$ označimo pot v $T_r$ iz $r$ v $p$. $E_r$ naj bo množica povezav v $G$, ki se ne pojavijo v $T_r$. Velja torej $E_r = E(G)\setminus E(T_r)$.
+
+Za vsak $r$ in $p$ v $P$ naj bo $\gamma(r,p)$ poligonalna pot, definirana s $T_r[p]$. Za vsak $r$ in vsako povezavo $pq\in E_r$ naj bo $\gamma (r,pq)$ zaprta poligonalna pot, ki jo dobimo z združitvijo $\gamma(r,p)$, $pq$ in  potjo, nasprotno $\gamma(r,q)$. Z $\length(r,pq)$ definiramo število povezav v $\gamma(r,pq)$. Tako velja $\length(r,pq) = d_G(r,p) + d_G(r,q) + 1$.
+
+Naj bo $\sigma$ daljica, za katero predpostavimo, da ne vsebuje nobene točke iz $P$. Za vsako poligonalno pot $\gamma$ naj bo $X(\gamma, \sigma)$ število presečišč $\gamma$ s $\sigma$ po modulu 2. Za vsak $r,p\in P$ definiramo $N(r,p) = X(\gamma(r,p), \sigma)$ ter za vsak $r\in P$ in $pq\in E_r$ definiramo $N(r,pq) = X(\gamma(r,pq), \sigma)$.
+
+Definirajmo sledeč optimizacijski problem:
+\begin{align*}
+	\Psi_\sigma(P) := \min ~~& \length(r,pq)\\
+	 \mbox{s.t.}~~ & r\in P\\
+				&	pq\in E_r\\
+				&	N(r,pq)=1. 
+\end{align*}
+
+Iz rezultatov Cabella in Giannopoulosa (referenca!) sledi naslednje:
+
+\begin{izrek}
+Naj bo $(r^\star, p^\star g^\star)$ optimalna rešitev problema $\Psi_\sigma(P)$. Potem so točke v $T_{r^*}[p]\cup T_{r^*}[q]$ optimalna rešitev problema ločevanja s krogi. 
+\end{izrek}
+
+Za izračun $\Psi_\sigma(P)$ iteriramo po točkah $r$, tako da definiramo tudi
+\begin{align*}
+	\Psi_\sigma(r,P) := \min ~~& d_G(r,p)+d_G(r,q) \\
+	 \mbox{s.t.}~~ & pq\in E_r\\
+				&	N(r,pq)=1. 
+\end{align*}
+
+Optimizacijski problem lahko potem definiramo kot
+\[
+	\Psi_\sigma(P) ~=~ 1+ \min_{r\in P} \Psi_\sigma(r,P).
+\]
+Fiksirajmo nek $r\in P$ in se osredotočimo na rešitev problema $\Psi_\sigma(r,P)$.
+
+Izračunamo drevo najkrajših poti $T_r$. Skupaj z vsako točko $p\in P$ shranimo $d_G(r,p)$. Nato izračunamo vrednosti $N(r,p), p\in P$ s preprostim sprehodom od spodaj navzgor po $T_r$. Začnemo z inicializacijo $N_r[r] := 0$. Za vsako točko $p\in P$, čigar starš v $T_r$ je $p'$, potem velja $N_r[p] = N_r[p'] + |\sigma\cap pp'| \pmod 2$. Če torej $pp'$ seka $\sigma$, velja $N_r[p]=N_r[p']+1 \pmod 2$, sicer velja
+$N_r[p]=N_r[p']$.
+
+Predpostavimo, da je $\sigma$ navpična daljica s krajišči $(0,0)$ in $(0,s)$. Iskanje optimalne povezave $pq$ razdelimo na tri primere:
+
+\begin{itemize}
+\item $pq$ ima obe krajišči na isti strani osi $y$, za kateri velja $N(r,p) \neq N(r,q)$, ali
+\item $pq$ ima krajišči na različnih straneh osi $y$, $N(r,p) \neq N(r,q)$ in $pq$  ne seka $\sigma$, ali
+\item $pq$ ima krajišči na različnih straneh osi $y$, $N(r,p) \neq N(r,q)$ in $pq$ seka $\sigma$.
+\end{itemize}
+
+\begin{lema}
+\label{lema6}
+$\Psi_\sigma(r,P)$ lahko izračunamo v času $\OO (n\log^4 n)$.
+\end{lema}
+
+\begin{proof}
+Za $i\in \{0,1\}$ naj bo $L_i$ podmnožica točk iz $P$ levo od osy $y$ in z $N(r,p) = i \pmod 2$. Očitno velja
+\[
+		P~=~ L_0\cup L_1\cup R_0\cup R_1.
+\]
+
+Naj bosta $\sigma_+$ in $\sigma_-$ poltraka na osi $y$, ki ju dobimo, če odstranimo $\sigma$. Z uporabo $d_G(r,p)$ kot utež točke $p\in P$ potem dobimo
+
+\begin{align*}
+		 \Psi_\sigma(r,P) ~=~ \min \{ &\Phi( L_0,L_1), \Phi( R_0,R_1),
+										\Phi_{\sigma_+}( L_0,R_1), \Phi_{\sigma_+}( L_1,R_0),\\
+										&\Phi_{\sigma_-}( L_0,R_1), \Phi_{\sigma_-}( L_1,R_0),
+										\Phi_{\sigma}( L_0,R_0), \Phi_{\sigma}(L_1,R_1) \}.
+\end{align*}
+
+Vsako posamezno instanco lahko izračunamo s pomočjo lem ~\ref{lema2} in ~\ref{lema4}v času $\OO (n\log^4 n)$.
+\end{proof}
+
+\begin{izrek}
+Problem minimalnega ločevanja s krogi lahko rešimo v času $\OO (n^2\log^4 n)$.
+\end{izrek}
+\begin{proof}
+Za vsak $r\in P$ izračunamo drevo najkrajših poti $T_r$ v $G$ iz $r$, razdalje $d_G(r,p), p\in P$ in paritete $N(r,p)$. Potem rešimo $\Psi_\sigma(r,P)$ s pomočjo leme ~\ref{lema6}.
+
+TODO
 \end{proof}
 
 \chapter{Implementacija algoritma}
@@ -762,23 +884,41 @@ Za rešitev optimizacijskega problema, predstavljenega v poglavju ~\ref{opt2}, s
 
 \subsection{DualPoint - implementacija dualne točke}
 
-Odločili smo se razlikovati po tipu med navadnimi točkami in točkami v dualnem prostoru, ki izhajajo iz premic v primarnem prostoru. Razred $DualPoint$ hrani dva atributa. Prvi je točka v dualnem prostoru tipa $Point\texttt{\_}2$, poimenovan $point$. Drugi je kazalec na točko tipa $Point\texttt{\_}2$, poimenovan $originalPoint$. Če $point$ predstavlja točko $(\phi_1(b), \phi_2(b))$ (glej poglavje ~\ref{opt2}), potem $originalPoint$ predstavlja točko $b$. Konstruktor razreda kot argumenta sprejme točko $b$ in daljico $\sigma$ in s pomočjo funkcije $imagePoint$ izračuna točko preslikave.
+Odločili smo se razlikovati po tipu med navadnimi točkami in točkami v dualnem prostoru, ki izhajajo iz premic v primarnem prostoru. Razred $DualPoint$ hrani dva atributa. Prvi je točka v dualnem prostoru tipa $Point\texttt{\_}2$, poimenovan $point$. Drugi je kazalec na točko tipa $Point\texttt{\_}2$, poimenovan $originalPoint$. Če $point$ predstavlja točko $(\varphi_1(b), \varphi_2(b))$ (glej poglavje ~\ref{opt2}), potem $originalPoint$ predstavlja točko $b$. Konstruktor razreda kot argumenta sprejme točko $b$ in daljico $\sigma$ in s pomočjo funkcije $imagePoint$ izračuna točko preslikave.
 
 
 \subsection{Območno drevo}
 Za dvodimenzionalna območna drevesa smo uporabili implementacijo v knjižnici CGAL, ki jo predstavlja razred $Range\texttt{\_}tree\texttt{\_}2$. Vsako vozlišče hrani par $<kljuc, vrednost>$. Vrednost dodatno opisuje vozlišče in je lahko tudi prazna, ključ pa se uporablja pri izgradnji drevesa in poizvedbah. Oba argumenta sta v razredu podana kot $template$, kar pomeni, da moramo pri konstrukciji drevesa zanju podati konkretna tipa. 
 Za ključ smo uporabili naš razred $Dual\texttt{\_}Point$, kot vrednost pa vsako vozlišče hrani svoje drevo NN.
 
-Pri inicializaciji drevesu podamo seznam parov dualnih točk in praznega drevesa NN. Nato se iterativno sprehodimo po prvem nivoju drevesa (primarnem drevesu) - tako kot pri preiskovanju v širino - s funkcijo $traverse\texttt{\_}and\texttt{\_}populate\texttt{\_}with\texttt{\_}data$. Za vsako vozlišče pokličemo funkcijo $build\texttt{\_}NN\texttt{\_}Tree\texttt{\_}on\texttt{\_}layer2$, ki rekurzivno  od spodaj navzgor za vsako vozlišče v sekundarnem drevesu, na katerega kaže vozlišče v primarnem drevesu, vstavi v (v tistem trenutku prazno) njegovo drevo NN točke, ki jih hranita drevesi NN njegovih otrok. Pri listih je v drevo NN vstavljena točka, čigar dualna točka je uporabljena kot ključ vozlišča. Rekurzivni klic funkcije se torej kliče pred vstavljanjem točk v drevo NN. S pomočjo rekurzije je vsakemu notranjemu vozlišču v sekundarnem drevesu seznam točk v njegovem poddrevesu, ki ga potrebujemo za izgradnjo njegovega drevesa NN, implicitno podan preko dreves NN njegovih otrok. Če bi drevesa NN gradili od zgoraj navzdol v sekundarnem drevesu, bi morali za vsako vozlišče narediti sprehod po njegovem poddrevesu.
+Pri inicializaciji drevesu podamo seznam parov dualnih točk in praznega drevesa NN. Nato se iterativno sprehodimo po prvem nivoju drevesa (primarnem drevesu) - tako kot pri preiskovanju v širino - s funkcijo $traverse\texttt{\_}and\texttt{\_}populate\texttt{\_}with\texttt{\_}data$. Za vsako vozlišče pokličemo funkcijo $build\texttt{\_}NN\texttt{\_}Tree\texttt{\_}on\texttt{\_}layer2$, ki rekurzivno  od spodaj navzgor za vsako vozlišče v sekundarnem drevesu, na katerega kaže vozlišče v primarnem drevesu, vstavi v (v tistem trenutku prazno) njegovo drevo NN točke, ki jih hranita drevesi NN njegovih otrok. Pri listih je v drevo NN vstavljena točka, čigar dualna točka je uporabljena kot ključ vozlišča. Rekurzivni klic funkcije se torej kliče pred vstavljanjem točk v drevo NN. S pomočjo rekurzije je vsakemu notranjemu vozlišču v sekundarnem drevesu seznam točk v njegovem poddrevesu, ki ga potrebujemo za izgradnjo njegovega drevesa NN, implicitno podan preko dreves NN njegovih otrok. Če bi drevesa NN gradili od zgoraj navzdol v sekundarnem drevesu, bi morali za vsako vozlišče narediti sprehod po njegovem poddrevesu. V primarnem drevesu so vsa drevesa NN prazna.
 
 \subsubsection{Poizvedbe v območnem drevesu}
-Razredu $Range\texttt{\_}tree\texttt{\_}d$ smo za poizvedbe dodali funkcijo $window\texttt{\_}query\texttt{\_}impl\texttt{\_}modified$, ki  kot osnovo uporablja obstoječo funkcijo $window\texttt{\_}query\texttt{\_}impl$. Argumenti funkcije so $OutputIterator$, kamor se vstavljajo vrnjene točke, interval, ki ga definirata dve dualni točki, tretji argument, ki ga v obstoječi funkciji ni, pa je dualna točka, ki jo uporabimo za poizvedbe najbližjega soseda v drevesih NN. 
+Razredu $Range\texttt{\_}tree\texttt{\_}d$ smo za poizvedbe dodali funkcijo $window\texttt{\_}query\texttt{\_}impl\texttt{\_}modified$, ki  kot osnovo uporablja obstoječo funkcijo $window\texttt{\_}query\texttt{\_}impl$. Argumenti funkcije so $OutputIterator$, kamor se vstavljajo vrnjene točke, interval $I$, ki ga definirata dve dualni točki, tretji argument, ki ga v obstoječi funkciji ni, pa je točka $a$, ki jo uporabimo za poizvedbe najbližjega soseda v drevesih NN. Pri dvodimenzionalnih območnih drevesih je geometrijska predstavitev intervala pravokotnik; levo krajišče intervala ustreza spodnjemu levemu oglišču pravokotnika, desno krajišče pa zgornjemu desnemu oglišču. Interval je zaprt. 
+
+Če za vozlišče $w$ v primarnem drevesu ugotovimo, da njegovo celotno poddrevo ustreza pogojem poizvedbe, nadaljujemo s preiskovanjem v njegovem sekundarnem drevesu. Če za vozlišče $v$ v sekundarnem vozlišču ugotovimo, da so vsa vozlišča v njegovem poddrevesu vsebovana v intervalu $I$, ne dodamo vso poddrevo v rezultat, kot je to storjeno v osnovni funkciji, temveč opravimo še poizvedbo najbližjega soseda točke $a$ v drevesu NN vozlišča $v$. Za vsako obiskano vozlišče $w$ v primarnem drevesu prav tako preverimo, če je vsebovano v intervalu $I$. Če je temu tako, točko, iz katere izhaja dualna točka, ki predstavlja ključ vozlišča $w$, dodamo v seznam vrnjenih točk. Enako velja za obiskana vozlišča v sekundarnem drevesu. [To pomeni vsi listi v sekundarnem drevesu. Naj listi sploh hranijo kd drevo velikosti 1?] 
+
 
 \lstinputlisting[language=C++, firstline=1, lastline=37]{KdTreeQuery.h}
 
 \lstinputlisting[language=C++, firstline=1, lastline=33]{NNquery.h}
 
+\subsection{Minimalno ločevanje}
+Za rešitev optimizacijskega problema (glej lemo ~\ref{lema6}) $\Psi_\sigma(r,P)$ smo napisali dve funkciji, ki rešita optimizacijska problema $\Phi(A,B)$ in $\Phi_\sigma(A,B)$.
 
+\subsubsection{opt1}
+\subsubsection{opt2}
+Funkcija $findminpairRi (L_i, L_j, R_i, currentMinWeight)$. Šest instanc problema $\Phi_\sigma(A,B)$ v $\Psi_\sigma(r,P)$ ne rešujemo neodvisno, ker bi sicer morali šestkrat konstruirati območno drevo. Probleme z isto podmnožico $R_i$ združimo pod skupni problem, ki ga s funkcijo rešimo na sledeč način.
+
+Zgradimo območno drevo s točkami $p\in R_i$. Za vsako točko $p_i\in L_i$ naredimo poizvedbo v območnem drevesu, pri čemer za območje iskanja podamo  drugi kvadrant koordinatnega sistema, ki ima za izhodišče točko $\varphi (p_i)$. Levo krajišče tako predstavlja točka $(\varphi_1 (p_i), -\infty)$, desno pa točka $(\infty, \varphi_2 (p_i))$. Parameter $currentMinWeight$ hrani trojko $(a, b, w_a + w_b)$, kjer točki $a$ in $b$ s povezavo $ab$ tvorita trenutno najbolj optimalno pot, izračunano z do zdaj rešenimi optimizacijskimi problemi $\Phi$ in $\Phi_\sigma$. Za vse točke $q_k$, ki jih vrne poizvedba, preverimo, če je vsota uteži $w_{p_i} + w_{q_k}$ manjša od $w_a+w_b$. Če je temu tako, posodobimo $currentMinWeight$ z $(p_i, q_k, w_{p_i} + w_{q_k})$. 
+
+Funkcijo smo optimizirali tako, da smo zmanjšali število poizvedb. Poizvedb ne delamo s točkami, pri katerih je razdalja do korena drevesa SSSP večja od vsote razdalj točk $a$ in $b$, ki tvorita trenutno optimalno zaprto pot. S poizvedbami nad drugim kvadrantom rešimo problem $\Phi_\sigma(L_i,R_i)$.
+
+Funkcija potem nadaljuje s poizvedbami za vsako točko $p_j\in L_j$. Za vsak $p_j$ opravimo dve poizvedbi. Pri eni za območje iskanja podamo prvi kvadrant, pri drugi pa tretji kvadrant koordinatnega sistema, ki ima za izhodišče točko $\varphi (p_j)$. Za vse točke $q_l$, ki jih vrneta poizvedbi, nato zopet preverimo vsoto uteži $w_{p_j} + w_{q_l}$ in po potrebi posodobimo $currentMinWeight$.
+
+S poizvedbami nad prvim kvadrantom rešimo problem $\Phi_{\sigma_+}(L_j,R_i)$, s poizvedbami nad tretjim kvadrantom pa problem $\Phi_{\sigma_-}(L_j,R_i)$. Glej tudi sliko ~\ref{dualp}. Območje iskanja v teoretičnem pogledu ne določajo samo kvadranti, temveč tudi polravnina $x \geq y$. Ampak presek obeh območij ni pravotnik, za območje iskanja v območnem drevesu pa ne moremo vzeti poljubnega poligona. Omejitev območja iskanja tudi ne prinaša nobenih prednosti. Vse točke $b\in B$ se nahajajo v omenjeni polravnini, točke na drugi strani polravnine, ki se nahajajo v prvem, drugem ali tretjem kvadrantu, pa pripadajo množici točk na levi strani osi $y$, ki niso shranjene v območnem drevesu.
+
+Funkcija se izvede dvakrat, kar pomeni, da tudi območno drevo zgradimo dvakrat; enkrat za $R_0$ in enkrat za $R_1$. Za točke v $L_0$ in $L_1$ naredimo tri poizvedbe; po enkrat v prvem, drugem in tretjem kvadrantu. 
 
 \chapter{Rezultati}
 \label{ch3}
