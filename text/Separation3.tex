@@ -317,9 +317,19 @@ Tretja predloga predstavlja režim adaptacije Delaunayeve triangulacije Voronoij
 \section{Območna drevesa}
 Območna drevesa so še ena podatkovna struktura za poizvedbe nad pravokotnimi območji. V primerjavi s kd drevesi imajo boljši čas poizvedbe ($\OO(\log^2 n)$), ampak slabšo prostorsko kompleksnost ($\OO(n\log n)$).
 
+\begin{figure}
+\centerline{\includegraphics[scale=0.5]{pics/range2-primer.png}}
+\caption{Dvodimenzionalno območno drevo.}
+\label{range-primer}
+\end{figure}
 
-\section{Kd-drevesa}\begin{equation}
-\end{equation}
+\section{Kd-drevesa}
+
+\begin{figure}
+\centerline{\includegraphics[scale=0.5]{pics/kd2-primer.png}}
+\caption{Dvodimenzionalno kd drevo.}
+\label{kd-primer}
+\end{figure}
 
 
 \chapter{Teorija}
@@ -878,7 +888,7 @@ Za podatkovno strukturo s poizvedbami najbližjega soseda smo sprva hoteli upora
 
 Kot osnovo smo za poizvedbe najbližjega soseda uporabili funkcijo $search$ v razredu $Kd{\_}tree$, ki kot argument sprejme $OutputIterator$, kamor se shranjujejo objekti, ki jih poizvedba vrne, in $FuzzyQueryItem$, ki je v dvodimenzionalnem primeru lahko krog ali pravokotnik in določa območje iskanja. Kot argument lahko sprejme vrednost $\epsilon$, ki določa stopnjo mehkosti (ang. fuzzyness) in se jo uporablja pri aproksimacijskih poizvedbah, ki pa jih v našem algoritmu nismo potrebovali. Časovna kompleksnost funkcije $search$ je enaka $\OO(\log n + k)$, kjer je $k$ število vrnjenih točk znotraj območja iskanja. Ker naš algoritem zahteva $\OO(\log n)$, smo razredu $Kd{\_}tree$ dodali podobno funkcijo, ki pa iskanje zaključi v istem trenutku, ko ugotovi, da se vsaj ena točka nahaja znotraj območja iskanja. Če na primer za neko notranje vozlišče Kd drevesa ugotovi, da vse točke v njegovem poddrevesu ustrezajo kriterijem iskanja, jih ne doda enega po enega v $OutputIterator$, temveč doda samo "dummy" točko in zaključi. Če najde samo eno točko (ko pride do lista Kd drevesa), potem tako točko tudi vrne. To si lahko privoščimo, ker nas v notranjih vozliščih drevesa najbližjega soseda ne zanimajo konkretne točke, ampak samo informacija, ali se vsaj ena točka nahaja v območju iskanja. Šele ko pridemo do lista NN drevesa, nas zanima konkretna točka. S tem, ko je vedno vrnjena ena točka, se časovna kompleksnost spremeni v $\OO(\log n)$.
 
-\section{Implementacija optimizacijskega problema 2}
+\section{Implementacija optimizacijskega problema $\Phi_\sigma(A,B)$}
 
 Za rešitev optimizacijskega problema, predstavljenega v poglavju ~\ref{opt2}, smo uporabili implementacijo območnih dreves v CGAL, za uporabo dualnosti pa napisali lasten razred (bolj natančno $struct$) $DualPoint$ za točke v dualnem prostoru.
 
@@ -903,14 +913,26 @@ Razredu $Range\texttt{\_}tree\texttt{\_}d$ smo za poizvedbe dodali funkcijo $win
 
 \lstinputlisting[language=C++, firstline=1, lastline=33]{NNquery.h}
 
-\subsection{Minimalno ločevanje}
-Za rešitev optimizacijskega problema (glej lemo ~\ref{lema6}) $\Psi_\sigma(r,P)$ smo napisali dve funkciji, ki rešita optimizacijska problema $\Phi(A,B)$ in $\Phi_\sigma(A,B)$.
+\section{Minimalno ločevanje}
 
-\subsubsection{opt1}
-\subsubsection{opt2}
-Funkcija $findminpairRi (L_i, L_j, R_i, currentMinWeight)$. Šest instanc problema $\Phi_\sigma(A,B)$ v $\Psi_\sigma(r,P)$ ne rešujemo neodvisno, ker bi sicer morali šestkrat konstruirati območno drevo. Probleme z isto podmnožico $R_i$ združimo pod skupni problem, ki ga s funkcijo rešimo na sledeč način.
+\begin{figure}
+\centerline{\includegraphics[scale=0.7]{pics/primer1.png}}
+\caption{Dodaj primer množic L0, L1, R0, R1. }
+\label{primer-sep}
+\end{figure}
 
-Zgradimo območno drevo s točkami $p\in R_i$. Za vsako točko $p_i\in L_i$ naredimo poizvedbo v območnem drevesu, pri čemer za območje iskanja podamo  drugi kvadrant koordinatnega sistema, ki ima za izhodišče točko $\varphi (p_i)$. Levo krajišče tako predstavlja točka $(\varphi_1 (p_i), -\infty)$, desno pa točka $(\infty, \varphi_2 (p_i))$. Parameter $currentMinWeight$ hrani trojko $(a, b, w_a + w_b)$, kjer točki $a$ in $b$ s povezavo $ab$ tvorita trenutno najbolj optimalno pot, izračunano z do zdaj rešenimi optimizacijskimi problemi $\Phi$ in $\Phi_\sigma$. Za vse točke $q_k$, ki jih vrne poizvedba, preverimo, če je vsota uteži $w_{p_i} + w_{q_k}$ manjša od $w_a+w_b$. Če je temu tako, posodobimo $currentMinWeight$ z $(p_i, q_k, w_{p_i} + w_{q_k})$. 
+
+Za rešitev optimizacijskega problema $\Psi_\sigma(r,P)$ (glej lemo ~\ref{lema6}) smo napisali dve funkciji, ki rešita optimizacijska problema $\Phi(A,B)$ in $\Phi_\sigma(A,B)$.
+
+\subsection{opt1}
+Funkcija $findMinPair(S_i, S_{i+1}, currentMinWeight)$ reši optimizacijska problema $\Phi(L_0, L_1)$ in $\Phi(R_0, R_1)$. Parameter $currentMinWeight$ hrani trojko $(a, b, w_a + w_b)$, kjer točki $a$ in $b$ s povezavo $ab$ tvorita trenutno najbolj optimalno pot.
+
+Nad točkami $p\in S_{i+1}$ zgradimo drevo $NN(S_{i+1})$. Za vsako točko $q\in S_i$ naredimo poizvedbo najbližjega soseda v drevesu, če je razdalja $q$ do korena drevesa $SSSP$ manjša od dolžine trenutno najbolj optimalne poti. Za točko $b$, ki jo vrne poizvedba, preverimo, če je vsota uteži $w_q + w_b$ manjša od $w_a+w_b$. Če je temu tako, posodobimo $currentMinWeight$ z $(q, b, w_q + w_b)$.
+
+\subsection{opt2}
+Funkcija $findminpairRi (L_i, L_j, R_i, currentMinWeight, st)$. Šest instanc problema $\Phi_\sigma(A,B)$ v $\Psi_\sigma(r,P)$ ne rešujemo neodvisno, ker bi sicer morali šestkrat konstruirati območno drevo. Probleme z isto podmnožico $R_i$ združimo pod skupni problem, ki ga s funkcijo rešimo na sledeč način.
+
+Zgradimo območno drevo s točkami $p\in R_i$. Za vsako točko $p_i\in L_i$ naredimo poizvedbo v območnem drevesu, pri čemer za območje iskanja podamo  drugi kvadrant koordinatnega sistema, ki ima za izhodišče točko $\varphi (p_i)$. Levo krajišče tako predstavlja točka $(\varphi_1 (p_i), -\infty)$, desno pa točka $(\infty, \varphi_2 (p_i))$. Parameter $st$ predstavlja daljico $\sigma$, s katero lahko izračunamo dualne točke. Parameter $currentMinWeight$ hrani trojko $(a, b, w_a + w_b)$, kjer točki $a$ in $b$ s povezavo $ab$ tvorita trenutno najbolj optimalno pot, izračunano z do zdaj rešenimi optimizacijskimi problemi $\Phi$ in $\Phi_\sigma$. Za vse točke $q_k$, ki jih vrne poizvedba, preverimo, če je vsota uteži $w_{p_i} + w_{q_k}$ manjša od $w_a+w_b$. Če je temu tako, posodobimo $currentMinWeight$ z $(p_i, q_k, w_{p_i} + w_{q_k})$. 
 
 Funkcijo smo optimizirali tako, da smo zmanjšali število poizvedb. Poizvedb ne delamo s točkami, pri katerih je razdalja do korena drevesa SSSP večja od vsote razdalj točk $a$ in $b$, ki tvorita trenutno optimalno zaprto pot. S poizvedbami nad drugim kvadrantom rešimo problem $\Phi_\sigma(L_i,R_i)$.
 
@@ -918,12 +940,49 @@ Funkcija potem nadaljuje s poizvedbami za vsako točko $p_j\in L_j$. Za vsak $p_
 
 S poizvedbami nad prvim kvadrantom rešimo problem $\Phi_{\sigma_+}(L_j,R_i)$, s poizvedbami nad tretjim kvadrantom pa problem $\Phi_{\sigma_-}(L_j,R_i)$. Glej tudi sliko ~\ref{dualp}. Območje iskanja v teoretičnem pogledu ne določajo samo kvadranti, temveč tudi polravnina $x \geq y$. Ampak presek obeh območij ni pravotnik, za območje iskanja v območnem drevesu pa ne moremo vzeti poljubnega poligona. Omejitev območja iskanja tudi ne prinaša nobenih prednosti. Vse točke $b\in B$ se nahajajo v omenjeni polravnini, točke na drugi strani polravnine, ki se nahajajo v prvem, drugem ali tretjem kvadrantu, pa pripadajo množici točk na levi strani osi $y$, ki niso shranjene v območnem drevesu.
 
-Funkcija se izvede dvakrat, kar pomeni, da tudi območno drevo zgradimo dvakrat; enkrat za $R_0$ in enkrat za $R_1$. Za točke v $L_0$ in $L_1$ naredimo tri poizvedbe; po enkrat v prvem, drugem in tretjem kvadrantu. 
+Funkcija se izvede dvakrat, kar pomeni, da tudi območno drevo zgradimo dvakrat; enkrat za $R_0$ in enkrat za $R_1$. Za točke v $L_0$ in $L_1$ naredimo tri poizvedbe; po enkrat v prvem, drugem in tretjem kvadrantu.
+
+\subsection{Kreiranje cikla}
+Ko dobimo par točk $a, b\in P$, ki določata minimalno zaprto pot, ki ločuje točki $s$ in $t$, v seznam shranimo vse točke, ki tvorijo cikel. S pomočjo funkcije $getParent()$ lahko za vsako točko $p$ v drevesu $SSSP(r, P)$ dobimo njegovega starša in s tem pot $T_r[p]$ v obratnem vrstnem redu (z začetkom pri točki $p$ in koncem pri točki $r$), ki jo označimo kot $T_r^{-1}[p]$. Pot $T_r[p]$ brez točke $r$ označimo z $T_{r-1}[p]$. Cikel lahko potem dobimo z združitvijo dveh poti $T_r^{-1}[a] + T_{r-1}[b]$, s čimer dobimo pot $(a,...,r,...b)$. Vrnjen seznam predstavlja cikel, v katerem je začetna točka shranjena samo enkrat. Za dolžino najbolj optimalne poti se do konca izvajanja programa hrani vsota dolžin točk $a$ in $b$. Dolžina, ki jo program vrne kot rezultat, je povečana za 1.
+
+\section{Obravnava degeneriranih primerov}
+rotacija, če st ni vertikalna daljica
+
+točke, ki ležijo na y osi, grejo k b (preveri tip neskončne vrednosti v dualpoint)
+
+
 
 \chapter{Rezultati}
 \label{ch3}
+
+\begin{table}
+\begin{center}
+\begin{tabular}{l|l|l|l|l|l|l}
+\hline
+number of points & 50k & 100k & 250k & 500k & 750k & 1mio \\ \hline \hline
+CPU(VD) [s] & 0.0859 & 0.196 & 0.562 & 1.2667 & 2.0495 & 2.9304 \\ \hline
+CPU(kd drevo) [s] & 0.0025 & 0.0047 & 0.0126 & 0.025 & 0.0375 & 0.0497
+\end{tabular}
+\end{center}
+\label{cpu_compare}
+\caption{Časi konstrukcij Voronoijevega diagrama in kd drevesa v sekundah. Vsaka konstrukcija se je izvedla desetkrat, na podlagi tega pa se je izračunal povprečni čas izvedbe.}
+\end{table}
+
+\begin{table}
+\begin{center}
+\begin{tabular}{l|l|l|l|l|l|l}
+number of points & 50k & 100k & 250k & 500k & 750k & 1mio \\ \hline \hline
+RAM(VD) [mb] & 7.2 & 14.4 & 34.3 & 68.9 & 103.6 & 137.9 \\ \hline
+RAM(kd drevo) [mb] & 1.9 & 3.8 & 9.5 & 19 & 28.5 & 38.1
+\end{tabular}
+\end{center}
+\label{ram_compare}
+\caption{Velikost prostora v megabajtih, ki ga zasede en objekt Voronoijevega diagrama ali kd drevesa.}
+\end{table}
+
+
+
 \section{Drevo najkrajših poti}
-Algoritem za izgradnjo drevesa smo pognali na različnem številu vhodnih točk (glej tabelo). V prvem primeru so točke naključno generirane znotraj pravokotnika dimenzij 4x1. S tem 
 \begin{figure}
 \centerline{\includegraphics[scale=0.3]{pics/w_points5000-1.png}}
 \caption{Točke v 4x1 pravokotniku.}
