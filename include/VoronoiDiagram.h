@@ -54,7 +54,8 @@ class VoronoiDiagram: public VD
 public:
 	VoronoiDiagram() {};
 	~VoronoiDiagram() {};
-	//VoronoiDiagram(Iterator, Iterator);
+	template <class Iterator>
+	VoronoiDiagram(Iterator a, Iterator b) : VD(a, b) {}
 	std::tuple<bool, Point_2*> query(Point_2 q);
 	int size() { return number_of_faces(); }
 	Face_handle insert(const Delaunay_vertex_handle& t);
