@@ -1,46 +1,51 @@
 #include <SSSPTree.h>
 
-
 template <class Iterator>
-tuple<Point_2, Point_2,int> findminpair(Iterator setAbegin, Iterator setAend, Iterator setBbegin, Iterator setBend, Segment_2 st, 
+tuple<Point_2, Point_2, int> findminpairRi(vector<Point_2> li, vector<Point_2> lj, Iterator r0s, Iterator r0t, Segment_2 st,
 	tuple<Point_2, Point_2, int> bestR)
 {
-	if (setBend - setBbegin == 0) { return bestR; }
-	CGAL::Timer cost;
-	CGAL::Timer all;
-	cost.reset(); cost.start(); all.start();
-	RangeTree rangeTree = buildRangeTree(setBbegin, setBend, st);
-	cost.stop();
-	cout << "build rangeTree total: " << cost.time() << endl;
+	if (r0t - r0s == 0) { return bestR; }
+	//RangeTree rangeTreei = buildRangeTree(r0.begin(), r0.end(), st);
+	cout << "ht" << endl;
+	RangeTree rangeTreei = buildRangeTree(r0s, r0t, st);
 	int minWeight = get<2>(bestR);
-	
-	cost.reset(); cost.start();
-	for (Iterator a = setAbegin; a != setAend; ++a)
+	for (auto a = li.begin(); a != li.end(); ++a)
 	{
 		vector<Point_2> queryResults;
 		int weight_a = (*a).getDist();
-		if (weight_a >= minWeight) { continue; }
+		// weight_b is at least 1. If weight_a+1 is already >= minWeight, we know point a won't give us better result
+		if (weight_a + 1 >= minWeight) { continue; }
 		DualPoint* a_dual = new DualPoint(a._Ptr, st);
-		//cout << "begin query" << endl;
-		rangeTree_query(&rangeTree, a_dual, back_inserter(queryResults));
+		rangeTree_query(&rangeTreei, a_dual, back_inserter(queryResults));
 		delete(a_dual);
 		//cout << "query res size: " << queryResults.size() << endl;
 		for (vector<Point_2>::iterator pointB = queryResults.begin(); pointB != queryResults.end(); ++pointB)
 		{
-			//cout << "it" << endl;
-			//cout << "min w: " << minWeight << endl;
-			//cout << "w-a: " << weight_a << endl;
-
-			if (weight_a + pointB->getDist() < minWeight) { 
+			if (weight_a + pointB->getDist() < minWeight) {
 				minWeight = weight_a + pointB->getDist();
 				bestR = make_tuple(*a, *pointB, minWeight);
 			}
 		}
 	}
-	cost.stop();
-	cout << "range tree query: " << cost.time() << endl;
-	all.stop();
-	cout << "findminpair in timer: " << all.time() << endl;
+
+	for (auto a = lj.begin(); a != lj.end(); ++a)
+	{
+		vector<Point_2> queryResults;
+		int weight_a = (*a).getDist();
+		// weight_b is at least 1. If weight_a+1 is already >= minWeight, we know point a won't give us better result
+		if (weight_a + 1 >= minWeight) { continue; }
+		DualPoint* a_dual = new DualPoint(a._Ptr, st);
+		rangeTree_query_complement(&rangeTreei, a_dual, back_inserter(queryResults));
+		delete(a_dual);
+		//cout << "query res size: " << queryResults.size() << endl;
+		for (vector<Point_2>::iterator pointB = queryResults.begin(); pointB != queryResults.end(); ++pointB)
+		{
+			if (weight_a + pointB->getDist() < minWeight) {
+				minWeight = weight_a + pointB->getDist();
+				bestR = make_tuple(*a, *pointB, minWeight);
+			}
+		}
+	}
 	return bestR;
 }
 

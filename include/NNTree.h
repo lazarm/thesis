@@ -76,6 +76,17 @@ void NNTree::insert(Iterator begin, Iterator end) {
 	}
 }
 
+int nextPowerOfTwo(int val) {
+	val--;
+	val = (val >> 1) | val;
+	val = (val >> 2) | val;
+	val = (val >> 4) | val;
+	val = (val >> 8) | val;
+	val = (val >> 16) | val;
+	val++; // Val is now the next highest power of 2.
+	return val;
+}
+
 tuple<bool, Point_2> NNTree::search(Point_2 q) {
 	//tuple<bool, Point_2*> res = make_tuple(true, new Point_2(0, 0));
 	tuple<bool, Point_2> res = query(q, 0);
@@ -94,17 +105,6 @@ tuple<bool, Point_2> NNTree::search(Point_2 q) {
 	// same value as in last loop iteration, if leaf node is left child
 	res = query(q, i);
 	return res;
-}
-
-int nextPowerOfTwo(int val) {
-	val--;
-	val = (val >> 1) | val;
-	val = (val >> 2) | val;
-	val = (val >> 4) | val;
-	val = (val >> 8) | val;
-	val = (val >> 16) | val;
-	val++; // Val is now the next highest power of 2.
-	return val;
 }
 
 tuple<bool, Point_2> NNTree::query(Point_2 q, int idx)
