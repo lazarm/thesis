@@ -1,8 +1,53 @@
 
 #include <CGAL/Timer.h>
 #include <separationMain.h>
-#include <leaker.h>
+#include <thread>
+#include <chrono>
 
+void cpuKd(vector<Point_2> points, int k, int s) {
+	cout << "cpu for kd tree." << endl;
+	CGAL::Timer cost;
+	cost.reset(); cost.start();
+	for (int i = 0; i < k; i++) {
+		shared_ptr<KDTree> a(new KDTree(points.begin(), points.begin() + s));
+	}
+	cost.stop();
+	cout << "Storing " << k << " kd trees of size " << s << " took total " << cost.time() << " time, and on average " << cost.time() / k;
+}
+
+void cpuVd(vector<Point_2> points, int k, int s) {
+	cout << "cpu for vd tree." << endl;
+	CGAL::Timer cost;
+	cost.reset(); cost.start();
+	for (int i = 0; i < k; i++) {
+		VD vd(points.begin(), points.begin() + s);
+	}
+	cost.stop();
+	cout << "Storing " << k << " VDs of size " << s << " took total " << cost.time() << " time, and on average " << cost.time() / k << endl;
+}
+
+void ramKd(vector<Point_2> points, int k, int s) {
+	vector<shared_ptr<KDTree>> treeList;
+	cout << "ram for kd tree, check current ram" << endl;
+	this_thread::sleep_for(chrono::seconds(10));
+	for (int i = 0; i < k; i++) {
+		treeList.push_back(shared_ptr<KDTree>(new KDTree(points.begin(), points.begin() + s)));
+	}
+	cout << "finished kd, check ram again" << endl;
+	this_thread::sleep_for(chrono::seconds(10));
+}
+
+void ramVd(vector<Point_2> points, int k, int s) {
+	vector<VD> vdList;
+	cout << "ram for vd, check current ram" << endl;
+	this_thread::sleep_for(chrono::seconds(10));
+	for (int i = 0; i < k; i++) {
+		//VD vd(points.begin(), points.begin() + s);
+		vdList.push_back(VD(points.begin(), points.begin() + s));
+	}
+	cout << "finished vd, check ram again" << endl;
+	this_thread::sleep_for(chrono::seconds(10));
+}
 
 int main() {
 
@@ -13,7 +58,7 @@ int main() {
 	vector<GraphNode*> gps;
 	GraphNode ag1 = { a1 }, ag2 = { a2 }, ag3 = { a3 }, ag4 = { a4 }, ag5 = { a5 };
 	//gps.reserve(2009);
-	pst2.reserve(209);
+	pst2.reserve(25009);
 	pst2.push_back(a1), gps.push_back(&ag1);
 	pst2.push_back(a6), gps.push_back(&ag2);
 	pst2.push_back(a2), gps.push_back(&ag3);
@@ -27,7 +72,7 @@ int main() {
 	//std::ofstream out("out.txt");
 	//std::streambuf *coutbuf = std::cout.rdbuf(); //save old buf
 	//std::cout.rdbuf(out.rdbuf()); //redirect std::cout to out.txt!
-	for (int i = 0; i < 200; i++)
+	for (int i = 0; i < 1000000; i++)
 	{
 		double y = (double)rand() / (RAND_MAX);
 		double x = ((double)rand() / (RAND_MAX)) * 4;
@@ -40,11 +85,9 @@ int main() {
 	
 	Segment_2 st(Point_2(2, 0.3), Point_2(2, 0.6));
 	vector< vector<Point_2> > rst;
-	double times = 0;
+	
 
-	//cout << pst2.size() << endl;
-	for (vector<Point_2>::iterator pi = pst2.begin(); pi != pst2.end(); ++pi) {
-		//cout << pi->x() << "," << pi->y() << endl;
-	}
-	main_procedure(pst2.begin(), pst2.end(), st);
+
+	vector<Point_2> bfs_points { a1, a2, a3, a4, a5, a6 };
+	testBfs(bfs_points, 0);
 }
