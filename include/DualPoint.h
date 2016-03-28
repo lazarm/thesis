@@ -1,4 +1,4 @@
-#include <VoronoiDiagram.h>
+#include <GridGraph.h>
 
 struct DualPoint
 {
@@ -20,6 +20,7 @@ struct DualPoint
 		Direction_2 direction_t(line_t);
 
 		Point_2 bFI(direction_s.dy() / direction_s.dx(), direction_t.dy() / direction_t.dx());
+		//cout << bFI.x() << " -- " << bFI.y() << endl;
 		return bFI;
 	}
 };

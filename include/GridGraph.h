@@ -54,7 +54,22 @@ tuple<int, int> getGridDimension(Iterator begin, Iterator end)
 
 void gridQuery(GridGraph g, Point_2 r)
 {
-	int xfloor = floor(r.x());
-	int yfloor = floor(r.y());
-	vector<tuple<int, int>> cellPoints{};
+	//do bfs, neighbours are points from neighbouring cells
+}
+
+vector<tuple<int, int>> getNeighbouringCells(GridGraph g, Point_2 v) 
+{
+	int xfloor = floor(v.x());
+	int yfloor = floor(v.y());
+	vector<tuple<int, int>> cellPoints
+	{ tuple<int, int>(xfloor, yfloor),
+	tuple<int, int>(xfloor - 1, yfloor),
+	tuple<int, int>(xfloor - 1, yfloor + 1),
+	tuple<int, int>(xfloor, yfloor + 1),
+	tuple<int, int>(xfloor + 1, yfloor + 1),
+	tuple<int, int>(xfloor + 1, yfloor),
+	tuple<int, int>(xfloor + 1, yfloor - 1),
+	tuple<int, int>(xfloor, yfloor - 1),
+	tuple<int, int>(xfloor - 1, yfloor - 1) };
+	return cellPoints;
 }

@@ -27,27 +27,27 @@ tuple<Segment_2, Segment_2> getRays(Segment_2 st, Line_2 line)
 		if (s.x() == t.x()) {
 			if (s.y() < t.y()) {
 				// navpicno navzgor
-				t_end = Point_2(s.x(), (numeric_limits<double>::infinity)());
-				s_start = Point_2(s.x(), -(numeric_limits<double>::infinity)());
+				t_end = Point_2(s.x(), (numeric_limits<int>::max)());
+				s_start = Point_2(s.x(), -(numeric_limits<int>::max)());
 			}
 			else {
 				// navpicno navzdol
-				s_start = Point_2(s.x(), (numeric_limits<double>::infinity)());
-				t_end = Point_2(s.x(), -(numeric_limits<double>::infinity)());
+				s_start = Point_2(s.x(), (numeric_limits<int>::max)());
+				t_end = Point_2(s.x(), -(numeric_limits<int>::max)());
 			}	
 		}
 		else {
 			// st pointing to right
-			t_end = Point_2((numeric_limits<double>::infinity)(), line.y_at_x((numeric_limits<double>::infinity)()));
-			s_start = Point_2(-(numeric_limits<double>::infinity)(), line.y_at_x(-(numeric_limits<double>::infinity)()));
+			t_end = Point_2((numeric_limits<int>::max)(), line.y_at_x((numeric_limits<int>::max)()));
+			s_start = Point_2(-(numeric_limits<int>::max)(), line.y_at_x(-(numeric_limits<int>::max)()));
 		}
 	}
 	else {
-		s_start = Point_2((numeric_limits<double>::infinity)(), line.y_at_x((numeric_limits<double>::infinity)()));
-		t_end = Point_2(-(numeric_limits<double>::infinity)(), line.y_at_x(-(numeric_limits<double>::infinity)()));
+		s_start = Point_2((numeric_limits<int>::max)(), line.y_at_x((numeric_limits<int>::max)()));
+		t_end = Point_2(-(numeric_limits<int>::max)(), line.y_at_x(-(numeric_limits<int>::max)()));
 	}
 	t_plus = Segment_2(t, t_end);
-	s_minus = Segment_2(s, s_start);
+	s_minus = Segment_2(s_start, s);
 	tuple<Segment_2, Segment_2> rays = make_tuple(t_plus, s_minus);
 	return rays;
 }
@@ -119,44 +119,46 @@ void main_procedure(vector<Point_2>::iterator begin, vector<Point_2>::iterator e
 		cost.reset(); cost.start();
 		SSSPTree<vector<Point_2>::iterator> ssspTree(begin, end, *p, st);
 		cost.stop();
-		//cout << "sssp tree time: " << cost.time() << endl;
+		cout << "sssp tree time: " << cost.time() << endl;
 		vector< vector<Point_2> > rst = ssspTree.getAllSets();
 		int ii = 0;
 
 		//cout << "st" << endl;
 		//cout << st.source().x() << "," << st.target().x() << endl;
 		//cout << st.source().y() << "," << st.target().y() << endl;
-		//cout << rst.at(0).size() << ", " << rst.at(1).size() << ", " << rst.at(2).size() << ", " << rst.at(3).size() << endl;
+		cout << rst.at(0).size() << ", " << rst.at(1).size() << ", " << rst.at(2).size() << ", " << rst.at(3).size() << endl;
 
 		Line_2 st_line = Line_2(st);
 		tuple<Segment_2, Segment_2> rays = getRays(st, st_line);
 		tuple<Point_2, Point_2, int> bestR = make_tuple(Point_2(), Point_2(), (numeric_limits<int>::max)());
 		cost.reset(); cost.start();
-		tuple<Point_2, Point_2, int>  l0r0 = findminpair(rst.at(0).begin(), rst.at(0).end(), rst.at(2).begin(), rst.at(2).end(),st, bestR);
+		tuple<Point_2, Point_2, int> r0rangeTree = findminpairRi(rst.at(0), rst.at(1), rst.at(2).begin(), rst.at(2).end(), st, bestR);
+		tuple<Point_2, Point_2, int> r1rangeTree = findminpairRi(rst.at(1), rst.at(0), rst.at(3).begin(), rst.at(3).end(), st, r0rangeTree);
+		//tuple<Point_2, Point_2, int>  l0r0 = findminpair(rst.at(0).begin(), rst.at(0).end(), rst.at(2).begin(), rst.at(2).end(),st, bestR);
 		cost.stop();
 		//cout << "first: " << cost.time() << endl;
 		cost.reset(); cost.start();
-		tuple<Point_2, Point_2, int>  l1r1 = findminpair(rst.at(1).begin(), rst.at(1).end(), rst.at(3).begin(), rst.at(3).end(), st,l0r0);
+		//tuple<Point_2, Point_2, int>  l1r1 = findminpair(rst.at(1).begin(), rst.at(1).end(), rst.at(3).begin(), rst.at(3).end(), st,l0r0);
 		cost.stop();
 		//cout << "second: " << cost.time() << endl;
 		cost.reset(); cost.start();
-		tuple<Point_2, Point_2, int>  l0r1_t = findminpair(rst.at(0).begin(), rst.at(0).end(), rst.at(3).begin(), rst.at(3).end(), get<0>(rays), l1r1);
+		//tuple<Point_2, Point_2, int>  l0r1_t = findminpair(rst.at(0).begin(), rst.at(0).end(), rst.at(3).begin(), rst.at(3).end(), get<0>(rays), l1r1);
 		cost.stop();
 		//cout << "third: " << cost.time() << endl;
 		cost.reset(); cost.start();
-		tuple<Point_2, Point_2, int>  l0r1_s = findminpair(rst.at(0).begin(), rst.at(0).end(), rst.at(3).begin(), rst.at(3).end(), get<1>(rays), l0r1_t);
+		//tuple<Point_2, Point_2, int>  l0r1_s = findminpair(rst.at(0).begin(), rst.at(0).end(), rst.at(3).begin(), rst.at(3).end(), get<1>(rays), l0r1_t);
 		cost.stop();
 		//cout << "fourth: " << cost.time() << endl;
 		cost.reset(); cost.start();
-		tuple<Point_2, Point_2, int>  l1r0_t = findminpair(rst.at(1).begin(), rst.at(1).end(), rst.at(2).begin(), rst.at(2).end(), get<0>(rays), l0r1_s);
+		//tuple<Point_2, Point_2, int>  l1r0_t = findminpair(rst.at(1).begin(), rst.at(1).end(), rst.at(2).begin(), rst.at(2).end(), get<0>(rays), l0r1_s);
 		cost.stop();
 		//cout << "fifth: " << cost.time() << endl;
 		cost.reset(); cost.start();
-		tuple<Point_2, Point_2, int>  l1r0_s = findminpair(rst.at(1).begin(), rst.at(1).end(), rst.at(2).begin(), rst.at(2).end(), get<1>(rays), l1r0_t);
+		//tuple<Point_2, Point_2, int>  l1r0_s = findminpair(rst.at(1).begin(), rst.at(1).end(), rst.at(2).begin(), rst.at(2).end(), get<1>(rays), l1r0_t);
 		cost.stop();
 		//cout << "sixth: " << cost.time() << endl;
 		cost.reset(); cost.start();
-		tuple<Point_2, Point_2, int>  l0l1 = findMinPair(rst.at(0).begin(), rst.at(0).end(), rst.at(1).begin(), rst.at(1).end(), l1r0_s);
+		tuple<Point_2, Point_2, int>  l0l1 = findMinPair(rst.at(0).begin(), rst.at(0).end(), rst.at(1).begin(), rst.at(1).end(), r1rangeTree);
 		cost.stop();
 		//cout << "seventh: " << cost.time() << endl;
 		cost.reset(); cost.start();

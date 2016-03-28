@@ -9,6 +9,7 @@
 #include <queue>
 #include <iterator>
 #include <windows.h>
+#include <psapi.h>
 
 
 typedef CGAL::Range_tree_map_traits_2<DualPoint, NNTree> rangeTraits;
@@ -104,26 +105,27 @@ Sites are created only at leaf nodes based on dual points of b and they get asso
 query is run and some site/point is returned, we can retrieve its original point b with all attributes contained in it 
 (such as weight).
 */
-vector<Site_2> build_VD_trees_on_layer2(RangeNode1* node)
-{	
+void build_VD_trees_on_layer2(RangeNode1* node)
+{
 	if (node->left_link == 0) {
 		// leaf node
 		DualPoint point = node->object.first;
 		vector<Point_2> vdSites;
 		vdSites.push_back(*point.originalPoint);
 		node->object.second.insert(vdSites.begin(), vdSites.end());
-		return vdSites;
+		return;
 	}
 	// recursively construct NNTree structures for both childs of node
-	vector<Point_2> v1 = build_VD_trees_on_layer2(node->left_link);
-	vector<Point_2> v2 = build_VD_trees_on_layer2(node->right_link);
-	vector<Site_2> vdSites;
-	vdSites.insert(vdSites.end(), v1.begin(), v1.end());
-	vdSites.insert(vdSites.end(), v2.begin(), v2.end());
-	node->object.second.insert(vdSites.begin(), vdSites.end());
-	return vdSites;
-}
+	build_VD_trees_on_layer2(node->left_link);
+	build_VD_trees_on_layer2(node->right_link);
 
+	vector<Site_2> vdSites;
+	shared_ptr<KDTree> root_left = node->left_link->object.second.getRoot();
+	shared_ptr<KDTree> root_right = node->right_link->object.second.getRoot();
+	vdSites.insert(vdSites.end(), root_left->begin(), root_left->end());
+	vdSites.insert(vdSites.end(), root_right->begin(), root_right->end());
+	node->object.second.insert(vdSites.begin(), vdSites.end());
+}
 
 /*
 Takes a node of a primary range tree and constructs NNTree structures for all nodes in secondary range tree coming from this node.
@@ -174,25 +176,40 @@ w_a + w_b*.
 template <class Iterator>
 Iterator rangeTree_query(RangeTree* rangeTree, DualPoint* a, Iterator it)
 {
-	DualPoint dp1 = DualPoint();
-	DualPoint dp2 = DualPoint();
-	DualPoint dp3 = DualPoint();
-	DualPoint dp4 = DualPoint();
-	dp1.point = Point_2(-(numeric_limits<double>::infinity)(), a->point.y());
-	dp2.point = Point_2(a->point.x(), (numeric_limits<double>::infinity)());
-	dp3.point = Point_2(a->point.x(), -(numeric_limits<double>::infinity)());
-	dp4.point = Point_2((numeric_limits<double>::infinity)(), a->point.y());
+	DualPoint xinf = DualPoint();
+	DualPoint infy = DualPoint();
+	xinf.point = Point_2(a->point.x(), -(numeric_limits<double>::infinity)());
+	infy.point = Point_2((numeric_limits<double>::infinity)(), a->point.y());
 
-	Interval win1 = Interval(dp1, dp2);
-	Interval win2 = Interval(dp3, dp4);
+	Interval second_quadrant = Interval(xinf, infy);
 
 	double x1 = a->originalPoint->x();
 	double y1 = a->originalPoint->y();
 	Point_2 a_orig = *(a->originalPoint);
+	rangeTree->window_query_modified(second_quadrant, a_orig, it);
 
-	rangeTree->window_query_modified(win1, a_orig, it);
-	rangeTree->window_query_modified(win2, a_orig, it);
+	return it;
+}
 
+template <class Iterator>
+Iterator rangeTree_query_complement(RangeTree* rangeTree, DualPoint* a, Iterator it)
+{
+	DualPoint infinfNeg = DualPoint();
+	DualPoint xy = DualPoint();
+	DualPoint infinfPos = DualPoint();
+
+	infinfNeg.point = Point_2(-(numeric_limits<double>::infinity)(), -(numeric_limits<double>::infinity)());
+	infinfPos.point = Point_2((numeric_limits<double>::infinity)(), (numeric_limits<double>::infinity)());
+	xy.point = Point_2(a->point.x(), a->point.y());
+
+	Interval first_quadrant = Interval(xy, infinfPos);
+	Interval third_quadrant = Interval(infinfNeg, xy);
+
+	double x1 = a->originalPoint->x();
+	double y1 = a->originalPoint->y();
+	Point_2 a_orig = *(a->originalPoint);
+	rangeTree->window_query_modified(first_quadrant, a_orig, it);
+	rangeTree->window_query_modified(third_quadrant, a_orig, it);
 	return it;
 }
 
