@@ -49,6 +49,16 @@ void ramVd(vector<Point_2> points, int k, int s) {
 	this_thread::sleep_for(chrono::seconds(10));
 }
 
+vector<Point_2> readPointsFromFile(string file) {
+	vector<Point_2> points;
+	ifstream ifs(file);
+	assert(ifs);
+	
+	Point_2 p;
+	while (ifs >> p) { points.push_back(p); }
+	return points;
+}
+
 int main() {
 
 	Point_2 a1(0, 0), a2(1, 0), a3(2, 0), a4(3, 0), a5(4, 0), a6(0.5, 0), a7(1.5, 0), a8(2.5,0), a9(3.5,0);
