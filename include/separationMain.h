@@ -70,35 +70,24 @@ void make_cycle(tuple<Point_2, Point_2, int> pair, vector<Point_2> cycle)
     // p and q are points to be connected and form a cycle. ps and qs are paths from p to r and from q to r, respectively. 
 	Point_2 p = get<0>(pair);
 	Point_2 q = get<1>(pair);
-	vector<Point_2> ps;
-	if (p.getParent() == 0) { ps.push_back(p); }
-	else {
-		ps.push_back(p);
+	vector<Point_2> ps {p};
+	if (p.getParent() != 0) {
 		Point_2 pi = p;
 		while (pi.getParent() != 0) {
 			pi = *(pi.getParent());
 			ps.push_back(pi);
 		}
 	}
-	vector<Point_2> qs;
-	if (q.getParent() == 0) { qs.push_back(q); }
-	else {
-		qs.push_back(q);
+	vector<Point_2> qs {q};
+	if (q.getParent() != 0) {
 		Point_2 qi = q;
 		while (qi.getParent() != 0) {
-
 			qi = *(qi.getParent());
 			qs.push_back(qi);
 		}
 	}
 	cycle.insert(cycle.end(), qs.rbegin(), qs.rend());
 	cycle.insert(cycle.end(), ps.begin(), ps.end() - 1);
-	/*
-	cout << "cycle" << endl;
-	for (auto i : cycle)
-	{
-		cout << i << endl;
-	}*/
 }
 
 
@@ -123,9 +112,6 @@ void main_procedure(vector<Point_2>::iterator begin, vector<Point_2>::iterator e
 		vector< vector<Point_2> > rst = ssspTree.getAllSets();
 		int ii = 0;
 
-		//cout << "st" << endl;
-		//cout << st.source().x() << "," << st.target().x() << endl;
-		//cout << st.source().y() << "," << st.target().y() << endl;
 		cout << rst.at(0).size() << ", " << rst.at(1).size() << ", " << rst.at(2).size() << ", " << rst.at(3).size() << endl;
 
 		Line_2 st_line = Line_2(st);
@@ -134,29 +120,8 @@ void main_procedure(vector<Point_2>::iterator begin, vector<Point_2>::iterator e
 		cost.reset(); cost.start();
 		tuple<Point_2, Point_2, int> r0rangeTree = findminpairRi(rst.at(0), rst.at(1), rst.at(2).begin(), rst.at(2).end(), st, bestR);
 		tuple<Point_2, Point_2, int> r1rangeTree = findminpairRi(rst.at(1), rst.at(0), rst.at(3).begin(), rst.at(3).end(), st, r0rangeTree);
-		//tuple<Point_2, Point_2, int>  l0r0 = findminpair(rst.at(0).begin(), rst.at(0).end(), rst.at(2).begin(), rst.at(2).end(),st, bestR);
 		cost.stop();
 		//cout << "first: " << cost.time() << endl;
-		cost.reset(); cost.start();
-		//tuple<Point_2, Point_2, int>  l1r1 = findminpair(rst.at(1).begin(), rst.at(1).end(), rst.at(3).begin(), rst.at(3).end(), st,l0r0);
-		cost.stop();
-		//cout << "second: " << cost.time() << endl;
-		cost.reset(); cost.start();
-		//tuple<Point_2, Point_2, int>  l0r1_t = findminpair(rst.at(0).begin(), rst.at(0).end(), rst.at(3).begin(), rst.at(3).end(), get<0>(rays), l1r1);
-		cost.stop();
-		//cout << "third: " << cost.time() << endl;
-		cost.reset(); cost.start();
-		//tuple<Point_2, Point_2, int>  l0r1_s = findminpair(rst.at(0).begin(), rst.at(0).end(), rst.at(3).begin(), rst.at(3).end(), get<1>(rays), l0r1_t);
-		cost.stop();
-		//cout << "fourth: " << cost.time() << endl;
-		cost.reset(); cost.start();
-		//tuple<Point_2, Point_2, int>  l1r0_t = findminpair(rst.at(1).begin(), rst.at(1).end(), rst.at(2).begin(), rst.at(2).end(), get<0>(rays), l0r1_s);
-		cost.stop();
-		//cout << "fifth: " << cost.time() << endl;
-		cost.reset(); cost.start();
-		//tuple<Point_2, Point_2, int>  l1r0_s = findminpair(rst.at(1).begin(), rst.at(1).end(), rst.at(2).begin(), rst.at(2).end(), get<1>(rays), l1r0_t);
-		cost.stop();
-		//cout << "sixth: " << cost.time() << endl;
 		cost.reset(); cost.start();
 		tuple<Point_2, Point_2, int>  l0l1 = findMinPair(rst.at(0).begin(), rst.at(0).end(), rst.at(1).begin(), rst.at(1).end(), r1rangeTree);
 		cost.stop();
@@ -166,7 +131,6 @@ void main_procedure(vector<Point_2>::iterator begin, vector<Point_2>::iterator e
 		cost.stop();
 		//cout << "eighth: " << cost.time() << endl;
 		tuple<Point_2, Point_2, int> result = r0r1;
-		// if result < best_result, ga obdrzi, sicer ne
 		if (get<2>(result) < get<2>(best_r)) { 
 			best_r = result;
 			cycle.clear();
@@ -183,10 +147,17 @@ void main_procedure(vector<Point_2>::iterator begin, vector<Point_2>::iterator e
 		//cout << "make_cycle" << endl;
 		resetPointDistances(begin, end);
 	}
-	/*
-	cycle je ocitno (Tr, e), ampak ponavadi je del cycla itak "rep", ki ga lahko odstranis? Res pa je, da bomo slej ko prej
-	prisli do takega r, da bomo dobili enak cikel brez tega repa. Implementacijsko je najbrz bolj zahtevno, ce bi rep kar odstranili,
-	ker dist vrednosti se nanasajo na r.
-	kaj pa optimizacija? ce prides recimo do a-ja na levi strani, ki ima dist >= min_dist-1, ga lahko kar zavrzes
-	*/
+	if (cycle.empty()) {
+		cout << "Could not separate points " << st.source().x() << "," << st.source.y() << " and " << st.end().x() << "," << st.end().y()
+			<< " with this set of unit disks." << endl;
+	}
+	else {
+		cout << "Points " << st.source().x() << "," << st.source.y() << " and " << st.end().x() << "," << st.end().y()
+			<< " can be separated by connecting points " << get<0>(best_r).x() << "," << get<0>(best_r).y() << " and "
+			<< get<1>(best_r).x() << "," << get<1>(best_r).y() << " and thus forming a following cycle: " << endl;
+
+		for (auto c : cycle) {
+			cout << c << endl;
+		}
+	}
 }
