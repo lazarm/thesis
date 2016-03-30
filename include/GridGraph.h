@@ -1,11 +1,13 @@
 #include <bfs.h>
 #include <unordered_map>
+#include <chrono>
+#include <thread>
 
 struct pair_hash {
 	template <class T1, class T2>
-	std::size_t operator () (const std::pair<T1, T2> &p) {
-		auto h1 = std::hash<T1>{}(p.first);
-		auto h2 = std::hash<T2>{}(p.second);
+	size_t operator () (const pair<T1, T2> &p) {
+		auto h1 = hash<T1>{}(p.first);
+		auto h2 = hash<T2>{}(p.second);
 
 		// use cantor pairing function to hash a pair of integers
 		return (h1 + h2)*(h1 + h2 + 1) / 2 + h2;
@@ -23,17 +25,16 @@ public:
 	~GridGraph(){};
 	template <class Iterator>
 	void insert(Iterator begin, Iterator end);
+	Unordered_map getCells() { return cells; }
 };
 
 template <class Iterator>
 void GridGraph::insert(Iterator begin, Iterator end)
 {
-	tuple<int, int> dim = getGridDimension(begin, end);
+	//tuple<int, int> dim = getGridDimension(begin, end);
 	for (auto p = begin; p != end; ++p)
 	{
-		int xfloor = floor(p->x());
-		int yfloor = floor(p->y());
-		pair<int, int> cellPoint(floor(p->x()), floor(p->y()));
+		pair<int, int> cellPoint(floor((*p)->p.x()), floor((*p)->p.y()));
 		if (!cells.count(cellPoint)) {
 		    cells.emplace(cellPoint, vector<shared_ptr<GraphNode>>());
 		}
@@ -41,6 +42,7 @@ void GridGraph::insert(Iterator begin, Iterator end)
 	}
 }
 
+/*
 template <class Iterator>
 tuple<int, int> getGridDimension(Iterator begin, Iterator end)
 {
@@ -61,9 +63,9 @@ tuple<int, int> getGridDimension(Iterator begin, Iterator end)
 	int xdim = ceil(maxx - minx);
 	int ydim = ceil(maxy - miny);
 	return tuple<int, int>(xdim, ydim);
-}
+}*/
 
-vector<shared_ptr<GraphNode>> getNeighbouringCells(GridGraph g, GraphNode v, Unordered_map cells)
+vector<shared_ptr<GraphNode>> getNeighbouringCells(GridGraph g, GraphNode v)
 {
 	int xfloor = int(floor(v.p.x()));
 	int yfloor = int(floor(v.p.y()));
@@ -71,6 +73,7 @@ vector<shared_ptr<GraphNode>> getNeighbouringCells(GridGraph g, GraphNode v, Uno
 	vector<shared_ptr<GraphNode>> neighbourCandidates;
 	vector<shared_ptr<GraphNode>> cands;
 	pair<int, int> l(xfloor, yfloor);
+	Unordered_map cells = g.getCells();
 	if (cells.count(l)) {
 		cands = cells.at(l);
 		neighbourCandidates.insert(neighbourCandidates.end(), cands.begin(), cands.end());
@@ -85,32 +88,32 @@ vector<shared_ptr<GraphNode>> getNeighbouringCells(GridGraph g, GraphNode v, Uno
 		cands = cells.at(l);
 		neighbourCandidates.insert(neighbourCandidates.end(), cands.begin(), cands.end());
 	}
-	l = pair<int, int>(xfloor - 1, yfloor + 1);
+	l = pair<int, int>(xfloor, yfloor + 1);
 	if (cells.count(l)) {
 		cands = cells.at(l);
 		neighbourCandidates.insert(neighbourCandidates.end(), cands.begin(), cands.end());
 	}
-	l = pair<int, int>(xfloor - 1, yfloor + 1);
+	l = pair<int, int>(xfloor + 1, yfloor + 1);
 	if (cells.count(l)) {
 		cands = cells.at(l);
 		neighbourCandidates.insert(neighbourCandidates.end(), cands.begin(), cands.end());
 	}
-	l = pair<int, int>(xfloor - 1, yfloor + 1);
+	l = pair<int, int>(xfloor + 1, yfloor);
 	if (cells.count(l)) {
 		cands = cells.at(l);
 		neighbourCandidates.insert(neighbourCandidates.end(), cands.begin(), cands.end());
 	}
-	l = pair<int, int>(xfloor - 1, yfloor + 1);
+	l = pair<int, int>(xfloor + 1, yfloor - 1);
 	if (cells.count(l)) {
 		cands = cells.at(l);
 		neighbourCandidates.insert(neighbourCandidates.end(), cands.begin(), cands.end());
 	}
-	l = pair<int, int>(xfloor - 1, yfloor + 1);
+	l = pair<int, int>(xfloor, yfloor - 1);
 	if (cells.count(l)) {
 		cands = cells.at(l);
 		neighbourCandidates.insert(neighbourCandidates.end(), cands.begin(), cands.end());
 	}
-	l = pair<int, int>(xfloor - 1, yfloor + 1);
+	l = pair<int, int>(xfloor - 1, yfloor - 1);
 	if (cells.count(l)) {
 		cands = cells.at(l);
 		neighbourCandidates.insert(neighbourCandidates.end(), cands.begin(), cands.end());
@@ -118,7 +121,7 @@ vector<shared_ptr<GraphNode>> getNeighbouringCells(GridGraph g, GraphNode v, Uno
 	return neighbourCandidates;
 }
 
-void gridQuery(GridGraph g, shared_ptr<GraphNode> r, Unordered_map cells)
+void gridQuery(GridGraph g, shared_ptr<GraphNode> r)
 {
 	r->dist = 0;
 	r->visited = true;
@@ -128,7 +131,7 @@ void gridQuery(GridGraph g, shared_ptr<GraphNode> r, Unordered_map cells)
 	{
 		shared_ptr<GraphNode> v = Q.front();
 		Q.pop_front();
-		vector<shared_ptr<GraphNode>> neighbours = getNeighbouringCells(g, *v, cells);
+		vector<shared_ptr<GraphNode>> neighbours = getNeighbouringCells(g, *v);
 		for (auto u : neighbours) {
 			if (CGAL::squared_distance(u->p, v->p) <= 1 && !u->visited) {
 				u->visited = true;
@@ -137,5 +140,34 @@ void gridQuery(GridGraph g, shared_ptr<GraphNode> r, Unordered_map cells)
 				Q.push_back(u);
 			}
 		}
+	}
+}
+
+void resetGridGraphNodes(vector<shared_ptr<GraphNode>> nodes) {
+	for (auto n : nodes) {
+		n->dist = numeric_limits<int>::max();
+		n->visited = false;
+		n->parent = nullptr;
+		n->neighbours.clear();
+	}
+}
+
+void gridGraphTest(vector<Point_2> points) {
+	vector<shared_ptr<GraphNode>> nodes;
+	for (auto p : points) {
+		nodes.push_back(shared_ptr<GraphNode>(new GraphNode(p.x(), p.y())));
+	}
+	GridGraph g;
+	g.insert(nodes.begin(), nodes.end());
+	for (auto a : g.getCells()) {
+		cout << a.first.first << " , " << a.first.second  << " - " << a.second.size() << endl;
+	}
+	for (auto r : nodes) {
+		gridQuery(g, r);
+		for (auto n : nodes) {
+			cout << (*n).p << " " << (*n).dist << endl;
+		}
+		resetGridGraphNodes(nodes);
+		this_thread::sleep_for(chrono::seconds(5));
 	}
 }

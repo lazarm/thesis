@@ -65,17 +65,28 @@ vector<shared_ptr<GraphNode>> runBfs(shared_ptr<GraphNode> s, vector<shared_ptr<
 	return nodes;
 }
 
+void resetGraphNodes(vector<shared_ptr<GraphNode>> nodes) {
+	for (auto n : nodes) {
+		n->dist = numeric_limits<int>::max();
+		n->visited = false;
+		n->parent = nullptr;
+		n->neighbours.clear();
+	}
+}
+
 void testBfs(vector<Point_2> points, int rootIndex)
 {
 	vector<shared_ptr<GraphNode>> nodes;
-	for (auto p = points.begin(); p != points.end(); ++p) {
-		nodes.push_back(shared_ptr<GraphNode>(new GraphNode (p->x(), p->y())));
+	for (auto p: points) {
+		nodes.push_back(shared_ptr<GraphNode>(new GraphNode (p.x(), p.y())));
 	}
 	constructG(nodes.begin(), nodes.end());
-	shared_ptr<GraphNode> root = nodes.at(rootIndex);
 
-	nodes = runBfs(root, nodes);
-	for (auto n = nodes.begin(); n != nodes.end(); ++n) {
-		cout << (**n).p << " " << (**n).dist << endl;
+	for (auto r : nodes) {
+		nodes = runBfs(r, nodes);
+		for (auto n: nodes) {
+			cout << (*n).p << " " << (*n).dist << endl;
+		}
+		resetGraphNodes(nodes);
 	}
 }
