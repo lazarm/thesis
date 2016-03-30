@@ -18,49 +18,23 @@ typedef rangeTraits::Pure_key RangePure_key;
 typedef rangeTraits::Interval Interval;
 typedef CGAL::Range_tree_2<rangeTraits> RangeTree;
 
-typedef CGAL::Range_tree_node<
-	std::pair<DualPoint, NNTree>,
-	std::pair<DualPoint, DualPoint>,
-	CGAL::tree_point_traits<
-		std::pair<DualPoint, NNTree>,
-		std::pair<DualPoint, DualPoint>,
-		DualPoint,
-		CGAL::T_Key_1<DualPoint, std::pair<DualPoint, NNTree>>,
-		CGAL::C_Low_1<DualPoint, std::pair<DualPoint, DualPoint >>,
-		CGAL::C_High_1<DualPoint, std::pair<DualPoint, DualPoint >>,
-		CGAL::C_Compare_1<DualPoint >>
-	> RangeNode;
+//using namespace std;
+using keyValue = pair<DualPoint, NNTree>;
+using dualKey = pair<DualPoint, DualPoint>;
+using pointTraits = CGAL::tree_point_traits < keyValue, dualKey, DualPoint,
+	CGAL::T_Key_1<DualPoint, keyValue>,
+	CGAL::C_Low_1<DualPoint, dualKey>,
+	CGAL::C_High_1<DualPoint, dualKey>,
+	CGAL::C_Compare_1<DualPoint >
+	>;
 
-typedef CGAL::Range_tree_node<
-	std::pair<DualPoint, NNTree>,
-	std::pair<DualPoint, DualPoint>,
-	CGAL::tree_point_traits<
-		std::pair<DualPoint, NNTree>,
-		std::pair<DualPoint, DualPoint>,
-		DualPoint,
-		CGAL::T_Key_2<DualPoint, std::pair<DualPoint, NNTree>>,
-		CGAL::C_Low_2<DualPoint, std::pair<DualPoint, DualPoint >>,
-		CGAL::C_High_2<DualPoint, std::pair<DualPoint, DualPoint >>,
-		CGAL::C_Compare_2<DualPoint >>
-	> RangeNode1;
+typedef CGAL::Range_tree_node<keyValue, dualKey, pointTraits> RangeNode;
 
-typedef CGAL::Range_tree_d<
-	std::pair<DualPoint, NNTree>,
-	std::pair<DualPoint, DualPoint>,
-	CGAL::tree_point_traits<
-		std::pair<DualPoint, NNTree>,
-		std::pair<DualPoint, DualPoint>,
-		DualPoint,
-		CGAL::T_Key_2<DualPoint, std::pair<DualPoint, NNTree>>,
-			CGAL::C_Low_2<DualPoint, std::pair<DualPoint, DualPoint >>,
-		CGAL::C_High_2<DualPoint, std::pair<DualPoint, DualPoint >>,
-		CGAL::C_Compare_2<DualPoint >>
-	> RangeTree1;
+typedef CGAL::Range_tree_node<keyValue, dualKey, pointTraits> RangeNode1;
 
-typedef CGAL::Tree_base <
-	std::pair<DualPoint, NNTree>,
-	std::pair<DualPoint, DualPoint>
-	> Tree_base;
+typedef CGAL::Range_tree_d<keyValue, dualKey, pointTraits> RangeTree1;
+
+typedef CGAL::Tree_base <keyValue, dualKey> Tree_base;
 
 /* From a vector of type Point_2 representing a group of points R_ make a vector of type Key storing
 a pair of DualPoint and empty class NNTree. Build range tree from that.
@@ -78,7 +52,7 @@ RangeTree buildRangeTree(Iterator begin, Iterator end, Segment_2 st)
 	cost.reset(); cost.start();
 	for (Iterator it = begin; it != end; ++it)
 	{
-		NNTree voronoiTree; //PAZI DA TO NE BO VEDNO REFERENCA NA ISTI OBJEKT!!!
+		NNTree voronoiTree;
 		Point_2 pt = *it;
 		unique_ptr < RangePure_key> dp(new RangePure_key(it._Ptr, st));
 		//cout << "point: " << pt << "  /  dual: " << dp->point << endl;
@@ -108,11 +82,7 @@ query is run and some site/point is returned, we can retrieve its original point
 void build_VD_trees_on_layer2(RangeNode1* node)
 {
 	if (node->left_link == 0) {
-		// leaf node
-		DualPoint point = node->object.first;
-		vector<Point_2> vdSites;
-		vdSites.push_back(*point.originalPoint);
-		node->object.second.insert(vdSites.begin(), vdSites.end());
+		// leaf node, leave nn tree empty, only key is accessed
 		return;
 	}
 	// recursively construct NNTree structures for both childs of node
