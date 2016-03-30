@@ -1,4 +1,4 @@
-#include <bfs.h>
+#include <GridGraph.h>
 
 #include <CGAL/Range_segment_tree_traits.h>
 #include <CGAL/Tree_traits.h>

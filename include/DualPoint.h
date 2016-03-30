@@ -1,4 +1,4 @@
-#include <GridGraph.h>
+#include <VoronoiDiagram.h>
 
 struct DualPoint
 {

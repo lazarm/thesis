@@ -148,11 +148,11 @@ void main_procedure(vector<Point_2>::iterator begin, vector<Point_2>::iterator e
 		resetPointDistances(begin, end);
 	}
 	if (cycle.empty()) {
-		cout << "Could not separate points " << st.source().x() << "," << st.source.y() << " and " << st.end().x() << "," << st.end().y()
+		cout << "Could not separate points " << st.source().x() << "," << st.source().y() << " and " << st.end().x() << "," << st.end().y()
 			<< " with this set of unit disks." << endl;
 	}
 	else {
-		cout << "Points " << st.source().x() << "," << st.source.y() << " and " << st.end().x() << "," << st.end().y()
+		cout << "Points " << st.source().x() << "," << st.source().y() << " and " << st.end().x() << "," << st.end().y()
 			<< " can be separated by connecting points " << get<0>(best_r).x() << "," << get<0>(best_r).y() << " and "
 			<< get<1>(best_r).x() << "," << get<1>(best_r).y() << " and thus forming a following cycle: " << endl;
 
