@@ -24,17 +24,29 @@ public:
 	GridGraph(){};
 	~GridGraph(){};
 	template <class Iterator>
-	void insert(Iterator begin, Iterator end);
+	GridGraph(Iterator begin, Iterator end);
 	Unordered_map getCells() { return cells; }
 };
 
+pair<int, int> computeGridPoint(GraphNode v) {
+	int xfloor, yfloor;
+	// it's safe to cast to double because we're doing floor operation
+	// and point coordinates read from input file are rational numbers
+	if (v.p.x() < 0) { xfloor = int(CGAL::to_double(-(-v.p.x() + 1))); }
+	else { xfloor = int(CGAL::to_double(v.p.x())); }
+	if (v.p.y() < 0) { yfloor = int(CGAL::to_double(-(-v.p.y() + 1))); }
+	else { yfloor = int(CGAL::to_double(v.p.y())); }
+	pair<int, int> gridPoint(xfloor, yfloor);
+	return gridPoint;
+}
+
 template <class Iterator>
-void GridGraph::insert(Iterator begin, Iterator end)
+GridGraph::GridGraph(Iterator begin, Iterator end)
 {
 	//tuple<int, int> dim = getGridDimension(begin, end);
 	for (auto p = begin; p != end; ++p)
 	{
-		pair<int, int> cellPoint(floor((*p)->p.x()), floor((*p)->p.y()));
+		pair<int, int> cellPoint = computeGridPoint(**p);
 		if (!cells.count(cellPoint)) {
 		    cells.emplace(cellPoint, vector<shared_ptr<GraphNode>>());
 		}
@@ -67,9 +79,10 @@ tuple<int, int> getGridDimension(Iterator begin, Iterator end)
 
 vector<shared_ptr<GraphNode>> getNeighbouringCells(GridGraph g, GraphNode v)
 {
-	int xfloor = int(floor(v.p.x()));
-	int yfloor = int(floor(v.p.y()));
-	vector<pair<int, int>> cellPoints{ pair<int,int>(xfloor, yfloor) };
+	pair<int, int> gridPoint = computeGridPoint(v);
+	int xfloor = gridPoint.first;
+	int yfloor = gridPoint.second;
+	vector<pair<int, int>> cellPoints{ gridPoint };
 	vector<shared_ptr<GraphNode>> neighbourCandidates;
 	vector<shared_ptr<GraphNode>> cands;
 	pair<int, int> l(xfloor, yfloor);
@@ -148,26 +161,42 @@ void resetGridGraphNodes(vector<shared_ptr<GraphNode>> nodes) {
 		n->dist = numeric_limits<int>::max();
 		n->visited = false;
 		n->parent = nullptr;
-		n->neighbours.clear();
 	}
 }
 
-void gridGraphTest(vector<Point_2> points) {
+void testBfsGrid(vector<Point_2> points) {
 	vector<shared_ptr<GraphNode>> nodes;
 	for (auto p : points) {
-		nodes.push_back(shared_ptr<GraphNode>(new GraphNode(p.x(), p.y())));
+		nodes.push_back(shared_ptr<GraphNode>(new GraphNode(p)));
 	}
-	GridGraph g;
-	g.insert(nodes.begin(), nodes.end());
-	for (auto a : g.getCells()) {
-		cout << a.first.first << " , " << a.first.second  << " - " << a.second.size() << endl;
-	}
-	for (auto r : nodes) {
-		gridQuery(g, r);
-		for (auto n : nodes) {
-			cout << (*n).p << " " << (*n).dist << endl;
+	CGAL::Timer cost;
+	double totalTime = 0;
+	for (int k = 0; k < 10; k++) {
+		cout << "Starting construction of grid graph." << endl;
+		cost.reset(); cost.start();
+		GridGraph g(nodes.begin(), nodes.end());
+		for (auto a : g.getCells()) {
+			cout << a.first.first << "," << a.first.second << endl;
 		}
-		resetGridGraphNodes(nodes);
-		this_thread::sleep_for(chrono::seconds(5));
+		cost.stop();
+		cout << "Construction of grid graph finished." << endl;
+		int nodesLength = nodes.size();
+		for (int i = 0; i < 10; i++) {
+			int idx = ceil(rand()*nodesLength / RAND_MAX);
+			cout << "idx: " << idx << " - " << nodes[idx]->p << endl;
+			shared_ptr<GraphNode> n = nodes[idx];
+			cout << "grid bfs start" << endl;
+			cost.start();
+			gridQuery(g, n);
+			cost.stop();
+			cout << "grid bfs end" << endl;
+			//for (auto n : nodes) {
+			//	cout << (*n).p << " " << (*n).dist << endl;
+			//}
+			resetGraphNodes(nodes);
+		}
+		cout << "Time for construction of graph G and running 10 iterations of bfs algorithm: " << cost.time() << endl;
+		totalTime += cost.time();
 	}
+	cout << "Average time for construction of graph G and running 10 iterations of bfs algorithm (repeated 10 times): " << totalTime / 10.0 << endl;
 }
