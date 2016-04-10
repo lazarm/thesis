@@ -14,7 +14,10 @@ struct pair_hash {
 	}
 };
 
-using Unordered_map = unordered_map<pair<int, int>, vector<shared_ptr<GraphNode>>, pair_hash>;
+using NodePointer = shared_ptr<GraphNode>;
+using nodePointerList = vector<NodePointer>;
+using intPair = pair<int, int>;
+using Unordered_map = unordered_map<intPair, nodePointerList, pair_hash>;
 
 class GridGraph
 {
@@ -28,7 +31,7 @@ public:
 	Unordered_map getCells() { return cells; }
 };
 
-pair<int, int> computeGridPoint(GraphNode v) {
+intPair computeGridPoint(GraphNode v) {
 	int xfloor, yfloor;
 	// it's safe to cast to double because we're doing floor operation
 	// and point coordinates read from input file are rational numbers
@@ -48,50 +51,27 @@ GridGraph::GridGraph(Iterator begin, Iterator end)
 	{
 		pair<int, int> cellPoint = computeGridPoint(**p);
 		if (!cells.count(cellPoint)) {
-		    cells.emplace(cellPoint, vector<shared_ptr<GraphNode>>());
+		    cells.emplace(cellPoint, nodePointerList());
 		}
 		cells.at(cellPoint).push_back(*p);
 	}
 }
 
-/*
-template <class Iterator>
-tuple<int, int> getGridDimension(Iterator begin, Iterator end)
+nodePointerList getNeighbouringCells(GridGraph g, GraphNode v)
 {
-	double minx = numeric_limits<int>::max();
-	double maxx = numeric_limits<int>::min();
-	double miny = numeric_limits<int>::max();
-	double maxy = numeric_limits<int>::min();
-
-	for (auto p = begin; p != end; ++p)
-	{
-		double px = p->x();
-		double py = p->y();
-		if (px > maxx) { maxx = px; }
-		if (px < minx) { minx = px; }
-		if (py > maxy) { maxy = py; }
-		if (py < miny) { miny = py; }
-	}
-	int xdim = ceil(maxx - minx);
-	int ydim = ceil(maxy - miny);
-	return tuple<int, int>(xdim, ydim);
-}*/
-
-vector<shared_ptr<GraphNode>> getNeighbouringCells(GridGraph g, GraphNode v)
-{
-	pair<int, int> gridPoint = computeGridPoint(v);
+	intPair gridPoint = computeGridPoint(v);
 	int xfloor = gridPoint.first;
 	int yfloor = gridPoint.second;
-	vector<pair<int, int>> cellPoints{ gridPoint };
-	vector<shared_ptr<GraphNode>> neighbourCandidates;
-	vector<shared_ptr<GraphNode>> cands;
-	pair<int, int> l(xfloor, yfloor);
+	vector<intPair> cellPoints{ gridPoint };
+	nodePointerList neighbourCandidates;
+	nodePointerList cands;
+	intPair l(xfloor, yfloor);
 	Unordered_map cells = g.getCells();
 	if (cells.count(l)) {
 		cands = cells.at(l);
 		neighbourCandidates.insert(neighbourCandidates.end(), cands.begin(), cands.end());
 	}
-	l = pair<int,int>(xfloor - 1, yfloor);
+	l = intPair(xfloor - 1, yfloor);
 	if (cells.count(l)) {
 		cands = cells.at(l);
 		neighbourCandidates.insert(neighbourCandidates.end(), cands.begin(), cands.end());
@@ -134,29 +114,107 @@ vector<shared_ptr<GraphNode>> getNeighbouringCells(GridGraph g, GraphNode v)
 	return neighbourCandidates;
 }
 
-void gridQuery(GridGraph g, shared_ptr<GraphNode> r)
+void checkNeighbours(NodePointer v, deque<NodePointer>* Q, intPair cellOffset, GridGraph g)
 {
-	r->dist = 0;
-	r->visited = true;
-	deque <shared_ptr<GraphNode>> Q;
-	Q.push_back(r);
-	while (Q.size() > 0)
-	{
-		shared_ptr<GraphNode> v = Q.front();
-		Q.pop_front();
-		vector<shared_ptr<GraphNode>> neighbours = getNeighbouringCells(g, *v);
-		for (auto u : neighbours) {
+	intPair gridPoint = computeGridPoint(*v);
+	intPair l(gridPoint.first + cellOffset.first, gridPoint.second + cellOffset.second);
+	if (g.getCells().count(l)) {
+		nodePointerList cands = g.getCells().at(l);
+		for (auto u : cands) {
 			if (CGAL::squared_distance(u->p, v->p) <= 1 && !u->visited) {
 				u->visited = true;
 				u->dist = v->dist + 1;
 				u->parent = v;
-				Q.push_back(u);
+				Q->push_back(u);
 			}
 		}
 	}
+	//return Q;
 }
 
-void resetGridGraphNodes(vector<shared_ptr<GraphNode>> nodes) {
+double gridQuery(GridGraph g, NodePointer r)
+{
+	CGAL::Timer cost;
+	cost.start();
+	r->dist = 0;
+	r->visited = true;
+	Unordered_map gCells = g.getCells();
+	deque <NodePointer> Q;
+	vector<intPair> neighbourCellOffsets{ intPair(0, 0), intPair(-1, 0),
+		intPair(-1, 1), intPair(0, 1),
+		intPair(1, 1), intPair(1, 0),
+		intPair(1, -1), intPair(0, -1), intPair(-1, -1)
+	};
+	Q.push_back(r);
+	intPair gridPoint;
+	intPair oldGridPoint = intPair(-1, -1);
+	intPair l;
+	vector<NodePointer> neighbours{};
+	while (Q.size() > 0)
+	{
+		shared_ptr<GraphNode> v = Q.front();
+		Q.pop_front();
+		// looping through neighbours vector is done twice. Dont do that
+		// move for block to separate function and call it 9 times
+		//cost.stop();
+		//cost.start();
+		gridPoint = computeGridPoint(*v);
+		if (gridPoint != oldGridPoint) {
+			neighbours.clear();
+			for (auto cellOffset : neighbourCellOffsets) {
+				l = intPair(gridPoint.first + cellOffset.first, gridPoint.second + cellOffset.second);
+				Unordered_map::iterator it = gCells.find(l);
+				if (it != gCells.end()) {
+					for (auto u : it->second) {
+						if (CGAL::squared_distance(u->p, v->p) <= 1 && !u->visited) {
+							u->visited = true;
+							u->dist = v->dist + 1;
+							u->parent = v;
+							Q.push_back(u);
+						}
+					}
+					neighbours.insert(neighbours.end(), it->second.begin(), it->second.end());
+				}
+			}
+		}
+		else {
+			for (auto u : neighbours) {
+				if (CGAL::squared_distance(u->p, v->p) <= 1 && !u->visited) {
+					u->visited = true;
+					u->dist = v->dist + 1;
+					u->parent = v;
+					Q.push_back(u);
+				}
+			}
+		}
+		oldGridPoint = gridPoint;
+		
+		/*
+		for (auto cellOffset : neighbourCellOffsets) {
+			l = intPair(gridPoint.first + cellOffset.first, gridPoint.second + cellOffset.second);
+			Unordered_map::iterator it = gCells.find(l);
+			if (it != gCells.end()) {
+				nodePointerList neighbours = it->second;
+				for (auto u : neighbours) {
+					if (CGAL::squared_distance(u->p, v->p) <= 1 && !u->visited) {
+						u->visited = true;
+						u->dist = v->dist + 1;
+						u->parent = v;
+						Q.push_back(u);
+					}
+				}
+			}
+		}*/
+		/*
+		for (auto offset : neighbourCellOffsets) {
+		    checkNeighbours(v, &Q, offset, g);
+		}*/
+		//cout << "q size: " << Q.size() << endl;
+	}
+	return cost.time();
+}
+
+void resetGridGraphNodes(nodePointerList nodes) {
 	for (auto n : nodes) {
 		n->dist = numeric_limits<int>::max();
 		n->visited = false;
@@ -165,38 +223,38 @@ void resetGridGraphNodes(vector<shared_ptr<GraphNode>> nodes) {
 }
 
 void testBfsGrid(vector<Point_2> points) {
-	vector<shared_ptr<GraphNode>> nodes;
+	nodePointerList nodes;
 	for (auto p : points) {
-		nodes.push_back(shared_ptr<GraphNode>(new GraphNode(p)));
+		nodes.push_back(NodePointer(new GraphNode(p)));
 	}
 	CGAL::Timer cost;
 	double totalTime = 0;
 	for (int k = 0; k < 10; k++) {
-		cout << "Starting construction of grid graph." << endl;
+		//cout << "Starting construction of grid graph." << endl;
 		cost.reset(); cost.start();
 		GridGraph g(nodes.begin(), nodes.end());
-		for (auto a : g.getCells()) {
-			cout << a.first.first << "," << a.first.second << endl;
-		}
 		cost.stop();
-		cout << "Construction of grid graph finished." << endl;
-		int nodesLength = nodes.size();
+		//cout << g.getCells().size() << endl;
+		double testTime = cost.time();
+		//cout << "Construction of grid graph finished." << endl;
+		size_t nodesLength = nodes.size();
 		for (int i = 0; i < 10; i++) {
 			int idx = ceil(rand()*nodesLength / RAND_MAX);
-			cout << "idx: " << idx << " - " << nodes[idx]->p << endl;
-			shared_ptr<GraphNode> n = nodes[idx];
-			cout << "grid bfs start" << endl;
-			cost.start();
-			gridQuery(g, n);
-			cost.stop();
-			cout << "grid bfs end" << endl;
+			//cout << "idx: " << idx << " - " << nodes[idx]->p << endl;
+			NodePointer n = nodes[idx];
+			//cout << "grid bfs start" << endl;
+			testTime += gridQuery(g, n);
+			//cost.start();
+			//gridQuery(g, n);
+			//cost.stop();
+			//cout << "grid bfs end" << endl;
 			//for (auto n : nodes) {
 			//	cout << (*n).p << " " << (*n).dist << endl;
 			//}
 			resetGraphNodes(nodes);
 		}
-		cout << "Time for construction of graph G and running 10 iterations of bfs algorithm: " << cost.time() << endl;
-		totalTime += cost.time();
+		cout << "Time for construction of graph G and running 10 iterations of bfs algorithm: " << testTime << endl;
+		totalTime += testTime;
 	}
-	cout << "Average time for construction of graph G and running 10 iterations of bfs algorithm (repeated 10 times): " << totalTime / 10.0 << endl;
+	cout << "Average time for construction of grid graph G and running 10 iterations of bfs algorithm (repeated 10 times): " << totalTime / 10.0 << endl;
 }
