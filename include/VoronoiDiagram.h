@@ -12,29 +12,32 @@
 #include <CGAL/Direction_2.h>
 #include <CGAL/spatial_sort.h>
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
+#include <CGAL/Exact_predicates_exact_constructions_kernel.h>
 #include <CGAL/Delaunay_triangulation_2.h>
 #include <CGAL/Voronoi_diagram_2.h>
 #include <CGAL/Delaunay_triangulation_adaptation_traits_2.h>
 #include <CGAL/Delaunay_triangulation_adaptation_policies_2.h>
 #include <CGAL/squared_distance_2.h>
+#include <CGAL/Lazy_exact_nt.h>
 
 //typedef CGAL::Homogeneous<long> Rep_class;
-typedef CGAL::Cartesian<double> Rep_class;
+typedef CGAL::Cartesian<double> EK;
+typedef CGAL::Lazy_exact_nt<CGAL::Gmpq>  NT;
 
 // typedefs for defining the adaptor
-typedef CGAL::Exact_predicates_inexact_constructions_kernel                  K;
-typedef CGAL::Delaunay_triangulation_2<Rep_class>                            DT;
+//typedef CGAL::Exact_predicates_exact_constructions_kernel                  EK;
+typedef CGAL::Delaunay_triangulation_2<EK>                                    DT;
 typedef CGAL::Delaunay_triangulation_adaptation_traits_2<DT>                 AT;
 typedef CGAL::Delaunay_triangulation_caching_degeneracy_removal_policy_2<DT> AP;
 typedef CGAL::Voronoi_diagram_2<DT, AT, AP>                                    VD;
 // typedef for the result type of the point location
 
 //typedef CGAL::Point_2<Rep_class> Point;
-typedef Rep_class::Segment_2		  Segment_2;
-typedef Rep_class::Line_2			  Line_2;
-typedef Rep_class::Direction_2		  Direction_2;
+typedef EK::Segment_2		  Segment_2;
+typedef EK::Line_2			  Line_2;
+typedef EK::Direction_2		  Direction_2;
 typedef AT::Site_2                    Site_2;
-typedef Rep_class::Point_2             Point_2;
+typedef EK::Point_2             Point_2;
 typedef VD::Locate_result             Locate_result;
 typedef VD::Vertex_handle             Vertex_handle;
 typedef VD::Face_handle               Face_handle;
@@ -57,7 +60,7 @@ public:
 	template <class Iterator>
 	VoronoiDiagram(Iterator a, Iterator b) : VD(a, b) {}
 	std::tuple<bool, Point_2*> query(Point_2 q);
-	int size() { return number_of_faces(); }
+	size_t size() { return number_of_faces(); }
 	Face_handle insert(const Delaunay_vertex_handle& t);
 	Face_handle insert(const Site_2& t);
 	template<class Iterator>
@@ -81,7 +84,7 @@ tuple<bool, Point_2*> VoronoiDiagram::query(Point_2 q) {
 	}
 	Point_2 faceSitePoint = df->point();
 	Point_2 *fcp = &df->point();
-	double dist = CGAL::squared_distance(*fcp, q);
+	NT dist = CGAL::squared_distance(*fcp, q);
 	
 	if (dist <= 1) {
 		return std::tuple<bool, Point_2*> {true, fcp};

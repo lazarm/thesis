@@ -7,7 +7,7 @@
 #include <CGAL/Kd_tree.h>
 #include <list>
 
-typedef CGAL::Search_traits_2<Rep_class> NNTreeTraits;
+typedef CGAL::Search_traits_2<EK> NNTreeTraits;
 typedef CGAL::Fuzzy_sphere<NNTreeTraits> Fuzzy_circle;
 typedef CGAL::Kd_tree<NNTreeTraits> KDTree;
 
@@ -27,7 +27,7 @@ public:
 	void insert(Iterator begin, Iterator beyond);
 	
 	int getSize() { return size; };
-	void setSize(int s) { size = s; };
+	void setSize(size_t s) { size = s; };
 	shared_ptr<KDTree> getRoot() { return A[0]; }
 	std::tuple<bool, Point_2> search(Point_2 q);
 	tuple<bool, Point_2> query(Point_2 q, int index);
@@ -59,11 +59,11 @@ void NNTree::insert(Iterator begin, Iterator end) {
 	//vd_root.insert(begin, end);
 	A.push_back(shared_ptr<KDTree>(new KDTree(begin, end)));
 	int i = 1;
-	int size = A.capacity();
+	size_t size = A.capacity();
 	for (int v = 1; v < log2(A.capacity() + 1); v++) {
-		int line_sum = 0;
+		size_t line_sum = 0;
 		for (int k = 0; k < pow(2, v); k = k + 2) {
-			int parent_size = A[(i-1)/2]->size();
+			size_t parent_size = A[(i-1)/2]->size();
 			if (parent_size > 1) {
 				A.push_back(shared_ptr<KDTree>(new KDTree(begin + line_sum, begin + line_sum + int(ceil(parent_size / 2)))));
 				//A[i] = vd_left;
