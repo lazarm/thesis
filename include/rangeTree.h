@@ -27,12 +27,19 @@ using pointTraits = CGAL::tree_point_traits < keyValue, dualKey, DualPoint,
 	CGAL::C_High_1<DualPoint, dualKey>,
 	CGAL::C_Compare_1<DualPoint >
 	>;
+using pointTraits1 = CGAL::tree_point_traits < keyValue, dualKey, DualPoint,
+	CGAL::T_Key_2<DualPoint, keyValue>,
+	CGAL::C_Low_2<DualPoint, dualKey>,
+	CGAL::C_High_2<DualPoint, dualKey>,
+	CGAL::C_Compare_2<DualPoint >
+>;
+
 
 typedef CGAL::Range_tree_node<keyValue, dualKey, pointTraits> RangeNode;
 
-typedef CGAL::Range_tree_node<keyValue, dualKey, pointTraits> RangeNode1;
+typedef CGAL::Range_tree_node<keyValue, dualKey, pointTraits1> RangeNode1;
 
-typedef CGAL::Range_tree_d<keyValue, dualKey, pointTraits> RangeTree1;
+typedef CGAL::Range_tree_d<keyValue, dualKey, pointTraits1> RangeTree1;
 
 typedef CGAL::Tree_base <keyValue, dualKey> Tree_base;
 
@@ -82,7 +89,11 @@ query is run and some site/point is returned, we can retrieve its original point
 void build_VD_trees_on_layer2(RangeNode1* node)
 {
 	if (node->left_link == 0) {
-		// leaf node, leave nn tree empty, only key is accessed
+		// leaf node, leave nn tree empty, only key is accessed?
+		DualPoint point = node->object.first;
+		vector<Point_2> vdSites;
+		vdSites.push_back(*point.originalPoint);
+		node->object.second.insert(vdSites.begin(), vdSites.end());
 		return;
 	}
 	// recursively construct NNTree structures for both childs of node
@@ -153,8 +164,6 @@ Iterator rangeTree_query(RangeTree* rangeTree, DualPoint* a, Iterator it)
 
 	Interval second_quadrant = Interval(xinf, infy);
 
-	double x1 = a->originalPoint->x();
-	double y1 = a->originalPoint->y();
 	Point_2 a_orig = *(a->originalPoint);
 	rangeTree->window_query_modified(second_quadrant, a_orig, it);
 
@@ -175,8 +184,6 @@ Iterator rangeTree_query_complement(RangeTree* rangeTree, DualPoint* a, Iterator
 	Interval first_quadrant = Interval(xy, infinfPos);
 	Interval third_quadrant = Interval(infinfNeg, xy);
 
-	double x1 = a->originalPoint->x();
-	double y1 = a->originalPoint->y();
 	Point_2 a_orig = *(a->originalPoint);
 	rangeTree->window_query_modified(first_quadrant, a_orig, it);
 	rangeTree->window_query_modified(third_quadrant, a_orig, it);
