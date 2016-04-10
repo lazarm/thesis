@@ -1,14 +1,6 @@
 #include <rangeTree.h>
 
-/*
-Re-assigns distances of all points to infinity to start building new SSSP tree from fresh start.
-*/
-void resetPointDistances(vector<Point_2>::iterator begin, vector<Point_2>::iterator end)
-{
-	for (auto p = begin; p != end; ++p) {
-		(*p).setDist((std::numeric_limits<int>::max)());
-	}
-}
+
 
 /*
 Returns two segments acting as rays (one endpoint goes to int max value in one of the directions),
@@ -65,7 +57,7 @@ tuple<Point_2, Point_2, int> findBest(Iterator begin, Iterator end)
 	return bestPair;
 }
 
-void make_cycle(tuple<Point_2, Point_2, int> pair, vector<Point_2> cycle)
+vector<Point_2> make_cycle(tuple<Point_2, Point_2, int> pair, vector<Point_2> cycle)
 {
     // p and q are points to be connected and form a cycle. ps and qs are paths from p to r and from q to r, respectively. 
 	Point_2 p = get<0>(pair);
@@ -86,8 +78,14 @@ void make_cycle(tuple<Point_2, Point_2, int> pair, vector<Point_2> cycle)
 			qs.push_back(qi);
 		}
 	}
+	//cout << "ps " << ps.size() << endl;
+	//cout << "qs " << qs.size() << endl;
+	//cout << p.getParent()->x() << endl;
+	//cout << p.getParent()->y() << endl;
+
 	cycle.insert(cycle.end(), qs.rbegin(), qs.rend());
 	cycle.insert(cycle.end(), ps.begin(), ps.end() - 1);
+	return cycle;
 }
 
 
@@ -95,59 +93,48 @@ void main_procedure(vector<Point_2>::iterator begin, vector<Point_2>::iterator e
 {
 	tuple<Point_2, Point_2, int> best_r = make_tuple(Point_2(), Point_2(), (numeric_limits<int>::max)());
 	vector<Point_2> cycle;
-
+	double totalTime = 0;
+	SSSPTree ssspTree(begin, end);
 	int k = 0;
 	for (auto p = begin; p != end; ++p)
 	{
-		k = k + 1;
-		if (k != 16) { continue; }
-		//cout << (k-1) << endl;
-		//cout << "p: " << *p << endl;
-		//cout << "root = " << *p << endl;
 		CGAL::Timer cost;
 		cost.reset(); cost.start();
-		SSSPTree<vector<Point_2>::iterator> ssspTree(begin, end, *p, st);
-		cost.stop();
-		cout << "sssp tree time: " << cost.time() << endl;
+		ssspTree.createTreeFromRoot(*p, st);
 		vector< vector<Point_2> > rst = ssspTree.getAllSets();
 		int ii = 0;
 
-		cout << rst.at(0).size() << ", " << rst.at(1).size() << ", " << rst.at(2).size() << ", " << rst.at(3).size() << endl;
-
-		Line_2 st_line = Line_2(st);
-		tuple<Segment_2, Segment_2> rays = getRays(st, st_line);
+		//cout << rst.at(0).size() << ", " << rst.at(1).size() << ", " << rst.at(2).size() << ", " << rst.at(3).size() << endl;
 		tuple<Point_2, Point_2, int> bestR = make_tuple(Point_2(), Point_2(), (numeric_limits<int>::max)());
-		cost.reset(); cost.start();
 		tuple<Point_2, Point_2, int> r0rangeTree = findminpairRi(rst.at(0), rst.at(1), rst.at(2).begin(), rst.at(2).end(), st, bestR);
 		tuple<Point_2, Point_2, int> r1rangeTree = findminpairRi(rst.at(1), rst.at(0), rst.at(3).begin(), rst.at(3).end(), st, r0rangeTree);
-		cost.stop();
-		//cout << "first: " << cost.time() << endl;
-		cost.reset(); cost.start();
 		tuple<Point_2, Point_2, int>  l0l1 = findMinPair(rst.at(0).begin(), rst.at(0).end(), rst.at(1).begin(), rst.at(1).end(), r1rangeTree);
-		cost.stop();
-		//cout << "seventh: " << cost.time() << endl;
-		cost.reset(); cost.start();
 		tuple<Point_2, Point_2, int>  r0r1 = findMinPair(rst.at(2).begin(), rst.at(2).end(), rst.at(3).begin(), rst.at(3).end(), l0l1);
-		cost.stop();
-		//cout << "eighth: " << cost.time() << endl;
 		tuple<Point_2, Point_2, int> result = r0r1;
+		//cout << "this best: " << get<2>(result) << endl;
+		//cout << "current best: " << get<2>(best_r) << endl;
 		if (get<2>(result) < get<2>(best_r)) { 
 			best_r = result;
 			cycle.clear();
 			//cout << get<0>(best_r) << "  -   " << get<1>(best_r) << " , dist= " << get<2>(best_r) << endl;
 			//cout << *(get<0>(best_r).getParent()) << "  -  " << *(get<1>(best_r).getParent()) << endl;
-			cout << get<0>(best_r).x() << "," << get<1>(best_r).x() << endl;
-			cout << get<0>(best_r).y() << "," << get<1>(best_r).y() << endl;
-			cout << get<2>(best_r) << endl;
+			//cout << get<0>(best_r).x() << "," << get<1>(best_r).x() << endl;
+			//cout << get<0>(best_r).y() << "," << get<1>(best_r).y() << endl;
+			cout << "len: " << get<2>(best_r) << endl;
+			//cout << *p << endl;
 			shared_ptr<Point_2> pp = get<0>(best_r).getParent();
 			//cout << pp->getParent() << endl;
-			make_cycle(result, cycle);
+			cycle = make_cycle(result, cycle);
+			//cout << cycle.size() << endl;
 		}
-		break;
-		//cout << "make_cycle" << endl;
-		resetPointDistances(begin, end);
+		ssspTree.resetSSSPTreeDTVertices();
+		ssspTree.clearSets();
+		cost.stop();
+		totalTime += cost.time();
 	}
-	if (cycle.empty()) {
+	cout << "time: " << totalTime << endl;
+	cout << get<2>(best_r) << endl;
+	if (get<2>(best_r) == (numeric_limits<int>::max)()) {
 		cout << "Could not separate points " << st.source().x() << "," << st.source().y() << " and " << st.end().x() << "," << st.end().y()
 			<< " with this set of unit disks." << endl;
 	}
@@ -159,5 +146,7 @@ void main_procedure(vector<Point_2>::iterator begin, vector<Point_2>::iterator e
 		for (auto c : cycle) {
 			cout << c << endl;
 		}
+		cout << "Number of points in cycle: " << cycle.size() << endl;
+		cout << "Number of points in cycle: " << get<2>(best_r) << endl;
 	}
 }
