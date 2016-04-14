@@ -91,7 +91,7 @@ where unit disks play a prominent role. For both problems
 we discuss efficient algorithms to solve them, provide an implementation
 of these algorithms, and present experimental results on the implementation.
 
-The first problem we consider is computing a shortest-path tree 
+The first problem we consider is computing a \emph{shortest-path tree} 
 in the (unweighted) intersection graph of unit disks. 
 The input to the problem is a set $\D$ of $n$ unit-radius disks, each disk
 represented by its center.
@@ -102,36 +102,60 @@ centers of the disks, denoted by $P$, and connecting two points $p$ and $q$ of $
 whenever the Euclidean distance $|pq|$ is at most $2$. 
 Given a root $r\in P$, the task is to compute a shortest-path tree from $r$ in this graph.
 
-The second problem we consider is the so-called minimum-separation problem.
+The second problem we consider is the so-called \emph{minimum-separation problem}.
 The input is a set $\D$ of $n$ unit-radius disks in the plane and two points
 $s$ and $t$ not covered by any disks of $\D$.
-We say that $\D$ \DEF{separates} $s$ and $t$ if each path in the plane 
+We say that $\D$ \DEF{separates} $s$ and $t$ if each curve in the plane 
 from $s$ to $t$ intersects some disk of $\D$.
 The task is to find the minimum cardinality subset of $\D$
 that separates $s$ and $t$. Formally, we want to solve
 \begin{align*}
 	\min ~~		& |\D'|\\
-	 \mbox{s.t.}~~ & \D'\subset \D\\
-				&	\D'\text{ separates $z$ and $z'$}. 
+	 \mbox{s.t.}~~ & \D'\subset \D \text{ and $\D'$ separates $s$ and $t$}. 
 \end{align*}
 
-Unit disks are the most standard model used for wireless sensors~\cite{} 
-and networks~\cite{}. 
-They provide an appropriate trade off between simplicity and accuracy. 
-While other models~\cite{} are more accurate, working with them is much more challenging.
+Unit disks are the most standard model used for wireless sensor networks; 
+see for example~\cite{GG11,HS95,zg-wsn-04}. Often the model is referred as UDG.
+The model provides an appropriate trade off between simplicity and accuracy. 
+While other models are more accurate, as for example discussed in~\cite{KWZ03,LP10},
+working with them is much more challenging.
 
-Some motivating references
+While unit disks give a simple model, exploiting the geometry of the model
+is often challenging. 
+Shortest paths in unit-disk graphs are basic for routing and
+are a basic subroutine for several other more complex tasks. 
+A somehow unexpected application of shortest paths in unit-disk graphs
+to boundary recognition is given in~\cite{WGM06}.
+The minimum-separation problem and variants thereof have been considered 
+in~\cite{CG16,gkv-ipud-11,pv-2013}. 
+The problem is dual to the barrier-resilience problem considered in~\cite{BK09,KH07,KLA05,KLA07}.
+It is not obvious that that the minimum-separation problem can be solved optimally
+in polynomial time, and the known algorithm for this uses as a subroutine 
+shortest paths in unit disk graphs. Thus, both problems considered in this paper are related.
+
 
 \myparagraph{Our contribution}
-There are two algorithms to compute shortest-path trees in unit disk graphs 
-$O(n\log n)$ worst-case time~\cite{CJ15,eik-01}. 
-Here we report on an implementation of a modification of the algorithm in ~\cite{CJ15},
-and we provide two other obvious alternative to compare the results.
-The algorithm of~\cite{eik-0} is substantially harder to implement and it is clear that
-it has worse constants hidden in the $O$-notation.
+We are aware of two algorithms to compute shortest-path trees in unit disk graphs in
+$O(n\log n)$ worst-case time: one by Cabello and Jej\v{c}i\v{c}~\cite{CJ15} and one Efrat, Itai and Katz~\cite{eik-01}. 
+Here we report on an implementation of a modification of the algorithm in~\cite{CJ15},
+and compare it against two obvious alternatives.
+The only complex ingredient in the algorithm is computing the Delaunay triangulation,
+but efficient libraries are available for this.
+The algorithm of~\cite{eik-01} would be substantially harder to implement 
+and it has worse constants hidden in the $O$-notation. 
 
-The minimum-separation problem is studied by Cabello and Giannopoulos~\cite{CG16}.
-No obvious that this problem can be solved exactly in polynomial time.
+As mentioned before, it is not obvious tat the minimum-separation problem can be solved
+in polynomial time. 
+A 2-approximation algorithm is given by Gibson, Kanade, and Varadarajan~\cite{gkv-ipud-11}. 
+Cabello and Giannopoulos~\cite{CG16} provide an exact algorithm that takes $O(n^3)$ 
+wosrt-case time and works for arbitrary shapes, not just disks. 
+In this paper we improve this last algorithm to near-quadratic time for the case
+of unit disks. 
+The basic principle of the algorithm is the same, but several additional tools
+from Computational Geometry have to be employed to reduce the worst-case running time. 
+We implement a variant of the new, near-quadratic-time algorithm and report
+on the experiments.
+
 
 \myparagraph{Assumptions} 
 Henceforth $P$ will be the set of centers of $\D$. 

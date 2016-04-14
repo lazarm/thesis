@@ -1,0 +1,90 @@
+\begin{thebibliography}{10}
+
+\bibitem{BK09}
+S.~Bereg and D.~G. Kirkpatrick.
+\newblock Approximating barrier resilience in wireless sensor networks.
+\newblock In {\em Proc. 5th ALGOSENSORS}, volume 5804 of {\em LNCS}, pages
+  29--40. Springer, 2009.
+
+\bibitem{CG16}
+S.~Cabello and P.~Giannopoulos.
+\newblock The complexity of separating points in the plane.
+\newblock {\em Algorithmica}, 74(2):643--663, 2016.
+
+\bibitem{CJ15}
+S.~Cabello and M.~Jej{\v c}i{\v c}.
+\newblock Shortest paths in intersection graphs of unit disks.
+\newblock {\em Comput. Geom.}, 48(4):360--367, 2015.
+
+\bibitem{CK15}
+S.~Cabello and M.~Kerber.
+\newblock Semi-dynamic connectivity in the plane.
+\newblock In {\em Algorithms and Data Structures - 14th International
+  Symposium, {WADS} 2015. Proceedings}, volume 9214 of {\em Lecture Notes in
+  Computer Science}, pages 115--126. Springer, 2015.
+
+\bibitem{eik-01}
+A.~Efrat, A.~Itai, and M.~J. Katz.
+\newblock Geometry helps in bottleneck matching and related problems.
+\newblock {\em Algorithmica}, 31(1):1--28, 2001.
+
+\bibitem{GG11}
+J.~Gao and L.~Guibas.
+\newblock Geometric algorithms for sensor networks.
+\newblock {\em Philosophical Transactions of the Royal Society of London A:
+  Mathematical, Physical and Engineering Sciences}, 370(1958):27--51, 2011.
+
+\bibitem{gkv-ipud-11}
+M.~Gibson, G.~Kanade, and K.~Varadarajan.
+\newblock On isolating points using disks.
+\newblock In {\em Proc. 19th ESA}, volume 6942 of {\em LNCS}, pages 61--69.
+  Springer, 2011.
+
+\bibitem{HS95}
+M.~L. Huson and A.~Sen.
+\newblock Broadcast scheduling algorithms for radio networks.
+\newblock In {\em {IEEE MILCOM '95}}, volume~2, pages 647--651 vol.2, 1995.
+
+\bibitem{KH07}
+S.~Kloder and S.~Hutchinson.
+\newblock Barrier coverage for variable bounded-range line-of-sight guards.
+\newblock In {\em Proc. ICRA}, pages 391--396. IEEE, 2007.
+
+\bibitem{KWZ03}
+F.~Kuhn, R.~Wattenhofer, and A.~Zollinger.
+\newblock Ad-hoc networks beyond unit disk graphs.
+\newblock In {\em Proceedings of the 2003 Joint Workshop on Foundations of
+  Mobile Computing}, DIALM-POMC '03, pages 69--78, 2003.
+
+\bibitem{KLA05}
+S.~Kumar, T.~H. Lai, and A.~Arora.
+\newblock Barrier coverage with wireless sensors.
+\newblock In {\em Proc. 11th MobiCom}, pages 284--298. ACM, 2005.
+
+\bibitem{KLA07}
+S.~Kumar, T.-H. Lai, and A.~Arora.
+\newblock Barrier coverage with wireless sensors.
+\newblock {\em Wireless Networks}, 13(6):817--834, 2007.
+
+\bibitem{LP10}
+Z.~Lotker and D.~Peleg.
+\newblock Structure and algorithms in the sinr wireless model.
+\newblock {\em SIGACT News}, 41(2):74--84, 2010.
+
+\bibitem{pv-2013}
+R.~Penninger and I.~Vigan.
+\newblock Point set isolation using unit disks is {NP}-complete.
+\newblock {\em CoRR}, abs/1303.2779, 2013.
+
+\bibitem{WGM06}
+Y.~Wang, J.~Gao, and J.~S. Mitchell.
+\newblock Boundary recognition in sensor networks by topological methods.
+\newblock In {\em Proceedings of the 12th Annual International Conference on
+  Mobile Computing and Networking}, MobiCom '06, pages 122--133, 2006.
+
+\bibitem{zg-wsn-04}
+F.~Zhao and L.~Guibas.
+\newblock {\em Wireless Sensor Networks: An Information Processing Approach}.
+\newblock Elsevier/Morgan-Kaufmann, 2004.
+
+\end{thebibliography}
