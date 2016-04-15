@@ -40,6 +40,7 @@
 \newcommand{\F}{\ensuremath{\mathcal{F}}}  
 \newcommand{\D}{\ensuremath{\mathcal{D}}}  
 \newcommand{\T}{\ensuremath{\mathcal{T}}}  
+\newcommand{\GG}{\ensuremath{G_{\le 1}}}
 
 \def\curve{\gamma}
 \def\length{\mathit{len}}
@@ -93,19 +94,19 @@ of these algorithms, and present experimental results on the implementation.
 
 The first problem we consider is computing a \emph{shortest-path tree} 
 in the (unweighted) intersection graph of unit disks. 
-The input to the problem is a set $\D$ of $n$ unit-radius disks, each disk
-represented by its center.
-The corresponding (unit-disk) intersection graph has a vertex for each disk,
+The input to the problem is a set $\D$ of $n$ disks of the same size, 
+each disk represented by its center.
+The corresponding unit disk (intersection) graph has a vertex for each disk,
 and an edge connecting two disks $D$ and $D'$ of $\D$ whenever $D$ and $D'$ intersect.
 An alternative, more convenient point of view, is to take as vertex set the set of
 centers of the disks, denoted by $P$, and connecting two points $p$ and $q$ of $P$ 
-whenever the Euclidean distance $|pq|$ is at most $2$. 
+whenever the Euclidean length $|pq|$ is at most the diameter of a disk. 
 Given a root $r\in P$, the task is to compute a shortest-path tree from $r$ in this graph.
 
-The second problem we consider is the so-called \emph{minimum-separation problem}.
-The input is a set $\D$ of $n$ unit-radius disks in the plane and two points
+The second problem we consider is the \emph{minimum-separation problem}.
+The input is a set $\D$ of $n$ unit disks in the plane and two points
 $s$ and $t$ not covered by any disks of $\D$.
-We say that $\D$ \DEF{separates} $s$ and $t$ if each curve in the plane 
+We say that $\D$ \emph{separates} $s$ and $t$ if each curve in the plane 
 from $s$ to $t$ intersects some disk of $\D$.
 The task is to find the minimum cardinality subset of $\D$
 that separates $s$ and $t$. Formally, we want to solve
@@ -115,23 +116,26 @@ that separates $s$ and $t$. Formally, we want to solve
 \end{align*}
 
 Unit disks are the most standard model used for wireless sensor networks; 
-see for example~\cite{GG11,HS95,zg-wsn-04}. Often the model is referred as UDG.
-The model provides an appropriate trade off between simplicity and accuracy. 
-While other models are more accurate, as for example discussed in~\cite{KWZ03,LP10},
-working with them is much more challenging.
+see for example~\cite{GG11,HS95,zg-wsn-04}. 
+Often the model is referred as UDG.
+This model provides an appropriate trade off between simplicity and accuracy. 
+Other models are more accurate, as for example discussed in~\cite{KWZ03,LP10},
+but obtaining efficient algorithm for them is much more difficult.
 
-While unit disks give a simple model, exploiting the geometry of the model
-is often challenging. 
-Shortest paths in unit-disk graphs are basic for routing and
+While unit disks give a simple model, exploiting the geometric features 
+of the model is often challenging. 
+Shortest paths in unit disk graphs are essential for routing and
 are a basic subroutine for several other more complex tasks. 
 A somehow unexpected application of shortest paths in unit-disk graphs
 to boundary recognition is given in~\cite{WGM06}.
 The minimum-separation problem and variants thereof have been considered 
 in~\cite{CG16,gkv-ipud-11,pv-2013}. 
 The problem is dual to the barrier-resilience problem considered in~\cite{BK09,KH07,KLA05,KLA07}.
-It is not obvious that that the minimum-separation problem can be solved optimally
+It is not obvious that the minimum-separation problem can be solved optimally
 in polynomial time, and the known algorithm for this uses as a subroutine 
-shortest paths in unit disk graphs. Thus, both problems considered in this paper are related.
+shortest paths in unit disk graphs. 
+Thus, both problems considered in this paper are related and it is worth to 
+consider them together.
 
 
 \myparagraph{Our contribution}
@@ -144,13 +148,13 @@ but efficient libraries are available for this.
 The algorithm of~\cite{eik-01} would be substantially harder to implement 
 and it has worse constants hidden in the $O$-notation. 
 
-As mentioned before, it is not obvious tat the minimum-separation problem can be solved
-in polynomial time. 
+As mentioned before, it is not obvious that the minimum-separation problem 
+can be solved in polynomial time. 
 A 2-approximation algorithm is given by Gibson, Kanade, and Varadarajan~\cite{gkv-ipud-11}. 
 Cabello and Giannopoulos~\cite{CG16} provide an exact algorithm that takes $O(n^3)$ 
 wosrt-case time and works for arbitrary shapes, not just disks. 
-In this paper we improve this last algorithm to near-quadratic time for the case
-of unit disks. 
+In this paper we improve this last algorithm to near-quadratic time for the 
+special case of unit disks. 
 The basic principle of the algorithm is the same, but several additional tools
 from Computational Geometry have to be employed to reduce the worst-case running time. 
 We implement a variant of the new, near-quadratic-time algorithm and report
@@ -158,16 +162,34 @@ on the experiments.
 
 
 \myparagraph{Assumptions} 
+We will assume that \emph{unit disk} means that it has radius $1/2$. 
+Up to scaling the input data, this choice is irrelevant.
+However, it is convenient for the exposition
+because then the disks intersect whenever 
+the distance between their centers is $1$. 
+The implementation and the experiments also make this assumption.
+
 Henceforth $P$ will be the set of centers of $\D$. 
-All the computation will be around $P$. In particular, we assume that $P$ is known.
+All the computation will be concentrated on $P$. 
+In particular, we assume that $P$ is known.
 (For the shortest path problem, one could possibly consider weaker models based 
-on adjacencies.)
+on adjacencies. )
 
-Let $G(P)$ be the graph with vertex set $P$ and an edge between two points $p,q\in P$ 
-are connected whenever their distance $|pq|$ is at most $1$. We drop the dependency on $P$
-and just write $G$ instead of $G(P)$. 
+We will work with the graph $\GG(P)$ with vertex set $P$ 
+and an edge between two points $p,q\in P$ 
+whenever their Euclidean distance $|pq|$ is at most $1$. 
+For simplicity of the theoretical 
+exposition we will sometimes assume that $\GG(P)$ is connected.
+It is trivial to adapt to the general case, for example
+treating each connected component separately.
+The implementation does not make this assumption.
 
-For simplicity of exposition we assume that $G(P)$ is connected.
+In the minimum-separation problem we will use $s$ and $t$
+for the points to separate, we will assume that
+the segment $st$ is vertical, $t$ is below $s$, and $t$ is 
+at the origin. The implementation also makes
+this assumption. A simple rigid transformation can be applied to
+the input to get to this setting.
 
 \myparagraph{Organization of the paper} 
 In Section~\ref{sec:algorithms} we discuss the theoretical
@@ -274,7 +296,7 @@ Build a grid like structure and use it each time to test candidate edges.
 \subsection{Minimum separation with unit-disk}
 \label{sec:algorithm-separation}
 
-\subsubsection*{Generic algorithm}
+\subsubsection{Generic algorithm}
 Cabello and Giannopouolos~\cite{CG16} present an algorithm
 for the minimum separation problem that in the worst-case runs in cubic-time.
 The algorithm has one feature that is both an advantage and a disadvantage: 
@@ -368,6 +390,7 @@ Without loss of generality, in our theoretical discussion we will assume
 that $z=(0,0)$ and $z'=(0,s)$. Therefore, $zz'$ is a segment, henceforth denoted by $\sigma$,
 contained in the $y$-axis.
 
+\subsubsection{Specialization for unit disks}
 
 
 
