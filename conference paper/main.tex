@@ -178,8 +178,9 @@ on adjacencies. )
 We will work with the graph $\GG(P)$ with vertex set $P$ 
 and an edge between two points $p,q\in P$ 
 whenever their Euclidean distance $|pq|$ is at most $1$. 
+In the notation we remove the dependency on $P$ and just use $G$ instead of $\GG(P)$.
 For simplicity of the theoretical 
-exposition we will sometimes assume that $\GG(P)$ is connected.
+exposition we will sometimes assume that $G$ is connected.
 It is trivial to adapt to the general case, for example
 treating each connected component separately.
 The implementation does not make this assumption.
@@ -205,33 +206,35 @@ and in Section~\ref{sec:experiments} we present our experimental results.
 \subsection{Shortest-path tree in unit-disk graphs}
 \label{sec:algorithm-sptree}
 We describe here the algorithm of Cabello and Jej\v{c}i\v{c}~\cite{CJ15} 
-to compute a shortest path tree in $G(P)$ from a given source point $s\in P$. 
-The pseudocode of the algorithm is in Figure~\ref{fig:BFS}. 
-
+to compute a shortest path tree in $G$ from a given root point $r\in P$. 
 As it is usually done for shortest path algorithms 
 we use tables $\dist[\cdot]$ and $\pi[\cdot]$ indexed by the points of $P$ to record, 
-for each point $p\in P$, the distance $d(s,p)$ and the ancestor of $p$ 
+for each point $p\in P$, the distance $d_{G}(s,p)$ and the ancestor of $p$ 
 in a shortest $(s,p)$-path. 
+
+The pseudocode of the algorithm, which we call \proc{UnweightedShortestPath},
+ is in Figure~\ref{fig:BFS}. 
+We explain the intuition, taken almost verbatim from~\cite{CJ15}.
 We start by computing the Delaunay triangulation $DT(P)$ of $P$. 
 We then proceed in rounds for increasing values of $i$, 
-where at round $i$ we find the set $W_i$ of points at distance exactly $i$ in $G(P)$ from the source $s$. We start with $W_0=\{ s\}$. 
+where at round $i$ we find the set $W_i$ of points at distance exactly $i$ in $G$ from the source $r$. We start with $W_0=\{ r\}$. 
 At round $i$, we use $DT(P)$ to grow a neighbourhood around the points of $W_{i-1}$ 
 that contains $W_{i}$. 
-More precisely, we consider the points adjacent to $W_{i-1}$ in $DT(P)$ as candidate points for $W_{i}$. For each candidate point that is found to lie in $W_{i}$, we also take its adjacent vertices in $DT(P)$ as new candidates to be included in $W_{i}$. For checking whether a candidate point $p$ lies in $W_{i}$ we use a data structure to find the nearest neighbour of $p$ in $W_{i-1}$, denoted by $\func{NN}(W_{i-1},p)$. Such data structure is just a point location data structure in the Voronoi diagram of $W_{i-1}$. Similarly, the shortest path tree is constructed by connecting each point of $W_i$ to its nearest neighbour in $W_{i-1}$. See Figure~\ref{fig:BFS} for the eventual algorithm \proc{UnweightedShortestPath}. 
-
+More precisely, we consider the points adjacent to $W_{i-1}$ in $DT(P)$ as candidate points for $W_{i}$. For each candidate point that is found to lie in $W_{i}$, we also take its adjacent vertices in $DT(P)$ as new candidates to be included in $W_{i}$. For checking whether a candidate point $p$ lies in $W_{i}$ we use a data structure to find a nearest neighbour of $p$ in $W_{i-1}$. If the distance from $p$ to its nearest neighbour $w$ in $W_{i-1}$ is
+smaller than $1$, then the shortest path tree is extended by connecting $p$ to $w$.
 
 \begin{figure}[htb]
 \begin{center}
 \ovalbox{~~~~
 \begin{varwidth}{\linewidth}
 \begin{codebox}
-    \Procname{$\proc{UnweightedShortestPath}(P,s)$}
+    \Procname{$\proc{UnweightedShortestPath}(P,r)$}
     \li build the Delaunay triangulation $DT(P)$
     \li \For$p\in P$ \Do
     	\li $\dist[p] \gets \infty$
     	\li $\pi[p] \gets \const{nil}$\End
-    \li $\dist[s] \gets  0$
-    \li $W_0 \gets \{ s\}$
+    \li $\dist[r] \gets  0$
+    \li $W_0 \gets \{ r\}$
     \li $i\gets1$
     \li \While $W_{i-1}\neq\emptyset$ \Do
     	\li build data structure for nearest neighbour queries in $W_{i-1}$
@@ -241,8 +244,8 @@ More precisely, we consider the points adjacent to $W_{i-1}$ in $DT(P)$ as candi
     		\li $q$ an arbitrary point of $Q$
             \li remove $q$ from $Q$
             \li \For $qp$ edge in $DT(P)$ \Do
-            	\li $w \gets \func{NN}(W_{i-1},p)$
-            	\li \If $\dist[p]=\infty$ and $\| p-w\|\leq 1$ \Then
+            	\li $w \gets$ nearest neighbour of $p$ in $W_{i-1}$
+            	\li \If $\dist[p]=\infty$ and $|pw|\leq 1$ \Then
                 	\li $\dist[p]\gets i$
                     \li $\pi[p]\gets w$
                     \li add $p$ to $Q$
@@ -257,40 +260,28 @@ More precisely, we consider the points adjacent to $W_{i-1}$ in $DT(P)$ as candi
 \end{codebox}
 \end{varwidth}
 ~~~~}\end{center}
-\caption{Algorithm to compute a shortest path tree in the unweighted case.}
+\caption{Algorithm from~\cite{CJ15} to compute a shortest path tree in the unweighted case.}
 \label{fig:BFS}
 \end{figure}
 
-We would like to emphasize a careful point that we employ to achieve the running time $\mathcal{O}(n \log n)$. For any point $p$, let $D(p,1)$ denote the disk of radius $1$ centered at $p$.
-In lines 16 and 17 of the algorithm, we check whether $p$ is at distance at most $1$ from \emph{some} point in $W_{i-1}$, namely its nearest neighbour in $W_{i-1}$. Checking whether $p$ is at distance at most $1$ from $\pi(q)$ (or $q$ when $q\in W_{i-1}$) would lead to a potentially larger running time. Thus, we do not grow each disk $D(w,1)$ independently for each $w\in W_{i-1}$, but we grow the whole region $\bigcup_{w\in W_{i-1}} D(w,1)$ at once. Growing each disk $D(w,1)$ separately would force as to check the same edge $qp$ of $DT(P)$ several times, once for each $w\in W_{i-1}$ such that $q\in D(w,1)$.
+Cabello and Jej\v{c}i\v{c}~\cite{CJ15} show that the algorithm correctly computes
+the shortest-path tree from $r$. 
+If for nearest neighbors we use a data structure that,
+for $n$ points, has construction time $T_c(n)$ and query time $T_q(n)$, 
+and the Delaunay triangulation is computed in $T_{DT}(n)$ time,
+then the algorithm takes $O(T_{DT}(n)+ T_c(n)+ n T_q(n))$ time. 
+Standards tools in Computational Geometry imply that 
+$T_{DT}(n)=O(n\log n)$, $T_c(n)=O(nqlog n)$ and $T_q(n)=O(\log n)$.
+This leads to the following.
 
-\begin{lemma}
-\label{le:time}
-	The algorithm \proc{UnweightedShortestPath}$(P,S)$ takes
-    $\mathcal{O}(n \log n)$ time, where $n$ is the size of $P$.
-\end{lemma}
-
-\begin{theorem}
-  Let $P$ be a set of $n$ points in the plane and let $s$ be a point from $P$. 
+\begin{theorem}[Cabello and Jej\v{c}i\v{c}~\cite{CJ15}]
+  Let $P$ be a set of $n$ points in the plane and let $r$ be a point from $P$. 
   In time ${\mathcal O}(n \log n)$ we can compute a shortest path tree from $s$
-  in the unweighted graph $G(P)$.
+  in the unweighted graph $\GG(P)$.
 \end{theorem}
 
-Cabello and Jej\v{c}i\v{c}~\cite{CJ15} show that the algorithm takes $O(n\log n)$ time
-in the worst case. 
-In general, if we use a data structure for nearest neighbors with construction time $T_c(m)$
-and query time $T_q(m)$, then the algorithm takes $O(n\log n + T_c(n)+ n T_q(n))$ time.
-
-Standard data structures have construction time $T_c(m)=O(m\log m)$ and 
-query time $T_q(m)=O(\log m)$, and thus the algorithm takes $O(n\log n)$ time.
-
-It is obvious that, when computing the shortest path tree from several sources,
+It is clear that, when computing the shortest path tree from several sources,
 we only need to compute the Delaunay triangulation once.
-
-Let us mention two obvious alternatives that we use in our comparison.
-Build the graph and run BFS.
-Build a grid like structure and use it each time to test candidate edges.
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Minimum separation with unit-disk}
@@ -403,6 +394,33 @@ contained in the $y$-axis.
 \subsection{Shortest-path tree in unit-disk graphs}
 \label{sec:implementation-sptree}
 
+\myparagraph{Alternative constructions} 
+Let us mention two obvious alternatives that we use in our comparison.
+
+The first alternative is to build the graph $G=\GG(P)$ explicitly. 
+Thus, for each pair of points $p,q$ we check whether their distance is
+at most once and add an edge to a graph data structure.
+We can then use breadth-first-search (BFS) from the given root $r$.
+The preprocessing is quadratic, and the time spent to compute
+a shortest-path tree depends on the density of the graph $G$.
+
+The second option we consider is to use a unit-length grid. 
+Two points $(x,y)$ and $(x',y')$ are in the same grid cell
+if and only if 
+$(\lfloor x\rfloor ,\lfloor y\rfloor)=(\lfloor x'\rfloor ,\lfloor y'\rfloor)$.
+We store all the points of a grid cell $c$ in a list $\ell(c)$.
+The non-empty lists $\ell(c)$ are stored in a dictionary,
+where the bottom-left corner of the cell is used as key.
+We can then run some sort of BFS using this data. When processing
+a point $p$ in a cell $c$, we have to treat all the points 
+in $c$ and its adjacent cells as candidate points. 
+The preprocessing is linear, and the time spent to compute
+a shortest-path tree depends on the density of the graph $G$.
+The number of candidates that are checked is proportional to the
+number of edges of the graph.
+\todo{Are perhaps points deleted from the list once they are assigned a level?}
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Minimum separation with unit-disk}
 \label{sec:implementation-separation}
@@ -412,6 +430,22 @@ contained in the $y$-axis.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Experimental results}
 \label{sec:experiments}
+
+Data was generated uniformly at random in polygons...
+
+
+\begin{figure}
+	\includegraphics[width=\textwidth,page=1]{data_generation}
+	\caption{Data generation with a small hole (left) and a large hole (right).}
+	\label{fig:data_generation}
+\end{figure}
+
+\begin{figure}
+	\includegraphics[width=\textwidth,page=2]{data_generation}
+	\caption{Data generation with four small holes (right) and four large holes (right).}
+	\label{fig:data_generation}
+\end{figure}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Shortest-path tree in unit-disk graphs}
@@ -429,7 +463,15 @@ contained in the $y$-axis.
 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliography{biblio}
+
+
+
+\newpage
+\begin{appendix}
+
+%%%%%%%%%%%%%%%%%%%%%
 \section{Building block}
 
 The following ideas are probably folklore. See~\cite{aa}.
@@ -780,6 +822,6 @@ We split the search for the optimal edge $pq$ into cases:
 	
 \end{proof}
 
-\bibliographystyle{abbrv}
-\bibliography{biblio}
+
+\end{appendix}
 \end{document}
