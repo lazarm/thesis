@@ -178,7 +178,8 @@ on adjacencies. )
 We will work with the graph $\GG(P)$ with vertex set $P$ 
 and an edge between two points $p,q\in P$ 
 whenever their Euclidean distance $|pq|$ is at most $1$. 
-In the notation we remove the dependency on $P$ and just use $G$ instead of $\GG(P)$.
+In the notation we remove the dependency on $P$ and on the distance.
+Thus we just use $G$ instead of $\GG(P)$.
 For simplicity of the theoretical 
 exposition we will sometimes assume that $G$ is connected.
 It is trivial to adapt to the general case, for example
@@ -186,9 +187,9 @@ treating each connected component separately.
 The implementation does not make this assumption.
 
 In the minimum-separation problem we will use $s$ and $t$
-for the points to separate, we will assume that
-the segment $st$ is vertical, $t$ is below $s$, and $t$ is 
-at the origin. The implementation also makes
+for the points to separate. We will assume that $s$ is the origin and
+$t$ is the point $(0,\tau)$, with $\tau\ge 0$. Thus, the segment $st$
+is vertical and $t$ is above $s$. The implementation also makes
 this assumption. A simple rigid transformation can be applied to
 the input to get to this setting.
 
