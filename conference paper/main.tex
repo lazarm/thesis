@@ -287,21 +287,37 @@ we only need to compute the Delaunay triangulation once.
 \subsection{Minimum separation with unit-disk}
 \label{sec:algorithm-separation}
 
-\subsubsection{Generic algorithm}
 Cabello and Giannopouolos~\cite{CG16} present an algorithm
 for the minimum separation problem that in the worst-case runs in cubic-time.
 The algorithm has one feature that is both an advantage and a disadvantage: 
 it works for any reasonable shapes, like segments or ellipses, and not just unit disks.
 This means that it is very generic, which is good,
-but it cannot exploit any properties of disks or unit disks.
+but it cannot exploit any properties of  unit disks.
 
-The algorithm can be slightly simplified for disks, as we explain below. 
+In this section we are going to describe an algorithm to solve the minimum separation
+problem \emph{for unit disks} in roughly quadratic time.
+The improvement is based on 3 ingredients. 
+The first ingredient is a reinterpretation of the algorithm of~\cite{CG16} 
+for disks. In the original algorithm, we had to select a point inside each
+shape. For disks there is a natural, obvious choice, the center of the disk.
+This allows for a simpler description and interpretation of the algorithm.
+We provide the description in Section~\ref{sec:generic}
+
+The second ingredient is the efficient algorithm for shortest-path trees for the graph $G$.
+The third ingredient is a compact treatment of the edges of $G$ using
+a few tools from Computational Geometry, namely 
+range trees, point-line duality, and nearest-neighbour searches.
+This is explained in Section~\ref{sec:quadratic}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
+\subsubsection{Generic algorithm specialized for unit disks}
+\label{sec:generic}
 Let us first introduce some notation.
-Each walk $W$ in the graph $G(P)$ defines a planar curve
+Each walk $W$ in the graph $G=\GG(P)$ defines a planar curve
 in the obvious way: we connect the points of $P$ 
 with segments in the order given by $W$. 
 We will relax the notation slightly and denote also by $W$ the curve itself.
-For any spanning tree $T$ of $G(P)$ and any edge $e\in E(G(P))\setminus E(T)$, 
+For any spanning tree $T$ of $G$ and any edge $e\in E(G)\setminus E(T)$, 
 let $\cycle(T,e))$ be the unique cycle in $T+e$.
 Finally, for any walk in $G(P)$, let $\CR (st,W)$ be the 
 modulo $2$ value of the number of crossings between the segment $st$ 
@@ -309,38 +325,49 @@ and (the curve defined by) $W$.
 
 The following property is implicit in~\cite{CG16} and explicit in~\cite{CK15}:
 \begin{quote}
-	Let $T$ be any spanning tree of $G(P)$.
+	Let $T$ be any spanning tree of $G$.
 	The set of unit disks with centers in $P$ separate $s$ and $t$ if and only
-	if there exists some edge $e\in E(G(P))\setminus E(T)$ 
+	if there exists some edge $e\in E(G)\setminus E(T)$ 
 	such that $\CR (st, \cycle(T,e))=1$.
 \end{quote}
 
-A consequence of this is that a minimum separation amounts to find a shortest
-cycle $W$ in $G(P)$ such that $W$ crosses $st$ an odd number of times.
-Moreover, one can show that we can restrict our search to the family 
-of generating cycles. Indeed, for each root $r$ let us fix a 
-shortest-path tree $T_r$ from $r$ in $G(P)$.
+A consequence of this is that finding a minimum separation amounts 
+to finding a shortest cycle $G$ that crosses the segment $st$ an odd number of times.
+Moreover, one can show that we can restrict our search to 
+a very concrete family cycles, as follows. 
+For each root $r$ let us fix a shortest-path tree $T_r$ from $r$ in $G$.
+When there are many, the choice of $T_r$ is irrelevant. 
 Then, we can restrict our search to
 \[
-	\{ \cycle(T_r,e)\mid r\in P,~ e\in E(G(P))\setminus E(T_r)\}.
+	\{ \cycle(T_r,e)\mid r\in P,~ e\in E(G)\setminus E(T_r)\}.
 \]
 This follows from the co-called 3-path condition; 
-see~\cite{CG16} for the details.
+see~\cite{CG16} for the ideas, and \todo{APPENDIX} appendix~\ref{} 
+for a self-contained proof.
 
-The values $\CR (st, \cycle(T_r,e))$ can be computed in amortized constant time
-with a bit of bookkeeping. Consider a fixed $r$.
+The values $\CR (st, \cycle(T_r,e))$ can be computed in constant amortized time per edge
+with some easy bookkeeping. Consider a fixed tree $T_r$.
 For each point $p\in P$ we store $N[p]$ as the parity of the number of crossings
 of the path in $T_r$ from $r$ to $p$. When $p$ is not the root,
 the value $N[p]$ can be computed from the value of its parent $\pi[p]$ in $T_r$
 using that $N[p]=N[\pi[p]]+\CR(st,p\pi[p])$.
-For each edge $pq\in E(G)$ we
-then have $\CR (st, \cycle(T_r,pq))= N[p]+N[q]+\CR(st,pq)$ because
-the crossings in the common part, from $r$ to the lowest common ancestor of $p$ and $q$,
-cancel out modulo $2$.
+In the algorithm we have written it this way (lines 4--6), but
+one can of course compute the values at the time of computing the shortest path tree $T_r$.
+
+We then have for each $T_r$
+\begin{align*}
+	\forall pq\in E(G)\setminus E(T_r):&~~~~
+	\CR (st, \cycle(T_r,pq))= N[p]+N[q]+\CR(st,pq) \pmod 2\\
+	\forall pq\in E(T_r):&~~~~
+	0= N[p]+N[q]+\CR(st,pq) \pmod 2
+\end{align*}
+because crossings that are counted twice cancel out modulo $2$.
+(In particular, the path in $T_r$ from $r$ to the lowest common ancestor of $p$ and $q$
+is counted twice.)
+This implies that we can just check for \emph{all} edges $pq$ of $G$ whether
+the sum  $N[p]+N[q]+\CR(st,pq)$ is $0$ modulo $2$.
 The final resulting algorithm, denoted as \proc{GenericMinimumSeparation},
 is given in Figure~\ref{fig:generic}.
-
-
 
 \begin{figure}[htb]
 \begin{center}
@@ -349,13 +376,12 @@ is given in Figure~\ref{fig:generic}.
 \begin{codebox}
     \Procname{$\proc{GenericMinimumSeparation}(P,s,t)$}
     \li $\best \gets \infty$ // length of the best separation so far
-    \li \For $s\in P$ \Do
+    \li \For $r\in P$ \Do
     	\li $(\dist[~],\pi[~])\gets$ shortest path tree from $r$ in $G(P)$
 		\\ \> \Comment Compute $N[~]$
     	\li $N[r]=0$
     	\li \For $p\in P\setminus \{r\}$ in non-decreasing values of $\dist[p]$ \Do
-			\li $q\gets \pi[p]$
-			\li $N[p]= N[q]+ \CR(st,pq) \pmod 2$
+			\li $N[p]= N[\pi[p]]+ \CR(st,p\pi[p]) \pmod 2$
 			\End
     	\li \For $pq\in E(G(P))$\Do
 			\li \If $N[p]+N[q]+ \CR(pq,st) \pmod 2 =1$ \Then
@@ -373,15 +399,25 @@ is given in Figure~\ref{fig:generic}.
 \end{figure}
 
 
-\todo{Questions for the algorithm. Is this the algorithm that is implemented? 
-Does it check wether $pq\in E(T_r)$? Do we compute $N(p)$ with the tree or later?}
+Let us look into the time complexity of the algorithm.
+For each point $r\in P$ we have to compute a shortest-path tree in $G$.
+This can be done in $O(n\log n)$ in our case, 
+as discussed in Section~\ref{sec:algorithm-sptree}. 
+Then, for each edge $pq$ of $G$ some constant amount of work is done.
+Thus for each point $r$ we spend  
+$O(n\log n+|E(G)|)$.
+This is cubic in the worst-case.
+We could get an improved running time if we can treat all the edges of $G$
+compactly. This is what we explain next.
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Compact treatment of edges}
+\label{sec:quadratic}
 
 Without loss of generality, in our theoretical discussion we will assume
 that $z=(0,0)$ and $z'=(0,s)$. Therefore, $zz'$ is a segment, henceforth denoted by $\sigma$,
 contained in the $y$-axis.
-
-\subsubsection{Specialization for unit disks}
 
 
 
