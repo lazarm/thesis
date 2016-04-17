@@ -416,12 +416,274 @@ compactly. This is what we explain next.
 \subsubsection{Compact treatment of edges}
 \label{sec:quadratic}
 
-Without loss of generality, in our theoretical discussion we will assume
-that $z=(0,0)$ and $z'=(0,s)$. Therefore, $zz'$ is a segment, henceforth denoted by $\sigma$,
-contained in the $y$-axis.
+We will use the following data structure.
+The data structure is essentially a 2-dimensional range tree $T$ with
+a data structure for nearest neighbour at each node of the secondary structure
+of $T$.
 
+\begin{lemma}
+\label{lem:block}
+	Let $B$ be a set of $n$ points with positive $x$-coordinates.
+	We can preprocess $B$ in $O(n\log^3 n)$ time such that,
+	for any query point $a$	with negative $x$-coordinate, 
+	we can decide in $O(\log^3 n)$ time whether the set 
+	$\{ b\in B \mid \text{$ab$ intersects $\sigma$ and $|ab|\le 1$}\}$
+	is empty.
+	A similar data structure with the same guarantees handles queries
+	to know whether 
+	$\{ b\in B \mid \text{$ab$ does not intersect $\sigma$ and $|ab|\le 1$}\}$
+	is empty.
+\end{lemma}
+\begin{proof}
+	We are going to use point-line duality and range trees.
+	These are standard concepts in Computational Geometry.
+	See for example~\cite[Chapters 5 and 8]{bkos-08}.
+	
+	We use the following precise point-line duality: 
+	the non-vertical line $\ell \equiv y=mx+c$ 
+	is mapped to the point $\ell^*=(m,-c)$ and
+	vice-versa. 
+	Let $\LL$ be the set of non-vertical lines.
+	Let $\sigma$ be the line segment $st$.
+	Let $\sigma^*$ be the set of points dual to non-vertical lines that intersect $\sigma$.
+	Thus
+	\[
+		\sigma^* ~=~ \{ l^* \mid \ell\in \LL, \ell\cap \sigma\neq \emptyset\} 
+	\]
+	Since we assumed that $s=(0,0)$ and $t=(o,\tau)$, 
+	in the dual space the set $\sigma^*$ is the horizontal slab 
+	\[
+		\sigma^* ~=~ \{ (m,-c)\in \RR^2\mid 0\le c\le \tau\}.
+	\]
+	
+	For every point $p\in \RR^2$, outside the $y$-axis, 
+	let $L^* _p$ be the set of points dual
+	to the lines through $p$ that intersect $\sigma$:
+	\[
+		L^*_p=\{ \ell^* \mid \ell\in \LL, p \in \ell, \text{ and } \sigma\cap \ell\not= \emptyset\}.
+	\]
+	In the dual space, $L^*_p$ is a segment with endpoints 
+	$(\varphi_1(p),0)$ and $(\varphi_2(p),\tau)$, 
+	for some values $\varphi_1(p)$ and $\varphi_2(p)$
+	that are easily computable.
+	Namely, $\varphi_1(p)$ is the slope of the line through $p$
+	and $(0,0)$ while $\varphi_2(p)$ is the slope of the line through $p$ and $(0,\tau)$.
+	The segment $L^*_p$ is contained in the slab $\sigma^*$ and has the endpoints on
+	different boundaries of $\sigma^*$.
+	Finally, define the mapping $\varphi(p)=(\varphi_1(p),\varphi_2(p))$.
+	Thus, $\varphi$ maps points in the plane with nonzero $x$-coordinate
+	to points in the plane. 
 
+	Let $a$ be any point to the left of the $y$-axis and 
+	let $b$ be a point to the right of the $y$-axis.
+	The segment $ab$ intersects $\sigma$ if and only if $L^*_a$ intersects $L^*_b$.
+	Namely, an intersection of $L^*_a$ and $L^*_b$ is dual to the line
+	through $a$ and $b$. The segments $L^*_a$ and $L^*_b$ intersect if
+	and only if the order of their endpoints on boundaries of $\sigma^*$ are reversed.
+	Moreover, since $a$ is to the left of the $y$-axis and $b$ is to the right
+	of the $y$-axis, if the segment $ab$ intersects $\sigma$,
+    then $\varphi_1(a)$, the slope of the line through $a$ and $(0,0)$,
+    is smaller than $\varphi_1(b)$, the slope of the line through $b$ and $(0,0)$.
+	Thus we have the following property:
+	\[
+		ab \cap \sigma \neq \emptyset ~\Longleftrightarrow ~ 
+		\varphi_1(a)\le \varphi_1(b)) \text{ and } \varphi_2(a)\ge \varphi_2(b)).
+	\]			
+	Given a point $a$ to the left of the $y$ axis, 
+	the set of points $b\in B$ with the property
+	that $ab$ intersects $\sigma$ corresponds to the points $b$ with $\varphi(b)$
+	in the bottom-right quadrant with apex $\varphi(a)$. 	
+\todo{figure}
 
+	We can use a $2$-dimensional range tree to store the point set $\varphi(B)$,
+	where each point $b\in B$ is identified with its image $\varphi(b)$. 
+	Moreover, for each node $v$ in the secondary level of the range tree, we 
+	store a data structure for nearest neighbours for the canonical set $P(v)$ of points
+	that are stored below $v$ in the secondary structure.
+	
+	For any query $a\in A$, the points $b\in B$ such that $ab$ intersects
+	$\sigma$ are obtained by querying the 2-dimensional range tree for the points
+	of $\varphi(B)$ contained in the quadrant 
+	\[
+		\{(x,y)\mid  \varphi_1(a) \le x \text{ and } \varphi_2(a) \ge y\}.
+	\]
+	This means that we get the set
+	$\{ b\in B \mid \text{$ab$ intersects $\sigma$}\}$
+	as the union of canonical subsets 
+	$P(v_1),\dots,P(v_k)$ for $k=O(\log^2 n)$ nodes in the secondary structure
+	of the 2-dimensional range tree.
+	For each such canonical subset $P(v_i)$ we query for the nearest neighbour of $a$.
+	If for some $v_i$ we get a nearest neighbour at distance at most $1$ from $a$,
+	then we know that $\{ b\in B \mid \text{$ab$ intersects $\sigma$ and $|ab|\le 1$}\}$
+	is non-empty. Otherwise the set is empty.
+
+	The construction time of the 2-dimensional range tree is $O(n\log n)$.
+	Each point appears in $O(\log^2 n)$ canonical subsets $P(v)$.
+	This is, $\sum_v |P(v)| = O( n\log^2 n)$, where the sum iterates over
+	all nodes $v$ in the secondary data structure.
+	Since for each node $v$ in the secondary level we build a data structure for
+	nearest neighbours, which takes $O(|P(v)| \log |P(v)|)$,
+	the total construction time is $O( n\log^3 n)$.
+	For the query time, the standard 2-dimensionsal range tree takes
+	$O(\log^2 n)$ time to find the nodes $v_1,\dots, v_k$,
+	and then we need additional $O(\log n)$ time per node.
+
+	Answering the queries for 
+	$\{ b\in B \mid \text{$ab$ does not intersect $\sigma$ and $|ab|\le 1$}\}$
+	is done similarly (and the same data structure works), we just have
+	to query for 2 of the other quadrants. (We do not need to query for the
+	other 3 quadrants because one of them is always empty.)
+\end{proof}
+
+From the theoretical perspective is would be more efficient to compute the union
+of the $|B|$ regions
+\[
+	\{ (x,y)\in \RR^2\mid x<0,~ |(x,y)b|\le 1,~ ((x,y) 
+			\text{ intersects } \sigma \} ,~~ b\in B
+\]
+and make point location there. Since the regions cannot have many crossings,
+good assymptotic bounds can be obtained. However, such approach seems to be 
+only of theoretical interest and the improvement on the overall result
+is rather marginal.
+
+Consider now a fixed root $r$. Assume that we have computed 
+the shortest path tree $T_r$ and the corresponding tables $\pi[~]$, $\dist[~]$ and $N[~]$,
+as discussed in Section~\ref{sec:generic}.
+We group the points by their distance from $r$:
+\[
+	W_i ~=~ \{ p\in P \mid \dist[p]=i \},~~~ i=0,1,\dots ,n
+\]
+A standard property of BFS trees, that also holds here,
+is that all the distances from the root for any two adjacent vertices differ by at most $1$.
+That is, the neighbours of a point $p\in P$ in $G$ are contained in
+$W_{\dist[p]-1}\cup W_{\dist[p]} \cup W_{\dist[p]+1}$.
+
+We make groups $L_i^j$ and $R_i^j$ (where $L$ stands for left and $R$ for right) 
+defined by
+\begin{align*}
+	L_i^j ~&=~ \{ p\in P \mid \dist[p]=i,~ p.x<0,~ N[p]=j \} ,
+	~~~\text{where $j=0,1$ and $i=0,1,\dots$}\\
+	R_i^j ~&=~ \{ p\in P \mid \dist[p]=i,~ p.x>0,~ N[p]=j \} ,
+	~~~\text{where $j=0,1$ and $i=0,1,\dots$}
+\end{align*}
+We are interested in edges $pq$ of $G$ such that $N[p]+N[q]+\CR(st,pq)=1 \pmod 2$. 
+Up to symmetry (exchanging $p$ and $q$), this is equivalent to pairs of points
+$(p,q)$ in one of the following two cases:
+\begin{itemize}
+	\item for some $i\in \NN$ we have, 
+			$p\in L_i^j\cup R_i^j$, 
+			$q\in L_i^{1-j}\cup R_i^{1-j}\cup L_{i-1}^{1-j}\cup R_{i-1}^{1-j}$, 
+			$|pq|\le 1$, and $pq$ does not cross $st$;
+	\item $p\in L_i^j\cup R_i^j$, 
+			$q\in L_i^{j}\cup R_i^{j}\cup L_{i-1}^{j}\cup R_{i-1}^{j}$, 
+			$|pq|\le 1$, and $pq$ crosses $st$.
+\end{itemize}
+Each one of these cases can be solved efficiently.
+Up to symmetry and indices, we have the following cases:
+\begin{itemize}
+\item If we want to search the candidates $(p,q)\in L_i^j\times L_{i'}^{1-j}$
+	that do not cross $st$,	we first preprocess $L_i^j$ for nearest neighbours.
+	Then for each point $q$ in $L_{i'}^{1-j}$ we do the following:
+	we query to get its nearest neighbour in $L_i^j$, and
+	if their distance is at most $1$, then we have
+	obtained a cycle of length (at most) $i+i'+1$ crossing $st$ an odd number of times.
+	The overall running time, if $m=|L_i^j|+|L_{i'}^{1-j}|$, is
+	$O(m\log m)$.
+\item If we want to search the candidates $(p,q)\in L_i^j\times R_{i'}^{j}$
+	such that $pq$ crosses $st$,
+	we first preprocess $R_{i'}^{1-j}$ as discussed in Lemma~\ref{lem:block}
+	into a data structure.
+	Then, for each point $p\in L_i^j$ we query the data structure (for crossing $st$).
+	If we get some nonempty set, then we got a cycle
+	of length (at most) $i+i'+1$ that crosses $st$ an odd number of times.
+	The overall running time, if $m=|L_i^j|+|R_{i'}^{j}|$, is
+	$O(m\log^3 m)$.
+\item If we want to search the candidates $(p,q)\in L_i^j\times R_{i'}^{1-j}$
+	such that $pq$ does not cross $st$,
+	we first preprocess $R_{i'}^{1-j}$ as in Lemma~\ref{lem:block}
+	into a data structure.
+	Then, for each point $p\in L_i^j$ we query the data structure (for not crossing $st$).
+	If we get some nonempty set, then we got a cycle
+	of length (at most) $i+i'+1$ that crosses $st$ an odd number of times.
+	The overall running time, if $m=|L_i^j|+|R_{i'}^{1-j}|$, is
+	$O(m\log^3 m)$.
+\end{itemize}
+We conclude that each of the cases can be done in $O(m\log^3 m)$ time, where
+$m$ is the number of points involved in the case.
+It is now easy to convert this into an algorithm that spends $O(n\log^3 n)$ time
+per root $r$. The algorithm
+
+\begin{figure}[htb]
+\begin{center}
+\ovalbox{~~~~
+\begin{varwidth}{\linewidth}
+\begin{codebox}
+    \Procname{$\proc{GenericMinimumSeparation}(P,s,t)$}
+    \li $\best \gets n+1$ // length of the best separation so far
+    \li \For $r\in P$ \Do
+    	\li $(\dist[~],\pi[~])\gets$ shortest path tree from $r$ in $G(P)$
+		\\ \> \Comment Compute the levels $W_i$
+    	\li \For $i=0\dots n$ \Do
+			\li $W_i\gets$ new empty list
+			\End
+    	\li \For $p\in P$ \Do
+			\li add $p$ to $W_{\dist[p]}$
+			\End		
+		\\ \> \Comment Compute $N[~]$ for the elements of $W_i$ and
+		\\ \> \Comment and construct $L_i^0,L_i^1,R_i^0,R_i^1$
+    	\li $N[r]=0$
+		\li \For $i=1\dots n$ \Do
+			\li \For $p\in W_i$ \Do
+				\li $N[p]= N[\pi[p]]+ \CR(st,p\pi[p]) \pmod 2$
+				\li \If $p$ to the left of the $y$-axis \Then
+					\li add $p$ to $L^{N[p]}_i$
+					\End
+				\li \If $p$ to the right of the $y$-axis \Then
+					\li add $p$ to $R^{N[p]}_i$
+					\End
+				\li Preprocess $R^0_i$ and $R^1_i$ as in Lemmas~\ref{adfafda}
+				\li Preprocess $L^1_i$ and $R^1_i$ for nearest neighbours
+				\End
+			\End
+    	\li $i=1$
+    	\li \While $i\le \best/2$ \Do
+			\\ \>\> \Comment cases within each side
+			\li search candidates in $L^0_i\times L^1_{i-1}$
+			\li search candidates in $L^0_i\times L^1_{i}$
+			\li search candidates in $L^1_i\times L^0_{i-1}$
+			\li search candidates in $R^0_i\times R^1_{i-1}$
+			\li search candidates in $R^0_i\times R^1_{i}$
+			\li search candidates in $R^1_i\times R^0_{i-1}$
+			\\ \>\> \Comment cases across $y$-axis crosing $\sigma$
+			\li search candidates in $L^0_i\times R^0_{i-1}$ crossing $\sigma$
+			\li search candidates in $L^0_i\times R^0_{i}$ crossing $\sigma$
+			\li search candidates in $L^1_i\times R^1_{i-1}$ crossing $\sigma$
+			\li search candidates in $L^1_i\times R^1_{i}$ crossing $\sigma$
+			\li search candidates in $L^0_{i-1}\times R^0_{i}$ crossing $\sigma$
+			\li search candidates in $L^1_{i-1}\times R^1_{i}$ crossing $\sigma$
+			\\ \>\> \Comment cases across $y$-axis not crosing $\sigma$			
+			\li search candidates in $L^0_i\times R^1_{i-1}$ not crossing $\sigma$
+			\li search candidates in $L^0_i\times R^1_{i}$ not crossing $\sigma$
+			\li search candidates in $L^1_i\times R^0_{i-1}$ not crossing $\sigma$
+			\li search candidates in $L^1_i\times R^0_{i}$ not crossing $\sigma$
+			\li search candidates in $L^0_{i-1}\times R^0_{i}$ not crossing $\sigma$
+			\li search candidates in $L^0_{i-1}\times R^1_{i}$ not crossing $\sigma$
+			\li $i \gets i+1$
+			\End
+    \li \Return $\best$
+    \\[-2mm]
+\end{codebox}
+\end{varwidth}
+~~~~}\end{center}
+\caption{New algorithm for minimum separation with unit disks.}
+\label{fig:generic}
+\end{figure}
+
+Actually, we could compute the values $N[~]$ as they are needed.
+
+We do not need to consider indices $i$ larger than $best$ 
+
+\proc{FullAlgorithmSeparationUnitDisks} is given in Figure~\ref{fig:FULL}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Implementation}
@@ -501,6 +763,7 @@ Data was generated uniformly at random in polygons...
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliographystyle{abbrv}
 \bibliography{biblio}
 
 
@@ -508,356 +771,79 @@ Data was generated uniformly at random in polygons...
 \newpage
 \begin{appendix}
 
-%%%%%%%%%%%%%%%%%%%%%
-\section{Building block}
+\section{Missing proofs}
 
-The following ideas are probably folklore. See~\cite{aa}.
-
-\begin{lemma}
-\label{le:ds2}
-	Let $P$ be a set of $n$ weighted points in the plane.
-	In $O(n\log n)$ time we can construct a data structure that,
-	for a query point $q$, it finds in time $O(\log^2 n)$ a point in
-	\[	\arg\min \{ w_p \mid p\in P,~|pq|\le 1\}.
-	\]
-\end{lemma}
-\begin{proof}
-	We sort the points of $P$ by non-decreasing weight, build
-	a balanced binary search tree $\T$ with $n$ leaves, and place
-	the points of $P$ in the leaves of $\T$ such that the order
-	arising from the search tree and the sorting of $P$ match.
-	
-	For every node $\nu$ of $\T$:
-	\begin{itemize}
-		\item Let $P(\nu)$ denote the set of points stored at the subtree rooted at $\nu$.
-			We refer to $P(\nu)$ as a \emph{canonical subset}.
-		\item Let $U(\nu)$ be the union of unit disks centered at the points of $P(\nu)$.
-		\item We build a data structure to decide whether a given query point
-			is contained in $U(\nu)$. A way to do this is to construct
-			a point-location data structure for the Voronoi diagram of $P(\nu)$.
-			Given a query point $q$, we find a closest neighbor from $P(\nu)$
-			by locating a cell $c$ of the Voronoi diagram that contains $q$.
-			We then check whether $q$ is at most at unit distance from the site defining $c$. 
-			If the points of $P(\nu)$ are sorted (lexicographically),
-			then the Voronoi diagram of $P(\nu)$ can be build in linear time~\ref{aaaa}
-			The preprocessing time for node $\nu$ is $O(|P(\nu)|)$ and a
-			query can be answered in $O(\log |P(\nu)|)= O(\log n)$ time.
-	\end{itemize}
-	
-	This finishes the description of the construction of the data structure.
-	Let us analyze the building time. We sort the points of $P$ 
-	lexicographically at the root and for each node $\nu$ 
-	we get the points $P(\nu)$ sorted from its parent.
-	Since the canonical subsets at each level of the tree are disjoint,
-	at each level of the tree we spend $O(n)$ time. 
-	Since $\T$ is balanced, there are $O(\log n)$ levels and
-	we spend in total $O(n\log n)$ time to build the data structure.
-	
-	Given a point $q$ we first check whether $q$ lies in $U(r)$ for the root $r$ of $\T$.
-	If $q$ is not in $U(r)$, then no point of $P$ is close enough to $q$.
-	Otherwise we set $\nu=r$ and proceed with a top-to-down search in the tree $\T$ 
-	until we reach a leaf. 
-	When $\nu$ is not a leaf, 
-	let $\nu_\ell$ and $\nu_r$ be the left and right children of $\nu$, respectively. 
-	If $q$ is in $U(\nu_\ell)$, we then proceed with the search in the subtree
-	at $\nu_\ell$ by setting $\nu=\nu_\ell$,
-	otherwise we proceed the search in the right subtree setting $\nu=\nu_r$.
-	At each point of the search, we maintain the following invariant:
-	\[	P(\nu) \cap \arg\min \{ w_p \mid p\in P,~|pq|\le 1\} ~\not=~ \emptyset.
-	\].
-	
-	The search path in $\T$ has $O(\log n)$ nodes and, for each node in the path,
-	spend $O(\log n)$ time to decide whether $q$ lies in $U(\nu)$. The total
-	query time is thus $O(\log^2 n)$.	 
-\end{proof}
-
-Consider the following problem for two weighted point sets $A$ and $B$.
-\begin{align*}
-	\Phi(A,B) :=\min ~~		& w_a+w_b\\
-	 \mbox{s.t.}~~ & a \in A, b\in B\\
-				&	|ab|\le 1. 
-\end{align*}
-
-\begin{lemma}
-\label{le:within}
-	Let $A$ and $B$ be sets of at most $n$ weighted points in the plane.
-	In $O(n\log^2 n)$ time we can compute $\Phi(A,B)$.
-\end{lemma}
-\begin{proof}
-	We build the data structure of the previous Lemma for $B$.
-	For each $a\in A$, we query the data structure to obtain
-	\[	
-		b^*(a) \in \arg\min \{ w_b \mid b\in B,~|ab|\le 1\}.
-	\]
-	Then we find the $a\in A$ minimizing the sum $w_a+w_{b^*(a)}$.	
-
-	We need $O(n\log n)$ time to construct the data structure and 
-	$O(\log^2 n)$ time per query. The result follows.
-\end{proof}
-
-
-Let $\sigma$ be a segment in the plane. 
-Without loss of generality, we will assume that $s$ lies on
-the $y$-axis with endpoints $(0,0)$ and $(0,s)$.
-Let $A$ be a set of points with negative $x$-coordinates 
-and let $B$ be a set of points with positive $x$-coordinates.
-Each point $p$ of $A\cup B$ has a weight $w_p$.
-We are interested in minimizing $w_a+w_b$ over all pairs $(a,b)\in A\times B$
-whose segment $ab$ have length at most $1$ and intersects $s$.
-Thus, we want to find
-\begin{align*}
-	\Phi_\sigma(A,B) :=\min ~~		& w_a+w_b\\
-	 \mbox{s.t.}~~ & a\in A, b\in B\\
-				&	|ab|\le 1\\
-				&	\mbox{$ab$ intersects $\sigma$}. 
-\end{align*}
-For every point $a\in A$ we define the sets
-\begin{align*}
-	B(a)~&=~\{ b\in B\mid \text{$ab$ intersects $\sigma$}\},\\
-	B_{\le 1}(a)~&=~ \{ b\in B\mid \text{$ab$ intersects $\sigma$ and $|ab|\le 1$}\} 
-			~=~ \{ b\in B(a)\mid |ab|\le 1\}
-\end{align*}
-and the optimization problem
-\begin{align*}
-	\Phi_\sigma(a,B) = w_a + \min \{ w_b\mid b\in B_{\le 1}(a)\}.
-\end{align*}
-We thus have
-\begin{align*}
-	\Phi_\sigma(A,B) = \min_{a\in A} \Phi_\sigma(a,B).
-\end{align*}
-
-We first provide a data structure to obtain the sets $B(\cdot)$ compactly.
-\begin{lemma}
-\label{le:range}
-	There is a family $\{ B_1,\dots, B_t\}$ of subsets of $B$
-	and a data structure $\D (B)$ with the following properties
-	\begin{itemize}
-		\item $\sum_{i=1}^t |B_i| = O(n\log n)$;
-		\item $\D (B)$ has size $O(n\log n)$ and can be constructed
-			in $O(n\log n)$ time;
-		\item for each point $a$ with negative $x$-coordinate, 
-			there is a subset of indices 
-			$I(a)\subset \{ 1,\dots,t\}$ such that $|I(a)|=O(\log^2 n)$ and
-			$B(a)$ is the disjoint union of $\{ B_i \}_{i\in I(a)}$;
-		\item for each query point $a$ with $a_x<0$, the data structure  $\D (B)$ returns $I(a)$
-			in $O(\log^2 n)$ time.
-	\end{itemize}
-\end{lemma}
-\begin{proof}
-	It is convenient to use point-line duality. We use the precise duality
-	described in BKOS Chapter XXX: the non-vertical line $\ell \equiv y=mx+c$
-	is mapped to the point $\ell^*=(m,-c)$.
- 
-	Let $\LL$ be the set of non-vertical lines.
-	Let $\sigma^*$ be the set of points dual to non-vertical lines that intersect $s$.
-	Thus
-	\[
-		\sigma^* ~=~ \{ l^* \mid \ell\in \LL, \ell\cap \sigma\neq \emptyset\} 
-	\]
-	In the dual space, the set $\sigma^*$ is the horizontal slab 
-	\[
-		\sigma^* ~=~ \{ (m,-c)\in \RR^2\mid 0\le c\le s\}.
-	\]
-	
-	For every point $b\in B$, let $L^* _b$ be the set of points dual
-	to the lines through $b$ that intersect $\sigma$:
-	\[
-		L^*_b=\{ \ell^* \mid \ell\in \LL, b \in \ell, \text{ and } \sigma\cap \ell\not= \emptyset\}.
-	\]
-	In the dual space, $L^*_b$ is a segment with endpoints 
-	$(\varphi_1(b),0)$ and $(\varphi_2(b),s)$, for some values $\varphi_1(b)$ and $\varphi_2(b)$
-	that are easily computable.
-	In particular, $L^*_b$ is contained in the slab $\sigma^*$ and has the endpoints on
-	different boundaries of $\sigma^*$.
-	Finally, define the mapping point $\varphi(b)=(\varphi_1(b),\varphi_2(b))$.
-	Thus, $\varphi$ maps points to the right of the $y$-axis to points
-	in the plane. Namely, $\varphi_1(b)$ is the slope of the line through $b$
-	and $(0,0)$ while $\varphi_2(b)$ is the slope of the line through $b$ and $(0,s)$.
-
-	Let $a$ be any point to the left of the $y$-axis and let $b\in B$.
-	The segment $ab$ intersects $\sigma$ if and only if $L^*_a$ intersects $L^*_b$.
-	Namely, an intersection of $L^*_a$ and $L^*_b$ is dual to the line
-	through $a$ and $b$. The segments $L^*_a$ and $L^*_b$ intersect if
-	and only if the order of their endpoints on boundaries of $\sigma^*$ are reversed.
-	Thus we have the following property:
-	\[
-		ab \cap \sigma \neq \emptyset ~\Longleftrightarrow ~ 
-		(\varphi_1(a)-\varphi_1(b)) \cdot (\varphi_2(a)- \varphi_2(b)) < 0.
-	\]			
-	Given a point $a$, the set of points $b\in B$ with the property
-	that $ab$ intersects $\sigma$ corresponds to the points $b$ with $\varphi(b)$
-	in 2 quadrants with apex $\varphi(a)$. 
-
-	We can use a $2$-dimensional range tree to store the point set $\varphi(B)$,
-	where each point $b\in B$ is identified with its image $\varphi(b)$. 
-	For any query $a\in A$, the points $b\in B$ such that $ab$ intersects
-	$\sigma$ are obtained by querying the 2-dimensional range tree for the points
-	of $\varphi(B)$ contained in the two quadrants 
-	\[
-		\{(x,y)\mid  \varphi_1(a) > x \text{ and } \varphi_2(a) < y\} \cup
-		\{(x,y)\mid  \varphi_1(a) < x \text{ and } \varphi_2(a) > y\}.
-	\]
-	The details are standard in computational geometry; see Chapter XXX of BKOS.
-\end{proof}
+3-path condition
 
 
 
-\begin{lemma}
-\label{le:accross}
-	We can compute $\Phi_\sigma(A,B)$ in $O(n\log^4 n)$ time.
-\end{lemma}
-\begin{proof}
-	We construct the sets $\{ B_1,\dots, B_t \}$ and the data structure $\D (B)$
-	described in Lemma~\ref{le:range}. For each $B_j$, where $j=1,\dots , t$, 
-	we build the data structure of Lemma~\ref{le:ds2}. 
-	Since $\sum_{i=1}^t |B_i| = O(n\log n)$,
-	we need
-	\[
-		\sum_{i=1}^t O(|B_i| \log |B_i|) ~=~ O(n\log^2 n)
-	\]
-	time for this.
-	
-	Consider a point $a\in A$. We query $\D (B)$ and obtain the 
-	the set $I(a)$ of indices such that 
-	\[
-		B(a) ~=~ \bigcup_{i\in I(a)} B_i.
-	\]
-	Now, for each $i\in I(a)$, we query with $a$ the data structure associated 
-	to $B_i$ to obtain
-	\[	
-		b_i^*(a) \in \arg\min \{ w_b \mid b\in B_i,~|ab|\le 1\}.
-	\]
-	We then have that
-	\begin{align*}
-		\min \{ w_b \mid b\in B_{\le 1}(a)\} ~=~ \min \{ w_{b_i^*(a)}\mid i\in I(a) \},
-	\end{align*}
-	so we can obtain $\Phi_\sigma(a,B)$ from the points $b_i^*(a)$, $i\in I(a)$. 
-	
-	For a point $a$, we need $O(\log^2 n)$ time to obtain $I(a)$,
-	and then we need $O(\log^2 n)$ time for each index $i$ in $I(a)$. This means that
-	we spend time $O(\log^4 n)$ for each point $a\in A$. 
-\end{proof}
+\section{Full new algorithm for separation with unit disks}
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Crossing a fixed segment}
-
-We will drop in the notation the dependency on $P$ and just write $G$ instead of $G(P)$.
-We will regard $G$ as an unweighted graph and denote by $d_G(r,p)$ the shortest-path
-distance in $G$ between $r$ and $p$. 
-
-For each point $r\in P$, let let $T_r$ be a shortest-path tree from $r$ in $G$.
-If there are several possible candidates, we fix $T_r$.
-We use $T_r[p]$ for the path in $T_r$ from $r$ to $p$.
-Let $E_r$ be the set of edges of $G$ not appearing in $T_r$. 
-Thus $E_r=E(G)\setminus E(T_r)$.
-
-For each $r$ and $p$ from $P$, let $\curve(r,p)$ be the polygonal path
-defined by $T_r[p]$.
-For each $r\in P$ and each edge $pq\in E_r$, 
-let $\curve(r,pq)$ be the polygonal closed path
-obtained be concatenating $\curve(r,p)$, $pq$, and the reverse of $\curve(r,q)$.
-We define $\length(r,pq)$ as the number of edges in $\curve(r,pq)$.
-Thus we have $\length(r,pq) = d_G(r,p)+d_G(r,q)+1$.
-
-Let $\sigma$ be a segment. For simplicity we assume that $\sigma$ does not
-contain any point of $P$. For each polygonal path $\gamma$, let $X(\gamma,\sigma)$ be the
-modulo two value of the number of crossings between $\gamma$ and $\sigma$.
-For each $r,p\in P$ we define $N(r,p)=X(\curve(r,p),\sigma)$, and 
-for each $r\in P$ and $pq\in E_r$ we define $N(r,pq)=X(\curve(r,pq),\sigma)$.
-
-\begin{align*}
-	\Psi_\sigma(P) := \min ~~& \length(r,pq)\\
-	 \mbox{s.t.}~~ & r\in P\\
-				&	pq\in E_r\\
-				&	N(r,pq)=1. 
-\end{align*}
-
-The results of Cabello and Giannopoulos~\cite{aa} imply the following result.
-(Should we provide a self-contained proof adapted to this scenario?)
-
-\begin{theorem}
-	Let $(r^*,p^*q^*)$ be an optimal solution to $\Psi_\sigma(P)$.
-	Then the points in $T_{r^*}[p]\cup T_{r^*}[q]$ are an optimal solution
-	to the separation problem.
-\end{theorem}
-
-To compute $\Psi_\sigma(P)$ we will iterate over the points $r$, so we define
-\begin{align*}
-	\Psi_\sigma(r,P) := \min ~~& d_G(r,p)+d_G(r,q) \\
-	 \mbox{s.t.}~~ & pq\in E_r\\
-				&	N(r,pq)=1. 
-\end{align*}
-We readily have
-\[
-	\Psi_\sigma(P) ~=~ 1+ \min_{r\in P} \Psi_\sigma(r,P)
-\]
-
-Let us fix some $r\in P$ and discuss how to solve $\Psi_\sigma(r,P)$. 
-We compute a shortest path tree $T_r$ from $r$. Together with each
-point $p\in P$ we store $d_G(r,p)$.
-
-We compute the values $N(r,p)$, $p\in P$, with a simple bottom-up traversal of $T_r$.
-We start setting $N_r[r]:=0$. For each point $p\in P$ whose parent in $T_r$ is $p'$,
-we obtain $N_r[p]$ using that $N_r[p]=N_r[p']+ |\sigma\cap pp'| \pmod 2$.
-This is, if $pp'$ crosses $\sigma$, then $N_r[p]=N_r[p']+1 \pmod 2$, otherwise
-$N_r[p]=N_r[p']$.
-
-Assume that $\sigma$ is a vertical segment with endpoints $(0,0)$ and $(0,s)$.
-
-We split the search for the optimal edge $pq$ into cases: 
-\begin{itemize}
-	\item $pq$ has both endpoints on the same side of the $y$-axis and 
-		connects points with $N(r,p)\neq N(r,p)$, or
-	\item $pq$ has endpoints in both sides of the $y$-axis, $N(r,p)\neq N(r,p)$,
-		and $pq$ does not intersect $\sigma$, or
-	\item $pq$ has endpoints in both sides of the $y$-axis, $N(r,p)\neq N(r,p)$,
-		and $pq$ intersects $\sigma$.
-\end{itemize}
-
-
-\begin{lemma}
-\label{le:fixedr}
-	We can compute $\Psi_\sigma(r,P)$ in $O(n\log^4 n)$ time.
-\end{lemma}
-\begin{proof}
-	For $i\in \{0,1\}$, let $L_i$ be the subset of points of $P$ to the left of the $y$-axis
-	with $N(r,p)=i\pmod 2$.
-	For $i\in \{0,1\}$, let $R_i$ be the subset of points of $P$ to the right of the $y$-axis
-	and $N(r,p)=i\pmod 2$.
-	Clearly
-	\[
-		P~=~ L_0\cup L_1\cup R_0\cup R_1.
-	\]
-	
-	Let $\sigma_+$ and $\sigma_-$ be the rays contained in the $y$-axis after deleting $\sigma$.
-	Using $d_G(r,p)$ as the weight $w_p$ of point $p\in P$, 
-	we then have
-	\begin{align*}
-		 \Psi_\sigma(r,P) ~=~ \min \{ &\Phi( L_0,L_1), \Phi( R_0,R_1),
-										\Phi_{\sigma_+}( L_0,R_1), \Phi_{\sigma_+}( L_1,R_0),\\
-										&\Phi_{\sigma_-}( L_0,R_1), \Phi_{\sigma_-}( L_1,R_0),
-										\Phi_{\sigma}( L_0,R_0), \Phi_{\sigma}(L_1,R_1) \}.
-	\end{align*}
-	Each of these instances can be solved using Lemmas~\ref{le:within} and~\ref{le:accross} in
-	$O(n\log^4 n)$ time.
-\end{proof}
-
-
-\begin{theorem}
-	We can solve the minimum separation problem using $O(n^2\log^4 n)$ time.
-\end{theorem}
-\begin{proof}
-	For each $r\in P$ we compute the shortest path tree $T_r$ from $r$ in $T$,
-	the distances $d_G(r,p)$, $p\in P$, and the parities $N(r,p)$.
-	We can then compute $\Psi_\sigma(r,P)$ using Lemma~\ref{le:fixedr}.
-	
-	Repeat for each $r\in P$.
-	Time bound.
-	
-	Correctness.
-	
-\end{proof}
+\begin{figure}[htb]
+\begin{center}
+\ovalbox{~~~~
+\begin{varwidth}{\linewidth}
+\begin{codebox}
+    \Procname{$\proc{FullAlgorithmSeparationUnitDisks}(P,s,t)$}
+    \li $\best \gets n+1$ // length of the best separation so far
+    \li \For $r\in P$ \Do
+    	\li $(\dist[~],\pi[~])\gets$ shortest path tree from $r$ in $G(P)$
+		\\ \> \Comment Compute the levels $W_i$
+    	\li \For $i=0\dots n$ \Do
+			\li $W_i\gets$ new empty list
+			\End
+    	\li \For $p\in P$ \Do
+			\li add $p$ to $W_{\dist[p]}$
+			\End		
+		\\ \> \Comment Compute $N[~]$ for the elements of $W_i$ and
+		\\ \> \Comment and construct $L_i^0,L_i^1,R_i^0,R_i^1$
+    	\li $N[r]=0$
+		\li \For $i=1\dots n$ \Do
+			\li \For $p\in W_i$ \Do
+				\li $N[p]= N[\pi[p]]+ \CR(st,p\pi[p]) \pmod 2$
+				\li \If $p$ to the left of the $y$-axis \Then
+					\li add $p$ to $L^{N[p]}_i$
+					\End
+				\li \If $p$ to the right of the $y$-axis \Then
+					\li add $p$ to $R^{N[p]}_i$
+					\End
+				\li Preprocess $R^0_i$ and $R^1_i$ as in Lemmas~\ref{adfafda}
+				\li Preprocess $L^1_i$ and $R^1_i$ for nearest neighbours
+				\End
+			\End
+    	\li $i=1$
+    	\li \While $i\le \best/2$ \Do
+			\\ \>\> \Comment cases within each side
+			\li search candidates in $L^0_i\times L^1_{i-1}$
+			\li search candidates in $L^0_i\times L^1_{i}$
+			\li search candidates in $L^1_i\times L^0_{i-1}$
+			\li search candidates in $R^0_i\times R^1_{i-1}$
+			\li search candidates in $R^0_i\times R^1_{i}$
+			\li search candidates in $R^1_i\times R^0_{i-1}$
+			\\ \>\> \Comment cases across $y$-axis crosing $\sigma$
+			\li search candidates in $L^0_i\times R^0_{i-1}$ crossing $\sigma$
+			\li search candidates in $L^0_i\times R^0_{i}$ crossing $\sigma$
+			\li search candidates in $L^1_i\times R^1_{i-1}$ crossing $\sigma$
+			\li search candidates in $L^1_i\times R^1_{i}$ crossing $\sigma$
+			\li search candidates in $L^0_{i-1}\times R^0_{i}$ crossing $\sigma$
+			\li search candidates in $L^1_{i-1}\times R^1_{i}$ crossing $\sigma$
+			\\ \>\> \Comment cases across $y$-axis not crosing $\sigma$			
+			\li search candidates in $L^0_i\times R^1_{i-1}$ not crossing $\sigma$
+			\li search candidates in $L^0_i\times R^1_{i}$ not crossing $\sigma$
+			\li search candidates in $L^1_i\times R^0_{i-1}$ not crossing $\sigma$
+			\li search candidates in $L^1_i\times R^0_{i}$ not crossing $\sigma$
+			\li search candidates in $L^0_{i-1}\times R^0_{i}$ not crossing $\sigma$
+			\li search candidates in $L^0_{i-1}\times R^1_{i}$ not crossing $\sigma$
+			\li $i \gets i+1$
+			\End
+    \li \Return $\best$
+    \\[-2mm]
+\end{codebox}
+\end{varwidth}
+~~~~}\end{center}
+\caption{New algorithm for minimum separation with unit disks.}
+\label{fig:FULL}
+\end{figure}
 
 
 \end{appendix}

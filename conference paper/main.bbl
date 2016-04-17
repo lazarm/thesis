@@ -6,6 +6,11 @@ S.~Bereg and D.~G. Kirkpatrick.
 \newblock In {\em Proc. 5th ALGOSENSORS}, volume 5804 of {\em LNCS}, pages
   29--40. Springer, 2009.
 
+\bibitem{bkos-08}
+M.~d. Berg, O.~Cheong, M.~v. Kreveld, and M.~Overmars.
+\newblock {\em Computational Geometry: Algorithms and Applications}.
+\newblock Springer-Verlag, 3rd ed. edition, 2008.
+
 \bibitem{CG16}
 S.~Cabello and P.~Giannopoulos.
 \newblock The complexity of separating points in the plane.
