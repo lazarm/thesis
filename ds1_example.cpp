@@ -96,7 +96,7 @@ vector<Point_2> pointGenerator(int e, int holes, boolean narrow, int size, boole
 				//this_thread::sleep_for(chrono::seconds(5));
 				points.push_back(p);
 				k++;
-				cout << k << endl;
+				//cout << k << endl;
 			}
 			else {
 				int c = 0;
@@ -126,7 +126,7 @@ vector<Point_2> pointGenerator(int e, int holes, boolean narrow, int size, boole
 				if (x < 2 || x > pow(2, e + 2) - 2 || y < 2 || y > pow(2, e) - 2) {
 					points.push_back(Point_2(x, y));
 					k++;
-					cout << k << endl;
+					//cout << k << endl;
 				}
 			}
 			else {
@@ -134,13 +134,13 @@ vector<Point_2> pointGenerator(int e, int holes, boolean narrow, int size, boole
 				if (x < pow(2, e) || x > 3 * pow(2, e) || y < pow(2, e - 2) || y > 3 * pow(2, e - 2)) {
 					points.push_back(Point_2(x, y));
 					k++;
-					cout << k << endl;
+					//cout << k << endl;
 				}
 			}
 		}
 		else if (holes == 4) {
 			if (narrow) {
-				if (x < 2 || (x > pow(2, e + 2) - 1 && x < pow(2, e + 2) + 1) || x > pow(2, e + 2) - 2 ||
+				if (x < 2 || (x > pow(2, e + 1) - 1 && x < pow(2, e + 1) + 1) || x > pow(2, e + 2) - 2 ||
 					y < 2 || (y > pow(2, e - 1) - 1 && y < pow(2, e - 1) + 1) || y > pow(2, e) - 2) {
 					points.push_back(Point_2(x, y));
 					k++;
@@ -220,29 +220,35 @@ int main() {
 		//cout << y << " " << x << endl;
 	}
 	
-	Segment_2 st(Point_2(2, 0.3), Point_2(2, 0.6));
+	Segment_2 st(Point_2(2, -0.3), Point_2(2, 0.6));
 	vector< vector<Point_2> > rst;
 	
 
 	
 	vector<Point_2> bfs_points{ a1, a2, a3, a4, a5, a6 };
 	//testBfsGrid(pst2);
-	/*vector<int> le{ 4, 8, 16};
-	for (int i = 0; i < 3; i++) {
-		vector<Point_2> gend = pointGenerator(i, 1, true, 1000, false, vector<Point_2>{});
-		writeToFile(gend, le[i], 1, true);
+	/*vector<int> le{ 4, 8, 16, 32, 64, 128 };
+	for (int i = 0; i < 6; i++) {
+		vector<Point_2> gend = pointGenerator(i, 4, false, 20000, false, vector<Point_2>{});
+		writeToFile(gend, le[i], 4, false);
 	}*/
-	
-	vector<int> ss{ 128, 64, 32, 16, 8, 4};
+	//testBfsGrid(bfs_points);
+	vector<int> ss{ 16, 32, 64, 128};
 	for (auto a : ss) {
-		vector<Point_2> readPoints = readFromFile("points-" + to_string(a) + "-0-5000.txt");
-		testBfsGrid(readPoints);
-		Segment_2 st(Point_2(7, 2), Point_2(7, 5));
+		vector<Point_2> readPoints = readFromFile("points-" + to_string(a) + "-0-50000.txt");
+		//testSSSPT(readPoints);
+		testBfs(readPoints);
+		//testBfsGrid(readPoints);
+		//Segment_2 st(Point_2(16, 4), Point_2(32, 10));
 		//main_procedure(readPoints.begin(), readPoints.end(), st);
 	}
+	//testSepGeneral(bfs_points, st);
 	//vector<Point_2> readPoints = readFromFile("points-32-0-2000.txt");
 	//testSSSPT(readPoints);
-	
+	//vector<Point_2> readPoints = readFromFile("points-16-1-2000.txt");
+	Segment_2 st2(Point_2(8, 2), Point_2(8, 5));
+	//main_procedure(readPoints.begin(), readPoints.end(), st2);
+	//testSeparationBruteForce(readPoints.begin(), readPoints.end(), st2);
 	/*double x1 = 0, y1 = 0;
 	//double xs = x1, ys = y1;
 	vector<Point_2> create1000_128;
@@ -280,3 +286,7 @@ int main() {
 	}
 	writeToFile(create1000_128, 128, 1, true);*/
 }
+
+// CpuUsage.cpp : Defines the entry point for the console application.
+//
+
