@@ -56,7 +56,7 @@ public:
   
   int dist;
   int Nr;
-  int id;
+  bool visited;
   std::shared_ptr<Point_2> parent;
 
   const Rep& rep() const
@@ -85,7 +85,7 @@ public:
   Point_2(const T1 &x, const T2 &y)
     : Rep(typename R::Construct_point_2()(Return_base_tag(), x, y))
   {
-	dist = std::numeric_limits<int>::max();
+	  dist = std::numeric_limits<int>::max();
 	Nr = 0;
   }
 
@@ -173,14 +173,14 @@ public:
 	Nr = n;
   }
   
-  int getId()
+  bool getVisited()
   {
-	return id;
+	return visited;
   }
   
-  void setId(int idi)
+  void setVisited(bool b)
   {
-    id = idi;
+    visited = b;
   }
   
   std::shared_ptr<Point_2> getParent()

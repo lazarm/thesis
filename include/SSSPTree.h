@@ -125,6 +125,7 @@ void SSSPTree::createTreeFromRoot(Point_2 r, Segment_2 st)
 	int kount = 0;
 	while (wi_1_delaunayVertices.size() > 0) {
 		VoronoiDiagram vd_nearestNeighbour;
+		// biult VD is stored as DT on a set of dt vertices, which represents a subset of DT of all points
 		vd_nearestNeighbour.insert(wi_1_delaunayVertices.begin(), wi_1_delaunayVertices.end());
 		deque<Delaunay_vertex_handle> queue;
 		copy(wi_1_delaunayVertices.begin(), wi_1_delaunayVertices.end(), back_inserter(queue));
@@ -138,7 +139,7 @@ void SSSPTree::createTreeFromRoot(Point_2 r, Segment_2 st)
 				if (dt.is_infinite(p->handle()) == true) { continue; }
 				Point_2 *pPoint; //popravi
 				pPoint = &p->point();
-				if (pPoint->getDist() == numeric_limits<int>::max()) {
+				if (!pPoint->getVisited()) {
 					tuple<bool, Point_2*> nearest = vd_nearestNeighbour.query(*pPoint);
 					if (get<0>(nearest) == true) {
 						shared_ptr<Point_2> par2 = make_shared<Point_2>(*(get<1>(nearest)));
@@ -146,12 +147,13 @@ void SSSPTree::createTreeFromRoot(Point_2 r, Segment_2 st)
 						wi_delaunayVertices.push_back(p);
 						queue.push_back(p);
 
+						pPoint->setVisited(true);
 						pPoint->setDist(i);
-						pPoint->setNr(updateNr(par2->getNr(), *pPoint, *par2, st));
+						//pPoint->setNr(updateNr(par2->getNr(), *pPoint, *par2, st));
 						pPoint->setParent(par2);
 						//cout << pPoint->x() << "," << par2->x() << " - " << pPoint->y() << "," << par2->y() << endl;
 						kount++;
-						categorize(&l0, &l1, &r0, &r1, pPoint, st);
+						//categorize(&l0, &l1, &r0, &r1, pPoint, st);
 					}
 				}
 			} while (++p != done);
@@ -163,6 +165,11 @@ void SSSPTree::createTreeFromRoot(Point_2 r, Segment_2 st)
 		i++;
 	}
 	//cout << "connected: " << kount << endl;
+	/*for (auto v = dt.vertices_begin(); v != dt.vertices_end(); ++v) {
+		if (!v->point().getVisited()) {
+			cout << "not v: " << v->point() << endl;
+		}
+	}*/
 }
 
 vector< vector<Point_2> > SSSPTree::getAllSets()
@@ -190,6 +197,7 @@ void SSSPTree::resetSSSPTreeDTVertices()
 {
 	for (auto v = dt.vertices_begin(); v != dt.vertices_end(); ++v) {
 		v->point().setDist((std::numeric_limits<int>::max)());
+		v->point().setVisited(false);
 	}
 }
 
@@ -197,16 +205,19 @@ void SSSPTree::resetSSSPTreeDTVertices()
 void testSSSPT(vector<Point_2> points)
 {
 	CGAL::Timer cost;
-	double totalTime = 0;
+	double totalQueryTime = 0;
+	double totalConstructionTime = 0;
 	Segment_2 st(Point_2(2, 0.3), Point_2(2, 0.7));
-	for (int k = 0; k < 10; ++k) {
+	for (int k = 0; k < 5; ++k) {
 		//cout << "Starting construction of graph G." << endl;
 		cost.reset(); cost.start();
 		SSSPTree tree(points.begin(), points.end());
 		cost.stop();
 		//cout << "SSSP tree construction finished, dt size is " << tree.getDT().number_of_vertices() << ", time: " << cost.time() << endl;
+		totalConstructionTime += cost.time();
 		size_t pointsLength = points.size();
-		for (int i = 0; i < 10; ++i) {
+		cost.reset();
+		for (int i = 0; i < 50; ++i) {
 			int idx = ceil(rand()*pointsLength / RAND_MAX);
 			//cout << "idx: " << idx << endl;
 			Point_2 p = points[idx];
@@ -227,8 +238,9 @@ void testSSSPT(vector<Point_2> points)
 			tree.resetSSSPTreeDTVertices();
 			tree.clearSets();
 		}
-		//cout << "Time for construction of graph G and running 10 iterations of bfs algorithm: " << cost.time() << endl;
-		totalTime += cost.time();
+		//cout << "Average time (50 iterations) of bfs algorithm on DT: " << cost.time()/50.0 << endl;
+		totalQueryTime += (cost.time()/50.0);
 	}
-	cout << "Average time for running 10 iterations of sssp algorithm (repeated 10 times): " << totalTime / 10.0 << endl;
+	cout << "Average time (5 iterations) for construction of DT: " << totalConstructionTime / 5.0 << endl;
+	cout << "Average time (5 iterations) for running 50 iterations of bfs algortithm on DT: " << totalQueryTime / 5.0 << endl;
 }
