@@ -216,7 +216,7 @@ double gridQuery(GridGraph g, NodePointer r)
 
 void resetGridGraphNodes(nodePointerList nodes) {
 	for (auto n : nodes) {
-		n->dist = numeric_limits<int>::max();
+		n->dist = (numeric_limits<int>::max)();
 		n->visited = false;
 		n->parent = nullptr;
 	}
@@ -228,22 +228,33 @@ void testBfsGrid(vector<Point_2> points) {
 		nodes.push_back(NodePointer(new GraphNode(p)));
 	}
 	CGAL::Timer cost;
-	double totalTime = 0;
-	for (int k = 0; k < 10; k++) {
-		//cout << "Starting construction of grid graph." << endl;
+	double totalQueryTime = 0;
+	double totalConstructionTime = 0;
+	FILETIME prevProcKernel, prevProcUser;
+	ULONGLONG usage = 0;
+	for (int k = 0; k < 2; k++) {
 		cost.reset(); cost.start();
+		//usage = getUsage(&prevProcKernel, &prevProcUser, true);
 		GridGraph g(nodes.begin(), nodes.end());
+		//usage = getUsage(&prevProcKernel, &prevProcUser);
 		cost.stop();
-		//cout << g.getCells().size() << endl;
 		double testTime = cost.time();
-		//cout << "Construction of grid graph finished." << endl;
+		totalConstructionTime += cost.time();
+		//cout << "Construction of grid graph finished in: " << cost.time() << endl;
+		//cout << "Construction of grid graph (usage) finished in: " << usage << endl;
+		cost.reset();
 		size_t nodesLength = nodes.size();
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 50; i++) {
 			int idx = ceil(rand()*nodesLength / RAND_MAX);
 			//cout << "idx: " << idx << " - " << nodes[idx]->p << endl;
 			NodePointer n = nodes[idx];
 			//cout << "grid bfs start" << endl;
-			testTime += gridQuery(g, n);
+			//usage = getUsage(&prevProcKernel, &prevProcUser, true);
+			double queryTime = gridQuery(g, n);
+			//usage = getUsage(&prevProcKernel, &prevProcUser);
+			testTime += queryTime;
+			//cout << "query time: " << queryTime << endl;
+			//cout << "query time (usage): " << usage << endl;
 			//cost.start();
 			//gridQuery(g, n);
 			//cost.stop();
@@ -253,8 +264,9 @@ void testBfsGrid(vector<Point_2> points) {
 			//}
 			resetGraphNodes(nodes);
 		}
-		cout << "Time for construction of graph G and running 10 iterations of bfs algorithm: " << testTime << endl;
-		totalTime += testTime;
+		//cout << "Average time (50 iterations) of bfs algorithm on grid graph: " << testTime/50.0 << endl;
+		totalQueryTime += testTime/50.0;
 	}
-	cout << "Average time for construction of grid graph G and running 10 iterations of bfs algorithm (repeated 10 times): " << totalTime / 10.0 << endl;
+	cout << "Average time (5 iterations) for construction of grid graph: " << totalConstructionTime / 2.0 << endl;
+	cout << "Average time (5 iterations) for running 50 iterations of bfs algorithm on grid graph: " << totalQueryTime / 2.0 << endl;
 }
