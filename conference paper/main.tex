@@ -1,6 +1,7 @@
 \documentclass[a4paper,USenglish,numberwithinsect]{lipics}
 
 \usepackage{graphicx}
+\usepackage{wrapfig}
 \graphicspath{{figs/}}
 \usepackage{latexsym}
 \usepackage{url}
@@ -111,18 +112,34 @@ An alternative, more convenient point of view, is to take as vertex set the set 
 centers of the disks, denoted by $P$, and connecting two points $p$ and $q$ of $P$ 
 whenever the Euclidean length $|pq|$ is at most the diameter of a disk. 
 Given a root $r\in P$, the task is to compute a shortest-path tree from $r$ in this graph.
+See Figure~\ref{fig:example1}.
+
+\begin{figure}[htb]
+	\centering
+	\includegraphics[page=4,width=.3\textwidth]{unitdisks}
+	\hfill
+	\includegraphics[page=2,width=.3\textwidth]{unitdisks}
+	\hfill
+	\includegraphics[page=3,width=.3\textwidth]{unitdisks}
+	\caption{Left: unit disks and two additional points $s$ and $t$. 
+		Middle: intersection graph of the disks. 
+		Right: a shortest-path tree in the graph.}
+	\label{fig:example1}
+\end{figure}
 
 The second problem we consider is the \emph{minimum-separation problem}.
 The input is a set $\D$ of $n$ unit disks in the plane and two points
-$s$ and $t$ not covered by any disks of $\D$.
+$s$ and $t$ not covered by any disks of $\D$. 
 We say that $\D$ \emph{separates} $s$ and $t$ if each curve in the plane 
 from $s$ to $t$ intersects some disk of $\D$.
 The task is to find the minimum cardinality subset of $\D$
-that separates $s$ and $t$. Formally, we want to solve
+that separates $s$ and $t$. See the right of Figure~\ref{fig:example1} for an example.
+Formally, we want to solve
 \begin{align*}
 	\min ~~		& |\D'|\\
 	 \mbox{s.t.}~~ & \D'\subset \D \text{ and $\D'$ separates $s$ and $t$}. 
 \end{align*}
+
 
 Unit disks are the most standard model used for wireless sensor networks; 
 see for example~\cite{GG11,HS95,zg-wsn-04}. 
