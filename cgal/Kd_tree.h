@@ -370,6 +370,21 @@ public:
 	  return it;
   }
 
+  tuple<bool, Point_2<EK>> kd_query(Point_2<EK> q)
+  {
+	  Fuzzy_circle exact_range(q, 1);
+	  list<Point_2<EK>> result;
+	  search_exists(back_inserter(result), exact_range);
+	  //cout << "resultsize " << result.size() << endl;
+	  if (result.size() == 0) {
+		  return tuple<bool, Point_2<EK>> {false, Point_2<EK>(0, 0)};
+	  }
+	  else {
+		  Point_2<EK> first = result.front();
+		  return tuple<bool, Point_2<EK>> {true, first};
+	  }
+  }
+
   ~Kd_tree() {
     if(is_built()){
       delete bbox;
@@ -451,20 +466,6 @@ public:
       << root()->num_nodes() << std::endl;
     s << " Tree depth: " << root()->depth() << std::endl;
     return s;
-  }
-  
-  std::tuple<bool, Point_d*> query(Point_d q) {
-	  Fuzzy_circle exact_range(q, 1);
-	list<Point_d> result;
-	search(back_inserter(result), exact_range);
-	if (result.size() == 0) {
-		return std::tuple<bool, Point_d*> {false, new Point_d(0, 0)};
-	}
-	else {
-		Point_d first = result.front();
-		return std::tuple<bool, Point_d*> {true, &first};
-	}
-	  
   }
 
 };

@@ -605,8 +605,8 @@ class Range_tree_d: public Tree_base< C_Data,  C_Window>
   }
   
 
-  std::back_insert_iterator< std::vector< Point_2<CGAL::Cartesian<double> > > > window_query_impl_modified( 
-	C_Window const &win, Point_2<CGAL::Cartesian<double> > a, std::back_insert_iterator< std::vector< Point_2<CGAL::Cartesian<double> > > > result, typename tbt::rbit * =0)
+  std::back_insert_iterator< std::vector< Point_2<EK> > > window_query_impl_modified( 
+	C_Window const &win, Point_2<EK> a, std::back_insert_iterator< std::vector< Point_2<EK> > > result, typename tbt::rbit * =0)
   {
     if(is_less_equal(m_interface.get_right(win), m_interface.get_left(win)))
        return result;
@@ -636,9 +636,9 @@ class Range_tree_d: public Tree_base< C_Data,  C_Window>
 	        Tree_base<C_Data, C_Window> *T= (w)->sublayer;
 	        if(T->is_anchor())
 			{
-				tuple<bool, Point_2<CGAL::Cartesian<double> >> rez6 = (w)->object.second.search(a);
+				tuple<bool, Point_2<EK>> rez6 = (w)->object.second.search(a);
 				if (std::get<0>(rez6)==true) {
-					Point_2<CGAL::Cartesian<double>> p6 = std::get<1>(rez6);
+					Point_2<EK> p6 = std::get<1>(rez6);
 					(*result++) = p6;
 				}
 				
@@ -679,10 +679,10 @@ class Range_tree_d: public Tree_base< C_Data,  C_Window>
 	    Tree_base<C_Data, C_Window> *T= (left(v))->sublayer;
 	    if(T->is_anchor())
 		{
-			tuple<bool, Point_2<CGAL::Cartesian<double> >> rez4 = (left(v))->object.second.search(a);
+			tuple<bool, Point_2<EK>> rez4 = (left(v))->object.second.search(a);
 			//cout << "subtree1" << endl;
 			if (std::get<0>(rez4) == true) {
-				Point_2<CGAL::Cartesian<double>> p4 = std::get<1>(rez4);
+				Point_2<EK> p4 = std::get<1>(rez4);
 				
 				(*result++) = p4;
 			}
