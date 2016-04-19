@@ -85,8 +85,9 @@ public:
   Point_2(const T1 &x, const T2 &y)
     : Rep(typename R::Construct_point_2()(Return_base_tag(), x, y))
   {
-	  dist = std::numeric_limits<int>::max();
+	dist = std::numeric_limits<int>::max();
 	Nr = 0;
+	visited = false;
   }
 
   Point_2(const RT& hx, const RT& hy, const RT& hw)
