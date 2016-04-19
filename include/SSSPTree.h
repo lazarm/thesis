@@ -8,10 +8,10 @@ using namespace std;
 class SSSPTree
 {
 private:
-	vector<Point_2> l0;
-	vector<Point_2> l1;
-	vector<Point_2> r0;
-	vector<Point_2> r1;
+	vector<vector<Point_2>> l0;
+	vector<vector<Point_2>> l1;
+	vector<vector<Point_2>> r0;
+	vector<vector<Point_2>> r1;
 	DT dt;
 public:
 	SSSPTree();
@@ -19,7 +19,7 @@ public:
 	SSSPTree(Iterator begin, Iterator end);
 	~SSSPTree(){};
 	DT getDT(){ return dt; }
-	vector< vector<Point_2> > getAllSets();
+	vector< vector<vector<Point_2>> > getAllSets();
 	void createTreeFromRoot(Point_2 r, Segment_2 st);
 	void clearSets();
 	void resetSSSPTreeDTVertices();
@@ -118,12 +118,14 @@ void SSSPTree::createTreeFromRoot(Point_2 r, Segment_2 st)
 	rPoint->setNr(0);
 	shared_ptr<Point_2> rootParent(nullptr);
 	rPoint->setParent(rootParent);
-
-	categorize(&l0, &l1, &r0, &r1, rPoint, st);
+	l0.push_back(vector<Point_2>{}); l1.push_back(vector<Point_2>{});
+	r0.push_back(vector<Point_2>{}); r1.push_back(vector<Point_2>{});
+	categorize(&l0[0], &l1[0], &r0[0], &r1[0], rPoint, st);
 	wi_1_delaunayVertices.push_back(rVertex);
 	int i = 1;
 	int kount = 0;
 	while (wi_1_delaunayVertices.size() > 0) {
+		vector<Point_2> l0i{}, l1i{}, r0i{}, r1i{};
 		VoronoiDiagram vd_nearestNeighbour;
 		// biult VD is stored as DT on a set of dt vertices, which represents a subset of DT of all points
 		vd_nearestNeighbour.insert(wi_1_delaunayVertices.begin(), wi_1_delaunayVertices.end());
@@ -149,11 +151,11 @@ void SSSPTree::createTreeFromRoot(Point_2 r, Segment_2 st)
 
 						pPoint->setVisited(true);
 						pPoint->setDist(i);
-						//pPoint->setNr(updateNr(par2->getNr(), *pPoint, *par2, st));
+						pPoint->setNr(updateNr(par2->getNr(), *pPoint, *par2, st));
 						pPoint->setParent(par2);
 						//cout << pPoint->x() << "," << par2->x() << " - " << pPoint->y() << "," << par2->y() << endl;
 						kount++;
-						//categorize(&l0, &l1, &r0, &r1, pPoint, st);
+						categorize(&l0i, &l1i, &r0i, &r1i, pPoint, st);
 					}
 				}
 			} while (++p != done);
@@ -161,7 +163,8 @@ void SSSPTree::createTreeFromRoot(Point_2 r, Segment_2 st)
 
 		wi_1_delaunayVertices.clear();
 		wi_1_delaunayVertices = wi_delaunayVertices;
-
+		//cout << l0i.size() << " " << l1i.size() << " " << r0i.size() << " " << r1i.size() << endl;
+		l0.push_back(l0i); l1.push_back(l1i); r0.push_back(r0i); r1.push_back(r1i);
 		i++;
 	}
 	//cout << "connected: " << kount << endl;
@@ -172,9 +175,9 @@ void SSSPTree::createTreeFromRoot(Point_2 r, Segment_2 st)
 	}*/
 }
 
-vector< vector<Point_2> > SSSPTree::getAllSets()
+vector< vector<vector<Point_2>> > SSSPTree::getAllSets()
 {
-	vector< vector<Point_2> > allSets;
+	vector< vector<vector<Point_2>> > allSets;
 	allSets.push_back(l0);
 	allSets.push_back(l1);
 	allSets.push_back(r0);
@@ -213,7 +216,7 @@ void testSSSPT(vector<Point_2> points)
 		cost.reset(); cost.start();
 		SSSPTree tree(points.begin(), points.end());
 		cost.stop();
-		//cout << "SSSP tree construction finished, dt size is " << tree.getDT().number_of_vertices() << ", time: " << cost.time() << endl;
+		cout << "SSSP tree construction finished, dt size is " << tree.getDT().number_of_vertices() << ", time: " << cost.time() << endl;
 		totalConstructionTime += cost.time();
 		size_t pointsLength = points.size();
 		cost.reset();

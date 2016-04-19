@@ -5,8 +5,9 @@ tuple<Point_2, Point_2, int> findminpairRi(vector<Point_2> li, vector<Point_2> l
 	tuple<Point_2, Point_2, int> bestR)
 {
 	if (r0t - r0s == 0) { return bestR; }
+	if (li.size() == 0 && lj.size() == 0) { return bestR; }
 	//RangeTree rangeTreei = buildRangeTree(r0.begin(), r0.end(), st);
-	cout << "ht" << endl;
+	//cout << "ht" << endl;
 	RangeTree rangeTreei = buildRangeTree(r0s, r0t, st);
 	int minWeight = get<2>(bestR);
 	for (auto a = li.begin(); a != li.end(); ++a)
@@ -47,65 +48,4 @@ tuple<Point_2, Point_2, int> findminpairRi(vector<Point_2> li, vector<Point_2> l
 		}
 	}
 	return bestR;
-}
-
-template <class Iterator>
-tuple<Point_2, Point_2, int> findMinPair(Iterator setAbegin, Iterator setAend, Iterator setBbegin, Iterator setBend, 
-	tuple<Point_2, Point_2, int> bestR)
-{
-	if (setBbegin == setBend || setAbegin == setAend) { return bestR; }
-	NNTree ds2(setBbegin, setBend);
-	//ds2.construct(setBbegin, setBend);
-	int minWeight = get<2>(bestR);
-	for (Iterator a = setAbegin; a != setAend; ++a)
-	{
-		if (a->getDist() < minWeight) {
-			tuple<bool, Point_2> query = ds2.search(Point_2(*a));
-			if (get<0>(query))
-			{
-				Point_2 bStar = get<1>(query);
-				int weight = (*a).getDist() + bStar.getDist();
-				if (weight < minWeight) {
-					bestR = make_tuple(*a, bStar, weight);
-					minWeight = weight;
-				}
-			}
-		}
-	}
-	return bestR;
-}
-
-template <class Iterator>
-tuple<Point_2, Point_2, int> bruteForce(Iterator setAbegin, Iterator setAend, Iterator setBbegin, Iterator setBend)
-{
-	int minWeight = numeric_limits<int>::max();
-	tuple<Point_2, Point_2, int> bestPair;
-	for (Iterator a = setAbegin; a != setAend; ++a) {
-		for (Iterator b = setBbegin; b != setBend; ++b) {
-			if (CGAL::squared_distance(*a, *b) <= 1 && ((*a).getDist() + (*b).getDist()) < minWeight)
-			{
-				bestPair = make_tuple(*a, *b, (*a).getDist() + (*b).getDist());
-				minWeight = (*a).getDist() + (*b).getDist();
-			}
-		}
-	}
-	return bestPair;
-}
-
-template <class Iterator>
-tuple<Point_2, Point_2, int> bruteForceSegment(Iterator setAbegin, Iterator setAend, Iterator setBbegin, Iterator setBend, Segment_2 st)
-{
-	int minWeight = numeric_limits<int>::max();
-	tuple<Point_2, Point_2, int> bestPair;
-	for (Iterator a = setAbegin; a != setAend; ++a) {
-		for (Iterator b = setBbegin; b != setBend; ++b) {
-			Segment_2 ab(*a, *b);
-			if (CGAL::squared_distance(*a, *b) <= 1 && CGAL::do_intersect(st,ab) && ((*a).getDist() + (*b).getDist()) < minWeight)
-			{
-				bestPair = make_tuple(*a, *b, (*a).getDist() + (*b).getDist());
-				minWeight = (*a).getDist() + (*b).getDist();
-			}
-		}
-	}
-	return bestPair;
 }

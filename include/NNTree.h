@@ -40,70 +40,18 @@ NNTree::NNTree() {
 template <class Iterator>
 NNTree::NNTree(Iterator begin, Iterator end) {
 	int treeSize = 2*nextPowerOfTwo(int(distance(begin,end))) - 1;
-	A.reserve(treeSize);
+	A.reserve(1);
 	insert(begin, end);
 }
 
 template <class Iterator>
 void NNTree::insert(Iterator begin, Iterator end) {
-	
-	if (A.size() == 0) {
-		int treeSize = 2 * nextPowerOfTwo(int(distance(begin, end))) - 1;
-		A.reserve(treeSize);
-	}
-	
-	// points have to be sorted non-descreasingly by their weight
-	sort(begin, end, sortByDist());
 	setSize(A.capacity());
-	//KDTree vd_root;
-	//vd_root.insert(begin, end);
 	A.push_back(shared_ptr<KDTree>(new KDTree(begin, end)));
-	int i = 1;
-	size_t size = A.capacity();
-	for (int v = 1; v < log2(A.capacity() + 1); v++) {
-		size_t line_sum = 0;
-		for (int k = 0; k < pow(2, v); k = k + 2) {
-			size_t parent_size = A[(i-1)/2]->size();
-			if (parent_size > 1) {
-				A.push_back(shared_ptr<KDTree>(new KDTree(begin + line_sum, begin + line_sum + int(ceil(parent_size / 2)))));
-				//A[i] = vd_left;
-				A.push_back(shared_ptr<KDTree>(new KDTree(begin + line_sum + int(ceil(parent_size / 2)), begin + line_sum + parent_size)));
-				//A[i + 1] = vd_right;
-			}
-			i += 2;
-			line_sum += parent_size;
-		}
-	}
-}
-
-int nextPowerOfTwo(int val) {
-	val--;
-	val = (val >> 1) | val;
-	val = (val >> 2) | val;
-	val = (val >> 4) | val;
-	val = (val >> 8) | val;
-	val = (val >> 16) | val;
-	val++; // Val is now the next highest power of 2.
-	return val;
 }
 
 tuple<bool, Point_2> NNTree::search(Point_2 q) {
-	//tuple<bool, Point_2*> res = make_tuple(true, new Point_2(0, 0));
 	tuple<bool, Point_2> res = query(q, 0);
-	if (std::get<0>(res) == false) {
-		return res;
-	}
-	
-	int i = 0;
-	while (2*i+1 < A.size()) {
-		res = query(q, 2 * i + 1);
-		if (get<0>(res) == true)
-			i = 2 * i + 1;
-		else
-			i = 2 * i + 2;
-	}
-	// same value as in last loop iteration, if leaf node is left child
-	res = query(q, i);
 	return res;
 }
 
@@ -120,8 +68,3 @@ tuple<bool, Point_2> NNTree::query(Point_2 q, int idx)
 		return tuple<bool, Point_2> {true, first};
 	}
 }
-
-struct sortByDist
-{
-	bool operator() (Point_2 L, Point_2 R) { return L.getDist() < R.getDist(); }
-};

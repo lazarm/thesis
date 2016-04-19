@@ -66,7 +66,6 @@ RangeTree buildRangeTree(Iterator begin, Iterator end, Segment_2 st)
 		inputList.push_back(RangeKey(*dp, voronoiTree));
 	}
 	cost.stop();
-	//cout << "inputList: " << cost.time() << endl;
 	cost.reset(); cost.start();
 	RangeTree rangeTree(inputList.begin(), inputList.end());
 	cost.stop();
@@ -75,7 +74,6 @@ RangeTree buildRangeTree(Iterator begin, Iterator end, Segment_2 st)
 	traverse_and_populate_with_data(rangeTree.range_tree_2->root());
 	cost.stop();
 	//cout << "traverse range tree: " << cost.time() << endl;
-	//this_thread::sleep_for(chrono::seconds(2));
 	return rangeTree;
 }
 

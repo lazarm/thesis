@@ -230,8 +230,6 @@ void testBfsGrid(vector<Point_2> points) {
 	CGAL::Timer cost;
 	double totalQueryTime = 0;
 	double totalConstructionTime = 0;
-	FILETIME prevProcKernel, prevProcUser;
-	ULONGLONG usage = 0;
 	for (int k = 0; k < 2; k++) {
 		cost.reset(); cost.start();
 		//usage = getUsage(&prevProcKernel, &prevProcUser, true);

@@ -176,10 +176,11 @@ void writeToFile(vector<Point_2> points, int space, int holes, boolean narrow)
 vector<Point_2> readFromFile(string filename) {
 	ifstream ifs(filename);
 	assert(ifs);
-
 	vector<Point_2> points;
 	Point_2 p;
-	while (ifs >> p) { points.push_back(p); }
+	while (ifs >> p) { 
+		points.push_back(p); 
+	}
 	ifs.close();
 	return points;
 }
@@ -193,38 +194,6 @@ int main() {
 	vector<shared_ptr<GraphNode>> gps;
 	GraphNode ag1 = { a1 }, ag2 = { a2 }, ag3 = { a3 }, ag4 = { a4 }, ag5 = { a5 };
 	//gps.reserve(2009);
-	pst2.reserve(5000);
-	/*
-	pst2.push_back(a1), gps.push_back(&ag1);
-	pst2.push_back(a6), gps.push_back(&ag2);
-	pst2.push_back(a2), gps.push_back(&ag3);
-	pst2.push_back(a7), gps.push_back(&ag4);
-	pst2.push_back(a3), gps.push_back(&ag5);
-	pst2.push_back(a8); gps.push_back(&ag6);
-	pst2.push_back(a4); gps.push_back(&ag7);
-	pst2.push_back(a9); gps.push_back(&ag8);
-	pst2.push_back(a5); gps.push_back(&ag9);
-	*/
-	srand(time(0));
-	//std::ofstream out("out.txt");
-	//std::streambuf *coutbuf = std::cout.rdbuf(); //save old buf
-	//std::cout.rdbuf(out.rdbuf()); //redirect std::cout to out.txt!
-	for (int i = 0; i < 5000; i++)
-	{
-		double y = (double)rand() / (RAND_MAX);
-		double x = ((double)rand() / (RAND_MAX)) * 4;
-		pst2.push_back(Point_2(x, y));
-		
-		//GraphNode *xg = new GraphNode(Point_2(y,x));
-		//gps.push_back(xg);
-		//cout << y << " " << x << endl;
-	}
-	
-	Segment_2 st(Point_2(2, -0.3), Point_2(2, 0.6));
-	vector< vector<Point_2> > rst;
-	
-
-	
 	vector<Point_2> bfs_points{ a1, a2, a3, a4, a5, a6 };
 	//testBfsGrid(pst2);
 	/*vector<int> le{ 4, 8, 16, 32, 64, 128 };
@@ -233,58 +202,25 @@ int main() {
 		writeToFile(gend, le[i], 4, false);
 	}*/
 	//testBfsGrid(bfs_points);
-	vector<int> ss{ 16, 32, 64, 128};
-	for (auto a : ss) {
-		vector<Point_2> readPoints = readFromFile("points-" + to_string(a) + "-0-50000.txt");
-		//testSSSPT(readPoints);
-		testBfs(readPoints);
+	vector<int> ss{ 32, 64, 128};
+	/*for (auto a : ss) {
+		vector<Point_2> readPoints = readFromFile("points-" + to_string(a) + "-4-5000-narrow.txt");
+		cout << readPoints.size() << endl;
+		cout << bfs_points.size() << endl;
+		testSSSPT(readPoints);
+		//testBfs(readPoints);
 		//testBfsGrid(readPoints);
 		//Segment_2 st(Point_2(16, 4), Point_2(32, 10));
 		//main_procedure(readPoints.begin(), readPoints.end(), st);
-	}
+	}*/
 	//testSepGeneral(bfs_points, st);
 	//vector<Point_2> readPoints = readFromFile("points-32-0-2000.txt");
 	//testSSSPT(readPoints);
-	//vector<Point_2> readPoints = readFromFile("points-16-1-2000.txt");
-	Segment_2 st2(Point_2(8, 2), Point_2(8, 5));
-	//main_procedure(readPoints.begin(), readPoints.end(), st2);
+	vector<Point_2> readPoints = readFromFile("points-32-1-2000.txt");
+	Segment_2 st2(Point_2(16, 4), Point_2(16, 9));
+	//testSepGeneral(readPoints, st2);
+	main_procedure(readPoints.begin(), readPoints.end(), st2);
 	//testSeparationBruteForce(readPoints.begin(), readPoints.end(), st2);
-	/*double x1 = 0, y1 = 0;
-	//double xs = x1, ys = y1;
-	vector<Point_2> create1000_128;
-	int kc = 0;
-	for (int i = 1; i < 256; i++) {
-		double yss = 1 + 0.2*((double)rand() / (RAND_MAX)) - 0.1;
-		create1000_128.push_back(Point_2(x1 + i*0.5, yss));
-		double yss2 = 31 + 0.2*((double)rand() / (RAND_MAX)) - 0.1;
-		create1000_128.push_back(Point_2(x1 + i*0.5, yss2));
-	}
-	for (int i = 1; i < 64; i++) {
-		double xss = 1 + 0.2*((double)rand() / (RAND_MAX)) - 0.1;
-		create1000_128.push_back(Point_2(xss, y1 + i*0.5));
-		double xss2 = 127 + 0.2*((double)rand() / (RAND_MAX)) - 0.1;
-		create1000_128.push_back(Point_2(xss2, y1 + i*0.5));
-	}*/
-	/*/
-	while (xs < 128) {
-		ys = y1;
-		while (ys < 16) {
-			double xss = xs + 0.5 * ((double)rand() / (RAND_MAX)) - 0.25;
-			create2000_64.push_back(Point_2(xss, ys));
-			kc++;
-			//cout << kc << endl;
-			ys = ys + 0.5 + 0.7 * ((double)rand() / (RAND_MAX));
-			//cout << ys << endl;
-		}
-		xs = xs + 0.9 + 0.3 * ((double)rand() / (RAND_MAX));
-	}*/
-	/*vector<Point_2> gend = pointGenerator(5, 1, true, 1000, true, create1000_128);
-	int z = 0;
-	while (create1000_128.size() < 1000) {
-		create1000_128.push_back(gend[z]);
-		z++;
-	}
-	writeToFile(create1000_128, 128, 1, true);*/
 }
 
 // CpuUsage.cpp : Defines the entry point for the console application.
