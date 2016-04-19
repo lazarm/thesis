@@ -186,13 +186,6 @@ It is trivial to adapt to the general case, for example
 treating each connected component separately.
 The implementation does not make this assumption.
 
-In the minimum-separation problem we will use $s$ and $t$
-for the points to separate. We will assume that $s$ is the origin and
-$t$ is the point $(0,\tau)$, with $\tau\ge 0$. Thus, the segment $st$
-is vertical and $t$ is above $s$. The implementation also makes
-this assumption. A simple rigid transformation can be applied to
-the input to get to this setting.
-
 \myparagraph{Organization of the paper} 
 In Section~\ref{sec:algorithms} we discuss the theoretical
 algorithms for both problems and their guarantees.
@@ -277,7 +270,7 @@ This leads to the following.
 
 \begin{theorem}[Cabello and Jej\v{c}i\v{c}~\cite{CJ15}]
   Let $P$ be a set of $n$ points in the plane and let $r$ be a point from $P$. 
-  In time ${\mathcal O}(n \log n)$ we can compute a shortest path tree from $s$
+  In time $O(n \log n)$ we can compute a shortest path tree from $s$
   in the unweighted graph $\GG(P)$.
 \end{theorem}
 
@@ -314,6 +307,7 @@ This is explained in Section~\ref{sec:quadratic}.
 \subsubsection{Generic algorithm specialized for unit disks}
 \label{sec:generic}
 Let us first introduce some notation.
+Recall that $s$ and $t$ are the two points to separate.
 Each walk $W$ in the graph $G=\GG(P)$ defines a planar curve
 in the obvious way: we connect the points of $P$ 
 with segments in the order given by $W$. 
@@ -416,8 +410,15 @@ compactly. This is what we explain next.
 \subsubsection{Compact treatment of edges}
 \label{sec:quadratic}
 
-We will use the following data structure.
-The data structure is essentially a 2-dimensional range tree $T$ with
+From now on we will assume that $s$ is the origin and 
+$t$ is the point $(0,\tau)$, with $\tau\ge 0$. Thus, the segment $st$
+is vertical and $t$ is above $s$. The implementation also makes
+this assumption. A simple rigid transformation can be applied to
+the input to get to this setting.
+
+We will use the data structure in the following lemma.
+It is essentially a multi-level data structure consisting
+of a 2-dimensional range tree $T$ with
 a data structure for nearest neighbour at each node of the secondary structure
 of $T$.
 
@@ -436,8 +437,9 @@ of $T$.
 \end{lemma}
 \begin{proof}
 	We are going to use point-line duality and range trees.
-	These are standard concepts in Computational Geometry.
-	See for example~\cite[Chapters 5 and 8]{bkos-08}.
+	These are standard concepts in Computational Geometry;
+	wee for example~\cite[Chapters 5 and 8]{bkos-08}.
+	We assume that the reader is familiar with the topic.
 	
 	We use the following precise point-line duality: 
 	the non-vertical line $\ell \equiv y=mx+c$ 
@@ -448,9 +450,9 @@ of $T$.
 	Let $\sigma^*$ be the set of points dual to non-vertical lines that intersect $\sigma$.
 	Thus
 	\[
-		\sigma^* ~=~ \{ l^* \mid \ell\in \LL, \ell\cap \sigma\neq \emptyset\} 
+		\sigma^* ~=~ \{ l^* \mid \ell\in \LL, \ell\cap \sigma\neq \emptyset\}.
 	\]
-	Since we assumed that $s=(0,0)$ and $t=(o,\tau)$, 
+	Since we assumed that $s=(0,0)$ and $t=(0,\tau)$, 
 	in the dual space the set $\sigma^*$ is the horizontal slab 
 	\[
 		\sigma^* ~=~ \{ (m,-c)\in \RR^2\mid 0\le c\le \tau\}.
@@ -479,7 +481,7 @@ of $T$.
 	The segment $ab$ intersects $\sigma$ if and only if $L^*_a$ intersects $L^*_b$.
 	Namely, an intersection of $L^*_a$ and $L^*_b$ is dual to the line
 	through $a$ and $b$. The segments $L^*_a$ and $L^*_b$ intersect if
-	and only if the order of their endpoints on boundaries of $\sigma^*$ are reversed.
+	and only if the order of their endpoints on the boundaries of $\sigma^*$ are reversed.
 	Moreover, since $a$ is to the left of the $y$-axis and $b$ is to the right
 	of the $y$-axis, if the segment $ab$ intersects $\sigma$,
     then $\varphi_1(a)$, the slope of the line through $a$ and $(0,0)$,
@@ -519,14 +521,18 @@ of $T$.
 
 	The construction time of the 2-dimensional range tree is $O(n\log n)$.
 	Each point appears in $O(\log^2 n)$ canonical subsets $P(v)$.
-	This is, $\sum_v |P(v)| = O( n\log^2 n)$, where the sum iterates over
+	This means that $\sum_v |P(v)| = O( n\log^2 n)$, where the sum iterates over
 	all nodes $v$ in the secondary data structure.
 	Since for each node $v$ in the secondary level we build a data structure for
 	nearest neighbours, which takes $O(|P(v)| \log |P(v)|)$,
 	the total construction time is $O( n\log^3 n)$.
 	For the query time, the standard 2-dimensionsal range tree takes
-	$O(\log^2 n)$ time to find the nodes $v_1,\dots, v_k$,
-	and then we need additional $O(\log n)$ time per node.
+	$O(\log^2 n)$ time to find the $O(\log^2 n)$  nodes $v_1,\dots, v_k$ such
+	that 
+	\[
+		\bigcup_{i=1}^k P(v_i) ~=~ \{ b\in B \mid \text{$ab$ intersects $\sigma$}\},
+	\]
+	and then we need additional $O(\log n)$ time per node to query for a nearest neighbor.
 
 	Answering the queries for 
 	$\{ b\in B \mid \text{$ab$ does not intersect $\sigma$ and $|ab|\le 1$}\}$
@@ -538,7 +544,7 @@ of $T$.
 From the theoretical perspective is would be more efficient to compute the union
 of the $|B|$ regions
 \[
-	\{ (x,y)\in \RR^2\mid x<0,~ |(x,y)b|\le 1,~ ((x,y) 
+	\{ (x,y)\in \RR^2\mid x<0,~ |(x,y)b|\le 1,~ (x,y) 
 			\text{ intersects } \sigma \} ,~~ b\in B
 \]
 and make point location there. Since the regions cannot have many crossings,
@@ -557,6 +563,7 @@ A standard property of BFS trees, that also holds here,
 is that all the distances from the root for any two adjacent vertices differ by at most $1$.
 That is, the neighbours of a point $p\in P$ in $G$ are contained in
 $W_{\dist[p]-1}\cup W_{\dist[p]} \cup W_{\dist[p]+1}$.
+We will exploit this property.
 
 We make groups $L_i^j$ and $R_i^j$ (where $L$ stands for left and $R$ for right) 
 defined by
@@ -570,23 +577,26 @@ We are interested in edges $pq$ of $G$ such that $N[p]+N[q]+\CR(st,pq)=1 \pmod 2
 Up to symmetry (exchanging $p$ and $q$), this is equivalent to pairs of points
 $(p,q)$ in one of the following two cases:
 \begin{itemize}
-	\item for some $i\in \NN$ we have, 
+	\item for some $i\in \NN$ and some $j\in \{0,1\}$, we have
 			$p\in L_i^j\cup R_i^j$, 
 			$q\in L_i^{1-j}\cup R_i^{1-j}\cup L_{i-1}^{1-j}\cup R_{i-1}^{1-j}$, 
 			$|pq|\le 1$, and $pq$ does not cross $st$;
-	\item $p\in L_i^j\cup R_i^j$, 
+	\item for some $i\in \NN$ and some $j\in \{0,1\}$, we have
+			$p\in L_i^j\cup R_i^j$, 
 			$q\in L_i^{j}\cup R_i^{j}\cup L_{i-1}^{j}\cup R_{i-1}^{j}$, 
 			$|pq|\le 1$, and $pq$ crosses $st$.
 \end{itemize}
 Each one of these cases can be solved efficiently.
-Up to symmetry and indices, we have the following cases:
+Up to symmetry, we have the following cases:
 \begin{itemize}
 \item If we want to search the candidates $(p,q)\in L_i^j\times L_{i'}^{1-j}$
-	that do not cross $st$,	we first preprocess $L_i^j$ for nearest neighbours.
-	Then for each point $q$ in $L_{i'}^{1-j}$ we do the following:
-	we query to get its nearest neighbour in $L_i^j$, and
-	if their distance is at most $1$, then we have
-	obtained a cycle of length (at most) $i+i'+1$ crossing $st$ an odd number of times.
+	(that cannot cross $st$ since they are on the same side
+	of the $y$-axis), we first preprocess $L_{i'}^{1-j}$ for nearest neighbours.
+	Then, for each point $p$ in $L_i^j$, we query the data structure
+	to find its nearest neighbour $q_p$ in $L_i^j$.
+	If for some $p$ we get that $|pq_p|\le 11$, then we have
+	obtained a closed walk through $r$ of length $i+i'+1$ 
+	crossing $st$ an odd number of times.
 	The overall running time, if $m=|L_i^j|+|L_{i'}^{1-j}|$, is
 	$O(m\log m)$.
 \item If we want to search the candidates $(p,q)\in L_i^j\times R_{i'}^{j}$
@@ -594,8 +604,9 @@ Up to symmetry and indices, we have the following cases:
 	we first preprocess $R_{i'}^{1-j}$ as discussed in Lemma~\ref{lem:block}
 	into a data structure.
 	Then, for each point $p\in L_i^j$ we query the data structure (for crossing $st$).
-	If we get some nonempty set, then we got a cycle
-	of length (at most) $i+i'+1$ that crosses $st$ an odd number of times.
+	If we get some nonempty set, then we get 
+	a closed walk through $r$ of length $i+i'+1$ 
+	that crosses $st$ an odd number of times.
 	The overall running time, if $m=|L_i^j|+|R_{i'}^{j}|$, is
 	$O(m\log^3 m)$.
 \item If we want to search the candidates $(p,q)\in L_i^j\times R_{i'}^{1-j}$
@@ -603,91 +614,103 @@ Up to symmetry and indices, we have the following cases:
 	we first preprocess $R_{i'}^{1-j}$ as in Lemma~\ref{lem:block}
 	into a data structure.
 	Then, for each point $p\in L_i^j$ we query the data structure (for not crossing $st$).
-	If we get some nonempty set, then we got a cycle
+	If we get some nonempty set, then we get a cycle
 	of length (at most) $i+i'+1$ that crosses $st$ an odd number of times.
 	The overall running time, if $m=|L_i^j|+|R_{i'}^{1-j}|$, is
 	$O(m\log^3 m)$.
 \end{itemize}
 We conclude that each of the cases can be done in $O(m\log^3 m)$ time, where
 $m$ is the number of points involved in the case.
-It is now easy to convert this into an algorithm that spends $O(n\log^3 n)$ time
-per root $r$. The algorithm
+Iterating over all possible values $i$, 
+it is now easy to convert this into an algorithm that spends $O(n\log^3 n)$ time
+per root $r$. We summarize the result we have obtained. This improves for the
+case of unit disks the previous, generic algorithm.
+
+\begin{theorem}
+	The minimum-separation problem for $n$ unit disks 
+	can be solved in $O(n^2 \log^3 n)$ time.
+\end{theorem}
+\begin{proof}
+	Let $P$ be the centers of the disks and,
+	as before, consider the graph $G=\GG(P)$.
+	For each root $r\in P$ we build the shortest-path tree
+	and the sets $W_i,L_i^0,L_i^1,R_i^0,L_i^1$ in $O(n\log n)$ time.
+	We then have at most $n$ iterations where, in iteration $i$
+	we spend $O(|W_i\cup W_{i-1}|\log^3 |W_i\cup W_{i-1}|)$ time.
+	Since the sets $W_i$ are disjoint,
+	adding over $i$, this means that we spend $O(n\log^3 n)$ time per root $r\in P$.
+	
+	Correctness follows from the foregoing discussion and the fact 
+	that the algorithm is computing the same as the generic algorithm.
+\end{proof}
 
 \begin{figure}[htb]
 \begin{center}
 \ovalbox{~~~~
 \begin{varwidth}{\linewidth}
 \begin{codebox}
-    \Procname{$\proc{GenericMinimumSeparation}(P,s,t)$}
-    \li $\best \gets n+1$ // length of the best separation so far
-    \li \For $r\in P$ \Do
-    	\li $(\dist[~],\pi[~])\gets$ shortest path tree from $r$ in $G(P)$
-		\\ \> \Comment Compute the levels $W_i$
-    	\li \For $i=0\dots n$ \Do
-			\li $W_i\gets$ new empty list
-			\End
-    	\li \For $p\in P$ \Do
-			\li add $p$ to $W_{\dist[p]}$
-			\End		
-		\\ \> \Comment Compute $N[~]$ for the elements of $W_i$ and
-		\\ \> \Comment and construct $L_i^0,L_i^1,R_i^0,R_i^1$
-    	\li $N[r]=0$
-		\li \For $i=1\dots n$ \Do
-			\li \For $p\in W_i$ \Do
-				\li $N[p]= N[\pi[p]]+ \CR(st,p\pi[p]) \pmod 2$
-				\li \If $p$ to the left of the $y$-axis \Then
-					\li add $p$ to $L^{N[p]}_i$
-					\End
-				\li \If $p$ to the right of the $y$-axis \Then
-					\li add $p$ to $R^{N[p]}_i$
-					\End
-				\li Preprocess $R^0_i$ and $R^1_i$ as in Lemmas~\ref{adfafda}
-				\li Preprocess $L^1_i$ and $R^1_i$ for nearest neighbours
-				\End
-			\End
-    	\li $i=1$
-    	\li \While $i\le \best/2$ \Do
-			\\ \>\> \Comment cases within each side
-			\li search candidates in $L^0_i\times L^1_{i-1}$
-			\li search candidates in $L^0_i\times L^1_{i}$
-			\li search candidates in $L^1_i\times L^0_{i-1}$
-			\li search candidates in $R^0_i\times R^1_{i-1}$
-			\li search candidates in $R^0_i\times R^1_{i}$
-			\li search candidates in $R^1_i\times R^0_{i-1}$
-			\\ \>\> \Comment cases across $y$-axis crosing $\sigma$
-			\li search candidates in $L^0_i\times R^0_{i-1}$ crossing $\sigma$
-			\li search candidates in $L^0_i\times R^0_{i}$ crossing $\sigma$
-			\li search candidates in $L^1_i\times R^1_{i-1}$ crossing $\sigma$
-			\li search candidates in $L^1_i\times R^1_{i}$ crossing $\sigma$
-			\li search candidates in $L^0_{i-1}\times R^0_{i}$ crossing $\sigma$
-			\li search candidates in $L^1_{i-1}\times R^1_{i}$ crossing $\sigma$
-			\\ \>\> \Comment cases across $y$-axis not crosing $\sigma$			
-			\li search candidates in $L^0_i\times R^1_{i-1}$ not crossing $\sigma$
-			\li search candidates in $L^0_i\times R^1_{i}$ not crossing $\sigma$
-			\li search candidates in $L^1_i\times R^0_{i-1}$ not crossing $\sigma$
-			\li search candidates in $L^1_i\times R^0_{i}$ not crossing $\sigma$
-			\li search candidates in $L^0_{i-1}\times R^0_{i}$ not crossing $\sigma$
-			\li search candidates in $L^0_{i-1}\times R^1_{i}$ not crossing $\sigma$
-			\li $i \gets i+1$
-			\End
-    \li \Return $\best$
+    \Procname{$\proc{SeparationUnitDisksCompactRoot}(P,s,t,r,\best)$}
+   	\li $(\dist[~],\pi[~])\gets$ shortest path tree from $r$ in $\GG(P)$
+	\li Compute the levels $W_0,W_1,\dots$
+	\li \For $i=0\dots n$ \Do
+		\li Compute $N[p]$ for each $p$ in $W_i$
+		\li Compute $L^0_i$, $L^1_i$, $R^0_i$, $R^1_i$
+		\End
+    \li $i=1$
+    \li \While $2i< \best$ \Do
+		\\ \> \Comment within each side of the $y$-axis 
+		\li search candidates in \\
+			\> ~~~$L^0_i\times L^1_{i-1}$, $L^1_i\times L^0_{i-1}$, 
+				$R^0_i\times R^1_{i-1}$, $R^1_i\times R^0_{i-1}$,
+				$L^0_i\times L^1_{i}$ and $R^0_i\times R^1_{i}$
+		\\ \> \Comment across $y$-axis crosing $\sigma$
+		\li search candidates crossing $\sigma$ in \\
+			\> ~~~ $L^0_i\times R^0_{i-1}$, 
+				$L^1_i\times R^1_{i-1}$, $L^0_{i-1}\times R^0_{i}$, 
+				$L^1_{i-1}\times R^1_{i}$, $L^0_i\times R^0_{i}$ 
+				and $L^1_i\times R^1_{i}$
+		\\ \> \Comment across $y$-axis not crosing $\sigma$			
+		\li search candidates not crossing $\sigma$ in \\
+			\> ~~~ $L^0_i\times R^1_{i-1}$, 
+				$L^1_i\times R^0_{i-1}$, $L^1_{i-1}\times R^0_{i}$, 
+				$L^0_{i-1}\times R^1_{i}$, $L^0_i\times R^1_{i}$ 
+				and $L^1_i\times R^0_{i}$		
+		\li $i \gets i+1$
+		\End
     \\[-2mm]
 \end{codebox}
 \end{varwidth}
 ~~~~}\end{center}
-\caption{New algorithm for minimum separation with unit disks.}
-\label{fig:generic}
+\caption{Work for each vertex in the news algorithm for minimum separation with unit disks.}
+\label{fig:compact}
 \end{figure}
 
-Actually, we could compute the values $N[~]$ as they are needed.
+The work for each root is described schematically in Figure~\ref{fig:compact}.
+A slightly more precise version of the algorithm is given 
+as \proc{SeparationUnitDisksCompact} in Figure~\ref{fig:FULL} of the Appendix.
+As before, the variable $\best$ stores the length of the shortest cycle (or actually
+rooted closed walk) that we have found so far. We can start setting $\best=n+1$
+at start.
+If eventually we finish with the value $\best=n+1$, it means that there is no
+feasible solution for the separation problem.
+When we consider a root $r$ we are interested in closed walks rooted at $r$
+and length at most $\best$. Since any closed walk through a vertex of $W_i$ has
+length at least $2i$, we only need to consider indices $i$ such that $2i<\best$.
+Moreover (and this is not described in the algorithm), we can consider first
+the pairs that give walks for length $2i$ first, like for example $L^0_i\times L^1_{i-1}$ 
+and then the ones that give length  $2i+1$, like for example $L^0_i\times L^1_i$.
+If we use this order, as soon as we find a closed walk of inside 
+the while-loop we can finish the work for the root $r$, and move onto the next root.
 
-We do not need to consider indices $i$ larger than $best$ 
-
-\proc{FullAlgorithmSeparationUnitDisks} is given in Figure~\ref{fig:FULL}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Implementation}
+\section{Implementation and experiments}
 \label{sec:implementation}
+
+We have implemented the algorithms described using CGAL (\todo{version}.
+
+
+Computer, environment.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Shortest-path tree in unit-disk graphs}
@@ -784,10 +807,10 @@ Data was generated uniformly at random in polygons...
 \ovalbox{~~~~
 \begin{varwidth}{\linewidth}
 \begin{codebox}
-    \Procname{$\proc{FullAlgorithmSeparationUnitDisks}(P,s,t)$}
+    \Procname{$\proc{SeparationUnitDisksCompact}(P,s,t)$}
     \li $\best \gets n+1$ // length of the best separation so far
     \li \For $r\in P$ \Do
-    	\li $(\dist[~],\pi[~])\gets$ shortest path tree from $r$ in $G(P)$
+    	\li $(\dist[~],\pi[~])\gets$ shortest path tree from $r$ in $\GG(P)$
 		\\ \> \Comment Compute the levels $W_i$
     	\li \For $i=0\dots n$ \Do
 			\li $W_i\gets$ new empty list
@@ -812,28 +835,31 @@ Data was generated uniformly at random in polygons...
 				\End
 			\End
     	\li $i=1$
-    	\li \While $i\le \best/2$ \Do
-			\\ \>\> \Comment cases within each side
+    	\li \While $2i< \best$ \Do
+			\\ \>\> \Comment length $2i$; within each side of the $y$-axis 
 			\li search candidates in $L^0_i\times L^1_{i-1}$
-			\li search candidates in $L^0_i\times L^1_{i}$
 			\li search candidates in $L^1_i\times L^0_{i-1}$
 			\li search candidates in $R^0_i\times R^1_{i-1}$
-			\li search candidates in $R^0_i\times R^1_{i}$
 			\li search candidates in $R^1_i\times R^0_{i-1}$
-			\\ \>\> \Comment cases across $y$-axis crosing $\sigma$
+			\\ \>\> \Comment length $2i$; across $y$-axis crosing $\sigma$
 			\li search candidates in $L^0_i\times R^0_{i-1}$ crossing $\sigma$
-			\li search candidates in $L^0_i\times R^0_{i}$ crossing $\sigma$
 			\li search candidates in $L^1_i\times R^1_{i-1}$ crossing $\sigma$
-			\li search candidates in $L^1_i\times R^1_{i}$ crossing $\sigma$
 			\li search candidates in $L^0_{i-1}\times R^0_{i}$ crossing $\sigma$
 			\li search candidates in $L^1_{i-1}\times R^1_{i}$ crossing $\sigma$
-			\\ \>\> \Comment cases across $y$-axis not crosing $\sigma$			
+			\\ \>\> \Comment length $2i$; across $y$-axis not crosing $\sigma$			
 			\li search candidates in $L^0_i\times R^1_{i-1}$ not crossing $\sigma$
-			\li search candidates in $L^0_i\times R^1_{i}$ not crossing $\sigma$
 			\li search candidates in $L^1_i\times R^0_{i-1}$ not crossing $\sigma$
-			\li search candidates in $L^1_i\times R^0_{i}$ not crossing $\sigma$
-			\li search candidates in $L^0_{i-1}\times R^0_{i}$ not crossing $\sigma$
 			\li search candidates in $L^0_{i-1}\times R^1_{i}$ not crossing $\sigma$
+			\li search candidates in $L^1_{i-1}\times R^0_{i}$ not crossing $\sigma$
+			\\ \>\> \Comment length $2i+1$; within each side of the $y$-axis 
+			\li search candidates in $L^0_i\times L^1_{i}$
+			\li search candidates in $R^0_i\times R^1_{i}$
+			\\ \>\> \Comment length $2i+1$; across $y$-axis crosing $\sigma$
+			\li search candidates in $L^0_i\times R^0_{i}$ crossing $\sigma$
+			\li search candidates in $L^1_i\times R^1_{i}$ crossing $\sigma$
+			\\ \>\> \Comment length $2i+1$; across $y$-axis not crosing $\sigma$			
+			\li search candidates in $L^0_i\times R^1_{i}$ not crossing $\sigma$
+			\li search candidates in $L^1_i\times R^0_{i}$ not crossing $\sigma$
 			\li $i \gets i+1$
 			\End
     \li \Return $\best$
