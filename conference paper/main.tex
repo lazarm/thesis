@@ -88,7 +88,7 @@ where $n$ is the number of disks.
 
 In the minimum-separation problem, we are given $n$ unit disks and two points $s$ and $t$,
 not contained in any of the disks, and we want to compute 
-the minimum number of disks one needs to retain so that any path connecting
+the minimum number of disks one needs to retain so that any curve connecting
 $s$ to $t$ intersects some of the retained disks.
 We present a new algorithm solving this problem in $O(n^2\log^3 n)$ worst-case time
 and its implementation.
@@ -111,16 +111,17 @@ and an edge connecting two disks $D$ and $D'$ of $\D$ whenever $D$ and $D'$ inte
 An alternative, more convenient point of view, is to take as vertex set the set of
 centers of the disks, denoted by $P$, and connecting two points $p$ and $q$ of $P$ 
 whenever the Euclidean length $|pq|$ is at most the diameter of a disk. 
+The graph is unweighted.
 Given a root $r\in P$, the task is to compute a shortest-path tree from $r$ in this graph.
 See Figure~\ref{fig:example1}.
 
 \begin{figure}[htb]
 	\centering
-	\includegraphics[page=4,width=.3\textwidth]{unitdisks}
+	\includegraphics[page=4,width=.32\textwidth]{unitdisks}
 	\hfill
-	\includegraphics[page=2,width=.3\textwidth]{unitdisks}
+	\includegraphics[page=2,width=.32\textwidth]{unitdisks}
 	\hfill
-	\includegraphics[page=3,width=.3\textwidth]{unitdisks}
+	\includegraphics[page=3,width=.32\textwidth]{unitdisks}
 	\caption{Left: unit disks and two additional points $s$ and $t$. 
 		Middle: intersection graph of the disks. 
 		Right: a shortest-path tree in the graph.}
@@ -133,11 +134,12 @@ $s$ and $t$ not covered by any disks of $\D$.
 We say that $\D$ \emph{separates} $s$ and $t$ if each curve in the plane 
 from $s$ to $t$ intersects some disk of $\D$.
 The task is to find the minimum cardinality subset of $\D$
-that separates $s$ and $t$. See the right of Figure~\ref{fig:example1} for an example.
+that separates $s$ and $t$. See the left of Figure~\ref{fig:example1} 
+for an example of an instance.
 Formally, we want to solve
 \begin{align*}
 	\min ~~		& |\D'|\\
-	 \mbox{s.t.}~~ & \D'\subset \D \text{ and $\D'$ separates $s$ and $t$}. 
+	 \mbox{s.t.}~~ & \D'\subseteq \D \text{ and $\D'$ separates $s$ and $t$}. 
 \end{align*}
 
 
@@ -146,7 +148,7 @@ see for example~\cite{GG11,HS95,zg-wsn-04}.
 Often the model is referred as UDG.
 This model provides an appropriate trade off between simplicity and accuracy. 
 Other models are more accurate, as for example discussed in~\cite{KWZ03,LP10},
-but obtaining efficient algorithm for them is much more difficult.
+but obtaining efficient algorithms for them is much more difficult.
 
 While unit disks give a simple model, exploiting the geometric features 
 of the model is often challenging. 
@@ -169,7 +171,8 @@ We are aware of two algorithms to compute shortest-path trees in unit disk graph
 $O(n\log n)$ worst-case time: one by Cabello and Jej\v{c}i\v{c}~\cite{CJ15} and one Efrat, Itai and Katz~\cite{eik-01}. 
 Here we report on an implementation of a modification of the algorithm in~\cite{CJ15},
 and compare it against two obvious alternatives.
-The only complex ingredient in the algorithm is computing the Delaunay triangulation,
+The only complex ingredients in the algorithm is computing the Delaunay triangulation
+and static nearest-neighbour queries,
 but efficient libraries are available for this.
 The algorithm of~\cite{eik-01} would be substantially harder to implement 
 and it has worse constants hidden in the $O$-notation. 
@@ -178,7 +181,7 @@ As mentioned before, it is not obvious that the minimum-separation problem
 can be solved in polynomial time. 
 A 2-approximation algorithm is given by Gibson, Kanade, and Varadarajan~\cite{gkv-ipud-11}. 
 Cabello and Giannopoulos~\cite{CG16} provide an exact algorithm that takes $O(n^3)$ 
-wosrt-case time and works for arbitrary shapes, not just disks. 
+worst-case time and works for arbitrary shapes, not just disks. 
 In this paper we improve this last algorithm to near-quadratic time for the 
 special case of unit disks. 
 The basic principle of the algorithm is the same, but several additional tools
@@ -216,7 +219,7 @@ The implementation does not make this assumption.
 In Section~\ref{sec:algorithms} we discuss the theoretical
 algorithms for both problems and their guarantees.
 In Section~\ref{sec:implementation} we discuss the implementations 
-and in Section~\ref{sec:experiments} we present our experimental results.
+and the experimental results.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Description of algorithms}
@@ -733,10 +736,42 @@ the while-loop we can finish the work for the root $r$, and move onto the next r
 \section{Implementation and experiments}
 \label{sec:implementation}
 
-We have implemented the algorithms described using CGAL (\todo{version}.
+We have implemented the algorithms in Section~\ref{sec:algorithms}
+using CGAL (\todo{version}~\cite{reference}
+because it provides the more complex procedures we need:
+Delaunay triangulations, range trees, and nearest neighboours.
+Although in some cases we had to make small modifications, it was
+very helpful to have the CGAL code available as a starting point. 
+
+CGAL provides procedures to compute the Delaunay triangulation~\cite{}.
+For nearest neighbours (in the plane) we used the library by~\cite{}. 
+Although in principle one could use also point location on the Voronoi diagram,
+our earlier tests suggested using 
+We did not test other libraries.
+
+For range trees we extended the structure presented in~\cite{}.
+
+Exact/non-exact arithmetic
 
 
-Computer, environment.
+Data was generated uniformly at random in polygons...
+
+
+\begin{figure}
+	\includegraphics[width=\textwidth,page=1]{data_generation}
+	\caption{Data generation with a small hole (left) and a large hole (right).}
+	\label{fig:data_generation}
+\end{figure}
+
+\begin{figure}
+	\includegraphics[width=\textwidth,page=2]{data_generation}
+	\caption{Data generation with four small holes (right) and four large holes (right).}
+	\label{fig:data_generation}
+\end{figure}
+
+
+All the experiments were carried out in a \todo{Computer, environment.}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Shortest-path tree in unit-disk graphs}
@@ -775,33 +810,7 @@ number of edges of the graph.
 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Experimental results}
-\label{sec:experiments}
 
-Data was generated uniformly at random in polygons...
-
-
-\begin{figure}
-	\includegraphics[width=\textwidth,page=1]{data_generation}
-	\caption{Data generation with a small hole (left) and a large hole (right).}
-	\label{fig:data_generation}
-\end{figure}
-
-\begin{figure}
-	\includegraphics[width=\textwidth,page=2]{data_generation}
-	\caption{Data generation with four small holes (right) and four large holes (right).}
-	\label{fig:data_generation}
-\end{figure}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Shortest-path tree in unit-disk graphs}
-\label{sec:experiments-sptree}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Minimum separation with unit-disk}
-\label{sec:experiments-separation}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusions}
@@ -856,8 +865,6 @@ Data was generated uniformly at random in polygons...
 				\li \If $p$ to the right of the $y$-axis \Then
 					\li add $p$ to $R^{N[p]}_i$
 					\End
-				\li Preprocess $R^0_i$ and $R^1_i$ as in Lemmas~\ref{adfafda}
-				\li Preprocess $L^1_i$ and $R^1_i$ for nearest neighbours
 				\End
 			\End
     	\li $i=1$
@@ -888,6 +895,7 @@ Data was generated uniformly at random in polygons...
 			\li search candidates in $L^1_i\times R^0_{i}$ not crossing $\sigma$
 			\li $i \gets i+1$
 			\End
+		\End
     \li \Return $\best$
     \\[-2mm]
 \end{codebox}
