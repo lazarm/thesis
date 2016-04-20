@@ -19,6 +19,10 @@
 
 \usepackage{todonotes}
 
+\renewcommand{\floatpagefraction}{.98}
+\renewcommand{\textfraction}{0.01}
+\renewcommand{\topfraction}{0.99}
+
 
 %-- -- -- line numbers -- -- --
 \usepackage[mathlines]{lineno}
@@ -737,7 +741,7 @@ case of unit disks the previous, generic algorithm.
 
 The work for each root is described schematically in Figure~\ref{fig:compact}.
 A slightly more precise version of the algorithm is given 
-as \proc{SeparationUnitDisksCompact} in Figure~\ref{fig:FULL} of the Appendix.
+as \proc{SeparationUnitDisksCompact} in Appendix~\ref{sec:FULLAlgorithm}.
 As before, the variable $\best$ stores the length of the shortest cycle (or actually
 rooted closed walk) that we have found so far. We can start setting $\best=n+1$
 at start.
@@ -865,16 +869,20 @@ in our test cases.
 \newpage
 \begin{appendix}
 
-\section{Missing proofs}
+\section{Appendix}
+\label{appendix}
 
-3-path condition
+\subsection{3-path condition}
 
 
 
-\section{Full new algorithm for separation with unit disks}
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\subsection{New algorithm for minimum-separation with unit-disks}
+\label{sec:FULLAlgorithm}
 \begin{figure}[htb]
 \begin{center}
+\scalebox{.92}{%
 \ovalbox{~~~~
 \begin{varwidth}{\linewidth}
 \begin{codebox}
@@ -935,10 +943,10 @@ in our test cases.
     \li \Return $\best$
     \\[-2mm]
 \end{codebox}
-\end{varwidth}
-~~~~}\end{center}
-\caption{New algorithm for minimum separation with unit disks.}
-\label{fig:FULL}
+\end{varwidth}~~~~}}
+\end{center}
+%\caption{New algorithm for minimum separation with unit disks.}
+%\label{fig:FULL}
 \end{figure}
 
 
