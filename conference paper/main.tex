@@ -1,4 +1,4 @@
-\documentclass[a4paper,USenglish,numberwithinsect]{lipics}
+\documentclass[a4paper,USenglish]{lipics}
 
 \usepackage{graphicx}
 \usepackage{wrapfig}
@@ -370,7 +370,7 @@ When there are many, the choice of $T_{r^*}$ is irrelevant.
 Then, the set of cycles $\{ \cycle(T_{r^*},e)\mid e\in E(G)\setminus E(T_{r^*})\}$
 contains an optimal solution.
 This follows from the co-called 3-path condition; 
-see~\cite{CG16} for the ideas, and \todo{APPENDIX} appendix~\ref{} 
+see~\cite{CG16} for the ideas, and Appendix~\ref{sec:3-path-condition} 
 for a self-contained proof. Since we do not know $r^*$, we just try all
 possible roots. (This leads to the option of having a randomized algorithm,
 by selecting some roots at random, for the case where the optimal solution is large.)
@@ -596,7 +596,7 @@ From the theoretical perspective is would be more efficient to compute the union
 			\text{ intersects } \sigma \}
 \]
 and make point location there. Since the regions cannot have many crossings,
-good assymptotic bounds can be obtained. However, such approach seems to be 
+good asymptotic bounds can be obtained. However, such approach seems to be 
 only of theoretical interest and the improvement on the overall result
 is rather marginal.
 
@@ -868,13 +868,58 @@ in our test cases.
 
 \newpage
 \begin{appendix}
-
 \section{Appendix}
 \label{appendix}
 
 \subsection{3-path condition}
+\label{sec:3-path-condition}
+We have to prove the following statement.
 
+\begin{lemma}
+	Let $W^*$ be a shortest cycle in $G$ that crosses the segment 
+	$st$ an odd number of times and let $r^*$ be any vertex in $W^*$.
+	Fix a shortest-path tree $T_{r^*}$ from $r^*$ in $G$.
+	Then, the set of cycles $\{ \cycle(T_{r^*},e)\mid e\in E(G)\setminus E(T_{r^*})\}$
+	contains a shortest cycle of $G$ that crosses $st$ an odd number of times.
+\end{lemma}
+\begin{proof}
+	The proof is a standard consequence of the 3-path condition and 
+	very similar to that given in~\cite{CG16}. We spell it out.
+	
+	For any points $p$ and $q$ of $P$, let $T_{r^*}[p \rightarrow q]$ be the 
+	unique path contained in $T_{r^*}$ from $p$ to $q$.
+	For every edge $pq$ of $G$, let $\walk(T_{r^*},pq)$ be the closed walk that follows 
+	$T_{r^*}[r^*\rightarrow p]$, then the edge $pq$, and finally $T_{r^*}[q\rightarrow r^*]$.
+	We then have the following relation modulo 2:
+	\begin{align*}
+		\sum_{pq\in W^*} \CR(st,\walk(T_{r^*},pq)) ~&=~ 
+		\sum_{pq\in W^*} \left(\CR(st,T_{r^*}[r^* \rightarrow p])+ \CR(st,pq) + 
+						\CR(st,T_{r^*}[q \rightarrow r^*]\right) \\
+		&=~ \sum_{pq\in W^*} \CR(st,pq)  \\
+		&=~ \CR(st,W^*) \\
+		&=~ 1. 		
+	\end{align*}
+	In the second equality we have used that each path
+	$T_{r^*}[r^*\rightarrow p]$ and its reverse $T_{r^*}[p\rightarrow r^*]$ 
+	appears an even number of times in the sum,
+	and thus cancel out modulo 2.
+	Parity implies that, for some edge $p_0q_0$ of $W^*$, 
+	we have $\CR(st,\walk(T_{r^*},p_0q_0))=1$.
+	Since $\CR(st,\walk(T_{r^*},p_0q_0))= \CR(st,\cycle(T_{r^*},p_0q_0))$ 
+	because the path from $r^*$ to the lowest common ancestor of $p$ and $q$ in $T_{r^*}$ 
+	is counted twice on the left side of the equality, 
+	we have $\CR(st,\cycle(T_{r^*},p_0q_0))=1$. 
 
+	Since $r^*$ is a vertex of $W^*$ and $p_0q_0$ is an edge of $W^*$,
+	the length of $W^*$ is at least the length of $T_{r^*}[r^* \rightarrow p_0]$ plus $1$,
+	for the edge $p_0q_0$,
+	plus the length of $T_{r^*}[q_0 \rightarrow r^*]$. However, this second part
+	is exactly the length of $\walk(T_{r^*},p_0q_0)$, which is at least the length of 
+	$\cycle(T_{r^*},p_0q_0)$.
+
+	We have shown that $\cycle(T_{r^*},p_0q_0)$ is not longer than $W^*$ 
+	and crosses $st$ an odd number of times. The result follows.
+\end{proof}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
