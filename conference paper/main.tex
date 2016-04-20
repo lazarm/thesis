@@ -370,6 +370,12 @@ see~\cite{CG16} for the ideas, and \todo{APPENDIX} appendix~\ref{}
 for a self-contained proof. Since we do not know $r^*$, we just try all
 possible roots. (This leads to the option of having a randomized algorithm,
 by selecting some roots at random, for the case where the optimal solution is large.)
+In summary, the size of the optimal solution is given by
+\[
+	\min \{ 1+d_G(r,p)+d_G(r,q) \mid
+		r\in P,~ pq\in E(G)\setminus E(T_r),~
+		\CR(st,\cycle(T_{r},pq))=1 \} .
+\]
 
 The values $\CR (st, \cycle(T_r,e))$ can be computed in constant amortized time per edge
 with some easy bookkeeping. Consider a fixed tree $T_r$.
@@ -378,9 +384,9 @@ of the path in $T_r$ from $r$ to $p$. When $p$ is not the root,
 the value $N[p]$ can be computed from the value of its parent $\pi[p]$ in $T_r$
 using that $N[p]=N[\pi[p]]+\CR(st,p\pi[p])$.
 In the algorithm we have written it this way (lines 4--6), but
-one can of course compute the values at the time of computing the shortest path tree $T_r$.
+one can also compute the values at the time of computing the shortest path tree $T_r$.
 
-We then have for each $T_r$
+We then have for each shortest-path tree $T_r$
 \begin{align*}
 	\forall pq\in E(G)\setminus E(T_r):&~~~~
 	\CR (st, \cycle(T_r,pq))= N[p]+N[q]+\CR(st,pq) \pmod 2\\
@@ -388,8 +394,8 @@ We then have for each $T_r$
 	0= N[p]+N[q]+\CR(st,pq) \pmod 2
 \end{align*}
 because crossings that are counted twice cancel out modulo $2$.
-(In particular, the path in $T_r$ from $r$ to the lowest common ancestor of $p$ and $q$
-is counted twice.)
+In particular, the path in $T_r$ from $r$ to the lowest common ancestor of $p$ and $q$
+is counted twice.
 This implies that we can just check for \emph{all} edges $pq$ of $G$ whether
 the sum  $N[p]+N[q]+\CR(st,pq)$ is $0$ modulo $2$.
 The final resulting algorithm, denoted as \proc{GenericMinimumSeparation},
@@ -462,15 +468,15 @@ of $T$.
 	we can decide in $O(\log^3 n)$ time whether the set 
 	$\{ b\in B \mid \text{$ab$ intersects $\sigma$ and $|ab|\le 1$}\}$
 	is empty.
-	A similar data structure with the same guarantees handles queries
-	to know whether 
+	The same data structure can handle queries
+	to know whether the set
 	$\{ b\in B \mid \text{$ab$ does not intersect $\sigma$ and $|ab|\le 1$}\}$
 	is empty.
 \end{lemma}
 \begin{proof}
 	We are going to use point-line duality and range trees.
 	These are standard concepts in Computational Geometry;
-	wee for example~\cite[Chapters 5 and 8]{bkos-08}.
+	see for example~\cite[Chapters 5 and 8]{bkos-08}.
 	We assume that the reader is familiar with the topic.
 	
 	We use the following precise point-line duality: 
@@ -544,9 +550,9 @@ of $T$.
 	This means that we get the set
 	$\{ b\in B \mid \text{$ab$ intersects $\sigma$}\}$
 	as the union of canonical subsets 
-	$P(v_1),\dots,P(v_k)$ for $k=O(\log^2 n)$ nodes in the secondary structure
+	$P(v_1),\dots,P(v_k)$ for $k=O(\log^2 n)$ nodes in the secondary levels
 	of the 2-dimensional range tree.
-	For each such canonical subset $P(v_i)$ we query for the nearest neighbour of $a$.
+	For each such canonical subset $P(v_i)$, we query for the nearest neighbour of $a$.
 	If for some $v_i$ we get a nearest neighbour at distance at most $1$ from $a$,
 	then we know that $\{ b\in B \mid \text{$ab$ intersects $\sigma$ and $|ab|\le 1$}\}$
 	is non-empty. Otherwise the set is empty.
@@ -573,11 +579,17 @@ of $T$.
 	other 3 quadrants because one of them is always empty.)
 \end{proof}
 
+Inside the data structure of Lemma~\ref{lem:block} we are using a data structure
+for nearest neighbours with construction time $O(n\log n)$ and query time $O(\log n)$.
+If we would use another data structure for nearest neighbours with construction
+time $T_c(n)$ and query time $T_q(n)$, then the construction time 
+in Lemma~\ref{lem:block} becomes $O(T_c(n\log^2 n))$ and the query time is
+$O(T_q(n)\cdot \log^2 n)$.
+
 From the theoretical perspective is would be more efficient to compute the union
-of the $|B|$ regions
 \[
-	\{ (x,y)\in \RR^2\mid x<0,~ |(x,y)b|\le 1,~ (x,y) 
-			\text{ intersects } \sigma \} ,~~ b\in B
+	\bigcup_{b\in B} \{ (x,y)\in \RR^2\mid x<0,~ |(x,y)b|\le 1,~ (x,y) 
+			\text{ intersects } \sigma \}
 \]
 and make point location there. Since the regions cannot have many crossings,
 good assymptotic bounds can be obtained. However, such approach seems to be 
@@ -589,7 +601,7 @@ the shortest path tree $T_r$ and the corresponding tables $\pi[~]$, $\dist[~]$ a
 as discussed in Section~\ref{sec:generic}.
 We group the points by their distance from $r$:
 \[
-	W_i ~=~ \{ p\in P \mid \dist[p]=i \},~~~ i=0,1,\dots ,n
+	W_i ~=~ \{ p\in P \mid \dist[p]=i \},~~~ i=0,1,\dots
 \]
 A standard property of BFS trees, that also holds here,
 is that all the distances from the root for any two adjacent vertices differ by at most $1$.
@@ -626,9 +638,11 @@ Up to symmetry, we have the following cases:
 	of the $y$-axis), we first preprocess $L_{i'}^{1-j}$ for nearest neighbours.
 	Then, for each point $p$ in $L_i^j$, we query the data structure
 	to find its nearest neighbour $q_p$ in $L_i^j$.
-	If for some $p$ we get that $|pq_p|\le 11$, then we have
-	obtained a closed walk through $r$ of length $i+i'+1$ 
-	crossing $st$ an odd number of times.
+	If for some $p$ we get that $|pq_p|\le 1$, then we have
+	obtained an edge $pq_p$ of $G$ with $\CR(\cycle(T_r,pq_p))=1$
+	and $\dist[p]+\dist[q_p]+1=i+i'+1$.
+	If for each $p$ we have $|pq_p|> 1$, then $L_i^j\times L_{i'}^{1-j}$
+	does not contain any edge of $G$
 	The overall running time, if $m=|L_i^j|+|L_{i'}^{1-j}|$, is
 	$O(m\log m)$.
 \item If we want to search the candidates $(p,q)\in L_i^j\times R_{i'}^{j}$
@@ -636,9 +650,10 @@ Up to symmetry, we have the following cases:
 	we first preprocess $R_{i'}^{1-j}$ as discussed in Lemma~\ref{lem:block}
 	into a data structure.
 	Then, for each point $p\in L_i^j$ we query the data structure (for crossing $st$).
-	If we get some nonempty set, then we get 
-	a closed walk through $r$ of length $i+i'+1$ 
-	that crosses $st$ an odd number of times.
+	If we get some nonempty set, then there is 
+	an edge $pq$ of $G$ with $p\in L_i^j$, $q\in R_{i'}^{j}$, $\CR(\cycle(T_r,pq))=1$
+	and $\dist[p]+\dist[q]+1=i+i'+1$.
+	Otherwise, there is no edge $pq\in L_i^j\times R_{i'}^{j}$ that crosses $st$.
 	The overall running time, if $m=|L_i^j|+|R_{i'}^{j}|$, is
 	$O(m\log^3 m)$.
 \item If we want to search the candidates $(p,q)\in L_i^j\times R_{i'}^{1-j}$
@@ -646,12 +661,15 @@ Up to symmetry, we have the following cases:
 	we first preprocess $R_{i'}^{1-j}$ as in Lemma~\ref{lem:block}
 	into a data structure.
 	Then, for each point $p\in L_i^j$ we query the data structure (for not crossing $st$).
-	If we get some nonempty set, then we get a cycle
-	of length (at most) $i+i'+1$ that crosses $st$ an odd number of times.
-	The overall running time, if $m=|L_i^j|+|R_{i'}^{1-j}|$, is
-	$O(m\log^3 m)$.
+	The remaining discussion is like in the previous item.
+%	If we get some nonempty set, then there is 
+%	an edge $pq$ of $G$ with $p\in L_i^j$, $q\in R_{i'}^{1-j}$, $\CR(\cycle(T_r,pq))=1$,
+%	and $\dist[p]+\dist[q]+1=i+i'+1$.
+%	Otherwise, there is no edge $pq\in L_i^j\times R_{i'}^{1-j}$ that does not cross $st$.
+%	The overall running time, if $m=|L_i^j|+|R_{i'}^{1-j}|$, is
+%	$O(m\log^3 m)$.
 \end{itemize}
-We conclude that each of the cases can be done in $O(m\log^3 m)$ time, where
+We conclude that each of the cases can be done in $O(m\log^3 m)$ worst-case time, where
 $m$ is the number of points involved in the case.
 Iterating over all possible values $i$, 
 it is now easy to convert this into an algorithm that spends $O(n\log^3 n)$ time
@@ -666,7 +684,7 @@ case of unit disks the previous, generic algorithm.
 	Let $P$ be the centers of the disks and,
 	as before, consider the graph $G=\GG(P)$.
 	For each root $r\in P$ we build the shortest-path tree
-	and the sets $W_i,L_i^0,L_i^1,R_i^0,L_i^1$ in $O(n\log n)$ time.
+	and the sets $W_i,L_i^0,L_i^1,R_i^0,L_i^1$ for all $i$ in $O(n\log n)$ time.
 	We then have at most $n$ iterations where, in iteration $i$
 	we spend $O(|W_i\cup W_{i-1}|\log^3 |W_i\cup W_{i-1}|)$ time.
 	Since the sets $W_i$ are disjoint,
@@ -681,7 +699,7 @@ case of unit disks the previous, generic algorithm.
 \ovalbox{~~~~
 \begin{varwidth}{\linewidth}
 \begin{codebox}
-    \Procname{$\proc{SeparationUnitDisksCompactRoot}(P,s,t,r,\best)$}
+    \Procname{~~\Comment Work for root $r\in P$}
    	\li $(\dist[~],\pi[~])\gets$ shortest path tree from $r$ in $\GG(P)$
 	\li Compute the levels $W_0,W_1,\dots$
 	\li \For $i=0\dots n$ \Do
@@ -713,7 +731,7 @@ case of unit disks the previous, generic algorithm.
 \end{codebox}
 \end{varwidth}
 ~~~~}\end{center}
-\caption{Work for each vertex in the news algorithm for minimum separation with unit disks.}
+\caption{Work for each vertex in the new algorithm for minimum separation with unit disks.}
 \label{fig:compact}
 \end{figure}
 
@@ -732,15 +750,15 @@ Moreover (and this is not described in the algorithm, but it is done
 in the implementation), we can consider first
 the pairs that give walks for length $2i$ first, like for example $L^0_i\times L^1_{i-1}$ 
 and then the ones that give length  $2i+1$, like for example $L^0_i\times L^1_i$.
-If we use this order, as soon as we find a closed walk of inside 
-the while-loop we can finish the work for the root $r$, and move onto the next root.
+If we use this order, as soon as we find an edge in 
+the while-loop, we can finish the work for the root $r$, and move onto the next root.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Implementation and experiments}
 \label{sec:implementation}
 
-We have implemented the algorithms in Section~\ref{sec:algorithms}
+We have implemented the algorithms of Section~\ref{sec:algorithms}
 using CGAL version~4.6.3~\cite{cgal}
 because it provides the more complex procedures we need:
 Delaunay triangulations and Voronoi diagrams~\cite{cgal:k-vda2-15a}, 
@@ -835,11 +853,7 @@ in our test cases.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Conclusions}
-\label{sec:conclusions}
-
-
-
+\myparagraph{Conclusions on the experiments.}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
