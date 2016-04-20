@@ -230,7 +230,7 @@ and the experimental results.
 \label{sec:algorithm-sptree}
 We describe here the algorithm of Cabello and Jej\v{c}i\v{c}~\cite{CJ15} 
 to compute a shortest path tree in $G$ from a given root point $r\in P$. 
-As it is usually done for shortest path algorithms 
+As it is usually done for shortest path algorithms, 
 we use tables $\dist[\cdot]$ and $\pi[\cdot]$ indexed by the points of $P$ to record, 
 for each point $p\in P$, the distance $d_{G}(s,p)$ and the ancestor of $p$ 
 in a shortest $(s,p)$-path. 
@@ -267,12 +267,14 @@ smaller than $1$, then the shortest path tree is extended by connecting $p$ to $
     		\li $q$ an arbitrary point of $Q$
             \li remove $q$ from $Q$
             \li \For $qp$ edge in $DT(P)$ \Do
-            	\li $w \gets$ nearest neighbour of $p$ in $W_{i-1}$
-            	\li \If $\dist[p]=\infty$ and $|pw|\leq 1$ \Then
-                	\li $\dist[p]\gets i$
-                    \li $\pi[p]\gets w$
-                    \li add $p$ to $Q$
-                    \li add $p$ to $W_{i}$
+            	\li \If $\dist[p]=\infty$ \Then
+					\li $w \gets$ nearest neighbour of $p$ in $W_{i-1}$
+					\li \If $|pw|\leq 1$ \Then
+						\li $\dist[p]\gets i$
+						\li $\pi[p]\gets w$
+						\li add $p$ to $Q$
+						\li add $p$ to $W_{i}$
+						\End
                     \End
             	\End
             \End
@@ -294,12 +296,12 @@ for $n$ points, has construction time $T_c(n)$ and query time $T_q(n)$,
 and the Delaunay triangulation is computed in $T_{DT}(n)$ time,
 then the algorithm takes $O(T_{DT}(n)+ T_c(n)+ n T_q(n))$ time. 
 Standards tools in Computational Geometry imply that 
-$T_{DT}(n)=O(n\log n)$, $T_c(n)=O(nqlog n)$ and $T_q(n)=O(\log n)$.
+$T_{DT}(n)=O(n\log n)$, $T_c(n)=O(n\log n)$ and $T_q(n)=O(\log n)$.
 This leads to the following.
 
 \begin{theorem}[Cabello and Jej\v{c}i\v{c}~\cite{CJ15}]
   Let $P$ be a set of $n$ points in the plane and let $r$ be a point from $P$. 
-  In time $O(n \log n)$ we can compute a shortest path tree from $s$
+  In time $O(n \log n)$ we can compute a shortest path tree from $r$
   in the unweighted graph $\GG(P)$.
 \end{theorem}
 
@@ -310,7 +312,7 @@ we only need to compute the Delaunay triangulation once.
 \subsection{Minimum separation with unit-disk}
 \label{sec:algorithm-separation}
 
-Cabello and Giannopouolos~\cite{CG16} present an algorithm
+Cabello and Giannopoulos~\cite{CG16} present an algorithm
 for the minimum separation problem that in the worst-case runs in cubic-time.
 The algorithm has one feature that is both an advantage and a disadvantage: 
 it works for any reasonable shapes, like segments or ellipses, and not just unit disks.
@@ -337,16 +339,15 @@ This is explained in Section~\ref{sec:quadratic}.
 \label{sec:generic}
 Let us first introduce some notation.
 Recall that $s$ and $t$ are the two points to separate.
-Each walk $W$ in the graph $G=\GG(P)$ defines a planar curve
+Each walk $W$ in the graph $G=\GG(P)$ defines a planar polygonal curve
 in the obvious way: we connect the points of $P$ 
 with segments in the order given by $W$. 
 We will relax the notation slightly and denote also by $W$ the curve itself.
 For any spanning tree $T$ of $G$ and any edge $e\in E(G)\setminus E(T)$, 
-let $\cycle(T,e))$ be the unique cycle in $T+e$.
+let $\cycle(T,e)$ be the unique cycle in $T+e$.
 Finally, for any walk in $G(P)$, let $\CR (st,W)$ be the 
 modulo $2$ value of the number of crossings between the segment $st$ 
 and (the curve defined by) $W$.
-
 The following property is implicit in~\cite{CG16} and explicit in~\cite{CK15}:
 \begin{quote}
 	Let $T$ be any spanning tree of $G$.
@@ -356,18 +357,19 @@ The following property is implicit in~\cite{CG16} and explicit in~\cite{CK15}:
 \end{quote}
 
 A consequence of this is that finding a minimum separation amounts 
-to finding a shortest cycle $G$ that crosses the segment $st$ an odd number of times.
+to finding a shortest cycle in $G$ that crosses the segment $st$ an odd number of times.
 Moreover, one can show that we can restrict our search to 
 a very concrete family cycles, as follows. 
-For each root $r$ let us fix a shortest-path tree $T_r$ from $r$ in $G$.
-When there are many, the choice of $T_r$ is irrelevant. 
-Then, we can restrict our search to
-\[
-	\{ \cycle(T_r,e)\mid r\in P,~ e\in E(G)\setminus E(T_r)\}.
-\]
+Consider any optimal cycle $W^*$ and let $r^*$ be any vertex in $W^*$.
+Fix a shortest-path tree $T_{r^*}$ from $r^*$ in $G$.
+When there are many, the choice of $T_{r^*}$ is irrelevant. 
+Then, the set of cycles $\{ \cycle(T_{r^*},e)\mid e\in E(G)\setminus E(T_{r^*})\}$
+contains an optimal solution.
 This follows from the co-called 3-path condition; 
 see~\cite{CG16} for the ideas, and \todo{APPENDIX} appendix~\ref{} 
-for a self-contained proof.
+for a self-contained proof. Since we do not know $r^*$, we just try all
+possible roots. (This leads to the option of having a randomized algorithm,
+by selecting some roots at random, for the case where the optimal solution is large.)
 
 The values $\CR (st, \cycle(T_r,e))$ can be computed in constant amortized time per edge
 with some easy bookkeeping. Consider a fixed tree $T_r$.
@@ -409,7 +411,7 @@ is given in Figure~\ref{fig:generic}.
 			\End
     	\li \For $pq\in E(G(P))$\Do
 			\li \If $N[p]+N[q]+ \CR(pq,st) \pmod 2 =1$ \Then
-				\li $\best \gets \min \{ \best, \dist[p]+\dist[q]+1$ 
+				\li $\best \gets \min \{ \best, \dist[p]+\dist[q]+1\}$ 
 				\End
 			\End
 		\End
@@ -441,8 +443,9 @@ compactly. This is what we explain next.
 
 From now on we will assume that $s$ is the origin and 
 $t$ is the point $(0,\tau)$, with $\tau\ge 0$. Thus, the segment $st$
-is vertical and $t$ is above $s$. The implementation also makes
-this assumption. A simple rigid transformation can be applied to
+is vertical and $t$ is above $s$. The implementation just
+assumes that $st$ is vertical with $s$ below $t$. 
+A simple rigid transformation can be applied to
 the input to get to this setting.
 
 We will use the data structure in the following lemma.
@@ -686,7 +689,7 @@ case of unit disks the previous, generic algorithm.
 		\li Compute $L^0_i$, $L^1_i$, $R^0_i$, $R^1_i$
 		\End
     \li $i=1$
-    \li \While $2i< \best$ \Do
+    \li \While $2i< \best$ and $W_i\neq\emptyset$ \Do
 		\\ \> \Comment within each side of the $y$-axis 
 		\li search candidates in \\
 			\> ~~~$L^0_i\times L^1_{i-1}$, $L^1_i\times L^0_{i-1}$, 
@@ -725,7 +728,8 @@ feasible solution for the separation problem.
 When we consider a root $r$ we are interested in closed walks rooted at $r$
 and length at most $\best$. Since any closed walk through a vertex of $W_i$ has
 length at least $2i$, we only need to consider indices $i$ such that $2i<\best$.
-Moreover (and this is not described in the algorithm), we can consider first
+Moreover (and this is not described in the algorithm, but it is done
+in the implementation), we can consider first
 the pairs that give walks for length $2i$ first, like for example $L^0_i\times L^1_{i-1}$ 
 and then the ones that give length  $2i+1$, like for example $L^0_i\times L^1_i$.
 If we use this order, as soon as we find a closed walk of inside 
@@ -737,25 +741,25 @@ the while-loop we can finish the work for the root $r$, and move onto the next r
 \label{sec:implementation}
 
 We have implemented the algorithms in Section~\ref{sec:algorithms}
-using CGAL (\todo{version}~\cite{reference}
+using CGAL version~4.6.3~\cite{cgal}
 because it provides the more complex procedures we need:
-Delaunay triangulations, range trees, and nearest neighboours.
+Delaunay triangulations and Voronoi diagrams~\cite{cgal:k-vda2-15a}, 
+range trees~\cite{cgal:n-rstd-15a}, and nearest neighboours~\cite{cgal:tf-ssd-15a}.
 Although in some cases we had to make small modifications, it was
 very helpful to have the CGAL code available as a starting point. 
+The coordinates of the points were Cartesian doubles.
 
-CGAL provides procedures to compute the Delaunay triangulation~\cite{}.
-For nearest neighbours (in the plane) we used the library by~\cite{}. 
-Although in principle one could use also point location on the Voronoi diagram,
-our earlier tests suggested using 
-We did not test other libraries.
+Experiments were carried out in a laptop with CPU i5-5200U at 2.20 Ghz, 
+RAM 8GB, and Windows 10.
 
-For range trees we extended the structure presented in~\cite{}.
-
-Exact/non-exact arithmetic
-
-
+\myparagraph{Data generation}
 Data was generated uniformly at random in polygons...
 
+We generated 1K, 2K, 5K, 10K, 20K and 50K points for the cases where the outer rectangle
+has sizes $4\times 1$, $8\times 2$,\ldots, $128\times 32$.
+The data was generated once and stored.
+Some of these cases are not meaningful for the minimum-separation because the disks
+centered at the points cover the hole.
 
 \begin{figure}
 	\includegraphics[width=\textwidth,page=1]{data_generation}
@@ -770,16 +774,17 @@ Data was generated uniformly at random in polygons...
 \end{figure}
 
 
-All the experiments were carried out in a \todo{Computer, environment.}
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Shortest-path tree in unit-disk graphs}
-\label{sec:implementation-sptree}
+\myparagraph{Shortest-path tree in unit-disk graphs}
+For the shortest-path tree we used Delaunay triangulation as provided by CGAL.
+The data structure for nearest neighbour queries is a small extension of
+the one provided by~\cite{cgal:k-vda2-15a}. 
+When the algorithm is used for the minimum-separation problem,
+at the time of constructing the shortest-path tree we already
+compute the tables $N[~]$ and the sets $L^0_i,L^1_i,R^0_i,R^1_i$.
 
-\myparagraph{Alternative constructions} 
-Let us mention two obvious alternatives that we use in our comparison.
-
+We compared the implementation with two obvious alternative algorithms to
+compute shortest-path trees.
 The first alternative is to build the graph $G=\GG(P)$ explicitly. 
 Thus, for each pair of points $p,q$ we check whether their distance is
 at most once and add an edge to a graph data structure.
@@ -787,28 +792,45 @@ We can then use breadth-first-search (BFS) from the given root $r$.
 The preprocessing is quadratic, and the time spent to compute
 a shortest-path tree depends on the density of the graph $G$.
 
-The second option we consider is to use a unit-length grid. 
+The second alternative we consider is to use a unit-length grid. 
 Two points $(x,y)$ and $(x',y')$ are in the same grid cell
 if and only if 
 $(\lfloor x\rfloor ,\lfloor y\rfloor)=(\lfloor x'\rfloor ,\lfloor y'\rfloor)$.
 We store all the points of a grid cell $c$ in a list $\ell(c)$.
 The non-empty lists $\ell(c)$ are stored in a dictionary,
 where the bottom-left corner of the cell is used as key.
-We can then run some sort of BFS using this data. When processing
+We can then run some sort of BFS using this structure. When processing
 a point $p$ in a cell $c$, we have to treat all the points 
 in $c$ and its adjacent cells as candidate points. 
 The preprocessing is linear, and the time spent to compute
 a shortest-path tree depends on the density of the graph $G$.
 The number of candidates that are checked is proportional to the
 number of edges of the graph.
+For each shortest-path tree we compute the lists and the dictionary anew.
+(As can be seen in the experiments, this is very fast in any case.)
 \todo{Are perhaps points deleted from the list once they are assigned a level?}
 
+The results comparing are in the table.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Minimum separation with unit-disk}
-\label{sec:implementation-separation}
+\myparagraph{Minimum separation with unit-disk}
+We have implemented the algorithm \proc{GenericMinimumSeparation}
+and the new algorithm based on a compact treatment of the edges.
+As mentioned earlier, the table $N[~]$ and the sets $L^0_i,L^1_i,R^0_i,R^1_i$
+are constructed at the time of computing the shortest-path tree.
 
+In the data structure of Lemma~\ref{lem:block},
+we do use a 2-dimensional tree as the primary structure, making some modifications
+of~\cite{cgal:n-rstd-15a}. In the secondary structure, for nearest neighbour, 
+instead of using Voronoi diagrams, we used a small modification of
+the $kd$-trees implemented in~\cite{cgal:tf-ssd-15a}. 
+In some preliminary experiments this seemed to be a better choice.
+In our modification, we make a range search query for points at distance at most $1$,
+and finish the search whenever we get the first point.
 
+In the new algorithm, before calling to the function to candidates pairs, like for example $L_i^0\times R^i_1$,
+we test that both sets are non-empty. This simple test reduced the time by 30-50\%
+in our test cases.
 
 
 
@@ -868,7 +890,7 @@ number of edges of the graph.
 				\End
 			\End
     	\li $i=1$
-    	\li \While $2i< \best$ \Do
+    	\li \While $2i< \best$ and $W_i\neq \emptyset$ \Do
 			\\ \>\> \Comment length $2i$; within each side of the $y$-axis 
 			\li search candidates in $L^0_i\times L^1_{i-1}$
 			\li search candidates in $L^1_i\times L^0_{i-1}$

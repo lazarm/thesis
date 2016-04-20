@@ -50,6 +50,12 @@ M.~L. Huson and A.~Sen.
 \newblock Broadcast scheduling algorithms for radio networks.
 \newblock In {\em {IEEE MILCOM '95}}, volume~2, pages 647--651 vol.2, 1995.
 
+\bibitem{cgal:k-vda2-15a}
+M.~Karavelas.
+\newblock {2D} voronoi diagram adaptor.
+\newblock In {\em {CGAL} User and Reference Manual}. {CGAL Editorial Board},
+  {4.6} edition, 2015.
+
 \bibitem{KH07}
 S.~Kloder and S.~Hutchinson.
 \newblock Barrier coverage for variable bounded-range line-of-sight guards.
@@ -76,10 +82,27 @@ Z.~Lotker and D.~Peleg.
 \newblock Structure and algorithms in the sinr wireless model.
 \newblock {\em SIGACT News}, 41(2):74--84, 2010.
 
+\bibitem{cgal:n-rstd-15a}
+G.~Neyer.
+\newblock {dD} range and segment trees.
+\newblock In {\em {CGAL} User and Reference Manual}. {CGAL Editorial Board},
+  {4.6} edition, 2015.
+
 \bibitem{pv-2013}
 R.~Penninger and I.~Vigan.
 \newblock Point set isolation using unit disks is {NP}-complete.
 \newblock {\em CoRR}, abs/1303.2779, 2013.
+
+\bibitem{cgal:tf-ssd-15a}
+H.~Tangelder and A.~Fabri.
+\newblock {dD} spatial searching.
+\newblock In {\em {CGAL} User and Reference Manual}. {CGAL Editorial Board},
+  {4.6} edition, 2015.
+
+\bibitem{cgal}
+{The CGAL Project}.
+\newblock {\em {CGAL} User and Reference Manual}.
+\newblock {CGAL Editorial Board}, 4.6 edition, 2015.
 
 \bibitem{WGM06}
 Y.~Wang, J.~Gao, and J.~S. Mitchell.
