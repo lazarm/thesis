@@ -803,12 +803,10 @@ because the disks centered at the points cover $s$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \myparagraph{Shortest-path tree in unit-disk graphs}
+We have implemented the algorithm described in Section~\ref{sec:algorithm-sptree}.
 For the shortest-path tree we used the Delaunay triangulation as provided by CGAL.
 The data structure for nearest neighbour queries is a small extension of
 the one provided by~\cite{cgal:k-vda2-15a}. 
-When the algorithm is used for the minimum-separation problem,
-at the time of constructing the shortest-path tree we already
-compute the tables $N[~]$ and the sets $L^0_i,L^1_i,R^0_i,R^1_i$.
 In the tables we refer to this algorithm as \DEF{SSSP}.
 
 We compared the implementation with two obvious alternative algorithms to
@@ -850,14 +848,17 @@ the grid cells and putting them into a dictionary is almost negligible.
 As it can be seen, the results for sssp are very much independent of the shape and,
 for dense point sets it outperforms the other algorithms.
 
-It should be noted that for BFS and grid one can construct instances 
-where the behavior will be bad. However, the algorithm sssp does come with guarantees
-in the worst case. For example, 
-to the instance with 10K points in a rectangle of size $32\times 8$ with a small hole
-we added 1K points quite cluttered. 
+%For smaller instances the time of SSSP is worse, 
+%but comparable to grid and BFS.
+While the algorithm SSSP has guarantees in the worst case,
+for BFS and grid one can construct instances 
+where the behavior will be substantially bad. 
+For example, to the instance with 10K points in a rectangle of size $32\times 8$ 
+with a small hole we added 1K points quite cluttered. 
 The increase in time with respect to the original instance 
-was for sssp 9,7\% (preprocessing) and 13,6\% (one root), for BFS it was
+was for SSSP 9,7\% (preprocessing) and 13,6\% (one root), for BFS it was
 21,9\% (preprocessing) and 56,5\% (one root), and for grid it was 25\%.
+
 
 \begin{table}
 \begin{tabular}{l*{6}{r}}
@@ -908,22 +909,6 @@ grid				&	2.181	&	2.627	&	0.668	&	0.262	&	0.104	&	0.060
 
 \begin{table}
 \begin{tabular}{l*{3}{r}|*{3}{r}}
-Rectangle 1 large hole & \multicolumn{3}{c|}{5K points} & \multicolumn{3}{c}{10K points}\\
-size rectangle	&	$32\times 8$	&	$64\times 16$	&	$128\times 32$	&	$32\times 8$	&	$64\times 16$	&	$128\times 32$\\						
-\hline
-SSSP preprocessing	&	0.006	&	0.006	&	0.006	&	0.012	&	0.013	&	0.014	\\
-SSSP average/root	&	0.027	&	0.027	&	0.027	&	0.057	&	0.055	&	0.054	\\
-BFS preprocessing	&	1.010	&	0.994	&	0.983	&	4.043	&	4.070	&	4.105	\\
-BFS average/root	&	0.008	&	0.004	&	0.002	&	0.031	&	0.015	&	0.008	\\
-grid				&	0.043	&	0.021	&	0.017	&	0.573	&	0.541	&	0.172
-\end{tabular}
-\caption{Times for shortest paths in rectangles with a large hole.}
-\label{table3}
-\end{table}
-
-
-\begin{table}
-\begin{tabular}{l*{3}{r}|*{3}{r}}
 Rectangle 4 small holes & \multicolumn{3}{c|}{10K points} & \multicolumn{3}{c}{20K points}\\
 size rectangle	&	$32\times 8$	&	$64\times 16$	&	$128\times 32$	&	$32\times 8$	&	$64\times 16$	&	$128\times 32$\\						
 \hline
@@ -959,7 +944,8 @@ grid				&	0.019	&	0.013	&	0.010	&	0.060	&	0.038	&	0.027
 \myparagraph{Minimum separation with unit-disk}
 We have implemented the algorithm \proc{GenericMinimumSeparation}
 and the new algorithm based on a compact treatment of the edges.
-As mentioned earlier, the table $N[~]$ and the sets $L^0_i,L^1_i,R^0_i,R^1_i$
+The shortest-path trees are constructed using the algorithm of Section~\ref{sec:algorithm-sptree}.
+The table $N[~]$ and the sets $L^0_i,L^1_i,R^0_i,R^1_i$
 are constructed at the time of computing the shortest-path tree.
 
 In the data structure of Lemma~\ref{lem:block},
@@ -970,15 +956,43 @@ the $kd$-trees implemented in~\cite{cgal:tf-ssd-15a}.
 In some preliminary experiments this seemed to be a better choice.
 In our modification, we make a range search query for points at distance at most $1$,
 and finish the search whenever we get the first point.
-
+%
 In the new algorithm, before calling to the function to candidates pairs, like for example $L_i^0\times R^i_1$,
 we test that both sets are non-empty. This simple test reduced the time by 30-50\%
 in our test cases.
 
+Besides the new algorithm we also implemented the generic algorithm of Section~\ref{sec:generic}.
+The measured times are in Tables~\ref{table6}--\ref{table7}.
+For the case of $4$ holes we always put $t$ above the rectangle and $s$ in one hole. % It seems that the choice of the hole does not substantially affect the experimental time in our setting.
+ We also constructed an instance with the rectangle of size $32\times 8$, one small hole,
+the original 2K points, and 1K extra points quite cluttered
+around the portion of $st$ in the domain. The generic algorithm took 427 seconds and the new
+algorithm took 259 seconds.
 
-
+\begin{table}[h!]
+\begin{tabular}{l*{4}{r}}
+Rectangle 1 small hole & \multicolumn{4}{c}{2K points}\\
+size rectangle	&	$8\times 2$	&	$16\times 4$	&	$32\times 8$ & $64\times 16$ \\	
+\hline
+new separation algorithm	&	65	&	64	&	53	&	38  \\
+generic algorithm			&	215	&	87	&	43	&	29
+\end{tabular}
+\caption{Times for minimum separation with 1 hole.}
+\label{table6}
+\end{table}
+\begin{table}[h!]
+\begin{tabular}{l*{3}{r}|*{3}{r}}
+Rectangle 4 holes & \multicolumn{3}{c|}{2K points, small holes} & \multicolumn{3}{c}{5K points, large holes}\\
+size rectangle	&	$32\times 8$ &	$64\times 16$ & $128\times 32$ & $32\times 8$ &	$64\times 16$ & $128\times 32$\\	
+\hline
+new separation algorithm	&	29	&	35	&	35	&	413 & 451 & 388  \\
+generic algorithm			&	80	&	40	&	30	&	416 & 266 & 206
+\end{tabular}
+\caption{Times for minimum separation with 4 holes.}
+\label{table7}
+\end{table}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\myparagraph{Conclusions on the experiments.}
+%\myparagraph{Conclusions on the experiments.}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1118,6 +1132,25 @@ We have to prove the following statement.
 %\caption{New algorithm for minimum separation with unit disks.}
 %\label{fig:FULL}
 \end{figure}
+
+
+\subsection{Experimental results skipped}
+
+\begin{table}
+\begin{tabular}{l*{3}{r}|*{3}{r}}
+Rectangle 1 large hole & \multicolumn{3}{c|}{5K points} & \multicolumn{3}{c}{10K points}\\
+size rectangle	&	$32\times 8$	&	$64\times 16$	&	$128\times 32$	&	$32\times 8$	&	$64\times 16$	&	$128\times 32$\\						
+\hline
+SSSP preprocessing	&	0.006	&	0.006	&	0.006	&	0.012	&	0.013	&	0.014	\\
+SSSP average/root	&	0.027	&	0.027	&	0.027	&	0.057	&	0.055	&	0.054	\\
+BFS preprocessing	&	1.010	&	0.994	&	0.983	&	4.043	&	4.070	&	4.105	\\
+BFS average/root	&	0.008	&	0.004	&	0.002	&	0.031	&	0.015	&	0.008	\\
+grid				&	0.043	&	0.021	&	0.017	&	0.573	&	0.541	&	0.172
+\end{tabular}
+\caption{Times for shortest paths in rectangles with a large hole.}
+\label{table3}
+\end{table}
+
 
 
 \end{appendix}
