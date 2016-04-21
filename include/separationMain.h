@@ -36,13 +36,10 @@ tuple<Point_2, Point_2, int> querySetOnTree(vector<Point_2> l, RangeTree* rangeT
 	{
 		vector<Point_2> queryResults;
 		int weight_a = (*a).getDist();
-		// weight_b is at least 1. If weight_a+1 is already >= minWeight, we know point a won't give us better result
-		//if (weight_a + 1 >= minWeight) { continue; }
 		DualPoint* a_dual = new DualPoint(a._Ptr, st);
 		rangeTree_query(rangeTree0, a_dual, back_inserter(queryResults));
 		rangeTree_query_complement(rangeTree1, a_dual, back_inserter(queryResults));
 		delete(a_dual);
-		//cout << "query res size: " << queryResults.size() << endl;
 		for (vector<Point_2>::iterator pointB = queryResults.begin(); pointB != queryResults.end(); ++pointB)
 		{
 			if (weight_a + pointB->getDist() < minWeight) {
@@ -95,7 +92,6 @@ tuple<Point_2, Point_2, int> rangeSeparation(vector<vector<Point_2>>* l0, vector
 	if (get<2>(res1) < get<2>(best_r)) {
 		return res1;
 	}
-	//cout << "done 2" << endl;
 	if (r0i.size() == 0 && r1i.size() > 0) {
 		res1 = findminpairRi(l1i1, l0i1, r1i.begin(), r1i.end(), st, best_r);
 		if (get<2>(res1) < get<2>(best_r)) {
@@ -129,7 +125,6 @@ tuple<Point_2, Point_2, int> rangeSeparation(vector<vector<Point_2>>* l0, vector
 tuple<Point_2, Point_2, int> nnSeparation(vector<vector<Point_2>>* l0, vector<vector<Point_2>>* l1,
 	vector<vector<Point_2>>* r0, vector<vector<Point_2>>* r1, int i)
 {
-	//cout << l0->size() << " " << l1->size() << "  " << r0->size() << "  " << r1->size() << endl;
 	tuple<Point_2, Point_2, int> best_r = make_tuple(Point_2(), Point_2(), (numeric_limits<int>::max)());
 	vector<Point_2> l0i = (*l0)[i];
 	vector<Point_2> l1i = (*l1)[i];
@@ -152,8 +147,6 @@ tuple<Point_2, Point_2, int> nnSeparation(vector<vector<Point_2>>* l0, vector<ve
 				tuple<bool, Point_2> result = kdtree.kd_query(pla);
 				if (get<0>(result)) {
 					Point_2 plb = get<1>(result);
-					cout << "plb: " << plb << endl;
-					cout << get<0>(result) << endl;
 					best_r = tuple<Point_2, Point_2, int>(pla, plb, pla.getDist() + plb.getDist());
 					return best_r;
 				}
@@ -180,21 +173,16 @@ void main_procedure(vector<Point_2>::iterator begin, vector<Point_2>::iterator e
 		vector<vector<Point_2>> l0 = rst[0]; vector<vector<Point_2>> l1 = rst[1];
 		vector<vector<Point_2>> r0 = rst[2]; vector<vector<Point_2>> r1 = rst[3];
 		int i = 1;
-		//cout << l0[3].size() << " " << l1[3].size() << " " << r0[3].size() << " " << r1[3].size() << endl;
 		size_t maxdist = l0.size();
-		while (2 * i < min(get<2>(best_r), maxdist*2)) {
-			//cout << "i: " << i << endl;
+
+		while (2 * i <= min(get<2>(best_r), maxdist*2-1)) {
 			tuple<Point_2, Point_2, int> res1 = nnSeparation(&l0, &l1, &r0, &r1, i);
-			//cout << "nnsep done: " << get<2>(res1) << endl;
 			if (get<2>(res1) < get<2>(best_r)) {
-				cout << "nnsep" << endl;
 				best_r = res1;
 				break;
 			}
 			res1 = rangeSeparation(&l0, &l1, &r0, &r1, i, st);
-			//cout << "rangesep done: " << get<2>(res1) << endl;
 			if (get<2>(res1) < get<2>(best_r)) {
-				cout << "rangesep" << endl;
 				best_r = res1;
 				break;
 			}
@@ -225,7 +213,6 @@ void main_procedure(vector<Point_2>::iterator begin, vector<Point_2>::iterator e
 			cout << c << endl;
 		}
 		cout << "Number of points in cycle: " << cycle.size() << endl;
-		cout << "Number of points in cycle: " << get<2>(best_r) << endl;
 	}
 }
 
@@ -235,7 +222,6 @@ public:
 	vector<int> neighbours;
 	GNode(Point_2 u) {
 		v = u;
-		//cout << "add: " << &u << endl;
 	}
 };
 
@@ -249,17 +235,13 @@ void constructGSeparation(vector<shared_ptr<GNode>> nodes)
 		for (int j = i + 1; j < nodes.size(); j++)
 		{
 			Point_2 u = nodes[j]->v;
-			//cout << v->point << " --- " << u->point() << endl;
 			if (CGAL::squared_distance(v, u) <= 1)
 			{
 				k++;
 				nodes[i]->neighbours.push_back(j);
-				//nodes[j]->neighbours.push_back(i);
-				//cout << i << " -> " << j << endl;
 			}
 		}
 	}
-	//cout << "constructG k: " << k << endl;
 }
 
 void testSepGeneral(vector<Point_2> points, Segment_2 st) {
@@ -271,10 +253,7 @@ void testSepGeneral(vector<Point_2> points, Segment_2 st) {
 	vector<Point_2> dtPoints;
 	DT dt = tree.getDT();
 	int c = 0;
-	//cout << &dt << endl;
 	for (auto p : points) {
-		//cout << "v: " << p->point() << endl;
-		//cout << p.ptr() << endl;
 		nodes.push_back(shared_ptr<GNode>(new GNode(p)));
 	}
 	constructGSeparation(nodes);
@@ -282,8 +261,8 @@ void testSepGeneral(vector<Point_2> points, Segment_2 st) {
 	int best = (numeric_limits<int>::max)();
 	double ttime = 0;
 	int k = 0;
+	tuple<Point_2, Point_2, int> connects;
 	for (auto p : nodes) {
-		//cout << k << endl;
 		k++;
 		tree.createTreeFromRoot(p->v, st);
 		cost.stop();
@@ -308,23 +287,26 @@ void testSepGeneral(vector<Point_2> points, Segment_2 st) {
 			for (auto b : jnode->neighbours) {
 				Point_2 bp = dtPoints[b];
 				if (ap.getNr() + bp.getNr() + updateNr(0, ap, bp, st) % 2 == 1) {
-					//cout << "nr checked" << endl;
-					if (ap.getDist() + bp.getDist() < best) {
+					if (ap.getVisited() && bp.getVisited() && ap.getDist() + bp.getDist() < best) {
 						best = ap.getDist() + bp.getDist();
-						cout << "best: " << ap << "  -.-   " << bp << " ,len: " << best <<endl;
+						connects = tuple<Point_2, Point_2, int>(ap, bp,best);
 					}
 				}
-				//cout << "end 2nd loop" << endl;
 			}
 			j++;
 		}
-		//cout << "reset: " << endl;
 		tree.resetSSSPTreeDTVertices();
 		cost.stop();
 		dtPoints.clear();
 		cost.start();
 	}
 	cost.stop();
+	vector<Point_2> cycle{};
+	cycle = make_cycle(connects, cycle);
+	for (auto c : cycle) {
+		cout << c << endl;
+	}
+	cout << "Number of points in cycle: " << cycle.size() << endl;
 	cout << best << endl;
 	cout << "total time: " << cost.time() << endl;
 }
