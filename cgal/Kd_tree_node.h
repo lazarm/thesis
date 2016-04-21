@@ -125,25 +125,6 @@ namespace CGAL {
       return it;
     }
 
-	// added - lazar
-	template <class OutputIterator>
-	OutputIterator tree_items_modified(OutputIterator it) const {
-		if (is_leaf()) {
-			Leaf_node_const_handle node =
-				static_cast<Leaf_node_const_handle>(this);
-			if (node->size() > 0) {
-				*it = *(node->begin()); ++it;
-			}
-		}
-		else {
-			Internal_node_const_handle node =
-				static_cast<Internal_node_const_handle>(this);
-			it = node->lower()->tree_items_modified(it);
-			it = node->upper()->tree_items_modified(it);
-		}
-		return it;
-	}
-
      void 
     indent(int d) const
     {
@@ -243,22 +224,23 @@ namespace CGAL {
 				node->cutting_value());
 
 			if (q.outer_range_contains(b)) {
-				//*it = Point_d(0, 0); ++it;
-				it = node->lower()->tree_items_modified(it);
+				it = node->lower()->search_exists(it, q, b);
 			}
-			else
-			    if (q.inner_range_intersects(b))
+			else {
+				if (q.inner_range_intersects(b))
 					it = node->lower()->search_exists(it, q, b);
-				if (q.outer_range_contains(b_upper)) {
-					//*it = Point_d(0,0); ++it;
-					it = node->upper()->tree_items_modified(it);
-				}
-				else
-				    if (q.inner_range_intersects(b_upper))
-					    it = node->upper()->search_exists(it, q, b_upper);
-			};
-			return it;
-		}
+			}
+			if (q.outer_range_contains(b_upper)) {
+					it = node->upper()->search_exists(it, q, b_upper);
+			}
+			else {
+				if (q.inner_range_intersects(b_upper))
+					it = node->upper()->search_exists(it, q, b_upper);
+			}
+			
+		};
+		return it;
+	}
 
   };
 
