@@ -196,30 +196,38 @@ int main() {
 	//gps.reserve(2009);
 	vector<Point_2> bfs_points{ a1, a2, a3, a4, a5, a6 };
 	//testBfsGrid(pst2);
-	/*vector<int> le{ 4, 8, 16, 32, 64, 128 };
-	for (int i = 0; i < 6; i++) {
-		vector<Point_2> gend = pointGenerator(i, 4, false, 20000, false, vector<Point_2>{});
+	vector<int> le{ 4, 8, 16, 32, 64, 128 };
+	/*for (int i = 0; i < 6; i++) {
+		vector<Point_2> gend = pointGenerator(i, 4, false, 2000, false, vector<Point_2>{});
 		writeToFile(gend, le[i], 4, false);
 	}*/
 	//testBfsGrid(bfs_points);
-	vector<int> ss{ 32, 64, 128};
-	/*for (auto a : ss) {
+	vector<int> ss{ 128, 64, 32};
+	for (auto a : ss) {
 		vector<Point_2> readPoints = readFromFile("points-" + to_string(a) + "-4-5000-narrow.txt");
-		cout << readPoints.size() << endl;
-		cout << bfs_points.size() << endl;
-		testSSSPT(readPoints);
+		Segment_2 st2(Point_2(a/4, a/4-2.5), Point_2(a/4, a/4+1));
+		//Segment_2 st2(Point_2(3 * a / 4, a / 24.0 + 0.5), Point_2(3 * a / 4, a / 4 - (a / 24.0 + 0.5)));
+		cout << st2.source() << "   " << st2.end() << endl;
+		//testSepGeneral(readPoints, st2);
+		main_procedure(readPoints.begin(), readPoints.end(), st2);
+		//cout << readPoints.size() << endl;
+		//cout << bfs_points.size() << endl;
+		//testSSSPT(readPoints);
 		//testBfs(readPoints);
 		//testBfsGrid(readPoints);
 		//Segment_2 st(Point_2(16, 4), Point_2(32, 10));
 		//main_procedure(readPoints.begin(), readPoints.end(), st);
-	}*/
+	}
 	//testSepGeneral(bfs_points, st);
 	//vector<Point_2> readPoints = readFromFile("points-32-0-2000.txt");
 	//testSSSPT(readPoints);
-	vector<Point_2> readPoints = readFromFile("points-32-1-2000.txt");
+	vector<Point_2> readPoints = readFromFile("points-32-1-11000-stuffed.txt");
+	//testSSSPT(readPoints);
+	//testBfs(readPoints);
+	//testBfsGrid(readPoints);
 	Segment_2 st2(Point_2(16, 4), Point_2(16, 9));
+	//main_procedure(readPoints.begin(), readPoints.end(), st2);
 	//testSepGeneral(readPoints, st2);
-	main_procedure(readPoints.begin(), readPoints.end(), st2);
 	//testSeparationBruteForce(readPoints.begin(), readPoints.end(), st2);
 }
 
