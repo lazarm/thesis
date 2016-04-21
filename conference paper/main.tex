@@ -763,7 +763,7 @@ the while-loop, we can finish the work for the root $r$, and move onto the next 
 \label{sec:implementation}
 
 We have implemented the algorithms of Section~\ref{sec:algorithms}
-using CGAL version~4.6.3~\cite{cgal}
+in C++ using CGAL version~4.6.3~\cite{cgal}
 because it provides the more complex procedures we need:
 Delaunay triangulations and Voronoi diagrams~\cite{cgal:k-vda2-15a}, 
 range trees~\cite{cgal:n-rstd-15a}, and nearest neighboours~\cite{cgal:tf-ssd-15a}.
@@ -772,47 +772,54 @@ very helpful to have the CGAL code available as a starting point.
 The coordinates of the points were Cartesian doubles.
 
 Experiments were carried out in a laptop with CPU i5-5200U at 2.20 Ghz, 
-RAM 8GB, and Windows 10.
+8GB of RAM, and Windows 10. \emph{All times we report are in seconds.}
 
 \myparagraph{Data generation}
-Data was generated uniformly at random in polygons...
-
+Data points were generated uniformly at random in the following polygonal domains:
+rectangles without holes, rectangles with a ``small" rectangular hole, rectangles
+with a ``large" rectangular hole, rectangles with 4 ``small" rectangular holes, 
+and rectangles with 4 ``large" rectangular holes. The precise proportions of the domains
+with holes are in Figures~\ref{fig:data_generation1} and~\ref{fig:data_generation2}.
 We generated 1K, 2K, 5K, 10K, 20K and 50K points for the cases where the outer rectangle
 has sizes $4\times 1$, $8\times 2$,\ldots, $128\times 32$.
 The data was generated once and stored.
-Some of these cases are not meaningful for the minimum-separation because the disks
-centered at the points cover the hole.
+For the minimum-separation problem $s$ was placed in the middle of a hole and 
+$t$ vertically above $s$ in the outer face.  
+Some of these domains are not meaningful for the minimum-separation problem 
+because the disks centered at the points cover $s$. 
 
 \begin{figure}
 	\includegraphics[width=\textwidth,page=1]{data_generation}
 	\caption{Data generation with a small hole (left) and a large hole (right).}
-	\label{fig:data_generation}
+	\label{fig:data_generation1}
 \end{figure}
 
 \begin{figure}
 	\includegraphics[width=\textwidth,page=2]{data_generation}
 	\caption{Data generation with four small holes (right) and four large holes (right).}
-	\label{fig:data_generation}
+	\label{fig:data_generation2}
 \end{figure}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \myparagraph{Shortest-path tree in unit-disk graphs}
-For the shortest-path tree we used Delaunay triangulation as provided by CGAL.
+For the shortest-path tree we used the Delaunay triangulation as provided by CGAL.
 The data structure for nearest neighbour queries is a small extension of
 the one provided by~\cite{cgal:k-vda2-15a}. 
 When the algorithm is used for the minimum-separation problem,
 at the time of constructing the shortest-path tree we already
 compute the tables $N[~]$ and the sets $L^0_i,L^1_i,R^0_i,R^1_i$.
+In the tables we refer to this algorithm as \DEF{SSSP}.
 
 We compared the implementation with two obvious alternative algorithms to
 compute shortest-path trees.
 The first alternative is to build the graph $G=\GG(P)$ explicitly. 
 Thus, for each pair of points $p,q$ we check whether their distance is
-at most once and add an edge to a graph data structure.
+at most one and add an edge to a graph data structure.
 We can then use breadth-first-search (BFS) from the given root $r$.
 The preprocessing is quadratic, and the time spent to compute
 a shortest-path tree depends on the density of the graph $G$.
+In the tables we refer to this algorithm as \DEF{BFS}.
 
 The second alternative we consider is to use a unit-length grid. 
 Two points $(x,y)$ and $(x',y')$ are in the same grid cell
@@ -821,18 +828,132 @@ $(\lfloor x\rfloor ,\lfloor y\rfloor)=(\lfloor x'\rfloor ,\lfloor y'\rfloor)$.
 We store all the points of a grid cell $c$ in a list $\ell(c)$.
 The non-empty lists $\ell(c)$ are stored in a dictionary,
 where the bottom-left corner of the cell is used as key.
-We can then run some sort of BFS using this structure. When processing
+We can then run some sort of BFS using this structure. 
+The list $\ell(c)$ for a cell $c$ maintains the points that
+have not been visited by the BFS tree yet. When processing
 a point $p$ in a cell $c$, we have to treat all the points 
-in $c$ and its adjacent cells as candidate points. 
+in the lists of $c$ and its $8$ adjacent cells as candidate points.
+Any point that is adjacent to $p$ is then removed from the list of its cell. 
 The preprocessing is linear, and the time spent to compute
-a shortest-path tree depends on the density of the graph $G$.
-The number of candidates that are checked is proportional to the
-number of edges of the graph.
+a shortest-path tree depends on the distribution of the points.
+It is easy to produce cases where the algorithm would need quadratic time.
 For each shortest-path tree we compute the lists and the dictionary anew.
-(As can be seen in the experiments, this is very fast in any case.)
-\todo{Are perhaps points deleted from the list once they are assigned a level?}
+(This step is very fast in any case.)
+In the tables we refer to this algorithm as \DEF{grid}.
 
-The results comparing are in the table.
+The measured times are in Tables~\ref{table1}--\ref{table5}.
+For SSSP and BFS we report the preprocessing time that is independent of the source
+(like building the Delaunay triangulation or building the graph) and the average
+time spent for a shortest-path tree over 50 choices of the root.
+For grid we just report the total running time; assigning points to
+the grid cells and putting them into a dictionary is almost negligible.
+As it can be seen, the results for sssp are very much independent of the shape and,
+for dense point sets it outperforms the other algorithms.
+
+It should be noted that for BFS and grid one can construct instances 
+where the behavior will be bad. However, the algorithm sssp does come with guarantees
+in the worst case. For example, 
+to the instance with 10K points in a rectangle of size $32\times 8$ with a small hole
+we added 1K points quite cluttered. 
+The increase in time with respect to the original instance 
+was for sssp 9,7\% (preprocessing) and 13,6\% (one root), for BFS it was
+21,9\% (preprocessing) and 56,5\% (one root), and for grid it was 25\%.
+
+\begin{table}
+\begin{tabular}{l*{6}{r}}
+Rectangle without holes & \multicolumn{6}{c}{20K points}\\						
+size rectangle	&	$4\times 1$	&	$8\times 2$	&	$16\times 4$	&	$32\times 8$	&	$64\times 16$	&	$128\times 32$	\\
+\hline
+SSSP preprocessing	&	0.03	&	0.03	&	0.02	&	0.03	&	0.03	&	0.03	\\
+SSSP average/root	&	0.13	&	0.13	&	0.13	&	0.13	&	0.13	&	0.14	\\
+BFS preprocessing	&	25.06	&	20.43	&	17.77	&	17.73	&	17.35	&	17.18	\\
+BFS average/root	&	3.41	&	1.36	&	0.40	&	0.09	&	0.03	&	0.01	\\
+grid				&	1.61	&	1.65	&	0.69	&	0.23	&	0.09	&	0.05\vspace{.2cm}	\\
+\hline
+  & \multicolumn{6}{c}{50K points}\\						
+\hline
+SSSP preprocessing	&	0.09	&	0.09	&	0.07	&	0.07	&	0.07	&	0.07	\\
+SSSP average/root	&	0.59	&	0.56	&	0.38	&	0.38	&	0.37	&	0.37	\\
+BFS preprocessing	&	>3min	&	159.81	&	144.97	&	140.40	&	131.85	&	132.48	\\
+BFS average/root	&	memory limit	&	9.38	&	2.79	&	0.58	&	0.14	&	0.04	\\
+grid				&	11.57	&	13.66	&	4.59	&	1.35	&	0.43	&	0.19
+\end{tabular}
+\caption{Times for shortest paths in rectangles without holes.}
+\label{table1}
+\end{table}
+
+\begin{table}
+\begin{tabular}{l*{6}{r}}
+Rectangle 1 small hole & \multicolumn{6}{c}{10K points}\\						
+size rectangle	&	$4\times 1$	&	$8\times 2$	&	$16\times 4$	&	$32\times 8$	&	$64\times 16$	&	$128\times 32$	\\
+\hline
+SSSP preprocessing	&	0.021	&	0.012	&	0.012	&	0.012	&	0.012	&	0.012	\\
+SSSP average/root	&	0.104	&	0.059	&	0.060	&	0.061	&	0.064	&	0.070	\\
+BFS preprocessing	&	8.500	&	4.300	&	4.100	&	4.100	&	4.000	&	4.000	\\
+BFS average/root	&	1.183	&	0.318	&	0.091	&	0.026	&	0.008	&	0.003	\\
+grid	&	0.486	&	0.513	&	0.168	&	0.072	&	0.035	&	0.026\vspace{.2cm}	\\
+\hline
+  & \multicolumn{6}{c}{20K points}\\						
+\hline
+SSSP preprocessing	&	0.027	&	0.026	&	0.025	&	0.025	&	0.025	&	0.025	\\
+SSSP average/root	&	0.142	&	0.137	&	0.136	&	0.136	&	0.138	&	0.145	\\
+BFS preprocessing	&	24.813	&	19.817	&	18.396	&	17.976	&	17.542	&	17.313	\\
+BFS average/root	&	3.253	&	1.328	&	0.467	&	0.108	&	0.031	&	0.011	\\
+grid				&	2.181	&	2.627	&	0.668	&	0.262	&	0.104	&	0.060	
+\end{tabular}
+\caption{Times for shortest paths in rectangles with a small hole.}
+\label{table2}
+\end{table}
+
+
+\begin{table}
+\begin{tabular}{l*{3}{r}|*{3}{r}}
+Rectangle 1 large hole & \multicolumn{3}{c|}{5K points} & \multicolumn{3}{c}{10K points}\\
+size rectangle	&	$32\times 8$	&	$64\times 16$	&	$128\times 32$	&	$32\times 8$	&	$64\times 16$	&	$128\times 32$\\						
+\hline
+SSSP preprocessing	&	0.006	&	0.006	&	0.006	&	0.012	&	0.013	&	0.014	\\
+SSSP average/root	&	0.027	&	0.027	&	0.027	&	0.057	&	0.055	&	0.054	\\
+BFS preprocessing	&	1.010	&	0.994	&	0.983	&	4.043	&	4.070	&	4.105	\\
+BFS average/root	&	0.008	&	0.004	&	0.002	&	0.031	&	0.015	&	0.008	\\
+grid				&	0.043	&	0.021	&	0.017	&	0.573	&	0.541	&	0.172
+\end{tabular}
+\caption{Times for shortest paths in rectangles with a large hole.}
+\label{table3}
+\end{table}
+
+
+\begin{table}
+\begin{tabular}{l*{3}{r}|*{3}{r}}
+Rectangle 4 small holes & \multicolumn{3}{c|}{10K points} & \multicolumn{3}{c}{20K points}\\
+size rectangle	&	$32\times 8$	&	$64\times 16$	&	$128\times 32$	&	$32\times 8$	&	$64\times 16$	&	$128\times 32$\\						
+\hline
+SSSP preprocessing	&	0.021	&	0.018	&	0.018	&	0.027	&	0.026	&	0.026	\\
+SSSP average/root	&	0.056	&	0.058	&	0.064	&	0.125	&	0.126	&	0.131	\\
+BFS preprocessing	&	6.291	&	6.102	&	6.364	&	18.325	&	17.887	&	17.256	\\
+BFS average/root	&	0.033	&	0.010	&	0.004	&	0.102	&	0.031	&	0.010	\\
+grid				&	0.064	&	0.031	&	0.023	&	0.230	&	0.096	&	0.055
+\end{tabular}
+\caption{Times for shortest paths in rectangles with 4 small holes.}
+\label{table4}
+\end{table}
+
+
+\begin{table}
+\begin{tabular}{l*{3}{r}|*{3}{r}}
+Rectangle 4 large holes & \multicolumn{3}{c|}{5K points} & \multicolumn{3}{c}{10K points}\\
+size rectangle	&	$32\times 8$	&	$64\times 16$	&	$128\times 32$	&	$32\times 8$	&	$64\times 16$	&	$128\times 32$\\						
+\hline
+SSSP preprocessing	&	0.007	&	0.009	&	0.009	&	0.012	&	0.018	&	0.019	\\
+SSSP average/root	&	0.027	&	0.028	&	0.026	&	0.057	&	0.054	&	0.053	\\
+BFS preprocessing	&	1.420	&	1.420	&	1.390	&	5.740	&	5.660	&	5.720	\\
+BFS average/root	&	0.007	&	0.003	&	0.002	&	0.028	&	0.013	&	0.007	\\
+grid				&	0.019	&	0.013	&	0.010	&	0.060	&	0.038	&	0.027
+\end{tabular}
+\caption{Times for shortest paths in rectangles with 4 large holes.}
+\label{table5}
+\end{table}
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \myparagraph{Minimum separation with unit-disk}
@@ -893,8 +1014,8 @@ We have to prove the following statement.
 	We then have the following relation modulo 2:
 	\begin{align*}
 		\sum_{pq\in W^*} \CR(st,\walk(T_{r^*},pq)) ~&=~ 
-		\sum_{pq\in W^*} \left(\CR(st,T_{r^*}[r^* \rightarrow p])+ \CR(st,pq) + 
-						\CR(st,T_{r^*}[q \rightarrow r^*]\right) \\
+		\sum_{pq\in W^*} \bigl( \CR(st,T_{r^*}[r^* \rightarrow p])+ \CR(st,pq) + 
+						\CR(st,T_{r^*}[q \rightarrow r^*]) \bigr) \\
 		&=~ \sum_{pq\in W^*} \CR(st,pq)  \\
 		&=~ \CR(st,W^*) \\
 		&=~ 1. 		
@@ -905,6 +1026,9 @@ We have to prove the following statement.
 	and thus cancel out modulo 2.
 	Parity implies that, for some edge $p_0q_0$ of $W^*$, 
 	we have $\CR(st,\walk(T_{r^*},p_0q_0))=1$.
+	It must be that $p_0q_0\notin E(T_{r^*})$ because for each edge $pq$ of $T_{r^*}$
+	it holds $\CR(st,\walk(T_{r^*},pq))=0$.
+	
 	Since $\CR(st,\walk(T_{r^*},p_0q_0))= \CR(st,\cycle(T_{r^*},p_0q_0))$ 
 	because the path from $r^*$ to the lowest common ancestor of $p$ and $q$ in $T_{r^*}$ 
 	is counted twice on the left side of the equality, 
@@ -917,7 +1041,8 @@ We have to prove the following statement.
 	is exactly the length of $\walk(T_{r^*},p_0q_0)$, which is at least the length of 
 	$\cycle(T_{r^*},p_0q_0)$.
 
-	We have shown that $\cycle(T_{r^*},p_0q_0)$ is not longer than $W^*$ 
+	We have shown that, for some edge $p_0q_0\in E(G)\setminus E(T_{r^*})$,
+	the cycle $\cycle(T_{r^*},p_0q_0)$ is not longer than $W^*$ 
 	and crosses $st$ an odd number of times. The result follows.
 \end{proof}
 
