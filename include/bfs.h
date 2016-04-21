@@ -40,7 +40,6 @@ void constructG(Iterator begin, Iterator end)
 			}
 		}
 	}
-	//cout << "constructG k: " << k << endl;
 }
 
 void runBfs(shared_ptr<GraphNode> s, vector<shared_ptr<GraphNode>> nodes)
@@ -67,7 +66,6 @@ void runBfs(shared_ptr<GraphNode> s, vector<shared_ptr<GraphNode>> nodes)
 			}
 		}
 	}
-	//cout << "visited points: " << k << endl;
 }
 
 void resetGraphNodes(vector<shared_ptr<GraphNode>> nodes) {
@@ -94,32 +92,24 @@ void testBfs(vector<Point_2> points)
 	double totalQueryTime = 0;
 	double totalConstructionTime = 0;
 	for (int k = 0; k < 5; ++k) {
-		//cout << "Starting construction of graph G." << endl;
 		cost.reset(); cost.start();
 		constructG(nodes.begin(), nodes.end());
 		cost.stop();
 		totalConstructionTime += cost.time();
 		
-		//cout << "Construction of graph G finished in " << cost.time() << endl;
 		cost.reset();
 		size_t nodesLength = nodes.size();
-		for (int i = 0; i < 1; ++i) {
+		for (int i = 0; i < 50; ++i) {
 			int idx = ceil(rand()*nodesLength / RAND_MAX);
-			//cout << "idx: " << idx << endl;
 			shared_ptr<GraphNode> n = nodes[idx];
 			cost.start();
 			runBfs(n, nodes);
 			cost.stop();
-			//cout << cost.time() << endl;
-			//for (auto n : nodes) {
-			//	cout << (*n).p << " " << (*n).dist << endl;
-			//}
 			resetGraphNodes(nodes);
 		}
-		//cout << "Average time (50 iterations) of bfs algorithm on G: " << cost.time()/50.0 << endl;
 		totalQueryTime += cost.time()/50.0;
 		resetGraph(nodes);
 	}
 	cout << "Average time (5 iterations) for construction of graph G: " << totalConstructionTime/5.0 << endl;
-	cout << "Average time (5 iterations) for running 50 iterations of bfs algortithm on G: " << totalQueryTime / 2.0 << endl;
+	cout << "Average time (5 iterations) for running 50 iterations of bfs algortithm on G: " << totalQueryTime / 5.0 << endl;
 }

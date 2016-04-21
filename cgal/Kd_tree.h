@@ -375,7 +375,6 @@ public:
 	  Fuzzy_circle exact_range(q, 1);
 	  list<Point_2<EK>> result;
 	  search_exists(back_inserter(result), exact_range);
-	  //cout << "resultsize " << result.size() << endl;
 	  if (result.size() == 0) {
 		  return tuple<bool, Point_2<EK>> {false, Point_2<EK>(0, 0)};
 	  }
