@@ -56,7 +56,7 @@ public:
   
   int dist;
   int Nr;
-  int id;
+  bool visited;
   std::shared_ptr<Point_2> parent;
 
   const Rep& rep() const
@@ -87,6 +87,7 @@ public:
   {
 	dist = std::numeric_limits<int>::max();
 	Nr = 0;
+	visited = false;
   }
 
   Point_2(const RT& hx, const RT& hy, const RT& hw)
@@ -173,14 +174,14 @@ public:
 	Nr = n;
   }
   
-  int getId()
+  bool getVisited()
   {
-	return id;
+	return visited;
   }
   
-  void setId(int idi)
+  void setVisited(bool b)
   {
-    id = idi;
+    visited = b;
   }
   
   std::shared_ptr<Point_2> getParent()

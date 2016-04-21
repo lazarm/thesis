@@ -1,127 +1,48 @@
 #include <deque>
 #include <CGAL/intersections.h>
 #include <unordered_map>
-#include <VoronoiTree.h>
+#include <NNTree.h>
 
 using namespace std;
 
-template <class Iterator> class SSSPTree
+class SSSPTree
 {
 private:
-	vector<Point_2> l0;
-	vector<Point_2> l1;
-	vector<Point_2> r0;
-	vector<Point_2> r1;
+	vector<vector<Point_2>> l0;
+	vector<vector<Point_2>> l1;
+	vector<vector<Point_2>> r0;
+	vector<vector<Point_2>> r1;
+	DT dt;
 public:
 	SSSPTree();
-	SSSPTree(Iterator begin, Iterator end, Point_2 r, Segment_2 st);
+	template <class Iterator>
+	SSSPTree(Iterator begin, Iterator end);
 	~SSSPTree(){};
-	vector< vector<Point_2> > getAllSets();
+	DT getDT(){ return dt; }
+	vector< vector<vector<Point_2>> > getAllSets();
+	void createTreeFromRoot(Point_2 r, Segment_2 st);
+	void clearSets();
+	void resetSSSPTreeDTVertices();
 };
 
 /*
 source point r has to be one of the points in the vector defined by begin and end
 */
 template <class Iterator>
-SSSPTree<Iterator>::SSSPTree(Iterator begin, Iterator end, Point_2 r, Segment_2 st)
+SSSPTree::SSSPTree(Iterator begin, Iterator end)
 {
 	// whenever we get to a point from source r and add it to SSSP, we add it into one of the four sets based on
 	// its Nr attribute and its relative position to segment st
 	// Delaunay triangulation
-	DT dt;
 	dt.insert(begin, end);
-
-	// wip and wi are vectors that in i-th iteration store points/vertices with dist=i
-	// we want to store and return points of Point_2 type, but we also need vertex handles
-	// in order to retrieve neighbours of a vertex in DT
-	vector<Point_2> wi_1_points;
-	vector<Delaunay_vertex_handle> wi_1_delaunayVertices;
-
-	// we have to retrieve vertex handle in DT that corresponds to the point r of type Point_2
-	// locate type loc must obviously be of type vertex
-	// li corresponds to the index of DT vertex that's incident to resulting DT face handle
-	// alternativa: Vertex_handle handle = T.nearest_vertex(Point_2(1, 1));
-	Locate_type loc;
-	int li;
-	Delaunay_face_handle h = dt.locate(r, loc, li);
-	Delaunay_vertex_handle rVertex;
-	if (loc == DT::VERTEX) {
-		 rVertex = h->vertex(li);
-	}
-	else {
-		//exception
-		cout << "Point r does not coincide with any of DT vertices." << endl;
-	}
-	
-	Point_2 *rPoint;
-	rPoint = &rVertex->point();
-	rPoint->setDist(0);
-	rPoint->setNr(0);
-	shared_ptr<Point_2> rootParent(nullptr);
-	rPoint->setParent(rootParent);
-	
-	wi_1_points.push_back({ *rPoint });
-	wi_1_delaunayVertices.push_back(rVertex);
-	int i = 1;
-	
-	while (wi_1_delaunayVertices.size() > 0) {
-		VoronoiDiagram<vector<Point_2>::iterator> vd_nearestNeighbour;
-		vd_nearestNeighbour.insert(wi_1_points.begin(), wi_1_points.end());
-		deque<Delaunay_vertex_handle> queue;
-		copy(wi_1_delaunayVertices.begin(), wi_1_delaunayVertices.end(), back_inserter(queue));
-		vector<Delaunay_vertex_handle> wi_delaunayVertices;
-		vector<Point_2> wi_points;
-		while (queue.size() > 0) {
-			Delaunay_vertex_handle q = queue.front();
-			queue.pop_front();
-			DT::Vertex_circulator p = dt.incident_vertices(q), done(p);
-			do {
-				// besides usual vertices, DT also stores an infinite vertex, which we have to exclude
-				if (dt.is_infinite(p->handle()) == true) { continue; }
-				Point_2 *pPoint; //popravi
-				pPoint = &p->point();
-				if (pPoint->getDist() == numeric_limits<int>::max()) {
-					tuple<bool, Point_2*> nearest = vd_nearestNeighbour.query(*pPoint);
-					if (get<0>(nearest) == true) {
-						shared_ptr<Point_2> par2 = make_shared<Point_2>(*(get<1>(nearest)));
-						
-						wi_delaunayVertices.push_back(p);
-						queue.push_back(p);
-
-						pPoint->setDist(i);
-						pPoint->setNr(updateNr(par2->getNr(), *pPoint, *par2, st));
-						pPoint->setParent(par2);
-						//cout << pPoint->x() << "," << par2->x() << " - " << pPoint->y() << "," << par2->y() << endl;
-						
-						wi_points.push_back(*pPoint);
-						categorize(&l0, &l1, &r0, &r1, pPoint, st);
-					}
-				}
-			} while (++p != done);
-		}
-
-		wi_1_delaunayVertices.clear();
-		wi_1_points.clear();
-		wi_1_delaunayVertices = wi_delaunayVertices;
-		wi_1_points = wi_points;
-
-		i++;
-	}/*
-	for (vector<Point_2*>::iterator tz2 = l0.begin(); tz2 != l0.end(); ++tz2) {
-		std::cout << (**tz2).x() << "   " << (**tz2).y() << "  dist: " << (**tz2).getDist() << "  nr: " << (**tz2).getNr() << std::endl;
-		cout << *((*tz2)->getParent()) << "  dist: " << (*tz2)->getParent()->getDist() << "  ad: " << (*tz2)->getParent() << endl;
-	}*/
 }
 
-template <class Iterator>
-vector< vector<Point_2> > SSSPTree<Iterator>::getAllSets()
+void SSSPTree::clearSets()
 {
-	vector< vector<Point_2> > allSets;
-	allSets.push_back(l0);
-	allSets.push_back(l1);
-	allSets.push_back(r0);
-	allSets.push_back(r1);
-	return allSets;
+	l0.clear();
+	l1.clear();
+	r0.clear();
+	r1.clear();
 }
 
 bool onLeft(Point_2 *p, Segment_2 st)
@@ -140,7 +61,7 @@ int updateNr(int nr, Point_2 p, Point_2 q, Segment_2 st)
 	int pnr = nr;
 	Segment_2 s(p, q);
 	if (CGAL::do_intersect(s, st)) {
-		// it may be the case that p or q lies on the segment st. Poins lying on the segment are categorized as "left"
+		// it may be the case that p or q lies on the segment st. Points lying on the segment are categorized as "left"
 		// points so we have to check that one point is left and the other one is right.
 		if ((onLeft(&p, st) && !onLeft(&q, st)) || (!onLeft(&p, st) && onLeft(&q, st))) {
 			pnr = (nr + 1) % 2;
@@ -148,8 +69,6 @@ int updateNr(int nr, Point_2 p, Point_2 q, Segment_2 st)
 	}
 	return pnr;
 }
-
-
 
 // Put point p in one of the four categories 
 void categorize(vector<Point_2>* l0, vector<Point_2>* l1, vector<Point_2>* r0, vector<Point_2>* r1, Point_2 *p, Segment_2 st)
@@ -166,4 +85,142 @@ void categorize(vector<Point_2>* l0, vector<Point_2>* l1, vector<Point_2>* r0, v
 	else if (p->getNr() == 1 && !onLeft(p, st)) {
 		r1->push_back(*p);
 	}
+}
+
+void SSSPTree::createTreeFromRoot(Point_2 r, Segment_2 st)
+{
+	// wip and wi are vectors that in i-th iteration store points/vertices with dist=i
+	// we want to store and return points of Point_2 type, but we also need vertex handles
+	// in order to retrieve neighbours of a vertex in DT
+	vector<Delaunay_vertex_handle> wi_1_delaunayVertices;
+
+	// we have to retrieve vertex handle in DT that corresponds to the point r of type Point_2
+	// locate type loc must obviously be of type vertex
+	// li corresponds to the index of DT vertex that's incident to resulting DT face handle
+	// alternativa: Vertex_handle handle = T.nearest_vertex(Point_2(1, 1));
+	Locate_type loc;
+	int li;
+	Delaunay_face_handle h = dt.locate(r, loc, li);
+	Delaunay_vertex_handle rVertex;
+	if (loc == DT::VERTEX) {
+		rVertex = h->vertex(li);
+	}
+	else {
+		//exception
+		cout << "Point r does not coincide with any of DT vertices." << endl;
+	}
+
+	Point_2 *rPoint;
+	rPoint = &rVertex->point();
+	rPoint->setDist(0);
+	rPoint->setNr(0);
+	shared_ptr<Point_2> rootParent(nullptr);
+	rPoint->setParent(rootParent);
+	l0.push_back(vector<Point_2>{}); l1.push_back(vector<Point_2>{});
+	r0.push_back(vector<Point_2>{}); r1.push_back(vector<Point_2>{});
+	categorize(&l0[0], &l1[0], &r0[0], &r1[0], rPoint, st);
+	wi_1_delaunayVertices.push_back(rVertex);
+	int i = 1;
+	int kount = 0;
+	while (wi_1_delaunayVertices.size() > 0) {
+		vector<Point_2> l0i{}, l1i{}, r0i{}, r1i{};
+		VoronoiDiagram vd_nearestNeighbour;
+		// built VD is stored as DT on a set of dt vertices, which represents a subset of DT of all points
+		vd_nearestNeighbour.insert(wi_1_delaunayVertices.begin(), wi_1_delaunayVertices.end());
+		deque<Delaunay_vertex_handle> queue;
+		copy(wi_1_delaunayVertices.begin(), wi_1_delaunayVertices.end(), back_inserter(queue));
+		vector<Delaunay_vertex_handle> wi_delaunayVertices;
+		while (queue.size() > 0) {
+			Delaunay_vertex_handle q = queue.front();
+			queue.pop_front();
+			DT::Vertex_circulator p = dt.incident_vertices(q), done(p);
+			do {
+				// besides usual vertices, DT also stores an infinite vertex, which we have to exclude
+				if (dt.is_infinite(p->handle()) == true) { continue; }
+				Point_2 *pPoint; //popravi
+				pPoint = &p->point();
+				if (!pPoint->getVisited()) {
+					tuple<bool, Point_2*> nearest = vd_nearestNeighbour.query(*pPoint);
+					if (get<0>(nearest) == true) {
+						shared_ptr<Point_2> par2 = make_shared<Point_2>(*(get<1>(nearest)));
+
+						wi_delaunayVertices.push_back(p);
+						queue.push_back(p);
+
+						pPoint->setVisited(true);
+						pPoint->setDist(i);
+						pPoint->setNr(updateNr(par2->getNr(), *pPoint, *par2, st));
+						pPoint->setParent(par2);
+						kount++;
+						categorize(&l0i, &l1i, &r0i, &r1i, pPoint, st);
+					}
+				}
+			} while (++p != done);
+		}
+
+		wi_1_delaunayVertices.clear();
+		wi_1_delaunayVertices = wi_delaunayVertices;
+		l0.push_back(l0i); l1.push_back(l1i); r0.push_back(r0i); r1.push_back(r1i);
+		i++;
+	}
+}
+
+vector< vector<vector<Point_2>> > SSSPTree::getAllSets()
+{
+	vector< vector<vector<Point_2>> > allSets;
+	allSets.push_back(l0);
+	allSets.push_back(l1);
+	allSets.push_back(r0);
+	allSets.push_back(r1);
+	return allSets;
+}
+
+
+/*
+Re-assigns distances of all points to infinity to start building new SSSP tree from fresh start.
+*/
+void resetPointDistances(vector<Point_2>::iterator begin, vector<Point_2>::iterator end)
+{
+	for (auto p = begin; p != end; ++p) {
+		(*p).setDist((std::numeric_limits<int>::max)());
+	}
+}
+
+void SSSPTree::resetSSSPTreeDTVertices()
+{
+	for (auto v = dt.vertices_begin(); v != dt.vertices_end(); ++v) {
+		v->point().setDist((std::numeric_limits<int>::max)());
+		v->point().setVisited(false);
+	}
+}
+
+
+void testSSSPT(vector<Point_2> points)
+{
+	CGAL::Timer cost;
+	double totalQueryTime = 0;
+	double totalConstructionTime = 0;
+	Segment_2 st(Point_2(2, 0.3), Point_2(2, 0.7));
+	for (int k = 0; k < 5; ++k) {
+		cost.reset(); cost.start();
+		SSSPTree tree(points.begin(), points.end());
+		cost.stop();
+		cout << "SSSP tree construction finished, dt size is " << tree.getDT().number_of_vertices() << ", time: " << cost.time() << endl;
+		totalConstructionTime += cost.time();
+		size_t pointsLength = points.size();
+		cost.reset();
+		for (int i = 0; i < 50; ++i) {
+			int idx = ceil(rand()*pointsLength / RAND_MAX);
+			Point_2 p = points[idx];
+			cost.start();
+			tree.createTreeFromRoot(p, st);
+			cost.stop();
+
+			tree.resetSSSPTreeDTVertices();
+			tree.clearSets();
+		}
+		totalQueryTime += (cost.time()/50.0);
+	}
+	cout << "Average time (5 iterations) for construction of DT: " << totalConstructionTime / 5.0 << endl;
+	cout << "Average time (5 iterations) for running 50 iterations of bfs algortithm on DT: " << totalQueryTime / 5.0 << endl;
 }
