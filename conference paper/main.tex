@@ -777,9 +777,9 @@ Experiments were carried out in a laptop with CPU i5-5200U at 2.20 Ghz,
 
 \myparagraph{Data generation}
 Data points were generated uniformly at random in the following polygonal domains:
-rectangles without holes, rectangles with a ``small" rectangular hole, rectangles
-with a ``large" rectangular hole, rectangles with 4 ``small" rectangular holes, 
-and rectangles with 4 ``large" rectangular holes. The precise proportions of the domains
+rectangles without holes, rectangles with a "small" rectangular hole, rectangles
+with a "large" rectangular hole, rectangles with 4 "small" rectangular holes, 
+and rectangles with 4 "large" rectangular holes. The precise proportions of the domains
 with holes are in Figures~\ref{fig:data_generation1} and~\ref{fig:data_generation2}.
 We generated 1K, 2K, 5K, 10K, 20K and 50K points for the cases where the outer rectangle
 has sizes $4\times 1$, $8\times 2$,\ldots, $128\times 32$.
@@ -866,19 +866,19 @@ was for SSSP 9,7\% (preprocessing) and 13,6\% (one root), for BFS it was
 Rectangle without holes & \multicolumn{6}{c}{20K points}\\						
 size rectangle	&	$4\times 1$	&	$8\times 2$	&	$16\times 4$	&	$32\times 8$	&	$64\times 16$	&	$128\times 32$	\\
 \hline
-SSSP preprocessing	&	0.03	&	0.03	&	0.02	&	0.03	&	0.03	&	0.03	\\
-SSSP average/root	&	0.13	&	0.13	&	0.13	&	0.13	&	0.13	&	0.14	\\
-BFS preprocessing	&	25.06	&	20.43	&	17.77	&	17.73	&	17.35	&	17.18	\\
-BFS average/root	&	3.41	&	1.36	&	0.40	&	0.09	&	0.03	&	0.01	\\
-grid				&	1.61	&	1.65	&	0.69	&	0.23	&	0.09	&	0.05\vspace{.2cm}	\\
+SSSP preprocessing	&	0.025	&	0.027	&	0.025	&	0.025	&	0.025	&	0.026	\\
+SSSP average/root	&	0.131	&	0.130	&	0.127	&	0.126	&	0.129	&	0.136	\\
+BFS preprocessing	&	25.057	&	20.433	&	17.773	&	17.734	&	17.347	&	17.179	\\
+BFS average/root	&	3.406	&	1.359	&	0.404	&	0.088	&	0.025	&	0.009	\\
+grid	&	1.605	&	1.647	&	0.695	&	0.227	&	0.089	&	0.053	\vspace{.2cm}	\\
 \hline
   & \multicolumn{6}{c}{50K points}\\						
 \hline
-SSSP preprocessing	&	0.09	&	0.09	&	0.07	&	0.07	&	0.07	&	0.07	\\
-SSSP average/root	&	0.59	&	0.56	&	0.38	&	0.38	&	0.37	&	0.37	\\
-BFS preprocessing	&	>3min	&	159.81	&	144.97	&	140.40	&	131.85	&	132.48	\\
-BFS average/root	&	memory limit	&	9.38	&	2.79	&	0.58	&	0.14	&	0.04	\\
-grid				&	11.57	&	13.66	&	4.59	&	1.35	&	0.43	&	0.19
+SSSP preprocessing	&	0.091	&	0.091	&	0.070	&	0.071	&	0.070	&	0.069	\\
+SSSP average/root	&	0.592	&	0.562	&	0.375	&	0.377	&	0.372	&	0.366	\\
+BFS preprocessing	&	>3min	&	159.812	&	144.965	&	140.404	&	131.854	&	132.475	\\
+BFS average/root	& memory limit & 9.378	&	2.789	&	0.584	&	0.144	&	0.044	\\
+grid				&	11.567	&	13.660	&	4.592	&	1.346	&	0.432	&	0.187
 \end{tabular}
 \caption{Times for shortest paths in rectangles without holes.}
 \label{table1}
