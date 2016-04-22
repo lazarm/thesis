@@ -482,6 +482,8 @@ of $T$.
 	These are standard concepts in Computational Geometry;
 	see for example~\cite[Chapters 5 and 8]{bkos-08}.
 	We assume that the reader is familiar with the topic.
+	For readers that are not very familiar with point-line duality,
+	Figure~\ref{fig:duality} in the appendix may be helpful.
 	
 	We use the following precise point-line duality: 
 	the non-vertical line $\ell \equiv y=mx+c$ 
@@ -495,7 +497,7 @@ of $T$.
 		\sigma^* ~=~ \{ l^* \mid \ell\in \LL, \ell\cap \sigma\neq \emptyset\}.
 	\]
 	Since we assumed that $s=(0,0)$ and $t=(0,\tau)$, 
-	in the dual space the set $\sigma^*$ is the horizontal slab 
+	in the dual space $\sigma^*$ is the horizontal slab 
 	\[
 		\sigma^* ~=~ \{ (m,-c)\in \RR^2\mid 0\le c\le \tau\}.
 	\]
@@ -507,7 +509,7 @@ of $T$.
 		L^*_p=\{ \ell^* \mid \ell\in \LL, p \in \ell, \text{ and } \sigma\cap \ell\not= \emptyset\}.
 	\]
 	In the dual space, $L^*_p$ is a segment with endpoints 
-	$(\varphi_1(p),0)$ and $(\varphi_2(p),\tau)$, 
+	$(\varphi_1(p),0)$ and $(\varphi_2(p),-\tau)$, 
 	for some values $\varphi_1(p)$ and $\varphi_2(p)$
 	that are easily computable.
 	Namely, $\varphi_1(p)$ is the slope of the line through $p$
@@ -578,8 +580,8 @@ of $T$.
 	Answering the queries for 
 	$\{ b\in B \mid \text{$ab$ does not intersect $\sigma$ and $|ab|\le 1$}\}$
 	is done similarly (and the same data structure works), we just have
-	to query for 2 of the other quadrants. (We do not need to query for the
-	other 3 quadrants because one of them is always empty.)
+	to query for 2 of the other quadrants. 
+	(The top-left quadrant of $\phi(a)$ is always empty.)
 \end{proof}
 
 Inside the data structure of Lemma~\ref{lem:block} we are using a data structure
@@ -1005,9 +1007,9 @@ generic algorithm			&	80	&	40	&	30	&	416 & 266 & 206
 \section{Appendix}
 \label{appendix}
 
-\subsection{3-path condition}
+\subsection{Additional material}
 \label{sec:3-path-condition}
-We have to prove the following statement.
+\label{sec:FULLAlgorithm}
 
 \begin{lemma}
 	Let $W^*$ be a shortest cycle in $G$ that crosses the segment 
@@ -1059,10 +1061,14 @@ We have to prove the following statement.
 	and crosses $st$ an odd number of times. The result follows.
 \end{proof}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newpage
-\subsection{New algorithm for minimum-separation with unit-disks}
-\label{sec:FULLAlgorithm}
+
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=\textwidth]{duality}
+	\caption{Transformation in the proof of Lemma~\ref{lem:block}.}
+	\label{fig:duality}
+\end{figure}
+
 \begin{figure}[htb]
 \begin{center}
 \scalebox{.92}{%
@@ -1133,9 +1139,7 @@ We have to prove the following statement.
 \end{figure}
 
 
-\subsection{Experimental results skipped}
-
-\begin{table}
+\begin{table}[h]
 \begin{tabular}{l*{3}{r}|*{3}{r}}
 Rectangle 1 large hole & \multicolumn{3}{c|}{5K points} & \multicolumn{3}{c}{10K points}\\
 size rectangle	&	$32\times 8$	&	$64\times 16$	&	$128\times 32$	&	$32\times 8$	&	$64\times 16$	&	$128\times 32$\\						
