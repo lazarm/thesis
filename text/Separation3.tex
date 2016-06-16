@@ -345,7 +345,7 @@ Problem iskanja minimalne kardinalne podmnožice $\D$, ki ločuje $z$ in $z'$, l
 \end{align*}
 
 \begin{figure}
-\centerline{\includegraphics[scale=0.5]{pics/separation.png}}
+\centerline{\includegraphics[scale=0.6,page=4]{pics/unitdisks.pdf}}
 \caption{Slikovna predstavitev problema. Točki $s$ in $t$ ločuje množica krogov, definiranih z njihovimi središčnimi točkami.}
 \label{separation}
 \end{figure}
@@ -355,7 +355,7 @@ Cilj našega algoritma za ločevanje enotskih krogov je rešiti ta problem v sko
 Naj bo $P$ množica točk, ki predstavljajo središča krogov $\D$. $P$ predstavlja vhod našega algoritma in vse operacije ter uporabljene podatkovne strukture se vrtijo okoli te množice. Kardinalnost množice je enaka $n$.
 
 \begin{figure}
-\centerline{\includegraphics[scale=0.6]{pics/g-disks2.png}}
+\centerline{\includegraphics[scale=0.6,page=5]{pics/unitdisks.pdf}}
 \caption{Graf $G(P)$, zgrajen nad množico $P$ v sliki ~\ref{separation}.}
 \label{gdisks}
 \end{figure}
@@ -363,7 +363,7 @@ Naj bo $P$ množica točk, ki predstavljajo središča krogov $\D$. $P$ predstav
 Naj bo $G(P)$ graf z množico vozlišč $P$ s povezavo med točkama $p,q \in P$, če velja $|pq| <= 1$ z evklidsko metriko. Vse povezave so neobtežene.
 
 \begin{figure}
-\centerline{\includegraphics[scale=0.6]{pics/walk.png}}
+\centerline{\includegraphics[scale=0.6,page=3]{pics/separation.pdf}}
 \caption{Minimalna podmnožica točk iz slike ~\ref{separation}, ki ločuje $s$ in $t$, med seboj povezanih z modrimi povezavami. Podmnožica je vedno zaprta pot.}
 \label{walk}
 \end{figure}
@@ -374,7 +374,7 @@ V nadaljevanju bomo namesto $G(P)$ pisali preprosto $G$, brez izgube splošnosti
 V tem poglavju je opisan algoritem za drevo SSSP (ang. single source shortest path). Gre za preiskovanje v širino nad grafom $G(P)$ brez dejanske izgradnje grafa. Vhod algoritma je torej $P$, pri izgradnji drevesa pa se uporablja abstrakten graf G(P).
 
 \begin{figure}
-\centerline{\includegraphics[scale=0.6]{pics/sssptree.png}}
+\centerline{\includegraphics[scale=0.6,page=6]{pics/unitdisks.pdf}}
 \caption{Drevo najbližjega soseda, ki hrani 6 točk, predstavljeno v obliki seznama. Za vsako celico so prikazani indeksi točk, ki jih hrani objekt v njej.}
 \label{nnarray}
 \end{figure}
@@ -398,7 +398,7 @@ Naj bo $p$ točka v $P\backslash \{s\}$, za katero velja $d(s,p) < \infty$. Obst
 \end{lema}
 
 \begin{figure}
-\centerline{\includegraphics[scale=0.5]{pics/qp_path_proof.png}}
+\centerline{\includegraphics[scale=1]{pics/path.pdf}}
 \caption{aa}
 \label{c1c2}
 \end{figure}
@@ -497,31 +497,31 @@ Za izgradnjo drevesa SSSP potrebuje algoritem $UnweightedShortestPath(P,s)$ $\OO
 \end{lema}
 
 \begin{proof}
-Glavne opazke, uporabljene v dokazu, so sledeče: vsaka točka v $P$ je dodana v $Q$ največ enkrat v vrstici 10 in enkrat v vrstici 20, izvajanje vrstic 13-21 za točko $q$ vzame $\OO(deg_{DT(P)}(q)\log n)$, vsota stopenj v $DT(P)$ je $\OO(n)$, in v vrstici 9 porabimo $\OO(n\log n)$ časa skupaj za vse iteracije. Sledijo podrobnosti.
+Glavne opazke, uporabljene v dokazu, so sledeče: vsaka točka v $P$ je dodana v $Q$ največ enkrat v vrstici 10 in enkrat v vrstici 20, izvajanje vrstic 13-21 za točko $q$ vzame $\OO(\deg_{DT(P)}(q)\log n)$, vsota stopenj v $DT(P)$ je $\OO(n)$, in v vrstici 9 porabimo $\OO(n\log n)$ časa skupaj za vse iteracije. Sledijo podrobnosti.
 
-Delaunayeva triangulacija nad $n$ točkami se lahko izračuna v času $\OO(n\log n)$. Inicializacija v vrsticah 1-7 tako vzame $\OO(n\log n)$ času. Dokazati moramo še, da zanka v vrsticah 8-22 vzame $\OO(n\log n)$ časa.
+Delaunayeva triangulacija nad $n$ točkami se lahko izračuna v času $\OO(n\log n)$. Inicializacija v vrsticah 1-7 tako vzame $\OO(n\log n)$ časa. Dokazati moramo še, da zanka v vrsticah 8-22 vzame $\OO(n\log n)$ časa.
 
 Izvajanje vrstic 9-11 vzame $\OO(|W_{i-1}|\log |W_{i-1}|) = \OO(|W_{i-1}|\log n)$ časa. Vsaka kasnejša poizvedba najbližjega soseda se izvede v času $\OO(\log n)$.
 
-Vsaka izvedba vrstic 16-21 se izvede v času $\OO(\log n)$, kjer je najbolj zahteven korak poizvedba v vrstici 16. Vsaka izvedba vrstic 13-21 se izvede v času $\OO(deg_{DT(P)}(q)\cdot\log n)$, ker se vrstice 16-21 izvedejo $deg_{DT(P)}(q)$-krat.
+Vsaka izvedba vrstic 16-21 se izvede v času $\OO(\log n)$, kjer je najbolj zahteven korak poizvedba v vrstici 16. Vsaka izvedba vrstic 13-21 se izvede v času $\OO(\deg_{DT(P)}(q)\cdot\log n)$, ker se vrstice 16-21 izvedejo $\deg_{DT(P)}(q)$-krat.
 
 Obravnavajmo eno izvedbo vrstic 9-22. Točke so dodane v $Q$ v vrsticah 10 in 20. V slednji je točka $p$ dodana v $Q$ natanko takrat, ko je dodana v $W_i$ (v vrstici 21). Iz tega sledi, da je $p$ dodana v $Q$ natanko takrat, ko pripada množici $W_{i-1}\cup W_i$. Poleg tega je vsaka točka iz $W_{i-1}\cup W_i$ dodana v $Q$ natanko enkrat: za vsako točko $p$, ki je dodana v $Q$, velja $dist[p]\leq i < \infty$, in da ne bo dodana nikoli več zaradi pogoja v vrstici 17.Iz tega sledi, da se zanka v vrsticah 12-22 izvede v času
 
 \begin{equation}
-\sum_{q\in W_{i-1}\cup W_i} \OO(deg_{DT(P)}(q) \cdot \log n).
+\sum_{q\in W_{i-1}\cup W_i} \OO(\deg_{DT(P)}(q) \cdot \log n).
 \end{equation}
 
 Tako lahko omejimo porabljen čas v zanki v vrsticah 8-22 z
 
 \begin{equation}
 \label{bigo1}
-\sum_i \OO \left( |W_i|\log n + \sum_{q\in W_{i-1}\cup W_i} (deg_{DT(P)}(q) \cdot \log n) \right) .
+\sum_i \OO \left( |W_i|\log n + \sum_{q\in W_{i-1}\cup W_i} (\deg_{DT(P)}(q) \cdot \log n) \right) .
 \end{equation}
 
 Z uporabo leme ~\ref{lema2}, ki pravi, da so množice $W_0,W_1,...$ parno disjunktne, ter relacijama $\sum_i |W_i| \leq n$ in 
 
 \begin{equation}
-\sum_{q \in P} deg_{DT(P)}(q) = 2 \cdot |E(DT(P))| = \OO(n),
+\sum_{q \in P} \deg_{DT(P)}(q) = 2 \cdot |E(DT(P))| = \OO(n),
 \end{equation}
 časovna kompleksnost iz ~\ref{bigo1} postane $\OO(n\log n)$.
 \end{proof}
@@ -634,6 +634,13 @@ Opiši iz poglavja knjige.
 		\item za vsako točko poizvedbe $a$ z $a_x<0$ podatkovna 				struktura $\D (B)$ vrne $I(a)$ v $\OO(\log^2 n)$ času.
 	\end{itemize}
 \end{lema}
+
+\begin{figure}
+\centerline{\includegraphics[width=\textwidth]{pics/duality.pdf}}
+\caption{.} 
+\label{duality}
+\end{figure}
+
 \begin{proof}
 Za potrebe dokaza uporabimo dualnost, opisano zgoraj.
 
@@ -650,10 +657,17 @@ V dualnem prostoru je množica $\sigma^*$ $horizontal slab$
 \]
 
 \begin{figure}
-\centerline{\includegraphics[scale=0.5]{pics/dual_problem4.png}}
-\caption{Množici $A$ (rdeči točki) ter $B$ (zelene točke) levo in desno od daljice $st$ (zgornja slika). Črtkani črti predstavljata premici, čigar koeficienta sta uporabljena za izračun koordinat dualne točke $\varphi (a_1)$, predstavljata pa tudi vidno polje točke $a_1$. Spodaj so prikazane točke iz zgornje slike v dualnem prostoru. Obarvano območje v sredini predstavlja prostor, v katerem se nahajajo vse take dualne točke $\varphi (b)$, za katere velja $b \in B(a_1)$. Obarvani območji levo in zgoraj predstavljata prostor dualnih točk $\varphi (b)$, za katere velja, da je presečišče premice $a_1b$ z osjo $y$ pod oziroma nad daljico $st$.} 
+\centerline{\includegraphics[width=\textwidth]{pics/dual_problem3.pdf}}
+\caption{Množici $A$ (rdeči točki) ter $B$ (zelene točke) levo in desno od daljice $st$ (zgornja slika). Črtkani črti predstavljata premici, čigar koeficienta sta uporabljena za izračun koordinat dualne točke $\varphi (a_1)$, predstavljata pa tudi vidno polje točke $a_1$.} 
 \label{dualp}
 \end{figure}
+
+\begin{figure}
+\centerline{\includegraphics[width=\textwidth]{pics/dual_problem4.pdf}}
+\caption{Spodaj so prikazane točke iz slike ~\ref{dualp} v dualnem prostoru. Obarvano območje v sredini predstavlja prostor, v katerem se nahajajo vse take dualne točke $\varphi (b)$, za katere velja $b \in B(a_1)$. Obarvani območji levo in zgoraj predstavljata prostor dualnih točk $\varphi (b)$, za katere velja, da je presečišče premice $a_1b$ z osjo $y$ pod oziroma nad daljico $st$.} 
+\label{dualp2}
+\end{figure}
+
 
 Za vsako točko $b\in B$ naj bo $L^* _b$ množica točk, dualnih premicam, ki gredo skozi $b$ in sekajo $\sigma$:
 
@@ -945,8 +959,8 @@ Funkcija se izvede dvakrat, kar pomeni, da tudi območno drevo zgradimo dvakrat;
 \subsection{Kreiranje cikla}
 Ko dobimo par točk $a, b\in P$, ki določata minimalno zaprto pot, ki ločuje točki $s$ in $t$, v seznam shranimo vse točke, ki tvorijo cikel. S pomočjo funkcije $getParent()$ lahko za vsako točko $p$ v drevesu $SSSP(r, P)$ dobimo njegovega starša in s tem pot $T_r[p]$ v obratnem vrstnem redu (z začetkom pri točki $p$ in koncem pri točki $r$), ki jo označimo kot $T_r^{-1}[p]$. Pot $T_r[p]$ brez točke $r$ označimo z $T_{r-1}[p]$. Cikel lahko potem dobimo z združitvijo dveh poti $T_r^{-1}[a] + T_{r-1}[b]$, s čimer dobimo pot $(a,...,r,...b)$. Vrnjen seznam predstavlja cikel, v katerem je začetna točka shranjena samo enkrat. Za dolžino najbolj optimalne poti se do konca izvajanja programa hrani vsota dolžin točk $a$ in $b$. Dolžina, ki jo program vrne kot rezultat, je povečana za 1.
 
-\section{Obravnava degeneriranih primerov}
-rotacija, če st ni vertikalna daljica
+\section{Obravnava posebnih vhodnih primerov}
+Pri algoritmu ločevanja z diski smo večkrat omenili, da je za daljico $\sigma$ privzeto, da je vertikalna. Če želimo uporabiti algoritem na primeru, kjer daljica ni vertikalna, je potrebno vse vhodne točke predhodno rotirati 
 
 točke, ki ležijo na y osi, grejo k b (preveri tip neskončne vrednosti v dualpoint)
 
@@ -955,11 +969,23 @@ točke, ki ležijo na y osi, grejo k b (preveri tip neskončne vrednosti v dualp
 \chapter{Rezultati}
 \label{ch3}
 
+\begin{figure}
+\centerline{\includegraphics[scale=0.75, page=1]{pics/data_generation.pdf}}
+\caption{. }
+\label{generation}
+\end{figure}
+
+\begin{figure}
+\centerline{\includegraphics[scale=0.75, page=2]{pics/data_generation.pdf}}
+\caption{. }
+\label{generation}
+\end{figure}
+
 \begin{table}
 \begin{center}
 \begin{tabular}{l|l|l|l|l|l|l}
 \hline
-number of points & 50k & 100k & 250k & 500k & 750k & 1mio \\ \hline \hline
+number of točk & 50k & 100k & 250k & 500k & 750k & 1mio \\ \hline \hline
 CPU(VD) [s] & 0.0859 & 0.196 & 0.562 & 1.2667 & 2.0495 & 2.9304 \\ \hline
 CPU(kd drevo) [s] & 0.0025 & 0.0047 & 0.0126 & 0.025 & 0.0375 & 0.0497
 \end{tabular}
@@ -971,7 +997,7 @@ CPU(kd drevo) [s] & 0.0025 & 0.0047 & 0.0126 & 0.025 & 0.0375 & 0.0497
 \begin{table}
 \begin{center}
 \begin{tabular}{l|l|l|l|l|l|l}
-number of points & 50k & 100k & 250k & 500k & 750k & 1mio \\ \hline \hline
+number of točk & 50k & 100k & 250k & 500k & 750k & 1mio \\ \hline \hline
 RAM(VD) [mb] & 7.2 & 14.4 & 34.3 & 68.9 & 103.6 & 137.9 \\ \hline
 RAM(kd drevo) [mb] & 1.9 & 3.8 & 9.5 & 19 & 28.5 & 38.1
 \end{tabular}
@@ -982,13 +1008,188 @@ RAM(kd drevo) [mb] & 1.9 & 3.8 & 9.5 & 19 & 28.5 & 38.1
 
 
 
+
+
 \section{Drevo najkrajših poti}
+
+\begin{table}
+\begin{center}
+\begin{tabular}{l*{3}{r}}
+Pravokotnik brez lukenj & \multicolumn{3}{c}{20K točk}\\						
+dimenzije pravokotnika	&	$4\times 1$	&	$8\times 2$	&	$16\times 4$ \\
+\hline
+predprocesiranje SSSP	&	0.025	&	0.027	&	0.025		\\
+povprečje za koren s SSSP	&	0.131	&	0.130	&	0.127		\\
+predprocesiranje BFS 	&	25.057	&	20.433	&	17.773		\\
+povprečje za koren z BFS	&	3.406	&	1.359	&	0.404		\\
+mreža	&	1.605	&	1.647	&	0.695	\vspace{.2cm}	\\
+
+&	$32\times 8$	&	$64\times 16$	&	$128\times 32$	\\
+\hline
+predprocesiranje SSSP &	0.025	&	0.025	&	0.026 \\
+povprečje za koren s SSSP &	0.126	&	0.129	&	0.136 \\
+predprocesiranje BFS &	17.734	&	17.347	&	17.179 \\
+povprečje za koren z BFS &	0.088	&	0.025	&	0.009 \\
+mreža &	0.227	&	0.089	&	0.053 \vspace{.2cm} \\
+\hline
+  & \multicolumn{3}{c}{50K točk}  \\						
+&	$4\times 1$	&	$8\times 2$	&	$16\times 4$ \\
+\hline
+predprocesiranje SSSP	&	0.091	&	0.091	&	0.070		\\
+povprečje za koren s SSSP	&	0.592	&	0.562	&	0.375		\\
+predprocesiranje BFS	&	$>$3min	&	159.812	&	144.965		\\
+povprečje za koren z BFS	& omejitev RAM-a & 9.378	&	2.789		\\
+mreža				&	11.567	&	13.660	&	4.592	\\
+
+&	$32\times 8$	&	$64\times 16$	&	$128\times 32$	\\
+\hline
+predprocesiranje SSSP &	0.071	&	0.070	&	0.069 \\
+povprečje za koren s SSSP &	0.377	&	0.372	&	0.366 \\
+predprocesiranje BFS &	140.404	&	131.854	&	132.475 \\
+povprečje za koren z BFS &	0.584	&	0.144	&	0.044 \\
+mreža &	1.346	&	0.432	&	0.187
+\end{tabular}
+\caption{Times for shortest paths in Pravokotniks without luknje.}
+\label{table1}
+\end{center}
+\end{table}
+
+
+
+\begin{table}
+\begin{center}
+\begin{tabular}{l*{3}{r}}
+Pravokotnik 1 small hole & \multicolumn{3}{c}{10K točk}\\						
+dimenzije pravokotnika	&	$4\times 1$	&	$8\times 2$	&	$16\times 4$		\\
+\hline
+predprocesiranje SSSP	&	0.021	&	0.012	&	0.012		\\
+povprečje za koren s SSSP	&	0.104	&	0.059	&	0.060		\\
+predprocesiranje BFS	&	8.500	&	4.300	&	4.100		\\
+povprečje za koren z BFS	&	1.183	&	0.318	&	0.091		\\
+mreža	&	0.486	&	0.513	&	0.168  \vspace{.2cm}	\\
+&	$32\times 8$	&	$64\times 16$	&	$128\times 32$ \\
+predprocesiranje SSSP &	0.012	&	0.012	&	0.012 \\
+povprečje za koren s SSSP &	0.061	&	0.064	&	0.070 \\
+predprocesiranje BFS &	4.100	&	4.000	&	4.000 \\
+povprečje za koren z BFS &	0.026	&	0.008	&	0.003 \\
+mreža &	0.072	&	0.035	&	0.026\vspace{.2cm} \\
+\hline
+  & \multicolumn{3}{c}{20K točk}\\
+  &	$4\times 1$	&	$8\times 2$	&	$16\times 4$		\\  			
+\hline
+predprocesiranje SSSP	&	0.027	&	0.026	&	0.025	\\
+povprečje za koren s SSSP	&	0.142	&	0.137	&	0.136	\\
+predprocesiranje BFS	&	24.813	&	19.817	&	18.396	\\
+povprečje za koren z BFS	&	3.253	&	1.328	&	0.467	\\
+mreža				&	2.181	&	2.627	&	0.668	\\
+&	$32\times 8$	&	$64\times 16$	&	$128\times 32$ \\
+predprocesiranje SSSP &	0.025	&	0.025	&	0.025	\\
+povprečje za koren s SSSP &	0.136	&	0.138	&	0.145	\\
+predprocesiranje BFS &	17.976	&	17.542	&	17.313	\\
+povprečje za koren z BFS &	0.108	&	0.031	&	0.011	\\
+mreža &	0.262	&	0.104	&	0.060 
+\end{tabular}
+\caption{Times for shortest paths in Pravokotniks with a small hole.}
+\label{table2}
+\end{center}
+\end{table}
+
+\begin{table}
+\begin{center}
+\begin{tabular}{l*{3}{r}}
+Pravokotnik 4 small luknje & \multicolumn{3}{c}{10K točk} \\
+dimenzije pravokotnika	&	$32\times 8$	&	$64\times 16$	&	$128\times 32$	\\						
+\hline
+SSSP preprocessing	&	0.021	&	0.018	&	0.018	\\
+povprečje za koren s SSSP	&	0.056	&	0.058	&	0.064	\\
+predprocesiranje BFS	&	6.291	&	6.102	&	6.364	\\
+povprečje za koren z BFS	&	0.033	&	0.010	&	0.004	\\
+mreža				&	0.064	&	0.031	&	0.023	\\
+\hline
+& \multicolumn{3}{c}{20K točk} \\
+\hline
+predprocesiranje SSSP &  0.027	&	0.026	&	0.026 \\
+povprečje za koren s SSSP &	0.125	&	0.126	&	0.131 \\
+predprocesiranje BFS &	18.325	&	17.887	&	17.256	\\
+povprečje za koren z BFS & 0.102	&	0.031	&	0.010 \\
+mreža &	0.230	&	0.096	&	0.055 
+\end{tabular}
+\caption{Časi za najkrajše poti v pravokotnikih s 4 manjšimi luknjami.}
+\label{table4}
+\end{center}
+\end{table}
+
+
+\begin{table}
+\begin{center}
+\begin{tabular}{l*{3}{r}}
+Pravokotnik 4 večje luknje & \multicolumn{3}{c}{5K točk} \\
+dimenzije pravokotnika	&	$32\times 8$	&	$64\times 16$	&	$128\times 32$ \\						
+\hline
+predprocesiranje SSSP	&	0.007	&	0.009	&	0.009	\\
+povprečje za koren s SSSP	&	0.027	&	0.028	&	0.026	\\
+predprocesiranje BFS	&	1.420	&	1.420	&	1.390	\\
+povprečje za koren z BFS	&	0.007	&	0.003	&	0.002	\\
+mreža				&	0.019	&	0.013	&	0.010	\\
+\hline
+& \multicolumn{3}{c}{10K točk} \\
+\hline
+predprocesiranje SSSP &	0.012	&	0.018	&	0.019	\\
+povprečje za koren s SSSP &	0.057	&	0.054	&	0.053	\\
+predprocesiranje BFS &	5.740	&	5.660	&	5.720	\\
+povprečje za koren z BFS &	0.028	&	0.013	&	0.007	\\
+mreža &	0.060	&	0.038	&	0.027 
+\end{tabular}
+\caption{Časi za minimalno ločevanje s 4 večjimi luknjami.}
+\label{table5}
+\end{center}
+\end{table}
+
+\section{Minimalno ločevanje}
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{l*{4}{r}}
+Pravokotnik 1 manjša luknja & \multicolumn{4}{c}{2K točk}\\
+dimenzije pravokotnika	&	$8\times 2$	&	$16\times 4$	&	$32\times 8$ & $64\times 16$ \\	
+\hline
+nov algoritem za ločevanje	&	65	&	64	&	53	&	38  \\
+generičen algoritem			&	215	&	87	&	43	&	29
+\end{tabular}
+\caption{Časi za minimalno ločevanje z eno manjšo luknjo.}
+\label{table6}
+\end{center}
+\end{table}
+
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{l*{3}{r}}
+Pravokotnik 4 luknje & \multicolumn{3}{c}{2K točk, manjše luknje} \\
+dimenzije pravokotnika	&	$32\times 8$ &	$64\times 16$ & $128\times 32$ \\	
+\hline
+nov algoritem za ločevanje	&	29	&	35	&	35	\\
+generičen algoritem			&	80	&	40	&	30	\\
+\hline
+& \multicolumn{3}{c}{5K točk, večje luknje} \\
+\hline
+nov algoritem za ločevanje &	413 & 451 & 388  \\
+generičen algoritem &	416 & 266 & 206
+\end{tabular}
+\caption{Časi za minimalno ločevanje s 4 luknjami.}
+\label{table7}
+\end{center}
+\end{table}
+
 \begin{figure}
-\centerline{\includegraphics[scale=0.3]{pics/w_points5000-1.png}}
-\caption{Točke v 4x1 pravokotniku.}
-\label{adsr}
+\centerline{\includegraphics[scale=0.3]{pics/separation-64-1-1000-narrow-2.png}}
+\caption{. }
+\label{sep-64-1-1000-narrow}
 \end{figure}
 
+\begin{figure}
+\centerline{\includegraphics[scale=0.3]{pics/32-1-5000-stuffed.png}}
+\caption{. }
+\label{sep-stuffed}
+\end{figure}
 
 \chapter{Sklepne ugotovitve}
 \label{ch4}
