@@ -273,6 +273,12 @@ povej kaj o traits, templated strukturami ($Point_2$)
 Drevo najkrajših poti z eno izvorno točko je vpeto drevo $T$ grafa $G$ s korenom $v$, za katerega velja, da je razdalja poti od $v$ do $u \in T$ enaka razdalji najkrajše poti od $v$ do $u$. Tako drevo lahko zgradimo s pomočjo algoritma za iskanje najkrajše poti med dvema danima točkama (tipična primera sta Dijsktrov in Bellman-Fordov algoritem). Izvorno točko $v$ fiksiramo in poženemo algoritem za vse pare $(v, u), v,u \in G.$ Časovna kompleksnost Dijkstrovega algoritma je $\OO((m+n)\log n)$, kjer je $n$ število vozlišč, $m$ pa število povezav v $G$. Ker moramo algoritem pognati za $n-1$ parov, lahko drevo zgradimo v času $\OO((n^2 + nm)\log n)$. Če predpostavimo, da za vhodni graf $G$ veljajo določene omejitve (v primeru našega algoritma povezava med vozliščema v grafu obstaja samo, če je njuna razdalja največ 1), ki se jih da izkoristiti pri izgradnji hitrejšega algoritma, se časovna kompleksnost lahko izboljša.
 \section{Graf kvadratne mreže}
 $https://en.wikipedia.org/wiki/Lattice_graph_Square_grid_graph$
+\begin{figure}
+\centerline{\includegraphics[scale=1.2]{pics/grid.pdf}}
+\caption{Evklidski Voronoijev diagram brez degeneracij, označen z rdečimi odebeljenimi povezavami. Voronoijeva središča, obarvana z modro barvo, predstavljajo hkrati tudi vozlišča v Delaunayevi triangulaciji, dualni Voronoijevemu diagramu, in je označena s tanjšimi črnimi povezavami.}
+\label{grid}
+\end{figure}
+
 
 \section{Delaunayeva triangulacija}
 \subsection{Implementacija v CGAL}
@@ -280,8 +286,8 @@ $https://en.wikipedia.org/wiki/Lattice_graph_Square_grid_graph$
 
 \section{Voronoijev diagram}
 \begin{figure}
-\centerline{\includegraphics[scale=0.8]{pics/vd-sredisce.jpg}}
-\caption{Evklidski Voronoijev diagram brez degeneracij.}
+\centerline{\includegraphics[scale=1.2]{pics/voronoi-dt.pdf}}
+\caption{Evklidski Voronoijev diagram brez degeneracij, označen z rdečimi odebeljenimi povezavami. Voronoijeva središča, obarvana z modro barvo, predstavljajo hkrati tudi vozlišča v Delaunayevi triangulaciji, dualni Voronoijevemu diagramu, in je označena s tanjšimi črnimi povezavami.}
 \label{vd}
 \end{figure}
 
@@ -318,17 +324,9 @@ Tretja predloga predstavlja režim adaptacije Delaunayeve triangulacije Voronoij
 Območna drevesa so še ena podatkovna struktura za poizvedbe nad pravokotnimi območji. V primerjavi s kd drevesi imajo boljši čas poizvedbe ($\OO(\log^2 n)$), ampak slabšo prostorsko kompleksnost ($\OO(n\log n)$).
 
 \begin{figure}
-\centerline{\includegraphics[scale=0.5]{pics/range2-primer.png}}
+\centerline{\includegraphics[scale=1.2]{pics/rangeTree.pdf}}
 \caption{Dvodimenzionalno območno drevo.}
 \label{range-primer}
-\end{figure}
-
-\section{Kd-drevesa}
-
-\begin{figure}
-\centerline{\includegraphics[scale=0.5]{pics/kd2-primer.png}}
-\caption{Dvodimenzionalno kd drevo.}
-\label{kd-primer}
 \end{figure}
 
 
@@ -636,7 +634,7 @@ Opiši iz poglavja knjige.
 \end{lema}
 
 \begin{figure}
-\centerline{\includegraphics[width=\textwidth]{pics/duality.pdf}}
+\centerline{\includegraphics[scale=1.2]{pics/duality.pdf}}
 \caption{.} 
 \label{duality}
 \end{figure}
@@ -657,13 +655,13 @@ V dualnem prostoru je množica $\sigma^*$ $horizontal slab$
 \]
 
 \begin{figure}
-\centerline{\includegraphics[width=\textwidth]{pics/dual_problem3.pdf}}
+\centerline{\includegraphics[scale=1.2]{pics/dual_problem3.pdf}}
 \caption{Množici $A$ (rdeči točki) ter $B$ (zelene točke) levo in desno od daljice $st$ (zgornja slika). Črtkani črti predstavljata premici, čigar koeficienta sta uporabljena za izračun koordinat dualne točke $\varphi (a_1)$, predstavljata pa tudi vidno polje točke $a_1$.} 
 \label{dualp}
 \end{figure}
 
 \begin{figure}
-\centerline{\includegraphics[width=\textwidth]{pics/dual_problem4.pdf}}
+\centerline{\includegraphics[scale=1.2]{pics/dual_problem4.pdf}}
 \caption{Spodaj so prikazane točke iz slike ~\ref{dualp} v dualnem prostoru. Obarvano območje v sredini predstavlja prostor, v katerem se nahajajo vse take dualne točke $\varphi (b)$, za katere velja $b \in B(a_1)$. Obarvani območji levo in zgoraj predstavljata prostor dualnih točk $\varphi (b)$, za katere velja, da je presečišče premice $a_1b$ z osjo $y$ pod oziroma nad daljico $st$.} 
 \label{dualp2}
 \end{figure}

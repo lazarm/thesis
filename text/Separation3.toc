@@ -13,9 +13,8 @@
 \contentsline {section}{\numberline {2.5}Delaunayeva triangulacija}{5}
 \contentsline {subsection}{\numberline {2.5.1}Implementacija v CGAL}{5}
 \contentsline {section}{\numberline {2.6}Voronoijev diagram}{5}
-\contentsline {subsection}{\numberline {2.6.1}Voronoijev diagram v CGAL}{6}
-\contentsline {section}{\numberline {2.7}Obmo\IeC {\v c}na drevesa}{8}
-\contentsline {section}{\numberline {2.8}Kd-drevesa}{8}
+\contentsline {subsection}{\numberline {2.6.1}Voronoijev diagram v CGAL}{7}
+\contentsline {section}{\numberline {2.7}Obmo\IeC {\v c}na drevesa}{9}
 \contentsline {chapter}{\numberline {3}Teorija}{11}
 \contentsline {section}{\numberline {3.1}Predstavitev problema}{11}
 \contentsline {section}{\numberline {3.2}SSSP drevo}{12}
