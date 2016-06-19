@@ -242,7 +242,31 @@ z vpisno številko \textbf{27122037}, sem avtor magistrskega dela z naslovom:
 \pagestyle{fancy}
 
 \chapter{Uvod}
-V poglavju 2 je na kratko opisana programska knjižnica CGAL. Osredotočili smo se na osrednje ideje, uporabljene pri jedru knjižnice, na katerem temeljijo vsi ostali deli paketa, ter tiste strukture, ki so bile uporabljene pri implementaciji našega algoritma. V poglavju 3 je predstavljen teoretični del algoritma. Podrobno so opisane vse podatkovne strukture, celotni potek algoritma ter njegova časovna in prostorska kompleksnost. V poglavju 4 je predstavljena implementacija algoritma. Ponovno so opisane vse uporabljene podatkovne strukture in nekatere spremembe v header datotekah CGAL-a z razredi, ki predstavljajo te strukture. Podrobno so opisani tudi deli algoritma, kjer se pojavijo razlike med teoretičnim opisom in implementacijo. V poglavju 5 so predstavljeni rezultati; prikazani so časi izvajanja in prostorska poraba celotnega algoritma za različno število vhodnih točk. Enako smo storili posebej za nekatere podatkovne strukture, npr. Kd drevesa, Voronoijev diagram in SSSP drevesa.
+V magistrski nalogi smo obravnavali dva geometrijska optimizacijska problema na ravnini, pri katerih osrednjo vlogo predstavljajo enotski krogi. Predstavili smo učinkovita algoritma, ki rešita omenjena problema, opisali njuno implementacijo ter predložili rezultate eksperimentov.
+
+Pri prvem problemu bi radi izračunali drevo najkrajših poti iz neuteženega grafa presekov enotskih krogov. Kot vhod je dana množica $\D$ $n$ krogov enake velikosti, kjer je vsak krog opisan z njegovim središčem. Vozlišča grafa presekov predstavljajo krogi, pri čemer med dvema vozliščema obstaja povezava natanko takrat, ko obstaja presečišče med njunima krogoma $D$ in $D'$. Graf presekov lahko predstavimo tudi na drug, bolj priročen način, kjer vozlišča predstavlja množica $P$ središč krogov, povezava med dvema točkama $p$ in $q$ pa obstaja, če je njuna evklidska razdalja $\|pq\|$ manjša ali enaka premeru enotskega kroga. Za podan koren $r \in P$ lahko iz takega grafa izračunamo drevo najkrajših poti brez eksplicitne izgradnje grafa, s čimer dosežemo časovno zahtevnost $\OO(n\log n)$ algoritma.
+
+Drugi problem, ki ga obravnavamo, je problem minimalne ločitve. Kot vhod je dana množica $\D$ $n$ enotskih krogov na ravnini in dve točki $s$ in $t$, ki nista vsebovani v nobenem od krogov iz $\D$. Pravimo, da $\D$ ločuje $s$ in $t$, če vsaka pot v ravnini od $s$ do $t$ seka nek krog v $\D$. Cilj je najti minimalno kardinalno podmnožico množice $\D$, ki ločuje $s$ in $t$, kar formalno zapišemo kot 
+
+\begin{align*}
+	\min ~~		& |\D'|\\
+	 \mbox{tako da}~~ & \D'\subset \D\\
+				&	\D'\text{ ločuje $s$ in $t$}. 
+\end{align*}
+
+Polinomsko časovno zahtevnost algoritma $\OO(n^2log^3n)$ dosežemo tako, da za del rešitve uporabimo algoritem prvega problema za izgradnjo drevesa najkrajših poti. Oba problema sta tako povezana in ju je smiselno obravnavati skupaj.
+
+Enotski krogi so najbolj standarden geometrijski model, ki se uporablja za brezžična senzorska omrežja (zanj se pogosto uporablja kratica UDG). Tak model predstavlja ustrezen trade-off med enostavnostjo in natačnostjo, saj je za bolj natančne modele dosti težje najti učinkovite algoritme. To pomeni tudi, da je izkoriščanje geometrijskih lastnosti modela UDG bolj zahtevno, algoritmi, ki se zanašajo na tak model, pa zaradi nerealističnih predpostavk pogosto odpovejo v praksi (kjer komunikacijski doseg ni idealen krog)~\cite{WGM06}. Drevesa najkrajših poti v grafu enotskih krogov igrajo pomembno vlogo pri usmerjanju in se pogosto uporabljajo pri bolj kompleksnih nalogah. Primer take uporabe v senzorskih omrežjih je pri algoritmu za prepoznavanje meja, ki tvorijo luknje s premalo senzorskimi vozlišči. Zaradi takih lukenj veliko požrešnih algoritmov za posredovanje paketov po omrežju odpove, ker predpostavljajo, da je omrežje dovolj gosto~\cite{FGG06}.
+
+Problem minimalne ločitve je obravnavan že v~\cite{CG16}, kjer je podan tudi algoritem s časovno zahtevnostjo $\OO(n^3)$ v najslabšem primeru, ki deluje za poljubne like. Z omejitvijo likov na enotne kroge in uporabo več različnih orodij iz računske geometrije lahko zmanjšamo časovno zahtevnost, lažje izvedljiva pa postane tudi implementacija algoritma.
+
+\begin{figure}
+\centerline{\includegraphics[scale=0.6,page=4]{pics/unitdisks.pdf}}
+\caption{Slikovna predstavitev problema. Točki $s$ in $t$ ločuje množica krogov, definiranih z njihovimi središčnimi točkami.}
+\label{separation}
+\end{figure}
+
+V poglavju 2 je na kratko opisana programska knjižnica CGAL, ki smo jo uporabili pri implementaciji obeh algoritmov. Zanjo smo se odločili, ker omogoča dostop do že implementiranih različnih geometrijskih podatkovnih struktur. Pri opisu smo se osredotočili na osrednje ideje jedra knjižnice, na katerem temeljijo vsi ostali deli paketa, ter tiste strukture, ki so bile uporabljene pri implementaciji algoritmov. V poglavju 3 je predstavljen teoretični del algoritmov. Podrobno so opisane vse podatkovne strukture, celotna poteka algoritmov ter njuna časovna in prostorska kompleksnost. V poglavju 4 je predstavljena implementacija algoritmov. Ponovno so opisane vse uporabljene podatkovne strukture in nekatere spremembe v datotekah CGAL-a z razredi, ki predstavljajo te strukture (ang. $headers$). Podrobno so opisani tudi deli algoritmov, kjer se pojavijo razlike med teoretičnim opisom in implementacijo. V poglavju 5 so predstavljeni rezultati; prikazani so časi izvajanja in prostorska poraba celotnega algoritma za različno število vhodnih točk. Enako smo storili posebej za nekatere podatkovne strukture, npr. Voronoijev diagram in SSSP drevesa.
 
 \clearemptydoublepage
 
@@ -336,17 +360,9 @@ Naj bo $\D$ množica skladnih enotskih krogov na Evklidski ravnini, ki jih defin
 
 Problem iskanja minimalne kardinalne podmnožice $\D$, ki ločuje $z$ in $z'$, lahko formalno zapišemo kot:
 
-\begin{align*}
-	\min ~~		& |\D'|\\
-	 \mbox{tako da}~~ & \D'\subset \D\\
-				&	\D'\text{ ločuje $z$ in $z'$}. 
-\end{align*}
 
-\begin{figure}
-\centerline{\includegraphics[scale=0.6,page=4]{pics/unitdisks.pdf}}
-\caption{Slikovna predstavitev problema. Točki $s$ in $t$ ločuje množica krogov, definiranih z njihovimi središčnimi točkami.}
-\label{separation}
-\end{figure}
+
+
 
 Cilj našega algoritma za ločevanje enotskih krogov je rešiti ta problem v skoraj kvadratičnem času. Do take časovne kompleksnosti pridemo tudi s pomočjo še enega našega algoritma za izgradnjo drevesa najkrajših poti iz enega, danega izhodišča. Oba algoritma sta opisana v nadaljevanju, prav tako dokaza za njuno časovno kompleksnost.
 
@@ -893,7 +909,6 @@ Zadnji dve točki nista omenjeni v psevdokodi, ker njuna uporabnost pride v poš
 Drevo najbližjega soseda, opisano v poglavju 3.3, bi lahko implementirali s kazalci ali seznamom. Odločili smo se slednjega. Seznam hrani kazalce ($shared{\_}ptr$) na objekte podatkovne strukture $DS(P(\nu))$ za poizvedbe najbližjega soseda. Velikost seznama, ki hrani $n$ točk, je enaka $2^{\lceil \log_2n \rceil+1}-1$. Nekatera vozlišča na najnižjem nivoju drevesa so lahko tudi prazna (torej brez objektov). Primer takega drevesa je prikazan na sliki ~\ref{nntree}. Otroka vozlišča, ki se v seznamu nahaja na mestu $i$, se nahajata na mestu $2i+1$ in $2i+2$. Podobno se starš vozlišča na mestu $i$ nahaja na mestu $\lfloor(i-1)/2\rfloor$.
 
 
-
 Za podatkovno strukturo s poizvedbami najbližjega soseda smo sprva hoteli uporabiti VD, vendar smo se kasneje odločili za Kd drevo. Razlog za to je implementacija VD v knjižnici CGAL. Ker je prostorska kompleksnost VD $\OO(n)$, bi pričakovali, da poraba prostora raste linearno z večanjem VD. Izkaže se, da je rast počasnejša od linearne, kar pomeni, da na primer 100 VD objektov velikosti 10 porabi več prostora kot 10 objektov velikosti 100. Posledično poraba prostora ni enaka za vsak nivo drevesa, temveč z globino raste. Razlike se v celotnem algoritmu potem še potencirajo, ker zgradimo VD v (skoraj) vsakem vozlišču drevesa najbližjega soseda, vsako tako drevo pa v vsakem vozlišču sekundarnega drevesa v območnem drevesu. Ko smo testirali implementacijo Kd dreves v CGAL, smo ugotovili tudi, da je čas konstrukcije bistveno krajši kot pri VD. Primerjave med konstrukcijama obeh podatkovnih struktur (procesorski čas in poraba RAM-a) so prikazane v poglavju Rezultati.
 
 \subsection{Kd drevo}
@@ -1192,11 +1207,7 @@ generičen algoritem &	416 & 266 & 206
 \chapter{Sklepne ugotovitve}
 \label{ch4}
 
-\addcontentsline{toc}{chapter}{Literatura}
-\begin{thebibliography}{99}
-\bibitem{cgalVor}CGAL 4.6 - 2D Voronoi Diagram Adaptor: User Manual. Dostopno na:\\ http://doc.cgal.org/latest/Voronoi\texttt{\_}diagram\texttt{\_}2/index.html
-\bibitem{hal}Jean-Daniel Boissonnat, Olivier Devillers, Sylvain Pion, Monique Teillaud, Mariette Yvinec.
-Triangulations in CGAL. Computational Geometry, Elsevier, 2002, 22, pp.5-19. $<$inria-00167199$>$.
 
-\end{thebibliography}
+\bibliographystyle{abbrv}
+\bibliography{biblia}
 \end{document}

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2015.12.31)  17 JUN 2016 18:58
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2015.12.31)  19 JUN 2016 20:33
 entering extended mode
 **./Separation3.tex
 (Separation3.tex
@@ -377,7 +377,17 @@ File: lstmisc.sty 2015/06/04 1.6 (Carsten Heinz)
 ("C:\Program Files (x86)\MiKTeX\tex\latex\listings\lstlang1.sty"
 File: lstlang1.sty 2015/06/04 1.6 listings language file
 )
-(Separation3.aux)
+(Separation3.aux
+
+LaTeX Warning: Label `nnarray' multiply defined.
+
+
+LaTeX Warning: Label `ch3' multiply defined.
+
+
+LaTeX Warning: Label `generation' multiply defined.
+
+)
 \openout1 = `Separation3.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 120.
@@ -464,146 +474,129 @@ File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
 
 ]
 Poglavje 1.
-[1
+
+Overfull \hbox (0.25706pt too wide) in paragraph at lines 247--248
+[]\OT1/cmr/m/n/12 Pri pr-vem pro-blemu bi radi izracunali drevo naj-krajsih p
+oti iz ne-utezenega
+ []
 
 
-] [2
+Underfull \vbox (badness 2689) has occurred while \output is active []
+
+ [1
+
+
+]
+<pics/unitdisks.pdf, id=68, page=4, 281.45149pt x 265.3915pt>
+File: pics/unitdisks.pdf Graphic file (type pdf)
+
+<use pics/unitdisks.pdf, page 4>
+Package pdftex.def Info: pics/unitdisks.pdf, page4 used on input line 264.
+(pdftex.def)             Requested size: 168.87218pt x 159.23611pt.
+
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 14.49998pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[2] [3 <./pics/unitdisks.pdf>] [4
 
 ]
 Poglavje 2.
-[3
+[5
 
 ]
 
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+Package Fancyhdr Warning: \headheight is too small (14.49998pt): 
  Make it at least 29.42502pt.
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[4] <pics/grid.pdf, id=78, 225.2415pt x 169.0315pt>
+[6] <pics/grid.pdf, id=93, 225.2415pt x 169.0315pt>
 File: pics/grid.pdf Graphic file (type pdf)
  <use pics/grid.pdf>
-Package pdftex.def Info: pics/grid.pdf used on input line 277.
+Package pdftex.def Info: pics/grid.pdf used on input line 301.
 (pdftex.def)             Requested size: 270.28842pt x 202.83676pt.
 
-<pics/voronoi-dt.pdf, id=79, 429.20651pt x 413.92343pt>
+<pics/voronoi-dt.pdf, id=94, 429.20651pt x 413.92343pt>
 File: pics/voronoi-dt.pdf Graphic file (type pdf)
 
 <use pics/voronoi-dt.pdf>
-Package pdftex.def Info: pics/voronoi-dt.pdf used on input line 289.
+Package pdftex.def Info: pics/voronoi-dt.pdf used on input line 313.
 (pdftex.def)             Requested size: 515.04523pt x 496.70563pt.
 
 
-LaTeX Warning: Citation `cgalVor' on page 5 undefined on input line 294.
+LaTeX Warning: Citation `cgalVor' on page 7 undefined on input line 318.
 
-[5 <./pics/grid.pdf>] [6 <./pics/voronoi-dt.pdf>]
-
-LaTeX Warning: Reference `vd' on page 7 undefined on input line 312.
-
-
-Overfull \hbox (41.22052pt too wide) in paragraph at lines 312--313
+[7 <./pics/grid.pdf>] [8 <./pics/voronoi-dt.pdf>]
+Overfull \hbox (41.22052pt too wide) in paragraph at lines 336--337
 []\OT1/cmr/m/n/12 Celice si po-na-vadi pred-sta-vljamo kot 2-dimenzionalne, ro-
 bove kot 1-dimenzionalne
  []
 
-[7]
+[9]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [8]
-<pics/rangeTree.pdf, id=109, 473.77pt x 313.57149pt>
+ [10]
+<pics/rangeTree.pdf, id=124, 473.77pt x 313.57149pt>
 File: pics/rangeTree.pdf Graphic file (type pdf)
  <use pics/rangeTree.pdf>
-Package pdftex.def Info: pics/rangeTree.pdf used on input line 327.
+Package pdftex.def Info: pics/rangeTree.pdf used on input line 351.
 (pdftex.def)             Requested size: 568.52116pt x 376.28389pt.
 
-[9 <./pics/rangeTree.pdf>] [10
+[11 <./pics/rangeTree.pdf>] [12
 
 ]
 Poglavje 3.
-<pics/unitdisks.pdf, id=123, page=4, 281.45149pt x 265.3915pt>
-File: pics/unitdisks.pdf Graphic file (type pdf)
-
-<use pics/unitdisks.pdf, page 4>
-Package pdftex.def Info: pics/unitdisks.pdf, page4 used on input line 346.
-(pdftex.def)             Requested size: 168.87218pt x 159.23611pt.
-
-<pics/unitdisks.pdf, id=124, page=5, 281.45149pt x 265.3915pt>
+<pics/unitdisks.pdf, id=137, page=5, 281.45149pt x 265.3915pt>
 File: pics/unitdisks.pdf Graphic file (type pdf)
 
 <use pics/unitdisks.pdf, page 5>
-Package pdftex.def Info: pics/unitdisks.pdf, page5 used on input line 356.
+Package pdftex.def Info: pics/unitdisks.pdf, page5 used on input line 372.
 (pdftex.def)             Requested size: 168.87218pt x 159.23611pt.
 
-
-LaTeX Warning: Reference `separation' on page 11 undefined on input line 357.
-
-[11] <pics/separation.pdf, id=128, page=3, 289.48149pt x 289.48149pt>
+<pics/separation.pdf, id=138, page=3, 289.48149pt x 289.48149pt>
 File: pics/separation.pdf Graphic file (type pdf)
 
 <use pics/separation.pdf, page 3>
-Package pdftex.def Info: pics/separation.pdf, page3 used on input line 364.
+Package pdftex.def Info: pics/separation.pdf, page3 used on input line 380.
 (pdftex.def)             Requested size: 173.69023pt x 173.69023pt.
-
-
-LaTeX Warning: Reference `separation' on page 12 undefined on input line 365.
-
-
-LaTeX Warning: Reference `separation' on page 12 undefined on input line 365.
-
-<pics/unitdisks.pdf, id=129, page=6, 289.48149pt x 289.48149pt>
+ [13] [14 <./pics/unitdisks.pdf> <./pics/separation.pdf>] <pics/unitdisks.pdf, 
+id=159, page=6, 289.48149pt x 289.48149pt>
 File: pics/unitdisks.pdf Graphic file (type pdf)
 
 <use pics/unitdisks.pdf, page 6>
-Package pdftex.def Info: pics/unitdisks.pdf, page6 used on input line 375.
+Package pdftex.def Info: pics/unitdisks.pdf, page6 used on input line 391.
 (pdftex.def)             Requested size: 173.69023pt x 173.69023pt.
- [12 <./pics/unitdisks.pdf>] [13 <./pics/unitdisks.pdf> <./pics/separation.pdf>
-]
-<pics/path.pdf, id=150, 211.81433pt x 136.04727pt>
+ [15 <./pics/unitdisks.pdf>]
+<pics/path.pdf, id=171, 211.81433pt x 136.04727pt>
 File: pics/path.pdf Graphic file (type pdf)
  <use pics/path.pdf>
-Package pdftex.def Info: pics/path.pdf used on input line 399.
+Package pdftex.def Info: pics/path.pdf used on input line 415.
 (pdftex.def)             Requested size: 211.8138pt x 136.04692pt.
- [14 <./pics/unitdisks.pdf>]
-Underfull \vbox (badness 2680) has occurred while \output is active []
-
- [15 <./pics/path.pdf>]
-Overfull \hbox (19.95012pt too wide) in paragraph at lines 426--427
+ [16 <./pics/path.pdf>]
+Overfull \hbox (19.95012pt too wide) in paragraph at lines 442--443
 []\OT1/cmr/m/n/12 Preden obrav-na-vamo in-duk-cij-ski ko-rak, iz-po-sta-vimo, d
 a so mnozice $\OML/cmm/m/it/12 W[]; W[]; :::$
  []
 
-
-LaTeX Warning: Reference `lema1' on page 16 undefined on input line 440.
-
-[16]
-Overfull \hbox (69.02692pt too wide) in paragraph at lines 494--495
+[17]
+Overfull \hbox (69.02692pt too wide) in paragraph at lines 510--511
 []\OT1/cmr/bx/n/12 Lema 3.3. []\OT1/cmr/m/it/12 Za iz-gra-dnjo dre-vesa SSSP po
 -tre-buje al-go-ri-tem $\OML/cmm/m/it/12 UnweightedShortestPath\OT1/cmr/m/n/12 
 (\OML/cmm/m/it/12 P; s\OT1/cmr/m/n/12 )$
  []
 
 
-Overfull \hbox (12.893pt too wide) in paragraph at lines 500--501
+Overfull \hbox (12.893pt too wide) in paragraph at lines 516--517
 []\OT1/cmr/m/n/12 Delaunayeva tri-an-gu-la-cija nad $\OML/cmm/m/it/12 n$ \OT1/c
 mr/m/n/12 tockami se lahko izracuna v casu $\OMS/cmsy/m/n/12 O\OT1/cmr/m/n/1
 2 (\OML/cmm/m/it/12 n [] n\OT1/cmr/m/n/12 )$.
  []
 
-[17] [18]
-
-LaTeX Warning: Reference `lema2' on page 19 undefined on input line 519.
-
-
-LaTeX Warning: Reference `bigo1' on page 19 undefined on input line 524.
-
-
-LaTeX Warning: Reference `lema3' on page 19 undefined on input line 532.
-
-
-LaTeX Warning: Reference `lema2' on page 19 undefined on input line 532.
-
-[19]
-Overfull \hbox (34.8243pt too wide) in paragraph at lines 552--553
+[18] [19] [20]
+Overfull \hbox (34.8243pt too wide) in paragraph at lines 568--569
 [][]\OT1/cmr/m/n/12 Cas pred-pro-ce-si-ra-nja vo-zlisca $\OML/cmm/m/it/12 $ 
 \OT1/cmr/m/n/12 je $\OMS/cmsy/m/n/12 O\OT1/cmr/m/n/12 (\OMS/cmsy/m/n/12 j\OML/c
 mm/m/it/12 P\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 \OT1/cmr/m/n/12 )\OMS/cmsy/m/n/1
@@ -612,64 +605,39 @@ mm/m/it/12 P\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 \OT1/cmr/m/n/12 )\OMS/cmsy/m/n/1
 cmr/m/n/12 )\OMS/cmsy/m/n/12 j\OT1/cmr/m/n/12 ) =$
  []
 
-[20] [21] [22] <pics/duality.pdf, id=205, 452.05588pt x 120.8515pt>
+[21] [22] [23] <pics/duality.pdf, id=221, 452.05588pt x 120.8515pt>
 File: pics/duality.pdf Graphic file (type pdf)
 
 <use pics/duality.pdf>
-Package pdftex.def Info: pics/duality.pdf used on input line 637.
+Package pdftex.def Info: pics/duality.pdf used on input line 653.
 (pdftex.def)             Requested size: 542.46432pt x 145.02106pt.
-
-<pics/dual_problem3.pdf, id=206, 289.48149pt x 200.14775pt>
+ [24 <./pics/duality.pdf>]
+<pics/dual_problem3.pdf, id=249, 289.48149pt x 200.14775pt>
 File: pics/dual_problem3.pdf Graphic file (type pdf)
 
 <use pics/dual_problem3.pdf>
-Package pdftex.def Info: pics/dual_problem3.pdf used on input line 658.
+Package pdftex.def Info: pics/dual_problem3.pdf used on input line 674.
 (pdftex.def)             Requested size: 347.37605pt x 240.17607pt.
 
-<pics/dual_problem4.pdf, id=207, 386.84525pt x 290.54448pt>
+<pics/dual_problem4.pdf, id=250, 386.84525pt x 290.54448pt>
 File: pics/dual_problem4.pdf Graphic file (type pdf)
 
 <use pics/dual_problem4.pdf>
-Package pdftex.def Info: pics/dual_problem4.pdf used on input line 664.
+Package pdftex.def Info: pics/dual_problem4.pdf used on input line 680.
 (pdftex.def)             Requested size: 464.21196pt x 348.65163pt.
-
-
-LaTeX Warning: Reference `dualp' on page 23 undefined on input line 665.
-
-
-LaTeX Warning: Reference `dualp' on page 23 undefined on input line 665.
-
-[23 <./pics/duality.pdf>] [24 <./pics/dual_problem3.pdf>] [25 <./pics/dual_prob
-lem4.pdf>]
-Overfull \hbox (6.23401pt too wide) in paragraph at lines 686--686
+ [25 <./pics/dual_problem3.pdf>] [26 <./pics/dual_problem4.pdf>]
+Overfull \hbox (6.23401pt too wide) in paragraph at lines 702--702
 [] 
  []
 
-[26]
-
-LaTeX Warning: Reference `dualnost' on page 27 undefined on input line 717.
-
-
-LaTeX Warning: Reference `lema1' on page 27 undefined on input line 717.
-
-[27] [28] [29]
-
-LaTeX Warning: Reference `lema2' on page 30 undefined on input line 812.
-
-
-LaTeX Warning: Reference `lema4' on page 30 undefined on input line 812.
-
-
-LaTeX Warning: Reference `lema6' on page 30 undefined on input line 819.
-
-[30]
-Poglavje 4.
-LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <14.4> not available
-(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 834.
-[31
+[27] [28] [29] [30] [31] [32
 
 ]
-Overfull \hbox (0.80983pt too wide) in paragraph at lines 846--847
+Poglavje 4.
+LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <14.4> not available
+(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 850.
+[33]
+Overfull \hbox (0.80983pt too wide) in paragraph at lines 862--863
 \OT1/cmr/m/n/12 Kot smo ome-nili pri opisu al-go-ritma v prejsnjem po-glavju, 
 pri gra-dnji mnozice
  []
@@ -688,119 +656,109 @@ File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <8> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 63.
- [32])
-Overfull \hbox (45.83981pt too wide) in paragraph at lines 858--859
+ [34])
+Overfull \hbox (45.83981pt too wide) in paragraph at lines 874--875
 $\OML/cmm/m/it/12 VoronoiDiagram$ \OT1/cmr/m/n/12 omogocili tudi vsta-vlja-nje
  objek-tov tipa $\OML/cmm/m/it/12 Delaunay[]Vertex[]Handle$\OT1/cmr/m/n/12 ,
  []
 
-[33] <pics/nntree-png.png, id=296, 522.753pt x 351.11176pt>
+[35] <pics/nntree-png.png, id=316, 522.753pt x 351.11176pt>
 File: pics/nntree-png.png Graphic file (type png)
 
 <use pics/nntree-png.png>
-Package pdftex.def Info: pics/nntree-png.png used on input line 882.
+Package pdftex.def Info: pics/nntree-png.png used on input line 898.
 (pdftex.def)             Requested size: 261.37585pt x 175.55544pt.
- [34]
-<pics/nnarray-png.png, id=301, 612.48825pt x 93.34875pt>
+ [36]
+<pics/nnarray-png.png, id=321, 612.48825pt x 93.34875pt>
 File: pics/nnarray-png.png Graphic file (type png)
 
 <use pics/nnarray-png.png>
-Package pdftex.def Info: pics/nnarray-png.png used on input line 888.
+Package pdftex.def Info: pics/nnarray-png.png used on input line 904.
 (pdftex.def)             Requested size: 306.24338pt x 46.67426pt.
-
-
-LaTeX Warning: Reference `nntree' on page 35 undefined on input line 893.
-
-[35 <./pics/nntree-png.png> <./pics/nnarray-png.png>] [36]
-Overfull \hbox (10.95775pt too wide) in paragraph at lines 903--903
+ [37 <./pics/nntree-png.png> <./pics/nnarray-png.png>] [38]
+Overfull \hbox (10.95775pt too wide) in paragraph at lines 918--918
 []\OT1/cmr/bx/n/17.28 Implementacija op-ti-mi-za-cij-skega pro-blema
  []
 
 
-LaTeX Warning: Reference `opt2' on page 37 undefined on input line 905.
-
-
-LaTeX Warning: Reference `opt2' on page 37 undefined on input line 909.
-
-
-Overfull \hbox (2.43094pt too wide) in paragraph at lines 909--910
+Overfull \hbox (2.43094pt too wide) in paragraph at lines 924--925
 $\OML/cmm/m/it/12 DualPoint$ \OT1/cmr/m/n/12 hrani dva atri-buta. Prvi je tock
 a v du-al-nem pro-storu tipa $\OML/cmm/m/it/12 Point[]\OT1/cmr/m/n/12 2$,
  []
 
 
-Overfull \hbox (13.21664pt too wide) in paragraph at lines 913--915
+Overfull \hbox (0.31616pt too wide) in paragraph at lines 924--925
+$\OML/cmm/m/it/12 originalPoint$\OT1/cmr/m/n/12 . []Ce $\OML/cmm/m/it/12 point$
+ \OT1/cmr/m/n/12 pred-sta-vlja tocko $(\OML/cmm/m/it/12 '[]\OT1/cmr/m/n/12 (\O
+ML/cmm/m/it/12 b\OT1/cmr/m/n/12 )\OML/cmm/m/it/12 ; '[]\OT1/cmr/m/n/12 (\OML/cm
+m/m/it/12 b\OT1/cmr/m/n/12 ))$ (glej po-glavje  3.3.2[]),
+ []
+
+
+Overfull \hbox (13.21664pt too wide) in paragraph at lines 928--930
 \OT1/cmr/m/n/12 Za dvo-di-men-zi-o-nalna obmocna dre-vesa smo upo-ra-bili im-p
 le-men-ta-cijo v knjiznici
  []
 
-[37]
-Overfull \hbox (84.58217pt too wide) in paragraph at lines 916--917
+[39]
+Overfull \hbox (84.58217pt too wide) in paragraph at lines 931--932
 \OT1/cmr/m/n/12 nem dre-vesu) - tako kot pri pre-i-sko-va-nju v sirino - s fun
 k-cijo $\OML/cmm/m/it/12 traverse[]and[]populate[]with[]data$\OT1/cmr/m/n/12 .
  []
 
 
-Overfull \hbox (53.79143pt too wide) in paragraph at lines 919--920
+Overfull \hbox (53.79143pt too wide) in paragraph at lines 934--935
 \OT1/cmr/m/n/12 Razredu $\OML/cmm/m/it/12 Range[]tree[]d$ \OT1/cmr/m/n/12 smo z
 a po-i-zvedbe do-dali funk-cijo $\OML/cmm/m/it/12 window[]query[]impl[]modified
 $\OT1/cmr/m/n/12 ,
  []
 
-[38] (KdTreeQuery.h
+[40] (KdTreeQuery.h
 LaTeX Font Info:    Font shape `OML/cmr/m/it' in size <8> not available
 (Font)              Font shape `OML/cmm/m/it' tried instead on input line 22.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [39])
-(NNquery.h) <pics/primer1.png, id=320, 458.31226pt x 447.47176pt>
+ [41])
+(NNquery.h) <pics/primer1.png, id=340, 458.31226pt x 447.47176pt>
 File: pics/primer1.png Graphic file (type png)
 
 <use pics/primer1.png>
-Package pdftex.def Info: pics/primer1.png used on input line 931.
+Package pdftex.def Info: pics/primer1.png used on input line 946.
 (pdftex.def)             Requested size: 320.81638pt x 313.22809pt.
-
-
-LaTeX Warning: Reference `lema6' on page 40 undefined on input line 937.
-
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [40]
-[41 <./pics/primer1.png>]
-Overfull \hbox (2.30714pt too wide) in paragraph at lines 940--941
+ [42]
+[43 <./pics/primer1.png>]
+Overfull \hbox (2.30714pt too wide) in paragraph at lines 955--956
 \OT1/cmr/m/n/12 Funkcija $\OML/cmm/m/it/12 findMinPair\OT1/cmr/m/n/12 (\OML/cmm
 /m/it/12 S[]; S[]; currentMinWeight\OT1/cmr/m/n/12 )$ resi op-ti-mi-za-cij-ska
  pro-
  []
 
 
-Overfull \hbox (6.8299pt too wide) in paragraph at lines 945--946
+Overfull \hbox (6.8299pt too wide) in paragraph at lines 960--961
 \OT1/cmr/m/n/12 Funkcija $\OML/cmm/m/it/12 findminpairRi\OT1/cmr/m/n/12 (\OML/c
 mm/m/it/12 L[]; L[]; R[]; currentMinWeight; st\OT1/cmr/m/n/12 )$. []Sest in-sta
 nc pro-
  []
 
-[42]
-
-LaTeX Warning: Reference `dualp' on page 43 undefined on input line 953.
-
-[43] [44]
+[44] [45] [46]
 Poglavje 5.
-<pics/data_generation.pdf, id=337, page=1, 530.38153pt x 102.69768pt>
+<pics/data_generation.pdf, id=358, page=1, 530.38153pt x 102.69768pt>
 File: pics/data_generation.pdf Graphic file (type pdf)
 
 <use pics/data_generation.pdf, page 1>
-Package pdftex.def Info: pics/data_generation.pdf, page1 used on input line 971
+Package pdftex.def Info: pics/data_generation.pdf, page1 used on input line 986
 .
 (pdftex.def)             Requested size: 397.78517pt x 77.02306pt.
 
-<pics/data_generation.pdf, id=338, page=2, 530.38153pt x 102.69768pt>
+<pics/data_generation.pdf, id=359, page=2, 530.38153pt x 102.69768pt>
 File: pics/data_generation.pdf Graphic file (type pdf)
 
 <use pics/data_generation.pdf, page 2>
-Package pdftex.def Info: pics/data_generation.pdf, page2 used on input line 977
+Package pdftex.def Info: pics/data_generation.pdf, page2 used on input line 992
 .
 (pdftex.def)             Requested size: 397.78517pt x 77.02306pt.
 
@@ -810,43 +768,43 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<pics/separation-64-1-1000-narrow-2.png, id=339, 1734.48pt x 873.0216pt>
+<pics/separation-64-1-1000-narrow-2.png, id=360, 1734.48pt x 873.0216pt>
 File: pics/separation-64-1-1000-narrow-2.png Graphic file (type png)
 
 <use pics/separation-64-1-1000-narrow-2.png>
 Package pdftex.def Info: pics/separation-64-1-1000-narrow-2.png used on input l
-ine 1181.
+ine 1196.
 (pdftex.def)             Requested size: 520.34802pt x 261.9085pt.
 
-<pics/32-1-5000-stuffed.png, id=340, 1734.48pt x 873.0216pt>
+<pics/32-1-5000-stuffed.png, id=361, 1734.48pt x 873.0216pt>
 File: pics/32-1-5000-stuffed.png Graphic file (type png)
 
 <use pics/32-1-5000-stuffed.png>
-Package pdftex.def Info: pics/32-1-5000-stuffed.png used on input line 1187.
+Package pdftex.def Info: pics/32-1-5000-stuffed.png used on input line 1202.
 (pdftex.def)             Requested size: 520.34802pt x 261.9085pt.
- [45
+ [47
 
- <./pics/data_generation.pdf>] [46 <./pics/data_generation.pdf>] [47] [48] [49]
- [50 <./pics/separation-64-1-1000-narrow-2.png> <./pics/32-1-5000-stuffed.png>]
- [51] [52
+ <./pics/data_generation.pdf>] [48 <./pics/data_generation.pdf>] [49] [50] [51]
+ [52 <./pics/separation-64-1-1000-narrow-2.png> <./pics/32-1-5000-stuffed.png>]
+ [53] [54
 
 ]
 Poglavje 6.
-[53] [54
+(Separation3.bbl [55] [56
 
-] [55] (Separation3.aux)
+]) [57] (Separation3.aux)
 
 LaTeX Warning: There were undefined references.
 
 
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 6807 strings out of 493634
- 91585 string characters out of 3142933
+ 6812 strings out of 493634
+ 91634 string characters out of 3142933
  289627 words of memory out of 3000000
- 10042 multiletter control sequences out of 15000+200000
+ 10044 multiletter control sequences out of 15000+200000
  18615 words of font info for 73 fonts, out of 3000000 for 9000
  1025 hyphenation exceptions out of 8191
  41i,15n,56p,1528b,1129s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -880,9 +838,9 @@ type1/public/amsfonts/cm/cmsy9.pfb><C:/Program Files (x86)/MiKTeX/fonts/type1/p
 ublic/amsfonts/cm/cmti12.pfb><C:/Program Files (x86)/MiKTeX/fonts/type1/public/
 amsfonts/cm/cmti8.pfb><C:/Program Files (x86)/MiKTeX/fonts/type1/public/amsfont
 s/symbols/msbm10.pfb>
-Output written on Separation3.pdf (71 pages, 827200 bytes).
+Output written on Separation3.pdf (73 pages, 854094 bytes).
 PDF statistics:
- 489 PDF objects out of 1000 (max. 8388607)
+ 511 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  91 words of extra memory for PDF output out of 10000 (max. 10000000)
 

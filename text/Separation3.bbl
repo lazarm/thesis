@@ -1,0 +1,20 @@
+\begin{thebibliography}{1}
+
+\bibitem{CG16}
+S.~Cabello and P.~Giannopoulos.
+\newblock The complexity of separating points in the plane.
+\newblock {\em Algorithmica}, 74(2):643--663, 2016.
+
+\bibitem{FGG06}
+Q.~Fang, J.~Gao, and L.~J. Guibas.
+\newblock Locating and bypassing routing holes in sensor networks.
+\newblock In {\em Proc. Mobile Networks and Applications}, volume~11, pages
+  187--200, 2006.
+
+\bibitem{WGM06}
+Y.~Wang, J.~Gao, and J.~S. Mitchell.
+\newblock Boundary recognition in sensor networks by topological methods.
+\newblock In {\em Proceedings of the 12th Annual International Conference on
+  Mobile Computing and Networking}, MobiCom '06, pages 122--133, 2006.
+
+\end{thebibliography}
