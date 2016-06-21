@@ -292,7 +292,14 @@ Pri nekaterih razredih knjižnice smo morali spremeniti kodo ali dodati kaj nove
 natancnost: cartesian, kaj pa leda, homogenous?
 povej kaj o traits, templated strukturami ($Point_2$) 
 
-\section{BFS drevesa}
+\section{Kd drevesa}
+
+\begin{figure}		
+\centerline{\includegraphics[scale=1.2]{pics/kdTree4.pdf}}		
+\caption{Dvodimenzionalno kd drevo.}		
+\label{kd-primer}		
+\end{figure}
+
 \section{SSSP drevesa}
 Drevo najkrajših poti z eno izvorno točko je vpeto drevo $T$ grafa $G$ s korenom $v$, za katerega velja, da je razdalja poti od $v$ do $u \in T$ enaka razdalji najkrajše poti od $v$ do $u$. Tako drevo lahko zgradimo s pomočjo algoritma za iskanje najkrajše poti med dvema danima točkama (tipična primera sta Dijsktrov in Bellman-Fordov algoritem). Izvorno točko $v$ fiksiramo in poženemo algoritem za vse pare $(v, u), v,u \in G.$ Časovna kompleksnost Dijkstrovega algoritma je $\OO((m+n)\log n)$, kjer je $n$ število vozlišč, $m$ pa število povezav v $G$. Ker moramo algoritem pognati za $n-1$ parov, lahko drevo zgradimo v času $\OO((n^2 + nm)\log n)$. Če predpostavimo, da za vhodni graf $G$ veljajo določene omejitve (v primeru našega algoritma povezava med vozliščema v grafu obstaja samo, če je njuna razdalja največ 1), ki se jih da izkoristiti pri izgradnji hitrejšega algoritma, se časovna kompleksnost lahko izboljša.
 \section{Graf kvadratne mreže}
@@ -310,7 +317,7 @@ $https://en.wikipedia.org/wiki/Lattice_graph_Square_grid_graph$
 
 \section{Voronoijev diagram}
 \begin{figure}
-\centerline{\includegraphics[scale=1.2]{pics/voronoi-dt.pdf}}
+\centerline{\includegraphics[scale=1.2]{pics/voronoi-dt2.pdf}}
 \caption{Evklidski Voronoijev diagram brez degeneracij, označen z rdečimi odebeljenimi povezavami. Voronoijeva središča, obarvana z modro barvo, predstavljajo hkrati tudi vozlišča v Delaunayevi triangulaciji, dualni Voronoijevemu diagramu, in je označena s tanjšimi črnimi povezavami.}
 \label{vd}
 \end{figure}
@@ -348,7 +355,7 @@ Tretja predloga predstavlja režim adaptacije Delaunayeve triangulacije Voronoij
 Območna drevesa so še ena podatkovna struktura za poizvedbe nad pravokotnimi območji. V primerjavi s kd drevesi imajo boljši čas poizvedbe ($\OO(\log^2 n)$), ampak slabšo prostorsko kompleksnost ($\OO(n\log n)$).
 
 \begin{figure}
-\centerline{\includegraphics[scale=1.2]{pics/rangeTree.pdf}}
+\centerline{\includegraphics[scale=1.2]{pics/rangeTree2.pdf}}
 \caption{Dvodimenzionalno območno drevo.}
 \label{range-primer}
 \end{figure}

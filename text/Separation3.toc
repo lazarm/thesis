@@ -7,14 +7,14 @@
 \contentsline {chapter}{\numberline {1}Uvod}{1}
 \contentsline {chapter}{\numberline {2}CGAL in uporabljene matemati\IeC {\v c}ne strukture}{5}
 \contentsline {section}{\numberline {2.1}CGAL}{5}
-\contentsline {section}{\numberline {2.2}BFS drevesa}{6}
+\contentsline {section}{\numberline {2.2}Kd drevesa}{6}
 \contentsline {section}{\numberline {2.3}SSSP drevesa}{6}
-\contentsline {section}{\numberline {2.4}Graf kvadratne mre\IeC {\v z}e}{7}
-\contentsline {section}{\numberline {2.5}Delaunayeva triangulacija}{7}
-\contentsline {subsection}{\numberline {2.5.1}Implementacija v CGAL}{7}
-\contentsline {section}{\numberline {2.6}Voronoijev diagram}{7}
-\contentsline {subsection}{\numberline {2.6.1}Voronoijev diagram v CGAL}{9}
-\contentsline {section}{\numberline {2.7}Obmo\IeC {\v c}na drevesa}{11}
+\contentsline {section}{\numberline {2.4}Graf kvadratne mre\IeC {\v z}e}{8}
+\contentsline {section}{\numberline {2.5}Delaunayeva triangulacija}{8}
+\contentsline {subsection}{\numberline {2.5.1}Implementacija v CGAL}{8}
+\contentsline {section}{\numberline {2.6}Voronoijev diagram}{8}
+\contentsline {subsection}{\numberline {2.6.1}Voronoijev diagram v CGAL}{10}
+\contentsline {section}{\numberline {2.7}Obmo\IeC {\v c}na drevesa}{12}
 \contentsline {chapter}{\numberline {3}Teorija}{13}
 \contentsline {section}{\numberline {3.1}Predstavitev problema}{13}
 \contentsline {section}{\numberline {3.2}SSSP drevo}{15}
