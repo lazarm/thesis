@@ -300,15 +300,15 @@ povej kaj o traits, templated strukturami ($Point_2$)
 \label{kd-primer}		
 \end{figure}
 
+Več na~\cite{bkos-08}.
+
 \section{SSSP drevesa}
 Drevo najkrajših poti z eno izvorno točko je vpeto drevo $T$ grafa $G$ s korenom $v$, za katerega velja, da je razdalja poti od $v$ do $u \in T$ enaka razdalji najkrajše poti od $v$ do $u$. Tako drevo lahko zgradimo s pomočjo algoritma za iskanje najkrajše poti med dvema danima točkama (tipična primera sta Dijsktrov in Bellman-Fordov algoritem). Izvorno točko $v$ fiksiramo in poženemo algoritem za vse pare $(v, u), v,u \in G.$ Časovna kompleksnost Dijkstrovega algoritma je $\OO((m+n)\log n)$, kjer je $n$ število vozlišč, $m$ pa število povezav v $G$. Ker moramo algoritem pognati za $n-1$ parov, lahko drevo zgradimo v času $\OO((n^2 + nm)\log n)$. Če predpostavimo, da za vhodni graf $G$ veljajo določene omejitve (v primeru našega algoritma povezava med vozliščema v grafu obstaja samo, če je njuna razdalja največ 1), ki se jih da izkoristiti pri izgradnji hitrejšega algoritma, se časovna kompleksnost lahko izboljša.
 \section{Graf kvadratne mreže}
-$https://en.wikipedia.org/wiki/Lattice_graph_Square_grid_graph$
-\begin{figure}
-\centerline{\includegraphics[scale=1.2]{pics/grid.pdf}}
-\caption{Evklidski Voronoijev diagram brez degeneracij, označen z rdečimi odebeljenimi povezavami. Voronoijeva središča, obarvana z modro barvo, predstavljajo hkrati tudi vozlišča v Delaunayevi triangulaciji, dualni Voronoijevemu diagramu, in je označena s tanjšimi črnimi povezavami.}
-\label{grid}
-\end{figure}
+Dvodimenzionalni graf kvadratne mreže je $m \times n$ mrežni graf $G_{m,n}$, ki predstavlja kartezični produkt dveh grafov poti z $n-1$ in $m-1$ povezavami. Vsi mrežni grafi so dvodelni, kar se da enostavno pokazati s tem, da se vozlišča pobarva z dvema barvama z vzorcem šahovnice.
+
+
+Vozlišča grafa ponavadi sovpadajo s točkami v ravnini, pri katerih koordinate predstavljajo cela števila: abscisne koordinate imajo vrednosti 1,...,n, ordinatne pa 1,...,m. Dve vozlišči sta povezani, če je njuna razdalja enaka 1, zato takemu grafu pravimo tudi graf enotskih razdalj.
 
 
 \section{Delaunayeva triangulacija}
@@ -340,7 +340,7 @@ V_i = \bigcap_{i \neq j} V_{ij} .
 
 Množico $V_i$ imenujemo tudi Voronoijeva celica ali Voronijevo lice središča $S_i$. Lokus točk, ki so enako oddaljene od dveh središč, se imenuje Voronijev bisektor. Povezani podmnožici slednjega pravimo Voronoijev rob. Točki, ki je enako oddaljena od treh ali več središč, pravimo Voronoijevo vozlišče. Voronoijev diagram na množici $S$ in z metriko $\delta(x,\cdot)$ je zbirka Voronoijevih celic, robov in vozlišč ter je primer ravninskega grafa.
 
-Celice si ponavadi predstavljamo kot 2-dimenzionalne, robove kot 1-dimenzionalne in vozlišča kot 0-dimenzionalne objekte. Za določene kombinacije središč in metrik to ne drži. Voronijev diagram z metriko $L_1$ ali $L_{\infty}$ lahko na primer vsebuje dvodimenzionalne robove. Takim Voronoijevim diagramom, za katere zgornja omejitev drži in imajo lastnost, da so njihove celice preprosto povezano območje v ravnini, pravimo preprosti Voronoijevi diagrami. Najbolj tipičen primer slednjih je evklidski Voronoijev diagram (slika ~\ref{vd}), ki ga uporabljamo v napem algoritmu.
+Celice si ponavadi predstavljamo kot 2-dimenzionalne, robove kot 1-dimenzionalne in vozlišča kot 0-dimenzionalne objekte. Za določene kombinacije središč in metrik to ne drži. Voronijev diagram z metriko $L_1$ ali $L_{\infty}$ lahko na primer vsebuje dvodimenzionalne robove. Takim Voronoijevim diagramom, za katere zgornja omejitev drži in imajo lastnost, da so njihove celice preprosto povezano območje v ravnini, pravimo preprosti Voronoijevi diagrami. Najbolj tipičen primer slednjih je evklidski Voronoijev diagram (slika ~\ref{vd}), ki ga uporabljamo v našem algoritmu.
 
 \subsection{Voronoijev diagram v CGAL}
 Knjižnica CGAL ponuja razred Voronoi\texttt{\_}diagram\texttt{\_}2$<DG,AT,AP>$, ki deluje kot prilagoditveni paket. Ta Delaunayevo triangulacijo na podlagi podanih kriterijev prilagodi pripadajočemu Voronoijevemu diagramu, ki je predstavljen kot DCEL (doubly connected edge list) struktura. Paket je torej zasnovan tako, da na zunaj deluje kot DCEL struktura, znotraj pa v resnici hrani strukturo grafa, ki predstavlja graf triangulacije.
@@ -844,6 +844,20 @@ Za vsak $r\in P$ izračunamo drevo najkrajših poti $T_r$ v $G$ iz $r$, razdalje
 TODO
 \end{proof}
 
+\section{Alternativni algoritmi za SSSP in minimalno ločevanje}
+\subsection{Eksplicitni BFS}
+
+\subsection{BFS z uporabo grafa kvadratne mreže}
+\begin{figure}
+\centerline{\includegraphics[scale=1.2]{pics/grid.pdf}}
+\caption{.}
+\label{grid}
+\end{figure}
+
+Graf enotske kvadratne mreže je med drugim uporaben za preiskovanje v širino kot alternativa klasičnemu algoritmu BFS nad grafom enotskih   Vsaki točki iz dane množice $P$ lahko izračunamo njen ključ tako, da poiščemo spodnje levo vozlišče celice grafa kvadratne mreže, v kateri se točka nahaja (glej sliko ~\ref{grid}). Graf $G(P)$ lahko tako predstavimo s slovarjem, kjer ključi predstavljajo vozlišča grafa kvadratne mreže, kot vrednosti pa hranijo seznam vseh točk v celici, ki se nahaja zgoraj desno od ključa. Preiskovanje v širino nad takim grafom poteka tako, da za dano točko preverimo samo tiste kandidate, ki se nahajajo v isti ali eni izmed sosednjih celic grafa kvadratne mreže, točki pa povežemo, če je njuna razdalja največ 1. 
+
+\subsection{Generični algoritem za ločevanje z diski}
+
 \chapter{Implementacija algoritma}
 \label{ch3}
 
@@ -983,7 +997,6 @@ Ko dobimo par točk $a, b\in P$, ki določata minimalno zaprto pot, ki ločuje t
 Pri algoritmu ločevanja z diski smo večkrat omenili, da je za daljico $\sigma$ privzeto, da je vertikalna. Če želimo uporabiti algoritem na primeru, kjer daljica ni vertikalna, je potrebno vse vhodne točke predhodno rotirati 
 
 točke, ki ležijo na y osi, grejo k b (preveri tip neskončne vrednosti v dualpoint)
-
 
 
 \chapter{Rezultati}

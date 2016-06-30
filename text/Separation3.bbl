@@ -1,5 +1,10 @@
 \begin{thebibliography}{1}
 
+\bibitem{bkos-08}
+M.~d. Berg, O.~Cheong, M.~v. Kreveld, and M.~Overmars.
+\newblock {\em Computational Geometry: Algorithms and Applications}.
+\newblock Springer-Verlag, 3rd ed. edition, 2008.
+
 \bibitem{CG16}
 S.~Cabello and P.~Giannopoulos.
 \newblock The complexity of separating points in the plane.
