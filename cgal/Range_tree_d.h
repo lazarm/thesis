@@ -528,16 +528,16 @@ class Range_tree_d: public Tree_base< C_Data,  C_Window>
 	        Tree_base<C_Data, C_Window> *T= (w)->sublayer;
 	        if(T->is_anchor())
 			{
-		      Node< vector<Site_2>::iterator > *ds2LeftRootNode = (w)->object.second.getRoot();
+		      //shared_ptr<Node< vector<Site_2>::iterator>> ds2LeftRootNode = (w)->object.second.getRoot();
 			  //cout << "evo ga!" << endl;
 			  //cout << (w)->object.second.getSize() << endl;
 			  //cout << "size: " << ds2LeftRootNode->value.size() << endl;
-			  vector<Site_2> at1(ds2LeftRootNode->value.vd.sites_begin(), ds2LeftRootNode->value.vd.sites_end());  // lazar
+			  //vector<Site_2> at1(ds2LeftRootNode->value.sites_begin(), ds2LeftRootNode->value.sites_end());  // lazar
 			  //cout << "ds2size: " << at1.size() << endl;
-			  for (vector<Site_2>::iterator it = at1.begin(); it != at1.end(); ++it) { //lazar
+			  //for (vector<Site_2>::iterator it = at1.begin(); it != at1.end(); ++it) { //lazar
 			    //cout << (*it).x() << "  |+|  " << (*it).y() << endl; //lazar
 				//(*result++)=(*it).dual;
-			  }
+			  //}
 	          //report_subtree(w,result); lazar zakomentiral
 			}
 	        else
@@ -605,8 +605,8 @@ class Range_tree_d: public Tree_base< C_Data,  C_Window>
   }
   
 
-  std::back_insert_iterator< std::vector< Point_2<CGAL::Cartesian<double> > *> > window_query_impl_modified( 
-	C_Window const &win, Point_2<CGAL::Cartesian<double> > a, std::back_insert_iterator< std::vector< Point_2<CGAL::Cartesian<double> > *> > result, typename tbt::rbit * =0)
+  std::back_insert_iterator< std::vector< Point_2<EK> > > window_query_impl_modified( 
+	C_Window const &win, Point_2<EK> a, std::back_insert_iterator< std::vector< Point_2<EK> > > result, typename tbt::rbit * =0)
   {
     if(is_less_equal(m_interface.get_right(win), m_interface.get_left(win)))
        return result;
@@ -615,14 +615,11 @@ class Range_tree_d: public Tree_base< C_Data,  C_Window>
     link_type split_node = findSplitNode(win);
     if(left(split_node)==0)
     {
-	  ////cout << "splitNode0: " << split_node->object.first.point << endl;
+	  // leaf node with VD of size 1; because the only site is also the nearest one, we can check distance here directly
       if(is_inside(win,split_node->object)) {
-	  ////cout << "|+1|" << endl;
-	//(*result++)=split_node->object; lazar
-	  if (CGAL::squared_distance(*split_node->object.first.originalPoint, a) <= 1) {
-		(*result++)=split_node->object.first.originalPoint;
-		//cout << *split_node->object.first.originalPoint << "  -|-  " << a << endl;
-	  }
+	    if (CGAL::squared_distance(*split_node->object.first.originalPoint, a) <= 1) {
+		  (*result++)=*(split_node->object.first.originalPoint);
+	    }
 	  }
     }	  
     else
@@ -639,11 +636,9 @@ class Range_tree_d: public Tree_base< C_Data,  C_Window>
 	        Tree_base<C_Data, C_Window> *T= (w)->sublayer;
 	        if(T->is_anchor())
 			{
-			    //cout << "subtree" << endl;
-				tuple<bool, Point_2<CGAL::Cartesian<double> >*> rez6 = (w)->object.second.search(a);
+				tuple<bool, Point_2<EK>> rez6 = (w)->object.second.search(a);
 				if (std::get<0>(rez6)==true) {
-					Point_2<CGAL::Cartesian<double>> *p6 = std::get<1>(rez6);
-					
+					Point_2<EK> p6 = std::get<1>(rez6);
 					(*result++) = p6;
 				}
 				
@@ -657,7 +652,7 @@ class Range_tree_d: public Tree_base< C_Data,  C_Window>
 			  // IF W->SUBLAYER = ANCHOR, POTEM NAREDI TO, SICER NAJPREJ VZAMI W->SUBLAYER->SUBLAYER
 			  ////cout << "|+2|" << endl;
 			  if (CGAL::squared_distance(*w->object.first.originalPoint, a) <= 1) {
-				(*result++)=(w)->object.first.originalPoint;
+				(*result++)=*((w)->object.first.originalPoint);
 				//cout << *w->object.first.originalPoint << "  -|-  " << a << endl;
 			  }
 			}
@@ -669,7 +664,7 @@ class Range_tree_d: public Tree_base< C_Data,  C_Window>
       if(is_inside(win,v->object)) {
 	    //(*result++)=v->object; lazar
 		if (CGAL::squared_distance(*v->object.first.originalPoint, a) <= 1) {
-		  (*result++)=v->object.first.originalPoint;
+		  (*result++)=*(v->object.first.originalPoint);
 		}
 	  }
       v = right(split_node);
@@ -684,10 +679,10 @@ class Range_tree_d: public Tree_base< C_Data,  C_Window>
 	    Tree_base<C_Data, C_Window> *T= (left(v))->sublayer;
 	    if(T->is_anchor())
 		{
-			tuple<bool, Point_2<CGAL::Cartesian<double> >*> rez4 = (left(v))->object.second.search(a);
+			tuple<bool, Point_2<EK>> rez4 = (left(v))->object.second.search(a);
 			//cout << "subtree1" << endl;
 			if (std::get<0>(rez4) == true) {
-				Point_2<CGAL::Cartesian<double>> *p4 = std::get<1>(rez4);
+				Point_2<EK> p4 = std::get<1>(rez4);
 				
 				(*result++) = p4;
 			}
@@ -700,7 +695,7 @@ class Range_tree_d: public Tree_base< C_Data,  C_Window>
 	    if(is_inside(win,left(v)->object)) {
 	      //(*result++)=left(v)->object; lazar
 		  if (CGAL::squared_distance(*left(v)->object.first.originalPoint, a) <= 1) {
-		    (*result++)=left(v)->object.first.originalPoint;
+		    (*result++)=*(left(v)->object.first.originalPoint);
 		  }
 		}
 	  }
@@ -713,7 +708,7 @@ class Range_tree_d: public Tree_base< C_Data,  C_Window>
       {
 	//(*result++)=v->object;
          if (CGAL::squared_distance(*v->object.first.originalPoint, a) <= 1) {	
-		   (*result++)=v->object.first.originalPoint;
+		   (*result++)=*(v->object.first.originalPoint);
 		 }
       }
     }

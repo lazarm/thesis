@@ -1,53 +1,115 @@
 #include <Optimization.h>
 
-struct GraphNode
+class GraphNode
 {
+public:
 	Point_2 p;
-	vector<GraphNode*> neighbours;
+	vector<int> neighbours;
 	int dist;
 	bool visited;
+	shared_ptr<GraphNode> parent;
 	
+	GraphNode(double x, double y) {
+		p = Point_2(x, y);
+		dist = (numeric_limits<int>::max)();
+		visited = false;
+		parent = nullptr;
+	}
+
 	GraphNode(Point_2 ps) { 
 		p = ps;
-		dist = numeric_limits<int>::max();
+		dist = (numeric_limits<int>::max)();
 		visited = false;
+		parent = nullptr;
 	}
 };
 
 template <class Iterator>
 void constructG(Iterator begin, Iterator end)
 {
+	int k = 0;
 	for (Iterator it = begin; it != end-1; ++it)
 	{
 		for (Iterator it2 = it+1; it2 != end; ++it2)
 		{
-			if (CGAL::squared_distance((*it)->p, (*it2)->p) <= 1)
+			if (CGAL::squared_distance((**it).p, (**it2).p) <= 1)
 			{
-				(*it)->neighbours.push_back(*it2);
-				(*it2)->neighbours.push_back(*it);
+				k++;
+				(**it).neighbours.push_back(it2- begin);
+				(**it2).neighbours.push_back(it - begin);
 			}
 		}
 	}
 }
 
-void runBfs(GraphNode* s)
+void runBfs(shared_ptr<GraphNode> s, vector<shared_ptr<GraphNode>> nodes)
 {
-	(*s).dist = 0;
+	s->dist = 0;
 	s->visited = true;
-	deque <GraphNode*> Q;
+	deque <shared_ptr<GraphNode>> Q;
 	Q.push_back(s);
+	int k = 0;
 	while (Q.size() > 0)
 	{
-		GraphNode* v = Q.front();
+		shared_ptr<GraphNode> v = Q.front();
 		Q.pop_front();
-		for (vector<GraphNode*>::iterator it = v->neighbours.begin(); it != v->neighbours.end(); ++it)
+		for (auto it = v->neighbours.begin(); it != v->neighbours.end(); ++it)
 		{
-			if (!((*it)->visited))
+			shared_ptr<GraphNode> u = nodes.at(*it);
+			if (!(u->visited))
 			{
-				(*it)->visited = true;
-				(*it)->dist = v->dist+1;
-				Q.push_back((*it));
+				k++;
+				u->visited = true;
+				u->dist = v->dist+1;
+				u->parent = v;
+				Q.push_back(u);
 			}
 		}
 	}
+}
+
+void resetGraphNodes(vector<shared_ptr<GraphNode>> nodes) {
+	for (auto n : nodes) {
+		n->dist = (numeric_limits<int>::max)();
+		n->visited = false;
+		n->parent = nullptr;
+	}
+}
+
+void resetGraph(vector<shared_ptr<GraphNode>> nodes) {
+	for (auto n : nodes) {
+		n->neighbours.clear();
+	}
+}
+
+void testBfs(vector<Point_2> points)
+{
+	vector<shared_ptr<GraphNode>> nodes;
+	for (auto p: points) {
+		nodes.push_back(shared_ptr<GraphNode>(new GraphNode (p)));
+	}
+	CGAL::Timer cost;
+	double totalQueryTime = 0;
+	double totalConstructionTime = 0;
+	for (int k = 0; k < 5; ++k) {
+		cost.reset(); cost.start();
+		constructG(nodes.begin(), nodes.end());
+		cost.stop();
+		totalConstructionTime += cost.time();
+		
+		cost.reset();
+		size_t nodesLength = nodes.size();
+		for (int i = 0; i < 50; ++i) {
+			int idx = ceil(rand()*nodesLength / RAND_MAX);
+			shared_ptr<GraphNode> n = nodes[idx];
+			cost.start();
+			runBfs(n, nodes);
+			cost.stop();
+			resetGraphNodes(nodes);
+		}
+		totalQueryTime += cost.time()/50.0;
+		resetGraph(nodes);
+	}
+	cout << "Average time (5 iterations) for construction of graph G: " << totalConstructionTime/5.0 << endl;
+	cout << "Average time (5 iterations) for running 50 iterations of bfs algortithm on G: " << totalQueryTime / 5.0 << endl;
 }

@@ -1,204 +1,312 @@
 #include <rangeTree.h>
 
-/*
-Re-assigns distances of all points to infinity to start building new SSSP tree from fresh start.
-*/
-void resetPointDistances(vector<Point_2>::iterator begin, vector<Point_2>::iterator end)
-{
-	for (auto p = begin; p != end; ++p) {
-		(*p).setDist(numeric_limits<int>::max());
-	}
-}
 
-/*
-Returns two segments acting as rays (one endpoint goes to int max value in one of the directions),
-where sources are endpoints of segment st.
-*/
-tuple<Segment_2, Segment_2> getRays(Segment_2 st, Line_2 line)
+vector<Point_2> make_cycle(tuple<Point_2, Point_2, int> pair, vector<Point_2> cycle)
 {
-	// four cases: is st pointing left or right? Is st horizontal or not?
-	Segment_2 t_plus;
-	Segment_2 s_minus;
-	Point_2 t_end;
-	Point_2 s_start;
-	Point_2 s = st.source();
-	Point_2 t = st.end();
-	if (s.x() <= t.x()) {
-		if (s.x() == t.x()) {
-			if (s.y() < t.y()) {
-				// navpicno navzgor
-				t_end = Point_2(s.x(), numeric_limits<int>::max());
-				s_start = Point_2(s.x(), numeric_limits<int>::min());
-			}
-			else {
-				// navpicno navzdol
-				s_start = Point_2(s.x(), numeric_limits<int>::max());
-				t_end = Point_2(s.x(), numeric_limits<int>::min());
-			}	
-		}
-		else {
-			// st pointing to right
-			t_end = Point_2(numeric_limits<int>::max(), line.y_at_x(numeric_limits<int>::max()));
-			s_start = Point_2(numeric_limits<int>::min(), line.y_at_x(numeric_limits<int>::min()));
-		}
-	}
-	else {
-		s_start = Point_2(numeric_limits<int>::max(), line.y_at_x(numeric_limits<int>::max()));
-		t_end = Point_2(numeric_limits<int>::min(), line.y_at_x(numeric_limits<int>::min()));
-	}
-	t_plus = Segment_2(t, t_end);
-	s_minus = Segment_2(s, s_start);
-	tuple<Segment_2, Segment_2> rays = make_tuple(t_plus, s_minus);
-	return rays;
-}
-
-template <class Iterator>
-tuple<Point_2, Point_2, int> findBest(Iterator begin, Iterator end)
-{
-	int min_weight = numeric_limits<int>::max();
-	tuple<Point_2, Point_2, int> bestPair;
-	for (auto tup = begin; tup != end; ++tup) {
-		if (get<2>(*tup) < min_weight) {
-			bestPair = *tup;
-		}
-	}
-	return bestPair;
-}
-
-void make_cycle(tuple<Point_2, Point_2, int> pair, vector<Point_2> cycle)
-{
-	/*
-	use the lowest common ancestor algorithm
-    p and q are points to be connected and form a cycle. To find a set of points defining the cycle, we need to find p's and q's
-	lowest common ancestor. ps and qs are paths from p to r and from q to r, respectively. LCA is found by comparing backward lists
-	of these paths looking for the first point where lists differ. LCA is the parent of such point.
-	O(n) + O(n) + O(n) = O(n) in worse-case scenario (where BFS tree is almost a path)
-    */
+	// p and q are points to be connected and form a cycle. ps and qs are paths from p to r and from q to r, respectively. 
 	Point_2 p = get<0>(pair);
 	Point_2 q = get<1>(pair);
-	vector<Point_2> ps;
-	if (p.getParent() == 0) { ps.push_back(p); }
-	else {
-		ps.push_back(p);
+	vector<Point_2> ps{ p };
+	if (p.getParent() != 0) {
 		Point_2 pi = p;
 		while (pi.getParent() != 0) {
 			pi = *(pi.getParent());
 			ps.push_back(pi);
 		}
 	}
-	vector<Point_2> qs;
-	if (q.getParent() == 0) { qs.push_back(q); }
-	else {
-		qs.push_back(q);
+	vector<Point_2> qs{ q };
+	if (q.getParent() != 0) {
 		Point_2 qi = q;
 		while (qi.getParent() != 0) {
-
 			qi = *(qi.getParent());
 			qs.push_back(qi);
 		}
 	}
-	vector<Point_2>::reverse_iterator longer;
-	vector<Point_2>::reverse_iterator shorter;
-	Point_2 lca = *(ps.end()-1);
-	for (longer = ps.rbegin(), shorter = qs.rbegin(); (longer != ps.rend() && shorter != qs.rend()); ++longer, ++shorter)
-	{
-		if (*longer == *shorter) { lca = *longer; }
-		else { break; }
-	}
-	int lca_dist = lca.getDist();
-	vector<Point_2> p_to_lca(ps.begin(), ps.begin() + (ps.size() - lca_dist)); //  to get [p,lca)
-	vector<Point_2> q_to_lca(qs.rbegin() + lca_dist+1, qs.rend()); // get (lca, q]
 
-	cycle.insert(cycle.end(), qs.rbegin(), qs.rbegin() + lca_dist+1); // [r, lca]
-	cycle.insert(cycle.end(), q_to_lca.begin(), q_to_lca.end()); // (lca,q]
-	cycle.insert(cycle.end(), p_to_lca.begin(), p_to_lca.end()); // [p,lca)
-	// merge p_to_lca and q_to_lca, kako je s clear in reserve, shrink to fit, reserve itd
-	/*
-	for (auto i : ps)
-	{
-		cout << i << endl;
-	}
-	cout << "qs" << endl;
-	for (auto i : qs)
-	{
-		cout << i << endl;
-	}*/
-
-	/*
-	cout << "cycle" << endl;
-	for (auto i : cycle)
-	{
-		cout << i << endl;
-	}*/
+	cycle.insert(cycle.end(), qs.rbegin(), qs.rend());
+	cycle.insert(cycle.end(), ps.begin(), ps.end() - 1);
+	return cycle;
 }
 
+tuple<Point_2, Point_2, int> querySetOnTree(vector<Point_2> l, RangeTree* rangeTree0, RangeTree* rangeTree1, 
+	Segment_2 st, tuple<Point_2, Point_2, int> bestR)
+{
+	int minWeight = get<2>(bestR);
+	for (auto a = l.begin(); a != l.end(); ++a)
+	{
+		vector<Point_2> queryResults;
+		int weight_a = (*a).getDist();
+		DualPoint* a_dual = new DualPoint(a._Ptr, st);
+		rangeTree_query(rangeTree0, a_dual, back_inserter(queryResults));
+		rangeTree_query_complement(rangeTree1, a_dual, back_inserter(queryResults));
+		delete(a_dual);
+		for (vector<Point_2>::iterator pointB = queryResults.begin(); pointB != queryResults.end(); ++pointB)
+		{
+			if (weight_a + pointB->getDist() < minWeight) {
+				minWeight = weight_a + pointB->getDist();
+				bestR = make_tuple(*a, *pointB, minWeight);
+				return bestR;
+			}
+		}
+	}
+	return bestR;
+}
+
+tuple<Point_2, Point_2, int> findminpairTree(vector<Point_2> l0i1, vector<Point_2> l1i1, vector<Point_2> l0i, vector<Point_2> l1i, 
+	vector<Point_2> r0i, vector<Point_2> r1i, Segment_2 st, tuple<Point_2, Point_2, int> bestR)
+{
+	if (l0i.size() + l1i.size() + l0i1.size() + l1i1.size() == 0) { return bestR; }
+	int minWeight = get<2>(bestR);
+	RangeTree tree0 = buildRangeTree(r0i.begin(), r0i.end(), st);
+	RangeTree tree1 = buildRangeTree(r1i.begin(), r1i.end(), st);
+
+	tuple<Point_2, Point_2, int> q1 = querySetOnTree(l0i1, &tree0, &tree1, st, bestR);
+	if (get<2>(q1) < minWeight) { return q1; }
+	q1 = querySetOnTree(l1i1, &tree1, &tree0, st, bestR);
+	if (get<2>(q1) < minWeight) { return q1; }
+	q1 = querySetOnTree(l0i, &tree0, &tree1, st, bestR);
+	if (get<2>(q1) < minWeight) { return q1; }
+	querySetOnTree(l1i, &tree1, &tree0, st, bestR);
+	if (get<2>(q1) < minWeight) { return q1; }
+
+	return bestR;
+}
+
+tuple<Point_2, Point_2, int> rangeSeparation(vector<vector<Point_2>>* l0, vector<vector<Point_2>>* l1,
+	vector<vector<Point_2>>* r0, vector<vector<Point_2>>* r1, int i, Segment_2 st)
+{
+	tuple<Point_2, Point_2, int> best_r = make_tuple(Point_2(), Point_2(), (numeric_limits<int>::max)());
+	vector<Point_2> l0i = (*l0)[i];
+	vector<Point_2> l1i = (*l1)[i];
+	vector<Point_2> l1i1 = (*l1)[i - 1];
+	vector<Point_2> l0i1 = (*l0)[i - 1];
+	vector<Point_2> r0i = (*r0)[i];
+	vector<Point_2> r1i = (*r1)[i];
+	vector<Point_2> r1i1 = (*r1)[i - 1];
+	vector<Point_2> r0i1 = (*r0)[i - 1];
+	tuple<Point_2, Point_2, int> res1 = findminpairRi(l0i, l1i, r0i1.begin(), r0i1.end(), st, best_r);
+	if (get<2>(res1) < get<2>(best_r)) {
+		return res1;
+	}
+	res1 = findminpairRi(l1i, l0i, r1i1.begin(), r1i1.end(), st, best_r);
+	if (get<2>(res1) < get<2>(best_r)) {
+		return res1;
+	}
+	if (r0i.size() == 0 && r1i.size() > 0) {
+		res1 = findminpairRi(l1i1, l0i1, r1i.begin(), r1i.end(), st, best_r);
+		if (get<2>(res1) < get<2>(best_r)) {
+			return res1;
+		}
+		res1 = findminpairRi(l1i, l0i, r1i.begin(), r1i.end(), st, best_r);
+		if (get<2>(res1) < get<2>(best_r)) {
+			return res1;
+		}
+	}
+	else if (r0i.size() > 0 && r1i.size() == 0) {
+		res1 = findminpairRi(l0i1, l1i1, r0i.begin(), r0i.end(), st, best_r);
+		if (get<2>(res1) < get<2>(best_r)) {
+			return res1;
+		}
+		res1 = findminpairRi(l0i, l1i, r0i.begin(), r0i.end(), st, best_r);
+		if (get<2>(res1) < get<2>(best_r)) {
+			return res1;
+		}
+	}
+	else if (r0i.size() > 0 && r1i.size() > 0) {
+		res1 = findminpairTree(l0i1, l1i1, l0i, l1i, r0i, r1i, st, best_r);
+		if (get<2>(res1) < get<2>(best_r)) {
+			return res1;
+		}
+	}
+
+	return best_r;
+}
+
+tuple<Point_2, Point_2, int> nnSeparation(vector<vector<Point_2>>* l0, vector<vector<Point_2>>* l1,
+	vector<vector<Point_2>>* r0, vector<vector<Point_2>>* r1, int i)
+{
+	tuple<Point_2, Point_2, int> best_r = make_tuple(Point_2(), Point_2(), (numeric_limits<int>::max)());
+	vector<Point_2> l0i = (*l0)[i];
+	vector<Point_2> l1i = (*l1)[i];
+	vector<Point_2> l1i1 = (*l1)[i - 1];
+	vector<Point_2> l0i1 = (*l0)[i - 1];
+	vector<Point_2> r0i = (*r0)[i];
+	vector<Point_2> r1i = (*r1)[i];
+	vector<Point_2> r1i1 = (*r1)[i - 1];
+	vector<Point_2> r0i1 = (*r0)[i - 1];
+	// skrajsaj tako, da uporabis zgornje vektorje direkt v groups tabeli
+	vector<vector<Point_2>> groups{ l0i1, l1i, l0i, l1i1, r0i1, r1i, r0i, r1i1 };
+	vector<tuple<int, int>> pairs{ tuple<int, int>(0, 1), tuple<int, int>(2, 3), tuple<int, int>(4, 5),
+		tuple<int, int>(6, 7), tuple<int, int>(1, 2), tuple<int, int>(5, 6) };
+	for (auto pair : pairs) {
+		vector<Point_2> p0 = groups[get<0>(pair)];
+		vector<Point_2> p1 = groups[get<1>(pair)];
+		if (p1.size() > 0 && p0.size() > 0) {
+			KDTree kdtree(p1.begin(), p1.end());
+			for (auto pla : p0) {
+				tuple<bool, Point_2> result = kdtree.kd_query(pla);
+				if (get<0>(result)) {
+					Point_2 plb = get<1>(result);
+					best_r = tuple<Point_2, Point_2, int>(pla, plb, pla.getDist() + plb.getDist());
+					return best_r;
+				}
+			}
+		}
+	}
+	return best_r;
+}
 
 void main_procedure(vector<Point_2>::iterator begin, vector<Point_2>::iterator end, Segment_2 st)
 {
-	tuple<Point_2, Point_2, int> best_r = make_tuple(Point_2(), Point_2(), numeric_limits<int>::max());
+	tuple<Point_2, Point_2, int> best_r = make_tuple(Point_2(), Point_2(), (numeric_limits<int>::max)());
 	vector<Point_2> cycle;
-	// reserve n memory cells. Maximum number of used cells is n, but probably less of them will be filled.
-	// It's probably better to do reserve only once with big value , and clear each time in the loop
-	cycle.reserve(distance(begin,end));
+	double totalTime = 0;
+	SSSPTree ssspTree(begin, end);
+	cout << ssspTree.getDT().number_of_vertices() << endl;
 	int k = 0;
 	for (auto p = begin; p != end; ++p)
 	{
-		k = k + 1;
-		if (k != 16) { continue; }
-		cout << (k-1) << endl;
-		
-		//cout << "root = " << *p << endl;
-		vector< vector<Point_2> > rst = constructW(begin, end, *p, st);
-		int ii = 0;/*
-		for (vector< vector<Point_2> >::iterator tz = rst.begin(); tz != rst.end(); ++tz) {
-			std::cout << ii << std::endl;
-			++ii;
-			for (vector<Point_2>::iterator tz2 = (*tz).begin(); tz2 != (*tz).end(); ++tz2) {
-				std::cout << (*tz2).x() << "   " << (*tz2).y() << "  dist: " << (*tz2).getDist() << "  nr: " << (*tz2).getNr() << std::endl;
-				cout << *(tz2->getParent()) << "  dist: " << tz2->getParent()->getDist() << "  nr: " << tz2->getParent()->getNr() << endl;
+		CGAL::Timer cost;
+		cost.reset(); cost.start();
+		ssspTree.createTreeFromRoot(*p, st);
+		vector< vector<vector<Point_2>> > rst = ssspTree.getAllSets();
+		vector<vector<Point_2>> l0 = rst[0]; vector<vector<Point_2>> l1 = rst[1];
+		vector<vector<Point_2>> r0 = rst[2]; vector<vector<Point_2>> r1 = rst[3];
+		int i = 1;
+		size_t maxdist = l0.size();
+
+		while (2 * i <= min(get<2>(best_r), maxdist*2-1)) {
+			tuple<Point_2, Point_2, int> res1 = nnSeparation(&l0, &l1, &r0, &r1, i);
+			if (get<2>(res1) < get<2>(best_r)) {
+				best_r = res1;
+				break;
 			}
-		}*/
-		cout << "st" << endl;
-		cout << st.source().x() << "," << st.target().x() << endl;
-		cout << st.source().y() << "," << st.target().y() << endl;
-
-
-		Line_2 st_line = Line_2(st);
-		tuple<Segment_2, Segment_2> rays = getRays(st, st_line);
-		tuple<Point_2, Point_2, int> bestR = make_tuple(Point_2(), Point_2(), numeric_limits<int>::max());
-
-		tuple<Point_2, Point_2, int>  l0r0 = findminpair(rst.at(0).begin(), rst.at(0).end(), rst.at(2).begin(), rst.at(2).end(),st, bestR);
-		tuple<Point_2, Point_2, int>  l1r1 = findminpair(rst.at(1).begin(), rst.at(1).end(), rst.at(3).begin(), rst.at(3).end(), st,l0r0);
-
-		tuple<Point_2, Point_2, int>  l0r1_t = findminpair(rst.at(0).begin(), rst.at(0).end(), rst.at(3).begin(), rst.at(3).end(), get<0>(rays), l1r1);
-		tuple<Point_2, Point_2, int>  l0r1_s = findminpair(rst.at(0).begin(), rst.at(0).end(), rst.at(3).begin(), rst.at(3).end(), get<1>(rays), l0r1_t);
-
-		tuple<Point_2, Point_2, int>  l1r0_t = findminpair(rst.at(1).begin(), rst.at(1).end(), rst.at(2).begin(), rst.at(2).end(), get<0>(rays), l0r1_s);
-		tuple<Point_2, Point_2, int>  l1r0_s = findminpair(rst.at(1).begin(), rst.at(1).end(), rst.at(2).begin(), rst.at(2).end(), get<1>(rays), l1r0_t);
-
-		tuple<Point_2, Point_2, int>  l0l1 = findMinPair(rst.at(0).begin(), rst.at(0).end(), rst.at(1).begin(), rst.at(1).end(), l1r0_s);
-		tuple<Point_2, Point_2, int>  r0r1 = findMinPair(rst.at(2).begin(), rst.at(2).end(), rst.at(3).begin(), rst.at(3).end(), l0l1);
-		tuple<Point_2, Point_2, int> result = r0r1;
-		// if result < best_result, ga obdrzi, sicer ne
-		if (get<2>(result) < get<2>(best_r)) { 
-			best_r = result;
-			cycle.clear();
-			//cout << get<0>(best_r) << "  -   " << get<1>(best_r) << " , dist= " << get<2>(best_r) << endl;
-			//cout << *(get<0>(best_r).getParent()) << "  -  " << *(get<1>(best_r).getParent()) << endl;
-			cout << get<0>(best_r).x() << "," << get<1>(best_r).x() << endl;
-			cout << get<0>(best_r).y() << "," << get<1>(best_r).y() << endl;
-			shared_ptr<Point_2> pp = get<0>(best_r).getParent();
-			//cout << pp->getParent() << endl;
-			make_cycle(result, cycle);
+			res1 = rangeSeparation(&l0, &l1, &r0, &r1, i, st);
+			if (get<2>(res1) < get<2>(best_r)) {
+				best_r = res1;
+				break;
+			}
+			i++;
 		}
-		break;
-		//cout << "make_cycle" << endl;
-		resetPointDistances(begin, end);
+
+		ssspTree.resetSSSPTreeDTVertices();
+		ssspTree.clearSets();
+		cost.stop();
+		totalTime += cost.time();
 	}
-	/*
-	cycle je ocitno (Tr, e), ampak ponavadi je del cycla itak "rep", ki ga lahko odstranis? Res pa je, da bomo slej ko prej
-	prisli do takega r, da bomo dobili enak cikel brez tega repa. Implementacijsko je najbrz bolj zahtevno, ce bi rep kar odstranili,
-	ker dist vrednosti se nanasajo na r.
-	kaj pa optimizacija? ce prides recimo do a-ja na levi strani, ki ima dist >= min_dist-1, ga lahko kar zavrzes
-	*/
+	if (get<2>(best_r) < (numeric_limits<int>::max)()) {
+		cout << "len: " << get<2>(best_r) << endl;
+		cycle = make_cycle(best_r, cycle);
+	}
+	cout << "time: " << totalTime << endl;
+	cout << get<2>(best_r) << endl;
+	if (get<2>(best_r) == (numeric_limits<int>::max)()) {
+		cout << "Could not separate points " << st.source().x() << "," << st.source().y() << " and " << st.end().x() << "," << st.end().y()
+			<< " with this set of unit disks." << endl;
+	}
+	else {
+		cout << "Points " << st.source().x() << "," << st.source().y() << " and " << st.end().x() << "," << st.end().y()
+			<< " can be separated by connecting points " << get<0>(best_r).x() << "," << get<0>(best_r).y() << " and "
+			<< get<1>(best_r).x() << "," << get<1>(best_r).y() << " and thus forming a following cycle: " << endl;
+
+		for (auto c : cycle) {
+			cout << c << endl;
+		}
+		cout << "Number of points in cycle: " << cycle.size() << endl;
+	}
+}
+
+struct GNode {
+public:
+	Point_2 v;
+	vector<int> neighbours;
+	GNode(Point_2 u) {
+		v = u;
+	}
+};
+
+
+void constructGSeparation(vector<shared_ptr<GNode>> nodes)
+{
+	int k = 0;
+	for (int i = 0; i < nodes.size() - 1; i++)
+	{
+		Point_2 v = nodes[i]->v;
+		for (int j = i + 1; j < nodes.size(); j++)
+		{
+			Point_2 u = nodes[j]->v;
+			if (CGAL::squared_distance(v, u) <= 1)
+			{
+				k++;
+				nodes[i]->neighbours.push_back(j);
+			}
+		}
+	}
+}
+
+void testSepGeneral(vector<Point_2> points, Segment_2 st) {
+	CGAL::Timer cost;
+	cost.reset(); cost.start();
+	SSSPTree tree(points.begin(), points.end());
+	// we need to iterate through points again, this time for all points associated with dt vertices, because
+	vector<shared_ptr<GNode>> nodes;
+	vector<Point_2> dtPoints;
+	DT dt = tree.getDT();
+	int c = 0;
+	for (auto p : points) {
+		nodes.push_back(shared_ptr<GNode>(new GNode(p)));
+	}
+	constructGSeparation(nodes);
+	int negh_sub = 0;
+	int best = (numeric_limits<int>::max)();
+	double ttime = 0;
+	int k = 0;
+	tuple<Point_2, Point_2, int> connects;
+	for (auto p : nodes) {
+		k++;
+		tree.createTreeFromRoot(p->v, st);
+		cost.stop();
+		dt = tree.getDT();
+		// get dt points, exclude from time measuring
+		for (auto g : nodes) {
+			Locate_type loc;
+			int li;
+			Delaunay_face_handle h = dt.locate(g->v, loc, li);
+			Delaunay_vertex_handle rVertex;
+			if (loc == DT::VERTEX) {
+				rVertex = h->vertex(li);
+				dtPoints.push_back(rVertex->point());
+			}
+		}
+		// end
+		cost.start();
+
+		int j = 0;
+		for (auto ap : dtPoints) {
+			shared_ptr<GNode> jnode = nodes[j];
+			for (auto b : jnode->neighbours) {
+				Point_2 bp = dtPoints[b];
+				if (ap.getNr() + bp.getNr() + updateNr(0, ap, bp, st) % 2 == 1) {
+					if (ap.getVisited() && bp.getVisited() && ap.getDist() + bp.getDist() < best) {
+						best = ap.getDist() + bp.getDist();
+						connects = tuple<Point_2, Point_2, int>(ap, bp,best);
+					}
+				}
+			}
+			j++;
+		}
+		tree.resetSSSPTreeDTVertices();
+		cost.stop();
+		dtPoints.clear();
+		cost.start();
+	}
+	cost.stop();
+	vector<Point_2> cycle{};
+	cycle = make_cycle(connects, cycle);
+	for (auto c : cycle) {
+		cout << c << endl;
+	}
+	cout << "Number of points in cycle: " << cycle.size() << endl;
+	cout << best << endl;
+	cout << "total time: " << cost.time() << endl;
 }

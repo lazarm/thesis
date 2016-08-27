@@ -12,29 +12,32 @@
 #include <CGAL/Direction_2.h>
 #include <CGAL/spatial_sort.h>
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
+#include <CGAL/Exact_predicates_exact_constructions_kernel.h>
 #include <CGAL/Delaunay_triangulation_2.h>
 #include <CGAL/Voronoi_diagram_2.h>
 #include <CGAL/Delaunay_triangulation_adaptation_traits_2.h>
 #include <CGAL/Delaunay_triangulation_adaptation_policies_2.h>
 #include <CGAL/squared_distance_2.h>
+#include <CGAL/Lazy_exact_nt.h>
 
 //typedef CGAL::Homogeneous<long> Rep_class;
-typedef CGAL::Cartesian<double> Rep_class;
+typedef CGAL::Cartesian<double> EK;
+typedef CGAL::Lazy_exact_nt<CGAL::Gmpq>  NT;
 
 // typedefs for defining the adaptor
-typedef CGAL::Exact_predicates_inexact_constructions_kernel                  K;
-typedef CGAL::Delaunay_triangulation_2<Rep_class>                            DT;
+//typedef CGAL::Exact_predicates_exact_constructions_kernel                  EK;
+typedef CGAL::Delaunay_triangulation_2<EK>                                    DT;
 typedef CGAL::Delaunay_triangulation_adaptation_traits_2<DT>                 AT;
 typedef CGAL::Delaunay_triangulation_caching_degeneracy_removal_policy_2<DT> AP;
 typedef CGAL::Voronoi_diagram_2<DT, AT, AP>                                    VD;
 // typedef for the result type of the point location
 
 //typedef CGAL::Point_2<Rep_class> Point;
-typedef Rep_class::Segment_2		  Segment_2;
-typedef Rep_class::Line_2			  Line_2;
-typedef Rep_class::Direction_2		  Direction_2;
+typedef EK::Segment_2		  Segment_2;
+typedef EK::Line_2			  Line_2;
+typedef EK::Direction_2		  Direction_2;
 typedef AT::Site_2                    Site_2;
-typedef AT::Point_2                   Point_2;
+typedef EK::Point_2             Point_2;
 typedef VD::Locate_result             Locate_result;
 typedef VD::Vertex_handle             Vertex_handle;
 typedef VD::Face_handle               Face_handle;
@@ -49,49 +52,39 @@ typedef DT::Vertex_circulator         Vertex_circulator;
 
 
 using namespace std;
-template <class Iterator> class DS1
+class VoronoiDiagram: public VD
 {	
 public:
-	VD vd;
-	DS1() {};
-	~DS1() {};
-	//DS1(Iterator, Iterator);
-	void construct(Iterator begin, Iterator end);
+	VoronoiDiagram() {};
+	~VoronoiDiagram() {};
+	template <class Iterator>
+	VoronoiDiagram(Iterator a, Iterator b) : VD(a, b) {}
 	std::tuple<bool, Point_2*> query(Point_2 q);
-	Point_2 pointInsideLeaf();
-	int size() { return vd.number_of_faces(); }
+	size_t size() { return number_of_faces(); }
+	Face_handle insert(const Delaunay_vertex_handle& t);
+	Face_handle insert(const Site_2& t);
+	template<class Iterator>
+	size_type insert(Iterator first, Iterator beyond);
+
 };
 
-template <class Iterator>
-void DS1<Iterator>::construct(Iterator first, Iterator beyond) {
-	//CGAL::spatial_sort(first, beyond);
-	vd.insert(first, beyond);
-	//assert(vd.is_valid());
-}
 
-template <class Iterator> 
-std::tuple<bool, Point_2*> DS1<Iterator>::query(Point_2 q) {
+tuple<bool, Point_2*> VoronoiDiagram::query(Point_2 q) {
 	
-	Locate_result lr = vd.locate(q);
-	// delaunay vertex == voronoi site
+	Locate_result lr = locate(q);
 	Delaunay_vertex_handle df;
 	if (Vertex_handle* v = boost::get<Vertex_handle>(&lr)) {
-		// query point coincides with a voronoi vertex
-		// vertex is built based on at most three sites, return the first one
 		df = (*v)->site(0);
 	}
 	else if (Face_handle* f = boost::get<Face_handle>(&lr)) {
-		// if query point lies on Voronoi face, return DT vertex inside that face
 		df = (*f)->dual();
 	}
 	else if (Halfedge_handle* e = boost::get<Halfedge_handle>(&lr)) {
-		// query point lies on Voronoi edge, return the site above it
 		df = (*e)->up();
 	}
 	Point_2 faceSitePoint = df->point();
 	Point_2 *fcp = &df->point();
-	// use squared distance
-	double dist = CGAL::squared_distance(*fcp, q);
+	NT dist = CGAL::squared_distance(*fcp, q);
 	
 	if (dist <= 1) {
 		return std::tuple<bool, Point_2*> {true, fcp};
@@ -101,11 +94,21 @@ std::tuple<bool, Point_2*> DS1<Iterator>::query(Point_2 q) {
 	}
 }
 
-// should be used only for trivial vd with one site and face
-template <class Iterator>
-Point_2 DS1<Iterator>::pointInsideLeaf() {
-	// use face to get the site and its point
-	Face_iterator fi = vd.faces_begin();
-	Point_2 p = fi->dual()->point();
-	return p;
+inline Face_handle VoronoiDiagram::insert(const Delaunay_vertex_handle& t) {
+
+    return VD::insert(t->point(), Has_site_inserter());
+}
+
+inline Face_handle VoronoiDiagram::insert(const Site_2& t) {
+
+    return VD::insert(t, Has_site_inserter());
+}
+
+template<class Iterator>
+inline VD::size_type VoronoiDiagram::insert(Iterator first, Iterator beyond) {
+	VD::size_type counter = 0;
+	for (Iterator it = first; it != beyond; ++it, ++counter) {
+		insert(*it);
+	}
+	return counter;
 }
