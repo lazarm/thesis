@@ -8,42 +8,43 @@
 \contentsline {chapter}{\numberline {2}CGAL in uporabljene matemati\IeC {\v c}ne strukture}{5}
 \contentsline {section}{\numberline {2.1}CGAL}{5}
 \contentsline {section}{\numberline {2.2}Kd drevesa}{6}
-\contentsline {section}{\numberline {2.3}SSSP drevesa}{6}
-\contentsline {section}{\numberline {2.4}Graf kvadratne mre\IeC {\v z}e}{8}
-\contentsline {section}{\numberline {2.5}Delaunayeva triangulacija}{8}
-\contentsline {subsection}{\numberline {2.5.1}Implementacija v CGAL}{8}
-\contentsline {section}{\numberline {2.6}Voronoijev diagram}{8}
-\contentsline {subsection}{\numberline {2.6.1}Voronoijev diagram v CGAL}{10}
-\contentsline {section}{\numberline {2.7}Obmo\IeC {\v c}na drevesa}{11}
-\contentsline {chapter}{\numberline {3}Teorija}{13}
-\contentsline {section}{\numberline {3.1}Predstavitev problema}{13}
-\contentsline {section}{\numberline {3.2}SSSP drevo}{15}
-\contentsline {section}{\numberline {3.3}Drevo najbli\IeC {\v z}jega soseda}{21}
-\contentsline {subsection}{\numberline {3.3.1}Optimizacijski problem 1}{22}
-\contentsline {subsection}{\numberline {3.3.2}Optimizacijski problem 2}{23}
-\contentsline {subsubsection}{Dualnost in dualni prostor}{24}
-\contentsline {subsection}{\numberline {3.3.3}Sekanje nepremi\IeC {\v c}ne daljice}{29}
-\contentsline {section}{\numberline {3.4}Alternativni algoritmi za SSSP in minimalno lo\IeC {\v c}evanje}{31}
-\contentsline {subsection}{\numberline {3.4.1}Eksplicitni BFS}{31}
-\contentsline {subsection}{\numberline {3.4.2}BFS z uporabo grafa kvadratne mre\IeC {\v z}e}{31}
-\contentsline {subsection}{\numberline {3.4.3}Generi\IeC {\v c}ni algoritem za lo\IeC {\v c}evanje z diski}{32}
-\contentsline {chapter}{\numberline {4}Implementacija algoritma}{33}
-\contentsline {section}{\numberline {4.1}SSSP drevo}{33}
-\contentsline {subsection}{\numberline {4.1.1}Dodatki v razredu Point\texttt {\_}2}{33}
-\contentsline {subsection}{\numberline {4.1.2}Voronoijev diagram za iskanje najbli\IeC {\v z}jega soseda}{34}
-\contentsline {subsection}{\numberline {4.1.3}Izgradnja drevesa}{35}
-\contentsline {section}{\numberline {4.2}Drevo najbli\IeC {\v z}jega soseda}{37}
-\contentsline {subsection}{\numberline {4.2.1}Kd drevo}{38}
-\contentsline {section}{\numberline {4.3}Implementacija optimizacijskega problema $\Phi _\sigma (A,B)$}{39}
-\contentsline {subsection}{\numberline {4.3.1}DualPoint - implementacija dualne to\IeC {\v c}ke}{39}
-\contentsline {subsection}{\numberline {4.3.2}Obmo\IeC {\v c}no drevo}{39}
-\contentsline {subsubsection}{Poizvedbe v obmo\IeC {\v c}nem drevesu}{40}
-\contentsline {section}{\numberline {4.4}Minimalno lo\IeC {\v c}evanje}{44}
-\contentsline {subsection}{\numberline {4.4.1}opt1}{44}
-\contentsline {subsection}{\numberline {4.4.2}opt2}{44}
-\contentsline {subsection}{\numberline {4.4.3}Kreiranje cikla}{45}
-\contentsline {section}{\numberline {4.5}Obravnava posebnih vhodnih primerov}{46}
-\contentsline {chapter}{\numberline {5}Rezultati}{47}
-\contentsline {section}{\numberline {5.1}Drevo najkraj\IeC {\v s}ih poti}{47}
-\contentsline {section}{\numberline {5.2}Minimalno lo\IeC {\v c}evanje}{47}
-\contentsline {chapter}{\numberline {6}Sklepne ugotovitve}{55}
+\contentsline {subsection}{\numberline {2.2.1}Poizvedbe}{8}
+\contentsline {section}{\numberline {2.3}SSSP drevesa}{8}
+\contentsline {section}{\numberline {2.4}Graf kvadratne mre\IeC {\v z}e}{9}
+\contentsline {section}{\numberline {2.5}Delaunayeva triangulacija}{9}
+\contentsline {subsection}{\numberline {2.5.1}Implementacija v CGAL}{10}
+\contentsline {section}{\numberline {2.6}Voronoijev diagram}{10}
+\contentsline {subsection}{\numberline {2.6.1}Voronoijev diagram v CGAL}{12}
+\contentsline {section}{\numberline {2.7}Obmo\IeC {\v c}na drevesa}{13}
+\contentsline {chapter}{\numberline {3}Teorija}{15}
+\contentsline {section}{\numberline {3.1}Predstavitev problema}{15}
+\contentsline {section}{\numberline {3.2}SSSP drevo}{17}
+\contentsline {section}{\numberline {3.3}Drevo najbli\IeC {\v z}jega soseda}{23}
+\contentsline {subsection}{\numberline {3.3.1}Optimizacijski problem 1}{24}
+\contentsline {subsection}{\numberline {3.3.2}Optimizacijski problem 2}{25}
+\contentsline {subsubsection}{Dualnost in dualni prostor}{26}
+\contentsline {subsection}{\numberline {3.3.3}Sekanje nepremi\IeC {\v c}ne daljice}{31}
+\contentsline {section}{\numberline {3.4}Alternativni algoritmi za SSSP in minimalno lo\IeC {\v c}evanje}{33}
+\contentsline {subsection}{\numberline {3.4.1}Eksplicitni BFS}{33}
+\contentsline {subsection}{\numberline {3.4.2}BFS z uporabo grafa kvadratne mre\IeC {\v z}e}{33}
+\contentsline {subsection}{\numberline {3.4.3}Generi\IeC {\v c}ni algoritem za lo\IeC {\v c}evanje z diski}{34}
+\contentsline {chapter}{\numberline {4}Implementacija algoritma}{35}
+\contentsline {section}{\numberline {4.1}SSSP drevo}{35}
+\contentsline {subsection}{\numberline {4.1.1}Dodatki v razredu Point\texttt {\_}2}{35}
+\contentsline {subsection}{\numberline {4.1.2}Voronoijev diagram za iskanje najbli\IeC {\v z}jega soseda}{36}
+\contentsline {subsection}{\numberline {4.1.3}Izgradnja drevesa}{37}
+\contentsline {section}{\numberline {4.2}Drevo najbli\IeC {\v z}jega soseda}{39}
+\contentsline {subsection}{\numberline {4.2.1}Kd drevo}{40}
+\contentsline {section}{\numberline {4.3}Implementacija optimizacijskega problema $\Phi _\sigma (A,B)$}{41}
+\contentsline {subsection}{\numberline {4.3.1}DualPoint - implementacija dualne to\IeC {\v c}ke}{41}
+\contentsline {subsection}{\numberline {4.3.2}Obmo\IeC {\v c}no drevo}{41}
+\contentsline {subsubsection}{Poizvedbe v obmo\IeC {\v c}nem drevesu}{42}
+\contentsline {section}{\numberline {4.4}Minimalno lo\IeC {\v c}evanje}{46}
+\contentsline {subsection}{\numberline {4.4.1}opt1}{46}
+\contentsline {subsection}{\numberline {4.4.2}opt2}{46}
+\contentsline {subsection}{\numberline {4.4.3}Kreiranje cikla}{47}
+\contentsline {section}{\numberline {4.5}Obravnava posebnih vhodnih primerov}{48}
+\contentsline {chapter}{\numberline {5}Rezultati}{49}
+\contentsline {section}{\numberline {5.1}Drevo najkraj\IeC {\v s}ih poti}{49}
+\contentsline {section}{\numberline {5.2}Minimalno lo\IeC {\v c}evanje}{49}
+\contentsline {chapter}{\numberline {6}Sklepne ugotovitve}{57}

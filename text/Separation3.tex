@@ -299,6 +299,17 @@ povej kaj o traits, templated strukturami ($Point_2$)
 \caption{Dvodimenzionalno kd drevo.}		
 \label{kd-primer}		
 \end{figure}
+Kd drevo je podatkovna struktura za organiziranje k-dimenzionalnih točk z razbitjem prostora. Najpogosteje se uporablja za območna iskanja in iskanja najbližjih sosedov.
+Kd drevo je v osnovi binarno drevo, kjer vsako notranje vozlišče razdeli prostor na dva polprostora (polravnini), ki ju ločuje hiperravnina (premica). Točke levo od hiperravnine so vsebovane v levem poddrevesu vozlišča, točke desno od hiperravnine pa v desnem poddrevesu. Smer hiperravnine je odvisna od tega, po kateri dimenziji vozlišče razdeli prostor.
+Za i-ti nivo drevesa velja, da je hiperravnina, ki razdeli prostor, pravokotna na koordinatno os, ki predstavlja $j = ((i-1) mod k + 1)$-to dimenzijo prostora. Vozlišče na drugem nivoju dvodimenzionalnega kd drevesa tako razdeli
+ravnino s premico, ki je vzporedna abscisni osi. Točke v spodnji polravnini se nahajajo v levem poddrevesu vozlišča, točke v zgornji polravnini pa v desnem poddrevesu. Hiperravnina, ki jo predstavlja neko vozlišče $v$ v $i$-tem nivoju,
+gre skozi tisto točko, čigar $j$-ta koordinata predstavlja mediano v množici vseh točk, ki se nahajajo v drevesu s korenom. Točke so shranjene v listih drevesa.
+
+Časovna zahtevnost izgradnje drevesa je $\OO(n\log n)$ (na vsakem nivoju drevesa je potrebno izračunati mediano, kar vzame $\OO(n)$ časa), prostorska zahtevnost pa $\OO(n)$.
+\subsection{Poizvedbe}
+Časovna zahtevnost poizvedbe je $\OO(n^(1-\frac{1}{d}) + k)$, kjer je $k$ število poročanih točk. V splošnem za dvodimenzionalno kd drevo velja, da je območje $reg(v)$, ki ga predstavlja vozlišče $v$, pravokotnik, ki je lahko neomejen z več strani. Omejen je s hiperravninami (premicami), shranjenih v starših $v$. Točka je vsebovana v drevesu s korenom $v$, če je vsebovana v $reg(v)$. Drevo s korenom $v$ med poizvedbo obiščemo le, če poizvedbeno območje (pravokotnik) seka $reg(v)$. Če
+je $reg(v)$ v celoti vsebovana v poizvedbenem območju, v rezultat dodamo celotno poddrevo $v$. Če pridemo do lista, preverimo, če je vozlišče shranjeno v njem vsebovano v območju. Primer poizvedbe je prikazan na sliki ~\ref{kd-primer} (pri čemer je treba opozoriti, da pri drevesu na sliki za razdelitev prostora ni bila vedno izbrana mediana).
+
 
 Več na~\cite{bkos-08}.
 
@@ -312,6 +323,16 @@ Vozlišča grafa ponavadi sovpadajo s točkami v ravnini, pri katerih koordinate
 
 
 \section{Delaunayeva triangulacija}
+Delaunayeva triangulacija nad točkami $P$ je triangulacija $DT(P)$, ki izpolnjuje Delaunayev pogoj. Ta pravi, da se nobena točka iz $P$ ne nahaja znotraj očrtanega kroga poljubnega trikotnika triangulacije. Taka triangulacija
+maksimizira minimalni kot med vsemi koti trikotnikov. Množica $P$ s kolinearnimi točkami predstavlja izrojen primer, za katerega ne obstaja nobena Delaunayeva triangulacija. Če točke v $P$ ležijo na istem krogu, rešitev ni enolična.
+Med točko $p$ in njenim najbližjim sosedom $q$, kjer $p,q\in P$, vedno obstaja povezava $pq\in E(DT(P))$, ker je graf najbližjih sosedov nad množico $P$ podgraf Delaunayeve triangulacije. Za dolžino najkrajše poti $dist(\pi (p,q))$ med dvema 
+vozliščema $p,q$ v Delaunayevem grafu velja:
+
+\begin{equation}
+dist(\pi (p,q)) \leq 2.418\times dist(p,q).
+\end{equation}
+
+Za izgradnjo triangulacije poznamo več algoritmov, najpogosteje uporabljeni so algoritem z obračanjem, inkrementalni algoritem z vstavljanjem ter deli in vladaj. 
 \subsection{Implementacija v CGAL}
 
 
