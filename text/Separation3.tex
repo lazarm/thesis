@@ -307,7 +307,7 @@ gre skozi tisto točko, čigar $j$-ta koordinata predstavlja mediano v množici 
 
 Časovna zahtevnost izgradnje drevesa je $\OO(n\log n)$ (na vsakem nivoju drevesa je potrebno izračunati mediano, kar vzame $\OO(n)$ časa), prostorska zahtevnost pa $\OO(n)$.
 \subsection{Poizvedbe}
-Časovna zahtevnost poizvedbe je $\OO(n^(1-\frac{1}{d}) + k)$, kjer je $k$ število poročanih točk. V splošnem za dvodimenzionalno kd drevo velja, da je območje $reg(v)$, ki ga predstavlja vozlišče $v$, pravokotnik, ki je lahko neomejen z več strani. Omejen je s hiperravninami (premicami), shranjenih v starših $v$. Točka je vsebovana v drevesu s korenom $v$, če je vsebovana v $reg(v)$. Drevo s korenom $v$ med poizvedbo obiščemo le, če poizvedbeno območje (pravokotnik) seka $reg(v)$. Če
+Časovna zahtevnost poizvedbe je $\OO(n^{(1-\frac{1}{d})} + k)$, kjer je $k$ število poročanih točk. V splošnem za dvodimenzionalno kd drevo velja, da je območje $reg(v)$, ki ga predstavlja vozlišče $v$, pravokotnik, ki je lahko neomejen z več strani. Omejen je s hiperravninami (premicami), shranjenih v starših $v$. Točka je vsebovana v drevesu s korenom $v$, če je vsebovana v $reg(v)$. Drevo s korenom $v$ med poizvedbo obiščemo le, če poizvedbeno območje (pravokotnik) seka $reg(v)$. Če
 je $reg(v)$ v celoti vsebovana v poizvedbenem območju, v rezultat dodamo celotno poddrevo $v$. Če pridemo do lista, preverimo, če je vozlišče shranjeno v njem vsebovano v območju. Primer poizvedbe je prikazan na sliki ~\ref{kd-primer} (pri čemer je treba opozoriti, da pri drevesu na sliki za razdelitev prostora ni bila vedno izbrana mediana).
 
 
@@ -325,6 +325,7 @@ Vozlišča grafa ponavadi sovpadajo s točkami v ravnini, pri katerih koordinate
 \section{Delaunayeva triangulacija}
 Delaunayeva triangulacija nad točkami $P$ je triangulacija $DT(P)$, ki izpolnjuje Delaunayev pogoj. Ta pravi, da se nobena točka iz $P$ ne nahaja znotraj očrtanega kroga poljubnega trikotnika triangulacije. Taka triangulacija
 maksimizira minimalni kot med vsemi koti trikotnikov. Množica $P$ s kolinearnimi točkami predstavlja izrojen primer, za katerega ne obstaja nobena Delaunayeva triangulacija. Če točke v $P$ ležijo na istem krogu, rešitev ni enolična.
+
 Med točko $p$ in njenim najbližjim sosedom $q$, kjer $p,q\in P$, vedno obstaja povezava $pq\in E(DT(P))$, ker je graf najbližjih sosedov nad množico $P$ podgraf Delaunayeve triangulacije. Za dolžino najkrajše poti $dist(\pi (p,q))$ med dvema 
 vozliščema $p,q$ v Delaunayevem grafu velja:
 
@@ -332,13 +333,20 @@ vozliščema $p,q$ v Delaunayevem grafu velja:
 dist(\pi (p,q)) \leq 2.418\times dist(p,q).
 \end{equation}
 
-Za izgradnjo triangulacije poznamo več algoritmov, najpogosteje uporabljeni so algoritem z obračanjem, inkrementalni algoritem z vstavljanjem ter deli in vladaj. 
+Za izgradnjo triangulacije poznamo več algoritmov. Najpogosteje uporabljeni so: 
+
+\begin{description}
+\item[algoritem z obračanjem] Pomembna lastnost dveh trikotnikov ABD in BCD s skupno stranico BD v Delaunayevi triangulaciji je, da je vsota kotov $\alpha$ in $\gamma$ manjša od 180$\deg $. Če ta lastnost ne velja, jo lahko dosežemo z obračanjem trikotnikov, tako da dobimo trikotnika ABC in ACD s skupno stranico AC. Algoritem z obračanjem zgradi navadno triangulacijo, nato pa izvaja operacijo obračanja, dokler vsi trikotniki ne izpolnjujejo Delaunayevega pogoja. Časovna zahtevnost v najslabšem primeru je $\OO(n^2)$.
+\item[inkrementalni algoritem z vstavljanjem] Dodaja točke zaporedoma v obstoječo triangulacijo. Ko je nova točka dodana, se tiste dele Delaunayevega grafa, na katere nova točka vpliva, popravi z obračanjem trikotnikov. V najslabšem primeru je časovna zahtevnost algoritma $\OO(n^2)$, ker moramo za vsako dodano točko najti trikotnik, ki jo vsebuje ($\OO(n)$) in popraviti vse trikotnike ($\OO(n)$). Z nekoliko izboljšanim algoritmom za iskanje lokacije nove točke je pričakovana časovna zahtevnost $\OO(n\log n)$, ker je v povprečju v vsakem koraku obrnjenih $\OO(1)$ trikotnikov, iskanje lokacije nove točke pa vzame v povprečju $\OO(\log n)$ časa.
+\item[deli in vladaj] Točke so rekurzivno razdeljene v dve množici z določeno premico. Delaunayeva triangulacija je izračunana za vsako množico točk posebej, nato pa sta obe triangulaciji združeni vzdolž premice. Združevanje vzame $\OO(n)$ časa, tako da je časovna zahtevnost algoritma $\OO(n\log n)$. V praksi je deli in vladaj najhitrejši algoritem za izgradnjo Delaunayeve triangulacije.
+\end{description}
+
 \subsection{Implementacija v CGAL}
 
 
 \section{Voronoijev diagram}
 \begin{figure}
-\centerline{\includegraphics[scale=1.2]{pics/voronoi-dt2.pdf}}
+\centerline{\includegraphics[scale=0.8]{pics/voronoi-dt2.pdf}}
 \caption{Evklidski Voronoijev diagram brez degeneracij, označen z rdečimi odebeljenimi povezavami. Voronoijeva središča, obarvana z modro barvo, predstavljajo hkrati tudi vozlišča v Delaunayevi triangulaciji, dualni Voronoijevemu diagramu, in je označena s tanjšimi črnimi povezavami.}
 \label{vd}
 \end{figure}
@@ -373,7 +381,14 @@ Tretja predloga predstavlja režim adaptacije Delaunayeve triangulacije Voronoij
  
 
 \section{Območna drevesa}
-Območna drevesa so še ena podatkovna struktura za poizvedbe nad pravokotnimi območji. V primerjavi s kd drevesi imajo boljši čas poizvedbe ($\OO(\log^2 n)$), ampak slabšo prostorsko kompleksnost ($\OO(n\log n)$).
+Območna drevesa so še ena podatkovna struktura za poizvedbe nad pravokotnimi območji. V primerjavi s kd drevesi imajo boljši čas poizvedbe ($\OO(\log^2 n)$), ampak slabšo prostorsko kompleksnost ($\OO(n\log n)$). Namesto, da razdelimo prostor izmenično po abscisni in ordinatni osi, imamo tukaj kot glavno drevo uravnoteženo dvojiško iskalno drevo $\T$, zgrajeno nad $x$ koordinatami točk. Vsako vozlišče $v$ drevesa ima potem kazalec na uravnoteženo dvojiško iskalno poddrevo $\T_{assoc}(v)$, zgrajeno nad $y$ koordinatami točk, ki so shranjene v listih poddrevesa v $\T$ s korenom $v$.
+
+Poizvedba $[x:x'] \times [y:y']$ v taki strukturi poteka na sledeč način: v glavnem drevesu iščemo z intervalom $x:x'$, dokler ne pridemo do vozlišča $v_{split}$, kjer se iskanje razcepi na dva dela. Iskanje nadaljujemo v smeri njegovega levega otroka in pri vsakem obiskanem vozlišču $v$, kjer se pot iskanja nadaljuje levo, označimo njegovega desnega otroka. Podobno nadaljujemo v smeri desnega otroka vozlišča $v_{split}$ in označimo levega otroka obiskanega vozlišča $v$, pri katerem se iskanje nadaljuje v desno. 
+V tem trenutku imamo označenih $\OO(\log n)$ poddreves. Za vsako poddrevo s korenom $v$ $P(v)$ naredimo poizvedbo $[y:y']$ na sekundarnem drevesu $\T_{assoc}(v)$, ki hrani vse točke iz $P(v)$. 
+
+Dejanske točke so shranjene v drevesih $\T_{assoc}$. Na danem nivoju drevesa $\T$ je neka točka $p \in P$ shranjena v natanko enem drevesu $\T_{assoc}$. Iz tega sledi, da vsa drevesa $\T_{assoc}$ na poljubnem nivoju drevesa $T$ porabijo skupaj $\OO(n)$ prostora. Ker je globina drevesa $\T$ $\OO(\log n)$, je prostorska zahtevnost območnih dreves $\OO(n\log n)$.
+
+Časovna zahtevnost enodimenzionalne poizvedbe v poddrevesu $\T_{assoc}(v)$ je $\OO(\log n + k_v)$, kjer je $k_v$ število vrnjenih točk. Celotni čas poizvedbe je $\sum_v\OO(\log n + k_v)$, torej vsota vseh obiskanih vozlišč v $T$. Ker je dolžina obeh iskalnih poti (ki se razcepita pri vozlišču $v_{split}$) enaka $\OO(\log n)$, in je vsota $\sum_v k_v$ enaka številu vseh vrnjenih točk poizvedbe $k$, je časovna zahtevnost celotne poizvedbe $\OO(log^2n + k)$.
 
 \begin{figure}
 \centerline{\includegraphics[scale=1.2]{pics/rangeTree2.pdf}}
