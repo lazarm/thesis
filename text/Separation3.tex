@@ -54,6 +54,7 @@
 \newcommand{\NN}{\ensuremath{\mathbb N}}  % natural numbers 
 \newcommand{\T}{\ensuremath{\mathcal{T}}} 
 \newcommand{\OO}{\ensuremath{\mathcal{O}}} % big O notation
+\newcommand{\U}{\texttt{\_}}
 \newcommand{\clearemptydoublepage}{\newpage{\pagestyle{empty}\cleardoublepage}}
 \setcounter{tocdepth}{1}	      % globina kazala
 
@@ -291,6 +292,7 @@ Pri nekaterih razredih knjižnice smo morali spremeniti kodo ali dodati kaj nove
 ??? 
 natancnost: cartesian, kaj pa leda, homogenous?
 povej kaj o traits, templated strukturami ($Point_2$) 
+$https://doc.cgal.org/4.5/Kernel_23/classKernel.html$
 
 \section{Kd drevesa}
 
@@ -342,7 +344,21 @@ Za izgradnjo triangulacije poznamo več algoritmov. Najpogosteje uporabljeni so:
 \end{description}
 
 \subsection{Implementacija v CGAL}
+Razred Delaunay\U triangulation\U 2 implementira Delaunayevo triangulacijo in deduje iz razreda Triangulation\U 2. Iz slednjega uporablja nekatere metode, kot so vstavljanje ali lociranje točke, nekatere pa tudi povozi, kot je recimo obračanje trikotnikov, ker trikotnikom v navadni triangulaciji ni potrebno izpolnjevati Delaunayevega pogoja. Poleg tega vsebuje dodatne metode za iskanje najbližjega soseda in konstrukcijo elementov Delaunayi triangulaciji dualnega Voronoijevega diagrama.
 
+Razred je parametriziran z dvema predlogama; prvi je razred geometrijskih značilnosti, drugi pa razred podatkovne strukture za triangulacijo. Za slednjega CGAL ponuja privzeti razred Triangulation\U data\U structure\U 2, ki vsebuje zbirki vozlišč in lic. Razred geometrijskih značilnosti mora biti model koncepta DelaunayTriangulationTraits\U 2, ki je dodelana verzija koncepta TriangulationTraits\U 2. Ta vsebuje predikata za primerjavo koordinat dveh točk in test orientacije treh točk. DelaunayTriangulationTraits\U 2 dodatno vsebuje še predikat side\U of\U oriented\U circle, ki za štiri dane točke $p, q, r, s$ določi položaj točke $s$ glede na krožnico, ki gre skozi točke $p, q$ in $r$.
+
+Izgradnja triangulacije uporablja inkrementalni algoritem z obračanjem. 
+
+\subsubsection{Operacije nad strukturo}
+\begin{description}
+\item[lociranje točke] Je implementirano s sprehodom po povezavah. Sprehod se začne pri vozlišču podanega lica, ali pri naključnem vozlišču, če lice ni podano. Povprečna časovna zahtevnost je $\OO(\sqrt{n})$.
+\item[vstavljanje nove točke] Najprej je uporabljena metoda $locate$ za lociranje lica, ki vsebuje novo točko, nato pa se lice razbije na tri dele. Novo triangulacijo se nato popravi z $\OO(d)$ obračanji (v povprečju $\OO(1)$), kjer je $d$ stopnja novega vozlišča
+\item[iskanje najbližjega soseda] Uporabljena je metoda $locate$, nato pa je potrebnega $\OO(1)$ časa za najdbo najbližjega soseda pri enakomerno porazdeljenih vozliščih, v najslabšem primeru pa $\OO(n)$ časa.
+\end{description}
+
+\subsubsection{Hierarhija triangulacij}
+Za učinkovito lociranje točk lahko uporabimo razred Triangulation\U hierarchy\U 2, ki hrani hierarhijo triangulacij. Na najnižjem nivoju se nahaja izvirna triangulacija, nad katero se izvajajo operacije in lociranje točk. Na vsakem višjem nivoju je nato zgrajena triangulacija nad manjšo množico naključno izbranih vozlišč iz triangulacije na predhodnem nivoju (recimo 3\% vozlišč). Lociranje točke se izvede od zgoraj navzdol po strukturi: na najvišjem nivoju se naivno izvede poizvedba najbližjega soseda, nato pa se na vsakem naslednjem nivoju najde najbližjega soseda s sprehodom po povezavah z začetkom pri najbližjem sosedu, najdenem na višjem nivoju. Taka struktura je najbolj primerna ravno za Delaunayeve triangulacije. Poleg hitrega delovanja na realnih podatkih ima dobro časovno zahtevnost v najslabšem primeru, in nizko prostorsko kompleksnost~\cite{Olivier}.
 
 \section{Voronoijev diagram}
 \begin{figure}
@@ -372,16 +388,15 @@ Množico $V_i$ imenujemo tudi Voronoijeva celica ali Voronijevo lice središča 
 Celice si ponavadi predstavljamo kot 2-dimenzionalne, robove kot 1-dimenzionalne in vozlišča kot 0-dimenzionalne objekte. Za določene kombinacije središč in metrik to ne drži. Voronijev diagram z metriko $L_1$ ali $L_{\infty}$ lahko na primer vsebuje dvodimenzionalne robove. Takim Voronoijevim diagramom, za katere zgornja omejitev drži in imajo lastnost, da so njihove celice preprosto povezano območje v ravnini, pravimo preprosti Voronoijevi diagrami. Najbolj tipičen primer slednjih je evklidski Voronoijev diagram (slika ~\ref{vd}), ki ga uporabljamo v našem algoritmu.
 
 \subsection{Voronoijev diagram v CGAL}
-Knjižnica CGAL ponuja razred Voronoi\texttt{\_}diagram\texttt{\_}2$<DG,AT,AP>$, ki deluje kot prilagoditveni paket. Ta Delaunayevo triangulacijo na podlagi podanih kriterijev prilagodi pripadajočemu Voronoijevemu diagramu, ki je predstavljen kot DCEL (doubly connected edge list) struktura. Paket je torej zasnovan tako, da na zunaj deluje kot DCEL struktura, znotraj pa v resnici hrani strukturo grafa, ki predstavlja graf triangulacije.
+Knjižnica CGAL vsebuje razred Voronoi\texttt{\_}diagram\texttt{\_}2$<DG,AT,AP>$, ki deluje kot prilagoditveni paket. Ta Delaunayevo triangulacijo na podlagi podanih kriterijev prilagodi pripadajočemu Voronoijevemu diagramu, ki je predstavljen kot DCEL (doubly connected edge list) struktura. Paket je torej zasnovan tako, da na zunaj deluje kot DCEL struktura, znotraj pa v resnici hrani strukturo grafa, ki predstavlja graf triangulacije.
 
-Razred je parametriziran s tremi predlogami. Prvi, DT, mora biti primerek, ki predstavlja koncept razreda DelaunayGraph\texttt{\_}2. Primeri takih struktur so Delaunayeva triangulacija, navadna triangulacija in Apollonov graf. Druga predloga, AT, predstavlja lastnosti prilagoditve ter definira tipe struktur in funktorje, ki jih razred potrebuje za dostop do geometrijskih lastnosti Delaunayeve triangulacije. Funktor mora biti recimo definiran za konstrukcijo Voronoijevih vozlišč iz njihovih dualnih lic v Delaunayevi triangulaciji. Za našo implementacijo algoritma ločevanja z diski je pomemben funktor za poizvedbe najbližjih središč, ki kot rezultat vrne informacijo o tem, koliko in katera središča so enako oddaljena od točke poizvedbe. Bolj konkretno, rezultat je Delaunayevo vozlišče, lice ali rob, na katerem točka poizvedbe leži oziroma z njim sovpada. Če je na primer točka poizvedbe $q$, enako oddaljena od treh središč, potem sovpada z nekim Voronoijevim vozliščem, zato funktor vrne Delaunayevo lice, ki je dualno temu vozlišču. Razred, ki predstavlja Delaunayevo lice, omogoča iteracijo po Delaunayevih vozliščih, ki definirajo lice, ta pa so dualna trem Voronoijevim središčem.
+Razred je parametriziran s tremi predlogami. Prvi, DT, mora biti model koncepta razreda DelaunayGraph\texttt{\_}2. Primeri takih struktur so Delaunayeva triangulacija, navadna triangulacija, Apollonov graf in hierarhija triangulacij. Druga predloga, AT, predstavlja lastnosti pretvorbe Delaunayeve triangulacije v Voronoijev diagram ter definira tipe struktur in funktorje, ki jih razred potrebuje za dostop do geometrijskih lastnosti Delaunayeve triangulacije. Funktor mora biti recimo definiran za konstrukcijo Voronoijevih vozlišč iz njihovih dualnih lic v Delaunayevi triangulaciji. Za našo implementacijo algoritma ločevanja z diski je pomemben funktor za poizvedbe najbližjih središč, ki kot rezultat vrne informacijo o tem, koliko in katera središča so enako oddaljena od točke poizvedbe. Bolj konkretno, rezultat je Delaunayevo vozlišče, lice ali rob, na katerem točka poizvedbe leži oziroma z njim sovpada. Če je na primer točka poizvedbe $q$, enako oddaljena od treh središč, potem sovpada z nekim Voronoijevim vozliščem, zato funktor vrne Delaunayevo lice, ki je dualno temu vozlišču. Razred, ki predstavlja Delaunayevo lice, omogoča iteracijo po Delaunayevih vozliščih, ki definirajo lice, ta pa so dualna trem Voronoijevim središčem.
 
 Tretja predloga predstavlja režim adaptacije Delaunayeve triangulacije Voronoijevemu diagramu. 
-Če množica središč, ki določa graf Delaunayeve triangulacije, vsebuje podmmnožice središč, ki so v degeneriranem položaju, potem ima dualni graf - Voronoijev diagram - lahko robove dolžine nič in po možnosti tudi celice s ploščino nič. Režim adaptacije določa, kaj storiti v takih primerih. V našem projektu smo uporabili tip režima, imenovan $Delaunay\texttt{\_}triangulation\texttt{\_}caching\texttt{\_}degeneracy\texttt{\_}removal\texttt{\_}policy\texttt{\_}2$. Kot pove že ime, ta tip poskrbi, da so vse zgoraj opisane celice in robovi odstranjeni iz Voronoijevega diagrama. Poleg tega uporablja $cache$ pri ugotavljanju, ali ima določena celica oziroma rob degenerirane lastnosti. Ker je slednje precej zahtevna operacija, se ta tip izplača pri vhodnih podatkih (središčih) z veliko degeneriranimi primeri.
+Če množica središč, ki določa graf Delaunayeve triangulacije, vsebuje podmmnožice središč, ki so v izrojenem položaju, ima dualni graf - Voronoijev diagram - lahko robove dolžine nič in po možnosti tudi celice s ploščino nič. Režim adaptacije določa, kaj storiti v takih primerih. V našem projektu smo uporabili režim $Delaunay\texttt{\_}triangulation\texttt{\_}caching\texttt{\_}degeneracy\texttt{\_}removal\texttt{\_}policy\texttt{\_}2$. Kot pove že ime, ta tip poskrbi, da so vse zgoraj opisane celice in robovi odstranjeni iz Voronoijevega diagrama. Poleg tega uporablja $cache$ pri ugotavljanju, ali ima določena celica oziroma rob degenerirane lastnosti. Ker je slednje precej zahtevna operacija, se ta tip izplača pri vhodnih podatkih (središčih) z veliko izrojenimi primeri.
  
-
 \section{Območna drevesa}
-Območna drevesa so še ena podatkovna struktura za poizvedbe nad pravokotnimi območji. V primerjavi s kd drevesi imajo boljši čas poizvedbe ($\OO(\log^2 n)$), ampak slabšo prostorsko kompleksnost ($\OO(n\log n)$). Namesto, da razdelimo prostor izmenično po abscisni in ordinatni osi, imamo tukaj kot glavno drevo uravnoteženo dvojiško iskalno drevo $\T$, zgrajeno nad $x$ koordinatami točk. Vsako vozlišče $v$ drevesa ima potem kazalec na uravnoteženo dvojiško iskalno poddrevo $\T_{assoc}(v)$, zgrajeno nad $y$ koordinatami točk, ki so shranjene v listih poddrevesa v $\T$ s korenom $v$.
+Območna drevesa so še ena podatkovna struktura za poizvedbe nad pravokotnimi območji. V primerjavi s kd drevesi imajo boljši čas poizvedbe ($\OO(\log^2 n + k)$), ampak slabšo prostorsko kompleksnost ($\OO(n\log n)$). Namesto, da razdelimo prostor izmenično po abscisni in ordinatni osi, imamo tukaj kot glavno drevo uravnoteženo dvojiško iskalno drevo $\T$, zgrajeno nad $x$ koordinatami točk. Vsako vozlišče $v$ drevesa ima potem kazalec na uravnoteženo dvojiško iskalno poddrevo $\T_{assoc}(v)$, zgrajeno nad $y$ koordinatami točk, ki so shranjene v listih poddrevesa v $\T$ s korenom $v$.
 
 Poizvedba $[x:x'] \times [y:y']$ v taki strukturi poteka na sledeč način: v glavnem drevesu iščemo z intervalom $x:x'$, dokler ne pridemo do vozlišča $v_{split}$, kjer se iskanje razcepi na dva dela. Iskanje nadaljujemo v smeri njegovega levega otroka in pri vsakem obiskanem vozlišču $v$, kjer se pot iskanja nadaljuje levo, označimo njegovega desnega otroka. Podobno nadaljujemo v smeri desnega otroka vozlišča $v_{split}$ in označimo levega otroka obiskanega vozlišča $v$, pri katerem se iskanje nadaljuje v desno. 
 V tem trenutku imamo označenih $\OO(\log n)$ poddreves. Za vsako poddrevo s korenom $v$ $P(v)$ naredimo poizvedbo $[y:y']$ na sekundarnem drevesu $\T_{assoc}(v)$, ki hrani vse točke iz $P(v)$. 
@@ -391,24 +406,13 @@ Dejanske točke so shranjene v drevesih $\T_{assoc}$. Na danem nivoju drevesa $\
 Časovna zahtevnost enodimenzionalne poizvedbe v poddrevesu $\T_{assoc}(v)$ je $\OO(\log n + k_v)$, kjer je $k_v$ število vrnjenih točk. Celotni čas poizvedbe je $\sum_v\OO(\log n + k_v)$, torej vsota vseh obiskanih vozlišč v $T$. Ker je dolžina obeh iskalnih poti (ki se razcepita pri vozlišču $v_{split}$) enaka $\OO(\log n)$, in je vsota $\sum_v k_v$ enaka številu vseh vrnjenih točk poizvedbe $k$, je časovna zahtevnost celotne poizvedbe $\OO(log^2n + k)$.
 
 \begin{figure}
-\centerline{\includegraphics[scale=1.2]{pics/rangeTree2.pdf}}
+\centerline{\includegraphics[scale=1]{pics/rangeTree2.pdf}}
 \caption{Dvodimenzionalno območno drevo.}
 \label{range-primer}
 \end{figure}
 
 
 \chapter{Teorija}
-\section{Predstavitev problema}
-Naj bo $\D$ množica skladnih enotskih krogov na Evklidski ravnini, ki jih definirajo njihove središčne točke.  $z$ in $z'$ naj bosta dve dani točki, ki nista vsebovani v nobenem krogu. Za $\D$ rečemo, da ločuje $z$ in $z'$, če vsaka pot v ravnini od $z$ do $z'$ seka nek krog v $\D$.
-
-Problem iskanja minimalne kardinalne podmnožice $\D$, ki ločuje $z$ in $z'$, lahko formalno zapišemo kot:
-
-
-
-
-
-Cilj našega algoritma za ločevanje enotskih krogov je rešiti ta problem v skoraj kvadratičnem času. Do take časovne kompleksnosti pridemo tudi s pomočjo še enega našega algoritma za izgradnjo drevesa najkrajših poti iz enega, danega izhodišča. Oba algoritma sta opisana v nadaljevanju, prav tako dokaza za njuno časovno kompleksnost.
-
 Naj bo $P$ množica točk, ki predstavljajo središča krogov $\D$. $P$ predstavlja vhod našega algoritma in vse operacije ter uporabljene podatkovne strukture se vrtijo okoli te množice. Kardinalnost množice je enaka $n$.
 
 \begin{figure}
@@ -425,7 +429,7 @@ Naj bo $G(P)$ graf z množico vozlišč $P$ s povezavo med točkama $p,q \in P$,
 \label{walk}
 \end{figure}
 
-V nadaljevanju bomo namesto $G(P)$ pisali preprosto $G$, brez izgube splošnosti pa predpostavili, da je $z=(0,0)$ in $z'=(0,s)$. $zz'$ je torej daljica, v nadaljevanju imenovana $\sigma$, ki je vsebovana v koordinatni osi $y$. Če dana vhodna daljica ne leži na osi $y$, lahko naredimo translacijo nad $\sigma$ in $P$; če poleg tega tudi vertikalna ni, naredimo še rotacijo (kjer pa lahko pride do numeričnih napak). 
+V nadaljevanju bomo namesto $G(P)$ pisali preprosto $G$, brez izgube splošnosti pa predpostavili, da je $z=(0,0)$ in $z'=(0,s)$. $zz'$ je torej daljica, v nadaljevanju imenovana $\sigma$, ki je vsebovana v koordinatni osi $y$. Če dana vhodna daljica ne leži na osi $y$, lahko naredimo translacijo nad $\sigma$ in $P$. Ce daljica ni niti navpična, lahko naredimo tudi rotacijo daljice in točk, kjer pa je treba upoštevati, da pri tem pride do numeričnih napak in se prave razdalje med točkami izgubijo. 
 \section{SSSP drevo}
 
 V tem poglavju je opisan algoritem za drevo SSSP (ang. single source shortest path). Gre za preiskovanje v širino nad grafom $G(P)$ brez dejanske izgradnje grafa. Vhod algoritma je torej $P$, pri izgradnji drevesa pa se uporablja abstrakten graf G(P).

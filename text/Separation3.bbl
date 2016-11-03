@@ -10,6 +10,12 @@ S.~Cabello and P.~Giannopoulos.
 \newblock The complexity of separating points in the plane.
 \newblock {\em Algorithmica}, 74(2):643--663, 2016.
 
+\bibitem{Olivier}
+O.~Devillers.
+\newblock Improved incremental randomized delaunay triangulation.
+\newblock In {\em Proceedings of the 14th Annual ACM Symposium on Computation
+  Geometry}, pages 106--115, 1998.
+
 \bibitem{FGG06}
 Q.~Fang, J.~Gao, and L.~J. Guibas.
 \newblock Locating and bypassing routing holes in sensor networks.
