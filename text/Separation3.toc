@@ -7,45 +7,50 @@
 \contentsline {chapter}{\numberline {1}Uvod}{1}
 \contentsline {chapter}{\numberline {2}CGAL in uporabljene matemati\IeC {\v c}ne strukture}{5}
 \contentsline {section}{\numberline {2.1}CGAL}{5}
-\contentsline {section}{\numberline {2.2}Kd drevesa}{6}
-\contentsline {subsection}{\numberline {2.2.1}Poizvedbe}{8}
-\contentsline {section}{\numberline {2.3}SSSP drevesa}{8}
-\contentsline {section}{\numberline {2.4}Graf kvadratne mre\IeC {\v z}e}{9}
-\contentsline {section}{\numberline {2.5}Delaunayeva triangulacija}{9}
-\contentsline {subsection}{\numberline {2.5.1}Implementacija v CGAL}{10}
-\contentsline {subsubsection}{Operacije nad strukturo}{11}
-\contentsline {subsubsection}{Hierarhija triangulacij}{12}
-\contentsline {section}{\numberline {2.6}Voronoijev diagram}{12}
-\contentsline {subsection}{\numberline {2.6.1}Voronoijev diagram v CGAL}{14}
-\contentsline {section}{\numberline {2.7}Obmo\IeC {\v c}na drevesa}{15}
-\contentsline {chapter}{\numberline {3}Teorija}{19}
-\contentsline {section}{\numberline {3.1}SSSP drevo}{19}
-\contentsline {section}{\numberline {3.2}Drevo najbli\IeC {\v z}jega soseda}{26}
-\contentsline {subsection}{\numberline {3.2.1}Optimizacijski problem 1}{28}
-\contentsline {subsection}{\numberline {3.2.2}Optimizacijski problem 2}{28}
-\contentsline {subsubsection}{Dualnost in dualni prostor}{29}
-\contentsline {subsection}{\numberline {3.2.3}Sekanje nepremi\IeC {\v c}ne daljice}{35}
-\contentsline {section}{\numberline {3.3}Alternativni algoritmi za SSSP in minimalno lo\IeC {\v c}evanje}{37}
-\contentsline {subsection}{\numberline {3.3.1}Eksplicitni BFS}{37}
-\contentsline {subsection}{\numberline {3.3.2}BFS z uporabo grafa kvadratne mre\IeC {\v z}e}{37}
-\contentsline {subsection}{\numberline {3.3.3}Generi\IeC {\v c}ni algoritem za lo\IeC {\v c}evanje z diski}{38}
-\contentsline {chapter}{\numberline {4}Implementacija algoritma}{39}
-\contentsline {section}{\numberline {4.1}SSSP drevo}{39}
-\contentsline {subsection}{\numberline {4.1.1}Dodatki v razredu Point\texttt {\_}2}{39}
-\contentsline {subsection}{\numberline {4.1.2}Voronoijev diagram za iskanje najbli\IeC {\v z}jega soseda}{40}
-\contentsline {subsection}{\numberline {4.1.3}Izgradnja drevesa}{41}
-\contentsline {section}{\numberline {4.2}Drevo najbli\IeC {\v z}jega soseda}{43}
-\contentsline {subsection}{\numberline {4.2.1}Kd drevo}{44}
-\contentsline {section}{\numberline {4.3}Implementacija optimizacijskega problema $\Phi _\sigma (A,B)$}{45}
-\contentsline {subsection}{\numberline {4.3.1}DualPoint - implementacija dualne to\IeC {\v c}ke}{45}
-\contentsline {subsection}{\numberline {4.3.2}Obmo\IeC {\v c}no drevo}{45}
-\contentsline {subsubsection}{Poizvedbe v obmo\IeC {\v c}nem drevesu}{46}
-\contentsline {section}{\numberline {4.4}Minimalno lo\IeC {\v c}evanje}{50}
-\contentsline {subsection}{\numberline {4.4.1}opt1}{50}
-\contentsline {subsection}{\numberline {4.4.2}opt2}{50}
-\contentsline {subsection}{\numberline {4.4.3}Kreiranje cikla}{51}
-\contentsline {section}{\numberline {4.5}Obravnava posebnih vhodnih primerov}{52}
-\contentsline {chapter}{\numberline {5}Rezultati}{53}
-\contentsline {section}{\numberline {5.1}Drevo najkraj\IeC {\v s}ih poti}{53}
-\contentsline {section}{\numberline {5.2}Minimalno lo\IeC {\v c}evanje}{53}
-\contentsline {chapter}{\numberline {6}Sklepne ugotovitve}{61}
+\contentsline {subsection}{\numberline {2.1.1}\IeC {\v S}tevilski tipi}{6}
+\contentsline {subsection}{\numberline {2.1.2}Jedro knji\IeC {\v z}nice}{6}
+\contentsline {subsubsection}{\numberline {2.1.2.1}Predstavitev objektov jedra}{7}
+\contentsline {paragraph}{\numberline {2.1.2.1.1}\IeC {\v S}tevilski tipi}{7}
+\contentsline {subsubsection}{\numberline {2.1.2.2}Geometrija in predikati jedra}{8}
+\contentsline {section}{\numberline {2.2}Kd drevesa}{9}
+\contentsline {subsection}{\numberline {2.2.1}Poizvedbe}{9}
+\contentsline {section}{\numberline {2.3}SSSP drevesa}{11}
+\contentsline {section}{\numberline {2.4}Graf kvadratne mre\IeC {\v z}e}{11}
+\contentsline {section}{\numberline {2.5}Delaunayeva triangulacija}{12}
+\contentsline {subsection}{\numberline {2.5.1}Implementacija v CGAL}{13}
+\contentsline {subsubsection}{\numberline {2.5.1.1}Operacije nad strukturo}{14}
+\contentsline {subsubsection}{\numberline {2.5.1.2}Hierarhija triangulacij}{14}
+\contentsline {section}{\numberline {2.6}Voronoijev diagram}{15}
+\contentsline {subsection}{\numberline {2.6.1}Voronoijev diagram v CGAL}{16}
+\contentsline {section}{\numberline {2.7}Obmo\IeC {\v c}na drevesa}{17}
+\contentsline {chapter}{\numberline {3}Teorija}{21}
+\contentsline {section}{\numberline {3.1}SSSP drevo}{21}
+\contentsline {section}{\numberline {3.2}Drevo najbli\IeC {\v z}jega soseda}{28}
+\contentsline {subsection}{\numberline {3.2.1}Optimizacijski problem 1}{30}
+\contentsline {subsection}{\numberline {3.2.2}Optimizacijski problem 2}{30}
+\contentsline {subsubsection}{\numberline {3.2.2.1}Dualnost in dualni prostor}{31}
+\contentsline {subsection}{\numberline {3.2.3}Sekanje nepremi\IeC {\v c}ne daljice}{37}
+\contentsline {section}{\numberline {3.3}Alternativni algoritmi za SSSP in minimalno lo\IeC {\v c}evanje}{39}
+\contentsline {subsection}{\numberline {3.3.1}Eksplicitni BFS}{39}
+\contentsline {subsection}{\numberline {3.3.2}BFS z uporabo grafa kvadratne mre\IeC {\v z}e}{39}
+\contentsline {subsection}{\numberline {3.3.3}Generi\IeC {\v c}ni algoritem za lo\IeC {\v c}evanje z diski}{40}
+\contentsline {chapter}{\numberline {4}Implementacija algoritma}{41}
+\contentsline {section}{\numberline {4.1}SSSP drevo}{41}
+\contentsline {subsection}{\numberline {4.1.1}Dodatki v razredu Point\texttt {\_}2}{41}
+\contentsline {subsection}{\numberline {4.1.2}Voronoijev diagram za iskanje najbli\IeC {\v z}jega soseda}{42}
+\contentsline {subsection}{\numberline {4.1.3}Izgradnja drevesa}{43}
+\contentsline {section}{\numberline {4.2}Drevo najbli\IeC {\v z}jega soseda}{45}
+\contentsline {subsection}{\numberline {4.2.1}Kd drevo}{46}
+\contentsline {section}{\numberline {4.3}Implementacija optimizacijskega problema $\Phi _\sigma (A,B)$}{47}
+\contentsline {subsection}{\numberline {4.3.1}DualPoint - implementacija dualne to\IeC {\v c}ke}{47}
+\contentsline {subsection}{\numberline {4.3.2}Obmo\IeC {\v c}no drevo}{47}
+\contentsline {subsubsection}{\numberline {4.3.2.1}Poizvedbe v obmo\IeC {\v c}nem drevesu}{48}
+\contentsline {section}{\numberline {4.4}Minimalno lo\IeC {\v c}evanje}{52}
+\contentsline {subsection}{\numberline {4.4.1}opt1}{52}
+\contentsline {subsection}{\numberline {4.4.2}opt2}{52}
+\contentsline {subsection}{\numberline {4.4.3}Kreiranje cikla}{53}
+\contentsline {section}{\numberline {4.5}Obravnava posebnih vhodnih primerov}{54}
+\contentsline {chapter}{\numberline {5}Rezultati}{55}
+\contentsline {section}{\numberline {5.1}Drevo najkraj\IeC {\v s}ih poti}{55}
+\contentsline {section}{\numberline {5.2}Minimalno lo\IeC {\v c}evanje}{55}
+\contentsline {chapter}{\numberline {6}Sklepne ugotovitve}{63}

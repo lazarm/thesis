@@ -27,6 +27,7 @@
 \usepackage{latexsym}
 \usepackage{ifthen}
 \usepackage[mathlines]{lineno}
+\usepackage{titlesec}
 
 %\newtheorem{theorem}{Theorem}
 %\newtheorem{corollary}[theorem]{Corollary}
@@ -57,7 +58,7 @@
 \newcommand{\U}{\texttt{\_}}
 \newcommand{\clearemptydoublepage}{\newpage{\pagestyle{empty}\cleardoublepage}}
 \setcounter{tocdepth}{1}	      % globina kazala
-
+\setcounter{secnumdepth}{4}
 \def\length{\mathrm{len}}
 
 % konstrukti
@@ -117,6 +118,11 @@
   breaklines=true,
   showstringspaces=false
 }
+
+\titleformat{\paragraph}
+{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+\titlespacing*{\paragraph}
+{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
 
 \begin{document}
 \selectlanguage{slovene}
@@ -293,6 +299,36 @@ Pri nekaterih razredih knjižnice smo morali spremeniti kodo ali dodati kaj nove
 natancnost: cartesian, kaj pa leda, homogenous?
 povej kaj o traits, templated strukturami ($Point_2$) 
 $https://doc.cgal.org/4.5/Kernel_23/classKernel.html$
+
+\subsection{Številski tipi}
+http://doc.cgal.org/latest/Number\U types/index.html\# Chapter\U Number\U Types
+\subsection{Jedro knjižnice}
+Jedro sestavljajo nespremenljivi geometrijski primitivni objekti konstantne velikosti (točke, vektorji, daljice, trikotniki...) ter funkcije in predikati, ki jih lahko kličemo nad njimi. Poleg tega ponuja osnovne operacije, kot so računanje razdalje, afina transformacija in zaznava presečišč. 
+
+Eden od osnosvnih problemov, s katerimi se soočimo pri implementaciji geometrijskih algoritmov, je eksaktno računanje z realnimi števili. Zaokroževanje pri uporabi aritmetike nad števili, predstavljenimi s plavajočo vejico, lahko privede do nekonsistentnih odločitev in nepričakovanih napakah že pri nekaterih osnovnih geometrijskih algoritmih. CGAL ponuja izbiro številskih tipov in aritmetike. Pri uporabi eksaktne aritmetike dobimo točne rezultate, a po drugi strani se čas izvajanja in prostorska poraba algoritma povečata.
+
+\subsubsection{Predstavitev objektov jedra}
+Vsi objekti jedra so predloge s parametrom, ki omogoča uporabniku izbiro predstavitve objektov. Dve družini modelov predstavitve temeljita na kartezični predstavitvi točk, dve pa na homogenični predstavitvi. Pri kartezični predstavitvi je vsaka točka predstavljena s kartezičnimi koordinatami, ki privzamejo $d$-dimenzionalni afini Evklidski prostor s koordinatnim izhodiščem in $d$ pravokotnimi osmi. Točke (in vektorji) so potem predstavljeni z $d$-terko $(c_o, c_1,..., c_{d-1})$. Pri homogeni predstavitvi so točke predstavljene z $(d+1)$-terko $(h_o, h_1,...,h_d)$. V kartezično predstavitev jih lahko pretvorimo s formulo $c_i = h_i/h_d$, ena od možnih homogenih predstavitev točke s kartezičnimi koordinatami pa je $(c_0, c_1,..., c_{d-1}, 1)$ (ker homogene koordinate niso enolične). Prednost uporabe homogenih koordinat v CGAL-u je, da se z njimi izognemo uporabi deljenja. Vmesnih objektov v jedru je napisan tako, da hkrati omogoča uporabo kartezične in homogene predstavitve. 
+
+\paragraph{Številski tipi}
+Obe družini predstavitve objektov sta nadalje parametrizirani s številskim tipom za koordinate. CGAL ponuja dva tipa predloge za številske tipe. Eden se nanaša na algebrsko strukturo kolobar, kjer je možno seštevati, odštevati in množiti, drugi pa na polje, kjer je poleg omenjenih operacij možno tudi deliti. Vgrajeni tip $int$ tako spada v prvo skupino, ker operacija deljenja ni inverz množenja.
+leda, gmpz
+(You might use limited precision integer types like int or long, use double to present your integers (they have more bits in their mantissa than an int and overflow nicely), or an arbitrary precision integer type like the wrapper Gmpz for the GMP integers, leda\U integer, or MP\U Float. )
+
+\bigbreak
+Če za vhodne podatke uporabljamo kartezične koordinate, bo veliko geometrijskih računanj vsebovalo samo vhodne vrednosti. To velja med drugim za taka računanja, ki vrednotijo predikate, pri katerih ne gre za nič drugega kot računanje determinante. Primeri so računanje triangulacije in konveksne ovojnice. V takih primerih je dovolj uporabiti kartezično predstavitev točk, celo s kolobarskim številskim tipom. Če pa algoritmi obsegajo tudi računanja novih točk, prihaja do uporabe deljenja, zato moramo uporabiti kartezično predstavitev s številskim tipom za polja, recimo $double$,  ali homogeno predstavitev. $double$ sicer ni popolnoma natančen, a ga ponavadi uporabljajo tisti, ki jim je pomembna hitrost in se zadovoljijo tudi s približnimi rezultati.
+
+Algoritmi in podatkovne strukture v osnovni knjižnici CGAL so med drugim parametrizirani z razredom geometrijskih značilnosti, ki zajema objekte, nad katerimi algoritmi in strukture
+delujejo. Za večino slednjih je dovolj za to uporabiti jedro.
+
+\subsubsection{Geometrija in predikati jedra}
+CGAL razlikuje med točkami, vektorji in smermi. Točka je točka v ekvklidskem prostoru $E^d$, vektor je razlika dveh točk $p_1, p_2$ ter označuje smer in razdaljo od $p_1$ do $p_2$ v vektorskem prostoru $\RR^d$, smer pa je vektor, pri katerem pozabimo na njegovo dolžino. Gre za različne matematične koncepte, ki se pri afinih transformacijah ne obnašajo enako.
+Poleg tega so v CGAL-u na voljo premice, poltraki, daljice, ravnine, trikotniki, tetraedri,  krogi, krogle, pravokotniki in kvadri.
+
+Dve poljubni točki na premici definirata njeno orientacijo ter particijo ravnine na pozitivno in negativno stran. Poltrak je orientiran iz smeri njegovega končnega vozlišča, vozlišča daljic pa so urejena in definirajo isto orientacijo kot premica, na kateri daljice ležijo.
+
+\bigbreak
+Predikati so osrčje jedra, saj predstavljajo osnovno enoto  pri izgradnji algoritmov, zato je njihova pravilnost ključnega pomena pri pravilni implementaciji. Predikati v CGAL-u ne vračajo nujno $boolean$ vrednosti, ampak tudi vrednosti tipa $enum$. Na voljo so predikati za orientacijo množice točk, primerjavo točk glede na dano zaporedje, primerjavo razdalj in testi za vsebovanost točke v krogu. 
 
 \section{Kd drevesa}
 
