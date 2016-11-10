@@ -13,16 +13,17 @@
 \contentsline {paragraph}{\numberline {2.1.2.1.1}\IeC {\v S}tevilski tipi}{7}
 \contentsline {subsubsection}{\numberline {2.1.2.2}Geometrija in predikati jedra}{8}
 \contentsline {section}{\numberline {2.2}Kd drevesa}{9}
-\contentsline {subsection}{\numberline {2.2.1}Poizvedbe}{9}
+\contentsline {subsection}{\numberline {2.2.1}Poizvedbe}{11}
 \contentsline {section}{\numberline {2.3}SSSP drevesa}{11}
-\contentsline {section}{\numberline {2.4}Graf kvadratne mre\IeC {\v z}e}{11}
+\contentsline {section}{\numberline {2.4}Graf kvadratne mre\IeC {\v z}e}{12}
 \contentsline {section}{\numberline {2.5}Delaunayeva triangulacija}{12}
-\contentsline {subsection}{\numberline {2.5.1}Implementacija v CGAL}{13}
+\contentsline {subsection}{\numberline {2.5.1}Implementacija v CGAL-u}{13}
 \contentsline {subsubsection}{\numberline {2.5.1.1}Operacije nad strukturo}{14}
-\contentsline {subsubsection}{\numberline {2.5.1.2}Hierarhija triangulacij}{14}
+\contentsline {subsubsection}{\numberline {2.5.1.2}Hierarhija triangulacij}{15}
 \contentsline {section}{\numberline {2.6}Voronoijev diagram}{15}
-\contentsline {subsection}{\numberline {2.6.1}Voronoijev diagram v CGAL}{16}
-\contentsline {section}{\numberline {2.7}Obmo\IeC {\v c}na drevesa}{17}
+\contentsline {subsection}{\numberline {2.6.1}Voronoijev diagram v CGAL-u}{17}
+\contentsline {section}{\numberline {2.7}Obmo\IeC {\v c}na drevesa}{18}
+\contentsline {subsection}{\numberline {2.7.1}Obmo\IeC {\v c}na drevesa v CGAL-u}{19}
 \contentsline {chapter}{\numberline {3}Teorija}{21}
 \contentsline {section}{\numberline {3.1}SSSP drevo}{21}
 \contentsline {section}{\numberline {3.2}Drevo najbli\IeC {\v z}jega soseda}{28}
