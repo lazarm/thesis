@@ -10,10 +10,15 @@ S.~Cabello and P.~Giannopoulos.
 \newblock The complexity of separating points in the plane.
 \newblock {\em Algorithmica}, 74(2):643--663, 2016.
 
+\bibitem{CJ15}
+S.~Cabello and M.~Jej{\v c}i{\v c}.
+\newblock Shortest paths in intersection graphs of unit disks.
+\newblock {\em Comput. Geom.}, 48(4):360--367, 2015.
+
 \bibitem{Olivier}
 O.~Devillers.
 \newblock Improved incremental randomized delaunay triangulation.
-\newblock In {\em Proceedings of the 14th Annual ACM Symposium on Computation
+\newblock In {\em Proceedings of the 14th Annual ACM Symposium on Computational
   Geometry}, pages 106--115, 1998.
 
 \bibitem{FGG06}
