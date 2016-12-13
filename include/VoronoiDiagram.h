@@ -14,6 +14,7 @@
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
 #include <CGAL/Exact_predicates_exact_constructions_kernel.h>
 #include <CGAL/Delaunay_triangulation_2.h>
+#include <CGAL/Triangulation_hierarchy_2.h>
 #include <CGAL/Voronoi_diagram_2.h>
 #include <CGAL/Delaunay_triangulation_adaptation_traits_2.h>
 #include <CGAL/Delaunay_triangulation_adaptation_policies_2.h>
@@ -24,9 +25,12 @@
 typedef CGAL::Cartesian<double> EK;
 typedef CGAL::Lazy_exact_nt<CGAL::Gmpq>  NT;
 
-// typedefs for defining the adaptor
-//typedef CGAL::Exact_predicates_exact_constructions_kernel                  EK;
-typedef CGAL::Delaunay_triangulation_2<EK>                                    DT;
+typedef CGAL::Triangulation_vertex_base_2<EK>             Vbb;
+typedef CGAL::Triangulation_hierarchy_vertex_base_2<Vbb> Vb;
+typedef CGAL::Triangulation_face_base_2<EK>               Fb;
+typedef CGAL::Triangulation_data_structure_2<Vb, Fb>      Tds;
+typedef CGAL::Delaunay_triangulation_2<EK, Tds>                                    DT;
+typedef CGAL::Triangulation_hierarchy_2<DT>									DTHier;
 typedef CGAL::Delaunay_triangulation_adaptation_traits_2<DT>                 AT;
 typedef CGAL::Delaunay_triangulation_caching_degeneracy_removal_policy_2<DT> AP;
 typedef CGAL::Voronoi_diagram_2<DT, AT, AP>                                    VD;
@@ -44,11 +48,10 @@ typedef VD::Face_handle               Face_handle;
 typedef VD::Halfedge_handle           Halfedge_handle;
 typedef VD::Ccb_halfedge_circulator   Ccb_halfedge_circulator;
 typedef VD::Face_iterator             Face_iterator;
-typedef DT::Vertex_handle             Delaunay_vertex_handle;
-typedef DT::Locate_type				  Locate_type;
-typedef DT::Face_handle				  Delaunay_face_handle;
-typedef DT::Vertex_circulator         Vertex_circulator;
-
+typedef DT::Vertex_handle             DH_vertex_handle;
+typedef DT::Locate_type				  DH_Locate_type;
+typedef DT::Face_handle				  DH_face_handle;
+typedef DT::Vertex_circulator         DH_vertex_circulator;
 
 
 using namespace std;
@@ -59,6 +62,7 @@ public:
 	~VoronoiDiagram() {};
 	template <class Iterator>
 	VoronoiDiagram(Iterator a, Iterator b) : VD(a, b) {}
+	std::tuple<bool, Point_2*> query(Point_2 q, DH_face_handle f);
 	std::tuple<bool, Point_2*> query(Point_2 q);
 	size_t size() { return number_of_faces(); }
 	Face_handle insert(const Delaunay_vertex_handle& t);
@@ -68,11 +72,38 @@ public:
 
 };
 
-
 tuple<bool, Point_2*> VoronoiDiagram::query(Point_2 q) {
-	
+
 	Locate_result lr = locate(q);
-	Delaunay_vertex_handle df;
+	DH_vertex_handle df;
+	if (Vertex_handle* v = boost::get<Vertex_handle>(&lr)) {
+		df = (*v)->site(0);
+		cout << "vertex" << endl;
+	}
+	else if (Face_handle* f = boost::get<Face_handle>(&lr)) {
+		df = (*f)->dual();
+	}
+	else if (Halfedge_handle* e = boost::get<Halfedge_handle>(&lr)) {
+		df = (*e)->up();
+		cout << "edge" << endl;
+	}
+	Point_2 faceSitePoint = df->point();
+	Point_2 *fcp = &df->point();
+	NT dist = CGAL::squared_distance(*fcp, q);
+
+	if (dist <= 1) {
+		return std::tuple<bool, Point_2*> {true, fcp};
+	}
+	else {
+		return std::tuple<bool, Point_2*> {false, fcp};
+	}
+}
+
+
+tuple<bool, Point_2*> VoronoiDiagram::query(Point_2 q, DH_face_handle fh) {
+	
+	Locate_result lr = locate(q, fh);
+	DH_vertex_handle df;
 	if (Vertex_handle* v = boost::get<Vertex_handle>(&lr)) {
 		df = (*v)->site(0);
 	}
@@ -94,7 +125,7 @@ tuple<bool, Point_2*> VoronoiDiagram::query(Point_2 q) {
 	}
 }
 
-inline Face_handle VoronoiDiagram::insert(const Delaunay_vertex_handle& t) {
+inline Face_handle VoronoiDiagram::insert(const DH_vertex_handle& t) {
 
     return VD::insert(t->point(), Has_site_inserter());
 }

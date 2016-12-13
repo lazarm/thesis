@@ -18,32 +18,26 @@ vector<Point_2> pointGenerator(int e, int holes, bool narrow, int size, bool con
 	vector<Point_2> points;
 	points.insert(points.end(), exs.begin(), exs.end());
 	size_t k = points.size();
-	//double x1 = pow(2, e - 1);
-	//double y1 = pow(2, e - 1);
-	//cout << x1 << ", " << y1 << endl;
-	//points.push_back(Point_2(x1, y1));
-	//k++;
 	while (k < size) {
 		double x = pow(2, e + 2) * ((double)rand() / (RAND_MAX));
 		double y = pow(2, e) * (double)rand() / (RAND_MAX);
 		Point_2 p(x, y);
-		if (connected && points.size() > 0) {
+		/*if (connected && points.size() > 0) {
 			int c = 0;
 			bool skip = false;
 			for (auto p2 : points) {
 				if (CGAL::squared_distance(p, p2) <= 1) {
 					c++;
-					if (c > 5 && points.size() < 999)
+					if (c > 5) {
 						skip = true;
-					else if (c > 5 && points.size() >= 999)
-						skip = true;
-					if (skip) break;
+						break;
+					}
 				}
 			}
 			if (c == 0 || skip) {
 				continue;
 			}
-		}
+		}*/
 		if (holes == 0) {
 
 			if (!connected || points.size() < 1) {
@@ -56,13 +50,11 @@ vector<Point_2> pointGenerator(int e, int holes, bool narrow, int size, bool con
 				for (auto p2 : points) {
 					if (CGAL::squared_distance(p, p2) <= 1) {
 						c++;
-						if (points.size() < 500 && c > 5) { break; }
-						else if (points.size() >= 500 && c > 5) {
-							//cout << "too much" << endl;
-							break;
-						}
+						if (c > 5) { break; }
 					}
 				}
+				// the condition below was probably meant to be c < 5 or points.size > 5 (ie encourage filling domain while there are few points and after a while, 
+				// when this becomes harder and harder, drop the max number of neighbours condition)
 				if (c > 0 && ((points.size() < 500 && c <= 5) || (points.size() >= 500 && c <= 5))) {
 					points.push_back(p);
 					k++;

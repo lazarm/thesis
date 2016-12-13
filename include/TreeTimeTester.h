@@ -37,7 +37,7 @@ void TreeTimeTester::testSSPT()
 	Segment_2 st(Point_2(2, 0.3), Point_2(2, 0.7));
 	for (int k = 0; k < constructionRepeats; ++k) {
 		cost.reset(); cost.start();
-		SSSPTree tree(points.begin(), points.end());
+		SSSPTree tree(points.begin(), points.end(), st);
 		cost.stop();
 		cout << "SSSP tree construction finished, dt size is " << tree.getDT().number_of_vertices() << ", time: " << cost.time() << endl;
 		totalConstructionTime += cost.time();
@@ -47,16 +47,18 @@ void TreeTimeTester::testSSPT()
 			int idx = ceil(rand()*pointsLength / RAND_MAX);
 			Point_2 p = points[idx];
 			cost.start();
-			tree.createTreeFromRoot(p, st);
+			tree.createTreeFromRoot(p);
 			cost.stop();
 
 			tree.resetSSSPTreeDTVertices();
 			tree.clearSets();
 		}
+		cout << "algorithm repeats: " << algorithmRepeats << endl;
+		cout << "time in " << k << " iteration: " << cost.time() << endl;
 		totalQueryTime += (cost.time() / double(algorithmRepeats));
 	}
 	cout << "Average time (5 iterations) for construction of DT: " << totalConstructionTime / double(constructionRepeats) << endl;
-	cout << "Average time (5 iterations) for running 50 iterations of bfs algortithm on DT: " << totalQueryTime / double(algorithmRepeats) << endl;
+	cout << "Average time (5 iterations) for running 50 iterations of bfs algortithm on DT: " << totalQueryTime / double(constructionRepeats) << endl;
 }
 
 void TreeTimeTester::testBfs()
@@ -84,11 +86,11 @@ void TreeTimeTester::testBfs()
 			cost.stop();
 			resetGraphNodes(nodes);
 		}
-		totalQueryTime += cost.time() / 50.0;
+		totalQueryTime += cost.time() / algorithmRepeats;
 		resetGraph(nodes);
 	}
-	cout << "Average time (5 iterations) for construction of graph G: " << totalConstructionTime / 5.0 << endl;
-	cout << "Average time (5 iterations) for running 50 iterations of bfs algortithm on G: " << totalQueryTime / 5.0 << endl;
+	cout << "Average time (5 iterations) for construction of graph G: " << totalConstructionTime / constructionRepeats << endl;
+	cout << "Average time (5 iterations) for running 50 iterations of bfs algortithm on G: " << totalQueryTime / constructionRepeats << endl;
 }
 
 void TreeTimeTester::testBfsGrid() {

@@ -269,10 +269,10 @@ void testSepGeneral(vector<Point_2> points, Segment_2 st) {
 		dt = tree.getDT();
 		// get dt points, exclude from time measuring
 		for (auto g : nodes) {
-			Locate_type loc;
+			DH_Locate_type loc;
 			int li;
-			Delaunay_face_handle h = dt.locate(g->v, loc, li);
-			Delaunay_vertex_handle rVertex;
+			DH_face_handle h = dt.locate(g->v, loc, li);
+			DH_vertex_handle rVertex;
 			if (loc == DT::VERTEX) {
 				rVertex = h->vertex(li);
 				dtPoints.push_back(rVertex->point());
