@@ -97,7 +97,7 @@ void SSSPTree::categorize(int i, Point_2 *p)
 	}
 }
 
-DH_face_handle getFaceHint(DH_vertex_handle q, int i, DT dt_nearestNeighbour) {
+DH_face_handle getFaceHint(DH_vertex_handle q, int i, DTWithFaceMap dt_nearestNeighbour) {
 	Point_2* orp = q->point().getDist() == i ? q->point().getParent().get() : &(q->point());
 	return dt_nearestNeighbour.getFaceFromPoint(orp);
 }
@@ -108,6 +108,11 @@ void SSSPTree::take(shared_ptr<Point_2> par2, int i, DH_vertex_handle p) {
 	p->point().setNr(i == 0 ? 0 : updateNr(par2->getNr(), p->point(), *par2));
 	p->point().setParent(par2);
 	categorize(i, &p->point());
+	/*cout << "p: " << p->point() << endl;
+	cout << "p dist: " << p->point().getDist() << endl;
+	if (i > 0) {
+		cout << "p par: " << *(p->point().getParent().get()) << endl;
+	}*/
 }
 
 /*
@@ -148,9 +153,9 @@ void SSSPTree::createTreeFromRoot(Point_2 r)
 	while (wi_1_delaunayVertices.size() > 0) {
 		l0.push_back(vector<Point_2>{}); l1.push_back(vector<Point_2>{});
 		r0.push_back(vector<Point_2>{}); r1.push_back(vector<Point_2>{});
-		DT dt_nearestNeighbour;
+		DTWithFaceMap dt_nearestNeighbour;
 		// built VD is stored as DT on a set of dt vertices, which represents a subset of DT of all points
-		dt_nearestNeighbour.insert(wi_1_delaunayVertices.begin(), wi_1_delaunayVertices.end(), 1);
+		dt_nearestNeighbour.insert(wi_1_delaunayVertices.begin(), wi_1_delaunayVertices.end());
 		deque<DH_vertex_handle> queue(wi_1_delaunayVertices.begin(), wi_1_delaunayVertices.end());
 		vector<DH_vertex_handle> wi_delaunayVertices;
 		while (queue.size() > 0) {

@@ -55,91 +55,33 @@ typedef DT::Vertex_circulator         DH_vertex_circulator;
 
 
 using namespace std;
-class VoronoiDiagram: public VD
-{	
+class DTWithFaceMap: public DT
+{
+private:
+	unordered_map < const Point_2*, Face_handle> pointsToFaceHandlers;
 public:
-	VoronoiDiagram() {};
-	~VoronoiDiagram() {};
+	DTWithFaceMap() {};
+	~DTWithFaceMap() {};
+	
 	template <class Iterator>
-	VoronoiDiagram(Iterator a, Iterator b) : VD(a, b) {}
-	std::tuple<bool, Point_2*> query(Point_2 q, DH_face_handle f);
-	std::tuple<bool, Point_2*> query(Point_2 q);
-	size_t size() { return number_of_faces(); }
-	Face_handle insert(const Delaunay_vertex_handle& t);
-	Face_handle insert(const Site_2& t);
-	template<class Iterator>
-	size_type insert(Iterator first, Iterator beyond);
+	DTWithFaceMap(Iterator a, Iterator b) : DT(a, b) {}
+	Face_handle getFaceFromPoint(const Point_2* p) { return pointsToFaceHandlers[p]; }
+	
+	template < class Iterator >
+	ptrdiff_t insert(Iterator first, Iterator last) {
+		size_type n = this->number_of_vertices();
+		vector<Point_2> points;
+		for (Iterator it = first; it != last; ++it) {
+			points.push_back((*it)->point());
+		}
+		spatial_sort(points.begin(), points.end(), geom_traits());
+		Face_handle f;
+		for (typename vector<Point_2>::const_iterator p = points.begin(), end = points.end();
+			p != end; ++p) {
+			f = DT::insert(*p, f)->face();
+			pointsToFaceHandlers[&(*p)] = f;
+		}
 
+		return this->number_of_vertices() - n;
+	}
 };
-
-tuple<bool, Point_2*> VoronoiDiagram::query(Point_2 q) {
-
-	Locate_result lr = locate(q);
-	DH_vertex_handle df;
-	if (Vertex_handle* v = boost::get<Vertex_handle>(&lr)) {
-		df = (*v)->site(0);
-		cout << "vertex" << endl;
-	}
-	else if (Face_handle* f = boost::get<Face_handle>(&lr)) {
-		df = (*f)->dual();
-	}
-	else if (Halfedge_handle* e = boost::get<Halfedge_handle>(&lr)) {
-		df = (*e)->up();
-		cout << "edge" << endl;
-	}
-	Point_2 faceSitePoint = df->point();
-	Point_2 *fcp = &df->point();
-	NT dist = CGAL::squared_distance(*fcp, q);
-
-	if (dist <= 1) {
-		return std::tuple<bool, Point_2*> {true, fcp};
-	}
-	else {
-		return std::tuple<bool, Point_2*> {false, fcp};
-	}
-}
-
-
-tuple<bool, Point_2*> VoronoiDiagram::query(Point_2 q, DH_face_handle fh) {
-	
-	Locate_result lr = locate(q, fh);
-	DH_vertex_handle df;
-	if (Vertex_handle* v = boost::get<Vertex_handle>(&lr)) {
-		df = (*v)->site(0);
-	}
-	else if (Face_handle* f = boost::get<Face_handle>(&lr)) {
-		df = (*f)->dual();
-	}
-	else if (Halfedge_handle* e = boost::get<Halfedge_handle>(&lr)) {
-		df = (*e)->up();
-	}
-	Point_2 faceSitePoint = df->point();
-	Point_2 *fcp = &df->point();
-	NT dist = CGAL::squared_distance(*fcp, q);
-	
-	if (dist <= 1) {
-		return std::tuple<bool, Point_2*> {true, fcp};
-	}
-	else {
-		return std::tuple<bool, Point_2*> {false, fcp};
-	}
-}
-
-inline Face_handle VoronoiDiagram::insert(const DH_vertex_handle& t) {
-
-    return VD::insert(t->point(), Has_site_inserter());
-}
-
-inline Face_handle VoronoiDiagram::insert(const Site_2& t) {
-
-    return VD::insert(t, Has_site_inserter());
-}
-
-template<class Iterator>
-inline VD::size_type VoronoiDiagram::insert(Iterator first, Iterator beyond) {
-	VD::size_type counter = 0;
-	for (Iterator it = first; it != beyond; ++it, ++counter) {
-		insert(*it);
-	}
-	return counter;
-}
