@@ -70,16 +70,11 @@ public:
 	template < class Iterator >
 	ptrdiff_t insert(Iterator first, Iterator last) {
 		size_type n = this->number_of_vertices();
-		vector<Point_2> points;
-		for (Iterator it = first; it != last; ++it) {
-			points.push_back((*it)->point());
-		}
-		spatial_sort(points.begin(), points.end(), geom_traits());
+		
 		Face_handle f;
-		for (typename vector<Point_2>::const_iterator p = points.begin(), end = points.end();
-			p != end; ++p) {
-			f = DT::insert(*p, f)->face();
-			pointsToFaceHandlers[&(*p)] = f;
+		for (Iterator p = first; p != last; ++p) {
+			f = DT::insert((*p)->point(), f)->face();
+			pointsToFaceHandlers[&((*p)->point())] = f;
 		}
 
 		return this->number_of_vertices() - n;
