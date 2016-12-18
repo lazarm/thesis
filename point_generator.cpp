@@ -131,5 +131,5 @@ int main(int argc, char* argv[]) {
 	bool buildNarrow = narrow == 1;
 
 	vector<Point_2> gend = pointGenerator(exp, holes, buildNarrow, numPoints, false, vector<Point_2>{});
-	writeToFile(gend, pow(2, exp+2), 4, false);
+	writeToFile(gend, pow(2, exp+2), holes, buildNarrow);
 }
