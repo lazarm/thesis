@@ -33,24 +33,25 @@
 \contentsline {subsection}{\numberline {3.2.1}Splo\IeC {\v s}ni algoritem za lo\IeC {\v c}evanje z diski}{32}
 \contentsline {subsubsection}{\numberline {3.2.1.1}Dualnost in dualni prostor}{36}
 \contentsline {subsection}{\numberline {3.2.2}Hitrej\IeC {\v s}i algoritem}{37}
-\contentsline {chapter}{\numberline {4}Implementacija algoritma}{47}
-\contentsline {section}{\numberline {4.1}SSSP drevo}{47}
-\contentsline {subsection}{\numberline {4.1.1}Dodatki v razredu Point\texttt {\_}2}{47}
-\contentsline {subsection}{\numberline {4.1.2}Voronoijev diagram za iskanje najbli\IeC {\v z}jega soseda}{48}
-\contentsline {subsection}{\numberline {4.1.3}Izgradnja drevesa}{49}
-\contentsline {section}{\numberline {4.2}Drevo najbli\IeC {\v z}jega soseda}{51}
-\contentsline {subsection}{\numberline {4.2.1}Kd drevo}{52}
-\contentsline {section}{\numberline {4.3}Implementacija optimizacijskega problema $\Phi _\sigma (A,B)$}{53}
-\contentsline {subsection}{\numberline {4.3.1}DualPoint - implementacija dualne to\IeC {\v c}ke}{53}
-\contentsline {subsection}{\numberline {4.3.2}Obmo\IeC {\v c}no drevo}{53}
-\contentsline {subsubsection}{\numberline {4.3.2.1}Poizvedbe v obmo\IeC {\v c}nem drevesu}{54}
-\contentsline {section}{\numberline {4.4}Minimalno lo\IeC {\v c}evanje}{58}
-\contentsline {subsection}{\numberline {4.4.1}opt1}{58}
-\contentsline {subsection}{\numberline {4.4.2}opt2}{58}
-\contentsline {subsection}{\numberline {4.4.3}Kreiranje cikla}{59}
-\contentsline {section}{\numberline {4.5}Obravnava posebnih vhodnih primerov}{60}
-\contentsline {chapter}{\numberline {5}Eksperimenti in rezultati}{61}
-\contentsline {section}{\numberline {5.1}Generator vhodnih podatkov}{61}
-\contentsline {section}{\numberline {5.2}Drevo najkraj\IeC {\v s}ih poti}{63}
-\contentsline {section}{\numberline {5.3}Minimalno lo\IeC {\v c}evanje}{63}
-\contentsline {chapter}{\numberline {6}Sklepne ugotovitve}{69}
+\contentsline {chapter}{\numberline {4}Implementacija algoritma}{49}
+\contentsline {section}{\numberline {4.1}SSSP drevo}{49}
+\contentsline {subsection}{\numberline {4.1.1}Podatkovna struktura za to\IeC {\v c}ko}{49}
+\contentsline {subsection}{\numberline {4.1.2}Podatkovna struktura za iskanje najbli\IeC {\v z}jega soseda}{50}
+\contentsline {subsection}{\numberline {4.1.3}Izgradnja drevesa}{53}
+\contentsline {section}{\numberline {4.2}Drevo najbli\IeC {\v z}jega soseda}{55}
+\contentsline {subsection}{\numberline {4.2.1}Kd drevo}{56}
+\contentsline {section}{\numberline {4.3}Implementacija optimizacijskega problema $\Phi _\sigma (A,B)$}{57}
+\contentsline {subsection}{\numberline {4.3.1}DualPoint - implementacija dualne to\IeC {\v c}ke}{57}
+\contentsline {subsection}{\numberline {4.3.2}Obmo\IeC {\v c}no drevo}{57}
+\contentsline {subsubsection}{\numberline {4.3.2.1}Poizvedbe v obmo\IeC {\v c}nem drevesu}{58}
+\contentsline {section}{\numberline {4.4}Minimalno lo\IeC {\v c}evanje}{62}
+\contentsline {subsection}{\numberline {4.4.1}opt1}{62}
+\contentsline {subsection}{\numberline {4.4.2}opt2}{63}
+\contentsline {subsection}{\numberline {4.4.3}Kreiranje cikla}{64}
+\contentsline {section}{\numberline {4.5}Obravnava posebnih vhodnih primerov}{64}
+\contentsline {chapter}{\numberline {5}Eksperimenti in rezultati}{65}
+\contentsline {section}{\numberline {5.1}Generator vhodnih podatkov}{65}
+\contentsline {section}{\numberline {5.2}Drevo najkraj\IeC {\v s}ih poti}{67}
+\contentsline {section}{\numberline {5.3}Minimalno lo\IeC {\v c}evanje}{68}
+\contentsline {subsection}{\numberline {5.3.1}Analiza}{68}
+\contentsline {chapter}{\numberline {6}Sklepne ugotovitve}{75}

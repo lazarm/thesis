@@ -15,6 +15,12 @@ S.~Cabello and M.~Jej{\v c}i{\v c}.
 \newblock Shortest paths in intersection graphs of unit disks.
 \newblock {\em Comput. Geom.}, 48(4):360--367, 2015.
 
+\bibitem{cgal:dd-ss-15a}
+C.~Delage and O.~Devillers.
+\newblock Spatial sorting.
+\newblock In {\em {CGAL} User and Reference Manual}. {CGAL Editorial Board},
+  {4.6} edition, 2015.
+
 \bibitem{Olivier}
 O.~Devillers.
 \newblock Improved incremental randomized delaunay triangulation.
@@ -26,6 +32,12 @@ Q.~Fang, J.~Gao, and L.~J. Guibas.
 \newblock Locating and bypassing routing holes in sensor networks.
 \newblock In {\em Proc. Mobile Networks and Applications}, volume~11, pages
   187--200, 2006.
+
+\bibitem{cgal:k-vda2-15a}
+M.~Karavelas.
+\newblock {2D} voronoi diagram adaptor.
+\newblock In {\em {CGAL} User and Reference Manual}. {CGAL Editorial Board},
+  {4.6} edition, 2015.
 
 \bibitem{WGM06}
 Y.~Wang, J.~Gao, and J.~S. Mitchell.
