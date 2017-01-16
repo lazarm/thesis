@@ -42,15 +42,16 @@
 \newlabel{kd-primer}{{2.1}{10}}
 \citation{bkos-08}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.2.1}Poizvedbe}{11}}
-\@writefile{toc}{\contentsline {section}{\numberline {2.3}SSSP drevesa}{11}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2.2}Kd drevesa v CGAL-u}{11}}
+\@writefile{toc}{\contentsline {section}{\numberline {2.3}Drevesa najkraj\IeC {\v s}ih poti z eno izvorno to\IeC {\v c}ko (SSSP)}{11}}
 \@writefile{toc}{\contentsline {section}{\numberline {2.4}Graf kvadratne mre\IeC {\v z}e}{12}}
 \newlabel{grid-chapter}{{2.4}{12}}
 \@writefile{toc}{\contentsline {section}{\numberline {2.5}Delaunayeva triangulacija}{12}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.5.1}Implementacija v CGAL-u}{13}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.5.1}Delaunayeva triangulacija v CGAL-u}{13}}
 \citation{Olivier}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {2.5.1.1}Operacije nad strukturo}{14}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.5.1.2}Hierarhija triangulacij}{14}}
 \citation{cgal:k-vda2-15a}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.5.1.2}Hierarhija triangulacij}{15}}
 \@writefile{toc}{\contentsline {section}{\numberline {2.6}Voronoijev diagram}{15}}
 \@writefile{lof}{\contentsline {figure}{\numberline {2.2}{\ignorespaces Evklidski Voronoijev diagram brez degeneracij, ozna\IeC {\v c}en z rde\IeC {\v c}imi odebeljenimi povezavami. Voronoijeva sredi\IeC {\v s}\IeC {\v c}a, obarvana z modro barvo, predstavljajo hkrati tudi vozli\IeC {\v s}\IeC {\v c}a v Delaunayevi triangulaciji, dualni Voronoijevemu diagramu, in je ozna\IeC {\v c}ena s tanj\IeC {\v s}imi \IeC {\v c}rnimi povezavami.\relax }}{16}}
 \newlabel{vd}{{2.2}{16}}
@@ -62,8 +63,8 @@
 \@writefile{toc}{\contentsline {chapter}{\numberline {3}Teorija}{23}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {section}{\numberline {3.1}SSSP drevo}{23}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1.1}Eksplicitni BFS}{23}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.1}Drevo SSSP}{23}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1.1}Eksplicitna uporaba preiskovanja v \IeC {\v s}irino (BFS)}{23}}
 \@writefile{lof}{\contentsline {figure}{\numberline {3.1}{\ignorespaces Graf $G(P)$, zgrajen nad mno\IeC {\v z}ico $P$ v sliki ~\ref  {separation}.\relax }}{24}}
 \newlabel{gdisks}{{3.1}{24}}
 \@writefile{lof}{\contentsline {figure}{\numberline {3.2}{\ignorespaces Minimalna podmno\IeC {\v z}ica to\IeC {\v c}k iz slike ~\ref  {separation}, ki lo\IeC {\v c}uje $s$ in $t$, med seboj povezanih z modrimi povezavami. Podmno\IeC {\v z}ica je vedno zaprta pot.\relax }}{24}}
@@ -121,63 +122,63 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.1.3}Izgradnja drevesa}{53}}
 \@writefile{lof}{\contentsline {figure}{\numberline {4.1}{\ignorespaces Drevo najbli\IeC {\v z}jega soseda, ki hrani 6 to\IeC {\v c}k, prikazano v drevesni strukturi. Vrednosti vozli\IeC {\v s}\IeC {\v c} ponazarjajo \IeC {\v s}tevilo to\IeC {\v c}k, shranjenih v objektu, ki omogo\IeC {\v c}a poizvedbe najbli\IeC {\v z}jega soseda, pod vozli\IeC {\v s}\IeC {\v c}i pa so nanizane konkretne to\IeC {\v c}ke.\relax }}{55}}
 \newlabel{nntree}{{4.1}{55}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.2}{\ignorespaces Drevo najbli\IeC {\v z}jega soseda, ki hrani 6 to\IeC {\v c}k, predstavljeno v obliki seznama. Za vsako celico so prikazani indeksi to\IeC {\v c}k, ki jih hrani objekt v njej.\relax }}{55}}
-\newlabel{nnarray}{{4.2}{55}}
 \@writefile{toc}{\contentsline {section}{\numberline {4.2}Drevo najbli\IeC {\v z}jega soseda}{55}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.2}{\ignorespaces Drevo najbli\IeC {\v z}jega soseda, ki hrani 6 to\IeC {\v c}k, predstavljeno v obliki seznama. Za vsako celico so prikazani indeksi to\IeC {\v c}k, ki jih hrani objekt v njej.\relax }}{56}}
+\newlabel{nnarray}{{4.2}{56}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.2.1}Kd drevo}{56}}
 \@writefile{toc}{\contentsline {section}{\numberline {4.3}Implementacija optimizacijskega problema $\Phi _\sigma (A,B)$}{57}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.3.1}DualPoint - implementacija dualne to\IeC {\v c}ke}{57}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.2}Obmo\IeC {\v c}no drevo}{57}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.2}Obmo\IeC {\v c}no drevo}{58}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.2.1}Poizvedbe v obmo\IeC {\v c}nem drevesu}{58}}
 \@writefile{lol}{\contentsline {lstlisting}{KdTreeQuery.h}{59}}
-\@writefile{lol}{\contentsline {lstlisting}{NNquery.h}{60}}
+\@writefile{lol}{\contentsline {lstlisting}{NNquery.h}{61}}
 \@writefile{lof}{\contentsline {figure}{\numberline {4.3}{\ignorespaces Dodaj primer mno\IeC {\v z}ic L0, L1, R0, R1. \relax }}{62}}
 \newlabel{primer-sep}{{4.3}{62}}
 \@writefile{toc}{\contentsline {section}{\numberline {4.4}Minimalno lo\IeC {\v c}evanje}{62}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.4.1}opt1}{62}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4.1}opt1}{63}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.4.2}opt2}{63}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.4.3}Kreiranje cikla}{64}}
-\@writefile{toc}{\contentsline {section}{\numberline {4.5}Obravnava posebnih vhodnih primerov}{64}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {5}Eksperimenti in rezultati}{65}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.5}Obravnava posebnih vhodnih primerov}{65}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {5}Eksperimenti in rezultati}{67}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{ch3}{{5}{65}}
-\@writefile{toc}{\contentsline {section}{\numberline {5.1}Generator vhodnih podatkov}{65}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5.1}{\ignorespaces . \relax }}{65}}
-\newlabel{generation1}{{5.1}{65}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5.2}{\ignorespaces . \relax }}{66}}
-\newlabel{generation2}{{5.2}{66}}
-\newlabel{cpu_compare}{{\caption@xref {cpu_compare}{ on input line 1255}}{67}}
-\@writefile{lot}{\contentsline {table}{\numberline {5.1}{\ignorespaces \IeC {\v C}asi konstrukcij Voronoijevega diagrama in kd drevesa v sekundah. Vsaka konstrukcija se je izvedla desetkrat, na podlagi tega pa se je izra\IeC {\v c}unal povpre\IeC {\v c}ni \IeC {\v c}as izvedbe.\relax }}{67}}
-\newlabel{ram_compare}{{\caption@xref {ram_compare}{ on input line 1267}}{67}}
-\@writefile{lot}{\contentsline {table}{\numberline {5.2}{\ignorespaces Velikost prostora v megabajtih, ki ga zasede en objekt Voronoijevega diagrama ali kd drevesa.\relax }}{67}}
-\@writefile{toc}{\contentsline {section}{\numberline {5.2}Drevo najkraj\IeC {\v s}ih poti}{67}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5.3}{\ignorespaces . \relax }}{68}}
-\newlabel{sep-64-1-1000-narrow}{{5.3}{68}}
-\@writefile{toc}{\contentsline {section}{\numberline {5.3}Minimalno lo\IeC {\v c}evanje}{68}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.1}Analiza}{68}}
-\@writefile{lot}{\contentsline {table}{\numberline {5.3}{\ignorespaces Times for shortest paths in Pravokotniks without luknje.\relax }}{69}}
-\newlabel{table1}{{5.3}{69}}
-\@writefile{lot}{\contentsline {table}{\numberline {5.4}{\ignorespaces Times for shortest paths in Pravokotniks with a small hole.\relax }}{70}}
-\newlabel{table2}{{5.4}{70}}
-\@writefile{lot}{\contentsline {table}{\numberline {5.5}{\ignorespaces \IeC {\v C}asi za najkraj\IeC {\v s}e poti v pravokotnikih s 4 manj\IeC {\v s}imi luknjami.\relax }}{71}}
-\newlabel{table4}{{5.5}{71}}
-\@writefile{lot}{\contentsline {table}{\numberline {5.6}{\ignorespaces \IeC {\v C}asi za minimalno lo\IeC {\v c}evanje s 4 ve\IeC {\v c}jimi luknjami.\relax }}{71}}
-\newlabel{table5}{{5.6}{71}}
-\@writefile{lot}{\contentsline {table}{\numberline {5.7}{\ignorespaces \IeC {\v C}asi za minimalno lo\IeC {\v c}evanje z eno manj\IeC {\v s}o luknjo.\relax }}{72}}
-\newlabel{table6}{{5.7}{72}}
-\@writefile{lot}{\contentsline {table}{\numberline {5.8}{\ignorespaces \IeC {\v C}asi za minimalno lo\IeC {\v c}evanje s 4 luknjami.\relax }}{72}}
-\newlabel{table7}{{5.8}{72}}
-\@writefile{lot}{\contentsline {table}{\numberline {5.9}{\ignorespaces \IeC {\v C}asi za minimalno lo\IeC {\v c}evanje s 4 luknjami.\relax }}{72}}
-\newlabel{table-increase}{{5.9}{72}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5.4}{\ignorespaces . \relax }}{73}}
-\newlabel{sep-stuffed}{{5.4}{73}}
+\newlabel{ch3}{{5}{67}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.1}Generator vhodnih podatkov}{67}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5.1}{\ignorespaces . \relax }}{67}}
+\newlabel{generation1}{{5.1}{67}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5.2}{\ignorespaces . \relax }}{68}}
+\newlabel{generation2}{{5.2}{68}}
+\newlabel{cpu_compare}{{\caption@xref {cpu_compare}{ on input line 1262}}{69}}
+\@writefile{lot}{\contentsline {table}{\numberline {5.1}{\ignorespaces \IeC {\v C}asi konstrukcij Voronoijevega diagrama in kd drevesa v sekundah. Vsaka konstrukcija se je izvedla desetkrat, na podlagi tega pa se je izra\IeC {\v c}unal povpre\IeC {\v c}ni \IeC {\v c}as izvedbe.\relax }}{69}}
+\newlabel{ram_compare}{{\caption@xref {ram_compare}{ on input line 1274}}{69}}
+\@writefile{lot}{\contentsline {table}{\numberline {5.2}{\ignorespaces Velikost prostora v megabajtih, ki ga zasede en objekt Voronoijevega diagrama ali kd drevesa.\relax }}{69}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.2}Drevo najkraj\IeC {\v s}ih poti}{69}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5.3}{\ignorespaces . \relax }}{70}}
+\newlabel{sep-64-1-1000-narrow}{{5.3}{70}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.3}Minimalno lo\IeC {\v c}evanje}{70}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.1}Analiza}{70}}
+\@writefile{lot}{\contentsline {table}{\numberline {5.3}{\ignorespaces Times for shortest paths in Pravokotniks without luknje.\relax }}{71}}
+\newlabel{table1}{{5.3}{71}}
+\@writefile{lot}{\contentsline {table}{\numberline {5.4}{\ignorespaces Times for shortest paths in Pravokotniks with a small hole.\relax }}{72}}
+\newlabel{table2}{{5.4}{72}}
+\@writefile{lot}{\contentsline {table}{\numberline {5.5}{\ignorespaces \IeC {\v C}asi za najkraj\IeC {\v s}e poti v pravokotnikih s 4 manj\IeC {\v s}imi luknjami.\relax }}{73}}
+\newlabel{table4}{{5.5}{73}}
+\@writefile{lot}{\contentsline {table}{\numberline {5.6}{\ignorespaces \IeC {\v C}asi za minimalno lo\IeC {\v c}evanje s 4 ve\IeC {\v c}jimi luknjami.\relax }}{73}}
+\newlabel{table5}{{5.6}{73}}
+\@writefile{lot}{\contentsline {table}{\numberline {5.7}{\ignorespaces \IeC {\v C}asi za minimalno lo\IeC {\v c}evanje z eno manj\IeC {\v s}o luknjo.\relax }}{74}}
+\newlabel{table6}{{5.7}{74}}
+\@writefile{lot}{\contentsline {table}{\numberline {5.8}{\ignorespaces \IeC {\v C}asi za minimalno lo\IeC {\v c}evanje s 4 luknjami.\relax }}{74}}
+\newlabel{table7}{{5.8}{74}}
+\@writefile{lot}{\contentsline {table}{\numberline {5.9}{\ignorespaces \IeC {\v C}asi za minimalno lo\IeC {\v c}evanje s 4 luknjami.\relax }}{74}}
+\newlabel{table-increase}{{5.9}{74}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5.4}{\ignorespaces . \relax }}{75}}
+\newlabel{sep-stuffed}{{5.4}{75}}
 \bibstyle{abbrv}
 \bibdata{biblia}
-\@writefile{toc}{\contentsline {chapter}{\numberline {6}Sklepne ugotovitve}{75}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {6}Sklepne ugotovitve}{77}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{ch4}{{6}{75}}
+\newlabel{ch4}{{6}{77}}
 \bibcite{bkos-08}{1}
 \bibcite{CG16}{2}
 \bibcite{CJ15}{3}
