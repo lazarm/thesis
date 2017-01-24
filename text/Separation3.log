@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2016.10.21)  19 JAN 2017 20:28
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2016.10.21)  24 JAN 2017 21:39
 entering extended mode
 **./Separation3.tex
 (Separation3.tex
@@ -467,7 +467,7 @@ File: lstlang1.sty 2015/06/04 1.6 listings language file
 File: lstmisc.sty 2015/06/04 1.6 (Carsten Heinz)
 ) (Separation3.aux
 
-LaTeX Warning: Label `ch3' multiply defined.
+LaTeX Warning: Label `fig:sep-overall' multiply defined.
 
 )
 \openout1 = `Separation3.aux'.
@@ -616,7 +616,7 @@ Underfull \vbox (badness 2689) has occurred while \output is active []
 
 
 ]
-<pics/unitdisks.pdf, id=68, page=4, 281.45149pt x 265.3915pt>
+<pics/unitdisks.pdf, id=67, page=4, 281.45149pt x 265.3915pt>
 File: pics/unitdisks.pdf Graphic file (type pdf)
 
 <use pics/unitdisks.pdf, page 4>
@@ -920,126 +920,152 @@ Underfull \vbox (badness 4752) has occurred while \output is active []
 LaTeX Warning: Reference `nntree' on page 56 undefined on input line 1153.
 
 [56]
-Overfull \hbox (10.95775pt too wide) in paragraph at lines 1162--1162
-|[]\OT1/cmr/bx/n/17.28 Implementacija op-ti-mi-za-cij-skega pro-blema
+
+Package caption Warning: \label without proper reference on input line 1314.
+See the caption package documentation for explanation.
+
+
+LaTeX Warning: Reference `cpu_compare' on page 57 undefined on input line 1159.
+
+
+
+Package caption Warning: \label without proper reference on input line 1326.
+See the caption package documentation for explanation.
+
+
+LaTeX Warning: Reference `ram_compare' on page 57 undefined on input line 1159.
+
+
+
+Overfull \hbox (63.86452pt too wide) in paragraph at lines 1161--1162
+\OML/cmm/m/it/12 OutputIterator$\OT1/cmr/m/n/12 , ka-mor se shra-nju-jejo objek
+ti, ki jih po-i-zvedba vrne, in $\OML/cmm/m/it/12 FuzzyQueryItem$\OT1/cmr/m/n/1
+2 ,
  []
 
+[57]
 
-LaTeX Warning: Reference `opt2' on page 57 undefined on input line 1164.
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [57]
-
-LaTeX Warning: Reference `opt2' on page 58 undefined on input line 1168.
+LaTeX Warning: Reference `opt2' on page 58 undefined on input line 1165.
 
 
-Overfull \hbox (1.29pt too wide) in paragraph at lines 1168--1169
-\OT1/cmr/m/n/12 van $\OML/cmm/m/it/12 point$\OT1/cmr/m/n/12 . Drugi je ka-za-le
-c na tocko tipa $\OML/cmm/m/it/12 Point[]\OT1/cmr/m/n/12 2$, po-i-me-no-van $\
-OML/cmm/m/it/12 originalPoint$\OT1/cmr/m/n/12 .
- []
-
-
-Overfull \hbox (18.65823pt too wide) in paragraph at lines 1168--1169
-[]\OT1/cmr/m/n/12 Ce $\OML/cmm/m/it/12 point$ \OT1/cmr/m/n/12 pred-sta-vlja to
-cko $(\OML/cmm/m/it/12 '[]\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 b\OT1/cmr/m/n/12 )\
-OML/cmm/m/it/12 ; '[]\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 b\OT1/cmr/m/n/12 ))$ (gl
-ej po-glavje  []), po-tem $\OML/cmm/m/it/12 originalPoint$
- []
-
-
-Overfull \hbox (13.21664pt too wide) in paragraph at lines 1172--1174
+Overfull \hbox (13.21664pt too wide) in paragraph at lines 1168--1170
 \OT1/cmr/m/n/12 Za dvo-di-men-zi-o-nalna obmocna dre-vesa smo upo-ra-bili im-p
 le-men-ta-cijo v knjiznici
  []
 
-[58] [59] <pics/primer1.png, id=374, 458.31226pt x 447.47176pt>
-File: pics/primer1.png Graphic file (type png)
+[58] [59]
+Overfull \hbox (47.25865pt too wide) in paragraph at lines 1178--1179
+\OT1/cmr/m/n/12 Za te po-trebe smo na-pi-sali me-todi $\OML/cmm/m/it/12 rangeTr
+ee[]query$ \OT1/cmr/m/n/12 in $\OML/cmm/m/it/12 rangeTree[]query[]complement$\O
+T1/cmr/m/n/12 .
+ []
 
-<use pics/primer1.png>
-Package pdftex.def Info: pics/primer1.png used on input line 1184.
+
+Underfull \hbox (badness 10000) in paragraph at lines 1214--1214
+[]$[]\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 Iterator$ $begin;$ $Iterator$ $end;$
+ []
+
+
+Underfull \hbox (badness 6094) detected at line 1215
+[]$[]\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 Iterator$ $begin;$ $Iterator$ $end;$
+ []
+
+
+LaTeX Warning: \oval, \circle, or \line size unavailable on input line 1216.
+
+
+Overfull \hbox (36.1852pt too wide) in paragraph at lines 1216--1216
+ [][] 
+ []
+
+
+Overfull \hbox (1.16577pt too wide) in paragraph at lines 1251--1251
+| [] 
+ []
+
+
+Overfull \hbox (1.16577pt too wide) detected at line 1252
+| [] 
+ []
+
+
+LaTeX Warning: \oval, \circle, or \line size unavailable on input line 1253.
+
+
+Overfull \hbox (45.96622pt too wide) in paragraph at lines 1253--1253
+ [][] 
+ []
+
+<pics/primer1.png, id=374, 458.31226pt x 447.47176pt>
+File: pics/primer1.png Graphic file (type png)
+ <use pics/primer1.png>
+Package pdftex.def Info: pics/primer1.png used on input line 1259.
 (pdftex.def)             Requested size: 320.81638pt x 313.22809pt.
 
+[60] [61] [62] [63] [64] [65 <./pics/primer1.png>] [66
 
-LaTeX Warning: Reference `lema6' on page 60 undefined on input line 1190.
-
-
-Overfull \hbox (2.30714pt too wide) in paragraph at lines 1193--1194
-\OT1/cmr/m/n/12 Funkcija $\OML/cmm/m/it/12 findMinPair\OT1/cmr/m/n/12 (\OML/cmm
-/m/it/12 S[]; S[]; currentMinWeight\OT1/cmr/m/n/12 )$ resi op-ti-mi-za-cij-ska
- pro-
- []
-
-[60 <./pics/primer1.png>]
-Overfull \hbox (6.8299pt too wide) in paragraph at lines 1198--1199
-\OT1/cmr/m/n/12 Funkcija $\OML/cmm/m/it/12 findminpairRi\OT1/cmr/m/n/12 (\OML/c
-mm/m/it/12 L[]; L[]; R[]; currentMinWeight; st\OT1/cmr/m/n/12 )$. []Sest in-sta
-nc pro-
- []
-
-[61] [62]
+]
 Poglavje 5.
-<pics/data_generation.pdf, id=384, page=1, 530.38153pt x 102.69768pt>
+<pics/data_generation.pdf, id=397, page=1, 530.38153pt x 102.69768pt>
 File: pics/data_generation.pdf Graphic file (type pdf)
 
 <use pics/data_generation.pdf, page 1>
-Package pdftex.def Info: pics/data_generation.pdf, page1 used on input line 122
-4.
+Package pdftex.def Info: pics/data_generation.pdf, page1 used on input line 128
+6.
 (pdftex.def)             Requested size: 397.78517pt x 77.02306pt.
 
-<pics/data_generation.pdf, id=385, page=2, 530.38153pt x 102.69768pt>
+<pics/data_generation.pdf, id=398, page=2, 530.38153pt x 102.69768pt>
 File: pics/data_generation.pdf Graphic file (type pdf)
 
 <use pics/data_generation.pdf, page 2>
-Package pdftex.def Info: pics/data_generation.pdf, page2 used on input line 123
-0.
+Package pdftex.def Info: pics/data_generation.pdf, page2 used on input line 129
+2.
 (pdftex.def)             Requested size: 397.78517pt x 77.02306pt.
- [63
-
- <./pics/data_generation.pdf>]
+ [67 <./pics/data_generation.pdf>]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [64 <./pics/data_generation.pdf>]
-Overfull \hbox (6.94588pt too wide) in paragraph at lines 1275--1276
+ [68 <./pics/data_generation.pdf>]
+Overfull \hbox (6.94588pt too wide) in paragraph at lines 1337--1338
 []\OT1/cmr/m/n/12 Kot drugo al-ter-na-tivo upo-ra-bimo mrezo enot-skih raz-dal
 j (glej po-glavje 2.4[]).
  []
 
-[65]
+[69]
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<pics/separation-64-1-1000-narrow-2.png, id=429, 1734.48pt x 873.0216pt>
+<pics/separation-64-1-1000-narrow-2.png, id=442, 1734.48pt x 873.0216pt>
 File: pics/separation-64-1-1000-narrow-2.png Graphic file (type png)
 
 <use pics/separation-64-1-1000-narrow-2.png>
 Package pdftex.def Info: pics/separation-64-1-1000-narrow-2.png used on input l
-ine 1445.
+ine 1507.
 (pdftex.def)             Requested size: 520.34802pt x 261.9085pt.
 
-<pics/32-1-5000-stuffed.png, id=431, 1734.48pt x 873.0216pt>
+<pics/32-1-5000-stuffed.png, id=444, 1734.48pt x 873.0216pt>
 File: pics/32-1-5000-stuffed.png Graphic file (type png)
 
 <use pics/32-1-5000-stuffed.png>
-Package pdftex.def Info: pics/32-1-5000-stuffed.png used on input line 1451.
+Package pdftex.def Info: pics/32-1-5000-stuffed.png used on input line 1513.
 (pdftex.def)             Requested size: 520.34802pt x 261.9085pt.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[66 <./pics/separation-64-1-1000-narrow-2.png>] [67] [68] [69] [70] [71 <./pics
-/32-1-5000-stuffed.png>] [72
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [70 <./pics/separation-64-1-1000-narrow-2.png>] [71] [72] [73] [74] [75 <./pic
+s/32-1-5000-stuffed.png>] [76
 
 ]
 Poglavje 6.
-(Separation3.bbl [73] [74
+(Separation3.bbl [77] [78
 
-] [75]) [76] (Separation3.aux)
+] [79]) [80] (Separation3.aux)
 
 LaTeX Warning: There were undefined references.
 
@@ -1048,11 +1074,11 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 9087 strings out of 493334
- 126034 string characters out of 3140953
+ 9077 strings out of 493334
+ 125889 string characters out of 3140953
  245039 words of memory out of 3000000
- 12402 multiletter control sequences out of 15000+200000
- 19208 words of font info for 75 fonts, out of 3000000 for 9000
+ 12393 multiletter control sequences out of 15000+200000
+ 16648 words of font info for 64 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  40i,13n,58p,1729b,1409s stack positions out of 5000i,500n,10000p,200000b,50000s
  <C:\Users\lmilinkovic\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\d
@@ -1080,9 +1106,9 @@ blic/amsfonts/cm/cmti8.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts
 /cm/cmtt10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmtt12.p
 fb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/latxfont/lcircle1.pfb><
 C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on Separation3.pdf (92 pages, 835260 bytes).
+Output written on Separation3.pdf (96 pages, 839700 bytes).
 PDF statistics:
- 545 PDF objects out of 1000 (max. 8388607)
+ 557 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  81 words of extra memory for PDF output out of 10000 (max. 10000000)
 

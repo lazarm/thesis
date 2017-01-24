@@ -1048,8 +1048,8 @@ Pravilnost algoritma sledi iz dejstva, da računa isto kot splošni algoritem.
 \end{codebox}
 \end{varwidth}~~~~}}
 \end{center}
-%\caption{New algorithm for minimum separation with unit disks.}
-%\label{fig:FULL}
+\caption{New algorithm for minimum separation with unit disks.}
+\label{fig:FULL}
 \end{figure}
 
 Opis postopka za posamezen koren je shematično prikazan na sliki~\ref{fig:compact}. (Appendix: celotni algoritem???) Kot pri splošnem algoritmu spremenljivka $best$ hrani dolžino trenutno najkrajšega cikla. Na začetku lahko njeno vrednost nastavimo na $n+1$. Če algoritem konča z isto vrednostjo spremenljivke, potem za dane točke ne obstaja rešitev za problem minimalne ločitve. Ko obravnavamo določen koren $r$, nas zanimajo samo cikli s korenom $r$ in dolžino največ $best$. Ker ima poljuben cikel, ki gre skozi vozlišče v $W_i$, dolžino najmanj $2i$, lahko obravnavamo samo indekse $i$, za katere velja $2i < best$. Poleg tega lahko dodatno omejimo iskanje (kar sicer ni opisano v algoritmu, je pa uporabljeno pri implementaciji) tako, da najprej obravnavamo pare, ki tvorijo cikel z dolžino $2i$, na primer $L^0_i\times L^1_{i-1}$, in šele potem tiste z dolžino $2i+1$, na primer $L^0_i\times L^1_i$. Z uporabo takega zaporedja lahko končamo z iskanjem za koren $r$ takoj, ko najdemo povezavo v $while$ zanki, in preidemo na naslednji koren.
@@ -1156,17 +1156,13 @@ Drevo najbližjega soseda, opisano v poglavju 3.3, bi lahko implementirali s kaz
 Za podatkovno strukturo s poizvedbami najbližjega soseda smo sprva hoteli uporabiti VD, vendar smo se kasneje odločili za Kd drevo. Razlog za to je implementacija VD v knjižnici CGAL. Ker je prostorska kompleksnost VD $\OO(n)$, bi pričakovali, da poraba prostora raste linearno z večanjem VD. Izkaže se, da je rast počasnejša od linearne, kar pomeni, da na primer 100 VD objektov velikosti 10 porabi več prostora kot 10 objektov velikosti 100. Posledično poraba prostora ni enaka za vsak nivo drevesa, temveč z globino raste. Razlike se v celotnem algoritmu potem še potencirajo, ker zgradimo VD v (skoraj) vsakem vozlišču drevesa najbližjega soseda, vsako tako drevo pa v vsakem vozlišču sekundarnega drevesa v območnem drevesu. Ko smo testirali implementacijo Kd dreves v CGAL, smo ugotovili tudi, da je čas konstrukcije bistveno krajši kot pri VD. Primerjave med konstrukcijama obeh podatkovnih struktur (procesorski čas in poraba RAM-a) so prikazane v poglavju Rezultati.
 
 \subsection{Kd drevo}
+Za podatkovno strukturo opisano v lemi~\ref{lema-ds2} kot primarno strukturo uporabljamo območna drevesa. Za strukturo, ki jo v sekundarnem drevesu območnega drevesa uporabljamo za iskanje najbližjega soseda, smo se namesto VD odločili uporabiti kd drecesa. O slabostih implementacije VD smo govorili že v poglavju~\ref{why dt}. Obe strukturi smo tudi direktno primerjali na podlagi dejanske časovne in prostorske porabe in  združili rezultate v tabelah~\ref{cpu_compare} in~\ref{ram_compare}. DT prav tako ne pride v poštev, ker brez dobrega začetnega lica, ki ga v tem primeru ne moremo zagotoviti, poizvedba s sprehodom vzame $O(\sqrt{n})$ časa.
 
-Kot osnovo smo za poizvedbe najbližjega soseda uporabili funkcijo $search$ v razredu $Kd{\_}tree$, ki kot argument sprejme $OutputIterator$, kamor se shranjujejo objekti, ki jih poizvedba vrne, in $FuzzyQueryItem$, ki je v dvodimenzionalnem primeru lahko krog ali pravokotnik in določa območje iskanja. Kot argument lahko sprejme vrednost $\epsilon$, ki določa stopnjo mehkosti (ang. fuzzyness) in se jo uporablja pri aproksimacijskih poizvedbah, ki pa jih v našem algoritmu nismo potrebovali. Tip, ki smo ga uporabili, je $Fuzzy\U circle$ s središčem, ki ga določa točka poizvedbe in polmerom $1$. Časovna kompleksnost funkcije $search$ je enaka $\OO(\log n + k)$, kjer je $k$ število vrnjenih točk znotraj območja iskanja. Ker naš algoritem zahteva čas $\OO(\log n)$, smo razredu $Kd{\_}tree$ dodali podobno funkcijo, ki vrne par $(boolean, Point\U 2)$. Ker nas v notranjih vozliščih drevesa najbližjega soseda ne zanimajo konkretne točke, ampak samo informacija, če se vsaj ena točka nahaja v območju iskanja, funkcija iskanje zaključi v tistem trenutku, ko ugotovi, da je ta pogoj izpolnjen ter vrne par $true$ in prvo točko v poddrevesu notranjega vozlišča.
-
-\section{Implementacija optimizacijskega problema $\Phi_\sigma(A,B)$}
-
-Za rešitev optimizacijskega problema, predstavljenega v poglavju ~\ref{opt2}, smo uporabili implementacijo območnih dreves v CGAL, za uporabo dualnosti pa napisali lasten razred (bolj natančno $struct$) $DualPoint$ za točke v dualnem prostoru.
+Kot osnovo smo za poizvedbe najbližjega soseda uporabili funkcijo $search$ v razredu $Kd{\_}tree$, ki je namenjena območnemu iskanju. Razlog za to je, da nas po lemi~\ref{lema-ds2} v resnici ne zanima najbližji sosed, ampak poljubna točka, ki je od poizvedbene točke oddaljena največ $1$. Kot argument sprejme $OutputIterator$, kamor se shranjujejo objekti, ki jih poizvedba vrne, in $FuzzyQueryItem$, ki je v dvodimenzionalnem primeru lahko krog ali pravokotnik in določa območje iskanja. Podamo mu lahko vrednost $\epsilon$, ki določa stopnjo mehkosti (ang. fuzzyness) in se jo uporablja pri aproksimacijskih poizvedbah, ki pa jih v našem algoritmu nismo potrebovali. Tip, ki smo ga uporabili, je $Fuzzy\U circle$ s središčem, ki ga določa točka poizvedbe in polmerom $1$. Časovna kompleksnost funkcije $search$ oziroma območnega iskanja v kd drevesu enaka $\OO(\sqrt{n} + k)$, kjer je $k$ število vrnjenih točk znotraj območja iskanja. Ker naš algoritem zahteva čas $\OO(\log n)$, smo v razredu $Kd{\_}tree$ napisali podobno funkcijo, ki vrne par $(boolean, Point\U 2)$. Kot smo omenili, nas v resnici namesto najbližje točke zanima le, če območje iskanja vsebuje kakšno točko. To pomeni, da lahko iskanje po kd drevesu zaključimo v tistem trenutku, ko ugotovimo, da je ta pogoj izpolnjen. Konkretno je ta pogoj izpolnjen takrat, ko za neko poddrevo ugotovimo, da se njegove točke v celoti nahajajo v območju iskanja. Naša metoda v tem primeru vrne par $true$ in prvo točko v takem poddrevesu. S tem za poizvedbe zagotovimo povprečno časovno zahtevnost $\OO(\log n)$.
 
 \subsection{DualPoint - implementacija dualne točke}
 
-Odločili smo se razlikovati po tipu med navadnimi točkami in točkami v dualnem prostoru, ki izhajajo iz premic v prvotnem prostoru. Razred $DualPoint$ hrani dva atributa. Prvi je točka v dualnem prostoru tipa $Point\texttt{\_}2$, poimenovan $point$. Drugi je kazalec na točko tipa $Point\texttt{\_}2$, poimenovan $originalPoint$. Če $point$ predstavlja točko $(\varphi_1(b), \varphi_2(b))$ (glej poglavje ~\ref{opt2}), potem $originalPoint$ predstavlja točko $b$. Konstruktor razreda kot argumenta sprejme točko $b$ in daljico $\sigma$ in s pomočjo funkcije $imagePoint$ izračuna točko preslikave.
-
+Odločili smo se razlikovati po tipu med navadnimi točkami in točkami v dualnem prostoru, ki izhajajo iz premic v primarnem prostoru. Za slednje smo naredili razred $DualPoint$, ki hrani dva atributa. Prvi je točka v dualnem prostoru tipa $Point\texttt{\_}2$, poimenovan $point$. Drugi je kazalec na točko tipa $Point\texttt{\_}2$, poimenovan $originalPoint$. Če $point$ predstavlja točko $(\varphi_1(b), \varphi_2(b))$ (glej poglavje ~\ref{opt2}), potem $originalPoint$ predstavlja točko $b$. Konstruktor razreda kot argumenta sprejme točko $b$ ter daljico $\sigma$ in s pomočjo funkcije $imagePoint(Point\U 2 b, Segment\U 2 \sigma)$ izračuna točko preslikave. Kazalec na točko v primarnem prostoru hranimo zato, da ko delamo poizvedbo nad območnim drevesom, ki hrani dualne točke, lahko iz rezultata enostavno dostopamo do primarne točke, ki nas v resnici zanima.
 
 \subsection{Območno drevo}
 Za dvodimenzionalna območna drevesa smo uporabili implementacijo v knjižnici CGAL, ki jo predstavlja razred $Range\texttt{\_}tree\texttt{\_}2$. Vsako vozlišče hrani par $kljuc$ in $ vrednost$. $Vrednost$ dodatno opisuje vozlišče in je lahko tudi prazna, ključ pa se uporablja pri izgradnji drevesa in poizvedbah. Oba argumenta sta predlogi, kar pomeni, da moramo pri konstrukciji drevesa zanju podati konkretna tipa. 
@@ -1177,8 +1173,87 @@ Pri inicializaciji drevesu podamo seznam parov dualnih točk in praznih kd dreve
 \subsubsection{Poizvedbe v območnem drevesu}
 Razredu $Range\texttt{\_}tree\texttt{\_}d$ smo za poizvedbe dodali funkcijo \\ $window\texttt{\_}query\texttt{\_}impl\texttt{\_}modified$, ki  kot osnovo uporablja obstoječo funkcijo $window\texttt{\_}query\texttt{\_}impl$. Argumenti funkcije so $OutputIterator$, kamor se vstavljajo vrnjene točke, interval $I$, ki ga definirata dve dualni točki, tretji argument, ki ga v obstoječi funkciji ni, pa je točka $a$, ki jo uporabimo za poizvedbe najbližjega soseda v kd drevesih. Pri dvodimenzionalnih območnih drevesih je geometrijska predstavitev intervala pravokotnik; levo krajišče intervala ustreza spodnjemu levemu oglišču pravokotnika, desno krajišče pa zgornjemu desnemu oglišču. Interval je zaprt. 
 
-Če za vozlišče $w$ v primarnem drevesu ugotovimo, da njegovo celotno poddrevo ustreza pogojem poizvedbe, nadaljujemo s preiskovanjem v njegovem sekundarnem drevesu. Če za vozlišče $v$ v sekundarnem vozlišču ugotovimo, da so vsa vozlišča v njegovem poddrevesu vsebovana v intervalu $I$, ne dodamo vso poddrevo v rezultat, kot je to storjeno v izvirni metodi, temveč opravimo še poizvedbo najbližjega soseda točke $a$ v kd drevesu vozlišča $v$. Za vsako obiskano vozlišče $w$ v primarnem drevesu prav tako preverimo, če je vsebovano v intervalu $I$. Če je temu tako, točko, iz katere izhaja dualna točka, ki predstavlja ključ vozlišča $w$, dodamo v seznam vrnjenih točk. Enako velja za obiskana vozlišča v sekundarnem drevesu.
-\section{Minimalno ločevanje}
+Če za vozlišče $w$ v primarnem drevesu ugotovimo, da njegovo celotno poddrevo ustreza pogojem poizvedbe, nadaljujemo s preiskovanjem v njegovem sekundarnem drevesu. Če za vozlišče $v$ v sekundarnem vozlišču ugotovimo, da so vsa vozlišča v njegovem poddrevesu vsebovana v intervalu $I$, ne dodamo vso poddrevo v rezultat, kot je to storjeno v izvirni metodi, temveč opravimo še poizvedbo najbližjega soseda (z območnim iskanjem) točke $a$ v kd drevesu vozlišča $v$. Če poizvedba vrne neprazen rezultat, lahko iskanje v območnem drevesu zaključimo. Za vsako obiskano vozlišče $w$ v primarnem drevesu prav tako preverimo, če je vsebovano v intervalu $I$. Če je temu tako, točko, iz katere izhaja dualna točka, ki predstavlja ključ vozlišča $w$, vrnemo kot rezultat. Enako velja za obiskana vozlišča v sekundarnem drevesu.
+
+Interval $I$ je odvisen od točke poizvedbe $a$ in tega, ali v drevesu iščemo tako točko $b$, da $ab$ seka $st$ ali ne. Če ja, potem je območje iskanja drugi kvadrant v dualnem prostoru (glej sliko~\ref{dualp2}), sicer sta to prvi in tretji kvadrant. Za te potrebe smo napisali metodi $rangeTree\U query$ in $rangeTree\U query\U complement$. Pri prvi je iz točke poizvedbe $a$ interval konstruiran kot pravokotnik s spodnjim levim ogliščem $(a.x, -\infty)$ in zgornjim desnim ogliščem $(\infty, a.y)$. Pri drugi metodi sta konstruirana dva intervala: prvi ima za levo krajišče točko $(-\infty, -\infty)$ in za desno krajišče točko $a$, drugi pa za levo krajišče točko $a$, za desno pa točko $(\infty, \infty)$. Najprej se naredi poizvedba s prvim intervalom in le če slednja ne vrne nobenega rezultata, se poizvedba naredi tudi z drugim intervalom.
+\subsection{Celotna struktura algoritma}
+
+\begin{figure}[htb]
+\begin{center}
+\ovalbox{~~~~
+\begin{varwidth}{\linewidth}
+\begin{codebox}
+    \Procname{$\proc{Psevdokoda glavnega algoritma}(Iterator$ $begin,$ $Iterator$ $end,$ $Segment2$ $st)$}
+    \li $(Point2, Point2, int)$ $\best \gets (null, null, MAX$ $VALUE)$
+    \\ // izračunaj DT
+    \li $SSSPTree$ $ssspTree(begin, end, st)$
+    \li \For $r\in P$ \Do
+    	\li $ssspTree.createTreeFromRoot(r)$
+    	\li $vector$ $l0 \gets ssspTree.getL0()$
+    	\\ \> // podobno za l1, r0, r1
+    	\li $i \gets 1$
+    	\li $int$ $maxDist \gets l0.size()$
+    	\li \While $2i< \best$ \&\& $2i \leq maxDist$ \Do
+    		\li (Point2, Point2, int) $result \gets nnSeparation(l0, l1, r0, r1, i)$
+    		\li \If $result[2] < best[2]$ \Then
+    			\li $best \gets result$
+    			\li break
+    		\End
+    		\li $result \gets rangeSeparation(l0, l1, r0, r1, i, st)$
+    		\li \If $result[2] < best[2]$ \Then
+    			\li $best \gets result$
+    			\li break
+    		\End
+    		\li $i++$
+    	\End
+    	\\ \> // resetiraj vrednosti atributov v točkah DT
+  		\li $ssspTree.resetTree()$
+  	\End
+    \li \Return makeCycle(best)
+    \\[-2mm]
+\end{codebox}
+\end{varwidth}
+~~~~}\end{center}
+\caption{Celotni algoritem minimalne ločitve}
+\label{fig:sep-overall}
+\end{figure}
+
+
+\begin{figure}[htb]
+\begin{center}
+\ovalbox{~~~~
+\begin{varwidth}{\linewidth}
+\begin{codebox}
+    \Procname{$\proc{nnSeparation}(vector$ $l0,$ $vector$ $l1,$ $vector$ $r0,$ $vector$ $r1,$ $int$ $i,$ $Segment2$ $st)$}
+    \li $(Point2, Point2, int)$ $\best \gets (null, null, MAX$ $VALUE)$
+    \li $vector$ $L_i^0 \gets l0[i]$
+    \li $vector$ $L_{i-1}^0 \gets l0[i-1]$
+    \\ // podobno za l1, r0, r1
+    \li $vector$ $groups \gets [L_{i-1}^0, L_{i}^1, L_{i}^0, L_{i-1}^1, R_{i-1}^0, R_{i}^1, R_{i}^0, R_{i-1}^1]$
+    \li $vector$ $pairs \gets [(0,1), (2, 3), (4, 5), (6, 7), (1, 2), (5, 6)]$
+    \li \For $pair:$ $pairs$ \Do
+    	\li $vector$ $p0 \gets groups[pair.first]$
+       	\li $vector$ $p1 \gets groups[pair.second]$
+       	\li \If $(!p0.empty()$ $\&\&$ $!p1.empty())$ \Then
+       		\li $KDTree$ $kdtree(p1.begin(), p1.end())$
+       		\li \For $q:$ $p0$ \Do 
+       			\li $(bool, Point2)$ $result \gets kdtree.customSearch(q)$
+       			\li \If $(result[0])$ \Then
+       				\li $Point2$ $nearest \gets result[1]$
+       				\li $best \gets (q, nearest, q.getDist() + nearest.getDist())$
+       				\li \Return $best$
+       			\End
+       		\End
+       	\End
+    \End
+    \li \Return $best$
+    \\[-2mm]
+\end{codebox}
+\end{varwidth}
+~~~~}\end{center}
+\caption{Prilagoditev splošnega algoritma za izračun minimalne ločitve za enotske diske.}
+\label{fig:sep-overall}
+\end{figure}
 
 \begin{figure}
 \centerline{\includegraphics[scale=0.7]{pics/primer1.png}}
@@ -1186,28 +1261,15 @@ Razredu $Range\texttt{\_}tree\texttt{\_}d$ smo za poizvedbe dodali funkcijo \\ $
 \label{primer-sep}
 \end{figure}
 
+Program kot prvi argument sprejme tekstovno datoteko, ki vsebuje po eno točko v vsaki vrstici kot par koordinat. Kot drugi argument je podano začetno krajišče daljice $\sigma$, točka $s$, kot tretji pa točka $t$ kot končno krajišče daljice. Nato se pokliče glavna metoda programa, v kateri se izvedejo vsi izračuni in se okvirno ujema z~\ref{fig:FULL}.
 
-Za rešitev optimizacijskega problema $\Psi_\sigma(r,P)$ (glej lemo ~\ref{lema6}) smo napisali dve funkciji, ki rešita optimizacijska problema $\Phi(A,B)$ in $\Phi_\sigma(A,B)$.
+Najprej se inicializira objekt SSSPTree, ki v konstruktorju zgradi DT. Za vsako točko $r\in P$ se nato zgradi drevo s korenom $r$. Iz drevesa dobimo ven štiri sezname $L0, L1, R0, R1$. V $while$ zanki nato preverimo kandidate v istem vrstnem redu, kot so nanizani v~\ref{fig:FULL}. Za kandidate na isti strani daljice $st$ se pokliče metoda $nnSeparation$, za ostale pa $rangeSeparation$.
 
-\subsection{opt1}
-Funkcija $findMinPair(S_i, S_{i+1}, currentMinWeight)$ reši optimizacijska problema $\Phi(L_0, L_1)$ in $\Phi(R_0, R_1)$. Parameter $currentMinWeight$ hrani trojko $(a, b, w_a + w_b)$, kjer točki $a$ in $b$ s povezavo $ab$ tvorita trenutno najbolj optimalno pot.
+V metodi $nnSeparation$ za vse pare množic točk $(S_1, S_2)$ na isti strani daljice $st$ in ki tvorijo cikel dolžine $2i$ zgradimo kd drevo nad $S_2$, za vsako točko $p\in S_1$ pa v drevesu z območnim iskanjem poiščemo prvo točko $q$, ki je od $p$ oddaljena za največ $1$. To naredimo z metodo v razredu $Kd_tree$, ki smo jo napisali sami. Preprosta optimizacija, ki smo jo dodali v algoritem, je ta, da vnaprej zavržemo tiste pare, pri katerih je ena od množic prazna. S tem bistveno pohitrimo algoritem (glej poglavje~\ref{Rezultati}), saj nima smisla delati poizvedbe nad praznim drevesom ali zgraditi drevesa, nad katerim ne bomo naredili nobene poizvedbe.
 
-Nad točkami $p\in S_{i+1}$ zgradimo drevo $NN(S_{i+1})$. Za vsako točko $q\in S_i$ naredimo poizvedbo najbližjega soseda v drevesu, če je razdalja $q$ do korena drevesa $SSSP$ manjša od dolžine trenutno najbolj optimalne poti. Za točko $b$, ki jo vrne poizvedba, preverimo, če je vsota uteži $w_q + w_b$ manjša od $w_a+w_b$. Če je temu tako, posodobimo $currentMinWeight$ z $(q, b, w_q + w_b)$.
+V $rangeSeparation$ preverimo pare v sledečem vrstnem redu: $L_i^0\times R_{i-1}^0$, $L_i^1\times R_{i-1}^0$, $L_i^1\times R_{i-1}^1$, $L_i^0\times R_{i-1}^1$, $L_{i-1}^0\times R_{i}^0$, $L_{i-1}^0\times R_{i}^1$, $L_{i-1}^1\times R_{i}^0$, $L_{i-1}^1\times R_{i}^1$, $L_{i}^0\times R_{i}^0$, $L_{i}^0\times R_{i}^1$, $L_{i}^1\times R_{i}^0$, $L_{i}^1\times R_{i}^1$. Območnih dreves ne gradimo za vsak par posebej, temveč enkrat za vsako od množic $R_{i-1}^0, R_{i-1}^1, R_{i}^0, R_{i}^1$, če je to potrebno. Tudi tukaj namreč ne preverjamo parov, pri katerih je ena od množic prazna. Za pare, kjer iščemo kandidate, ki sekajo $st$, uporabimo metodo $rangeTree\U query$, za kandidate, ki ne sekajo $st$, pa metodo $rangeTree\U query\U complement$. Na koncu z metodo $nnSeparation$ preverimo še zadnja dva para $L_i^0\times L_i^1$ in $R_i^0\times R_i^1$. S takim zaporedjem parov lahko v trenutku, ko naletimo na prvi par, ki vrne neprazen rezultat, prenehamo z iskanjem z ostalimi pari, zaključimo zanko in s tem iskanje cikla za koren $r$.
 
-\subsection{opt2}
-Funkcija $findminpairRi (L_i, L_j, R_i, currentMinWeight, st)$. Šest instanc problema $\Phi_\sigma(A,B)$ v $\Psi_\sigma(r,P)$ ne rešujemo neodvisno, ker bi sicer morali šestkrat konstruirati območno drevo. Probleme z isto podmnožico $R_i$ združimo pod skupni problem, ki ga s funkcijo rešimo na sledeč način.
-
-Zgradimo območno drevo s točkami $p\in R_i$. Za vsako točko $p_i\in L_i$ naredimo poizvedbo v območnem drevesu, pri čemer za območje iskanja podamo  drugi kvadrant koordinatnega sistema, ki ima za izhodišče točko $\varphi (p_i)$. Levo krajišče tako predstavlja točka $(\varphi_1 (p_i), -\infty)$, desno pa točka $(\infty, \varphi_2 (p_i))$. Parameter $st$ predstavlja daljico $\sigma$, s katero lahko izračunamo dualne točke. Parameter $currentMinWeight$ hrani trojko $(a, b, w_a + w_b)$, kjer točki $a$ in $b$ s povezavo $ab$ tvorita trenutno najbolj optimalno pot, izračunano z do zdaj rešenimi optimizacijskimi problemi $\Phi$ in $\Phi_\sigma$. Za vse točke $q_k$, ki jih vrne poizvedba, preverimo, če je vsota uteži $w_{p_i} + w_{q_k}$ manjša od $w_a+w_b$. Če je temu tako, posodobimo $currentMinWeight$ z $(p_i, q_k, w_{p_i} + w_{q_k})$. 
-
-Funkcijo smo optimizirali tako, da smo zmanjšali število poizvedb. Poizvedb ne delamo s točkami, pri katerih je razdalja do korena drevesa SSSP večja od vsote razdalj točk $a$ in $b$, ki tvorita trenutno optimalno zaprto pot. S poizvedbami nad drugim kvadrantom rešimo problem $\Phi_\sigma(L_i,R_i)$.
-
-Funkcija potem nadaljuje s poizvedbami za vsako točko $p_j\in L_j$. Za vsak $p_j$ opravimo dve poizvedbi. Pri eni za območje iskanja podamo prvi kvadrant, pri drugi pa tretji kvadrant koordinatnega sistema, ki ima za izhodišče točko $\varphi (p_j)$. Za vse točke $q_l$, ki jih vrneta poizvedbi, nato zopet preverimo vsoto uteži $w_{p_j} + w_{q_l}$ in po potrebi posodobimo $currentMinWeight$.
-
-S poizvedbami nad prvim kvadrantom rešimo problem $\Phi_{\sigma_+}(L_j,R_i)$, s poizvedbami nad tretjim kvadrantom pa problem $\Phi_{\sigma_-}(L_j,R_i)$. Glej tudi sliko ~\ref{dualp}. Območje iskanja v teoretičnem pogledu ne določajo samo kvadranti, temveč tudi polravnina $x \geq y$. Ampak presek obeh območij ni pravotnik, za območje iskanja v območnem drevesu pa ne moremo vzeti poljubnega poligona. Omejitev območja iskanja tudi ne prinaša nobenih prednosti. Vse točke $b\in B$ se nahajajo v omenjeni polravnini, točke na drugi strani polravnine, ki se nahajajo v prvem, drugem ali tretjem kvadrantu, pa pripadajo množici točk na levi strani osi $y$, ki niso shranjene v območnem drevesu.
-
-Funkcija se izvede dvakrat, kar pomeni, da tudi območno drevo zgradimo dvakrat; enkrat za $R_0$ in enkrat za $R_1$. Za točke v $L_0$ in $L_1$ naredimo tri poizvedbe; po enkrat v prvem, drugem in tretjem kvadrantu.
-
-\subsection{Kreiranje cikla}
+\subsection{Izgradnja cikla}
 Ko dobimo par točk $a, b\in P$, ki določata minimalno zaprto pot, ki ločuje točki $s$ in $t$, v seznam shranimo vse točke, ki tvorijo cikel. S pomočjo funkcije $getParent()$ lahko za vsako točko $p$ v drevesu $SSSP(r, P)$ dobimo njegovega starša in s tem pot $T_r[p]$ v obratnem vrstnem redu (z začetkom pri točki $p$ in koncem pri točki $r$), ki jo označimo kot $T_r^{-1}[p]$. Pot $T_r[p]$ brez točke $r$ označimo z $T_{r-1}[p]$. Cikel lahko potem dobimo z združitvijo dveh poti $T_r^{-1}[a] + T_{r-1}[b]$, s čimer dobimo pot $(a,...,r,...b)$. Vrnjen seznam predstavlja cikel, v katerem je začetna točka shranjena samo enkrat. Za dolžino najbolj optimalne poti se do konca izvajanja programa hrani vsota dolžin točk $a$ in $b$. Dolžina, ki jo program vrne kot rezultat, je povečana za 1.
 
 \section{Obravnava posebnih vhodnih primerov}
@@ -1217,7 +1279,7 @@ točke, ki ležijo na y osi, grejo k b (preveri tip neskončne vrednosti v dualp
 
 
 \chapter{Eksperimenti in rezultati}
-\label{ch3}
+\label{Rezultati}
 Eksperimente smo izvedli na prenosnem računalniku z operacijskim sistemom Windows 10, procesorjem CPU i5-5200U z 2.20 Ghz in 8GB spomina. Za vizualizacijo domen, vhodnih podatkov in rezultatov smo napisali skripte v Pythonu in pri tem uporabili knjižnico $Matplotlib$.
 \section{Generator vhodnih podatkov}
 \begin{figure}
@@ -1453,6 +1515,7 @@ generičen algoritem &	416 & 266 & 206
 \label{sep-stuffed}
 \end{figure}
 
+Opiši implementacijo splošnega algoritma.
 
 \subsection{Analiza}
 \begin{table}[h!]
@@ -1474,6 +1537,8 @@ mreža &	25\%
 Za razliko od SSSP algoritma BFS in mreža nimata nikakršne garancije za najslabši primer. Za oba lahko zgradimo takšne vhodne množice $P$, pri katerih bo njuna izvedba zelo počasna. Kot primer smo testirali $P$ s 10000 točkami v pravokotniku, ki ima dimenzije $32\times 8$ in majhno luknjo. Med krajiščema daljice $st$ smo nato v majhnem zgoščenem prostoru dodali še dodatnih 1000 točk. Čas izvajanja je glede na prvotno instanco najmanj narastel za SSSP, največ pa za BFS (glej tabelo~\ref{table-increase}).
 \chapter{Sklepne ugotovitve}
 \label{ch4}
+
+Improvements: najti točko preloma za število točk, pri katerih se začne splačati uporabljati nn search namesto preveriti vse pare L0i x L1i itd. To je odvisno tako od velikosti strukture, po kateri delamo poizvedbe, kot od števila poizvedb. V našem primeru smo naredili samo to, da strukture nismo zgradili, če smo vedeli, da je število poizvedb nič.
 
 
 \bibliographystyle{abbrv}
