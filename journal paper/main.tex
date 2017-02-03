@@ -899,7 +899,7 @@ Although in some cases we had to make small modifications, it was
 very helpful to have the CGAL code available as a starting point. 
 The coordinates of the points were Cartesian doubles.
 
-Experiments were carried out in a laptop with CPU i5-5200U at 2.20 Ghz, 
+Experiments were carried out in a laptop with CPU i7-6700HQ at 2.60 Ghz, 
 8GB of RAM, and Windows 10. \emph{All times we report are in seconds.}
 
 \paragraph{Data generation}
@@ -999,94 +999,94 @@ was for SSSP 9,7\% (preprocessing) and 13,6\% (one root), for BFS it was
 
 \begin{table}[ht]
 \begin{tabular}{l*{6}{r}}
-Rectangle without holes & \multicolumn{6}{c}{20K points}\\						
+\textbf{Rectangle without holes} & \multicolumn{6}{c}{20K points}\\						
 size rectangle	&	$4\times 1$	&	$8\times 2$	&	$16\times 4$	&	$32\times 8$	&	$64\times 16$	&	$128\times 32$	\\
 \hline
-SSSP preprocessing	&	0.025	&	0.027	&	0.025	&	0.025	&	0.025	&	0.026	\\
-SSSP average/root	&	0.131	&	0.130	&	0.127	&	0.126	&	0.129	&	0.136	\\
-BFS preprocessing	&	25.057	&	20.433	&	17.773	&	17.734	&	17.347	&	17.179	\\
-BFS average/root	&	3.406	&	1.359	&	0.404	&	0.088	&	0.025	&	0.009	\\
-grid	&	1.605	&	1.647	&	0.695	&	0.227	&	0.089	&	0.053	\vspace{.2cm}	\\
+SSSP preprocessing	&	0.018	&	0.018	&	0.018	&	0.018	&	0.019	&	0.021	\\
+SSSP average/root	&	0.011	&	0.012	&	0.012	&	0.012	&	0.013	&	0.013	\\
+BFS preprocessing	&	18.70	&	13.46	&	12.03	&	11.40	&	11.32	&	11.13	\\
+BFS average/root	&	2.437	&	1.018	&	0.321	&	0.069	&	0.017	&	0.005	\\
+grid				&	1.309	&	1.130	&	0.474	&	0.160	&	0.060	&	0.035\vspace{.2cm}	\\
 \hline
   & \multicolumn{6}{c}{50K points}\\						
 \hline
-SSSP preprocessing	&	0.091	&	0.091	&	0.070	&	0.071	&	0.070	&	0.069	\\
-SSSP average/root	&	0.592	&	0.562	&	0.375	&	0.377	&	0.372	&	0.366	\\
-BFS preprocessing	&	>3min	&	159.812	&	144.965	&	140.404	&	131.854	&	132.475	\\
-BFS average/root	& memory limit & 9.378	&	2.789	&	0.584	&	0.144	&	0.044	\\
-grid				&	11.567	&	13.660	&	4.592	&	1.346	&	0.432	&	0.187
+SSSP preprocessing	&	0.051	&	0.050	&	0.053	&	0.051	&	0.051	&	0.053	\\
+SSSP average/root	&	0.034	&	0.037	&	0.037	&	0.036	&	0.035	&	0.036	\\
+BFS preprocessing	&	$>$2min	&	86.12	&	74.76	&	74.15	&	72.41	&	71.49	\\
+BFS average/root	& \hspace{-.7cm}memory limit & 6.524	&	2.422	&	0.510	&	0.119	&	0.035	\\
+grid				&	6.297	&	7.125	&	3.188	&	0.923	&	0.301	&	0.139
 \end{tabular}
 \caption{Times for shortest paths in rectangles without holes.}
 \label{table1}
 \end{table}
 
+
 \begin{table}[ht]
 \begin{tabular}{l*{6}{r}}
-Rectangle 1 small hole & \multicolumn{6}{c}{10K points}\\						
+\textbf{Rectangle 1 small hole}& \multicolumn{6}{c}{10K points}\\						
 size rectangle	&	$4\times 1$	&	$8\times 2$	&	$16\times 4$	&	$32\times 8$	&	$64\times 16$	&	$128\times 32$	\\
 \hline
-SSSP preprocessing	&	0.021	&	0.012	&	0.012	&	0.012	&	0.012	&	0.012	\\
-SSSP average/root	&	0.104	&	0.059	&	0.060	&	0.061	&	0.064	&	0.070	\\
-BFS preprocessing	&	8.500	&	4.300	&	4.100	&	4.100	&	4.000	&	4.000	\\
-BFS average/root	&	1.183	&	0.318	&	0.091	&	0.026	&	0.008	&	0.003	\\
-grid	&	0.486	&	0.513	&	0.168	&	0.072	&	0.035	&	0.026\vspace{.2cm}	\\
+SSSP preprocessing	&	0.011	&	0.012	&	0.009	&	0.010	&	0.010	&	0.009	\\
+SSSP average/root	&	0.004	&	0.005	&	0.005	&	0.005	&	0.006	&	0.006	\\
+BFS preprocessing	&	3.724	&	3.033	&	2.890	&	2.826	&	2.874	&	2.841	\\
+BFS average/root	&	0.587	&	0.248	&	0.078	&	0.021	&	0.006	&	0.002	\\
+grid				&	0.258	&	0.313	&	0.119	&	0.049	&	0.022	&	0.015	\vspace{.2cm}	\\
 \hline
   & \multicolumn{6}{c}{20K points}\\						
 \hline
-SSSP preprocessing	&	0.027	&	0.026	&	0.025	&	0.025	&	0.025	&	0.025	\\
-SSSP average/root	&	0.142	&	0.137	&	0.136	&	0.136	&	0.138	&	0.145	\\
-BFS preprocessing	&	24.813	&	19.817	&	18.396	&	17.976	&	17.542	&	17.313	\\
-BFS average/root	&	3.253	&	1.328	&	0.467	&	0.108	&	0.031	&	0.011	\\
-grid				&	2.181	&	2.627	&	0.668	&	0.262	&	0.104	&	0.060	
+SSSP preprocessing	&	0.019	&	0.019	&	0.019	&	0.019	&	0.018	&	0.023	\\
+SSSP average/root	&	0.010	&	0.012	&	0.011	&	0.012	&	0.013	&	0.013	\\
+BFS preprocessing	&	15.22	&	13.47	&	11.51	&	11.66	&	11.73	&	11.38	\\
+BFS average/root	&	2.402	&	1.045	&	0.369	&	0.088	&	0.023	&	0.006	\\
+grid				&	1.122	&	1.339	&	0.461	&	0.181	&	0.074	&	0.036
 \end{tabular}
 \caption{Times for shortest paths in rectangles with a small hole.}
 \label{table2}
 \end{table}
 
-
 \begin{table}[ht]
 \begin{tabular}{l*{3}{r}|*{3}{r}}
-Rectangle 1 large hole & \multicolumn{3}{c|}{5K points} & \multicolumn{3}{c}{10K points}\\
+\textbf{Rectangle 1 large hole} & \multicolumn{3}{c|}{5K points} & \multicolumn{3}{c}{10K points}\\
 size rectangle	&	$32\times 8$	&	$64\times 16$	&	$128\times 32$	&	$32\times 8$	&	$64\times 16$	&	$128\times 32$\\						
 \hline
-SSSP preprocessing	&	0.006	&	0.006	&	0.006	&	0.012	&	0.013	&	0.014	\\
-SSSP average/root	&	0.027	&	0.027	&	0.027	&	0.057	&	0.055	&	0.054	\\
-BFS preprocessing	&	1.010	&	0.994	&	0.983	&	4.043	&	4.070	&	4.105	\\
-BFS average/root	&	0.008	&	0.004	&	0.002	&	0.031	&	0.015	&	0.008	\\
-grid				&	0.043	&	0.021	&	0.017	&	0.573	&	0.541	&	0.172
+SSSP preprocessing	&	0.004	&	0.005	&	0.005	&	0.009	&	0.010	&	0.010	\\
+SSSP average/root	&	0.002	&	0.002	&	0.002	&	0.005	&	0.005	&	0.005	\\
+BFS preprocessing	&	0.751	&	0.767	&	0.742	&	2.783	&	3.175	&	2.804	\\
+BFS average/root	&	0.006	&	0.003	&	0.002	&	0.025	&	0.012	&	0.006	\\
+grid				&	0.018	&	0.012	&	0.008	&	0.053	&	0.032	&	0.022
 \end{tabular}
 \caption{Times for shortest paths in rectangles with a large hole.}
 \label{table3}
 \end{table}
 
 
-
 \begin{table}[ht]
 \begin{tabular}{l*{3}{r}|*{3}{r}}
-Rectangle 4 small holes & \multicolumn{3}{c|}{10K points} & \multicolumn{3}{c}{20K points}\\
+\textbf{Rectangle 4 small holes\hspace{-.2cm}} & \multicolumn{3}{c|}{10K points} & \multicolumn{3}{c}{20K points}\\
 size rectangle	&	$32\times 8$	&	$64\times 16$	&	$128\times 32$	&	$32\times 8$	&	$64\times 16$	&	$128\times 32$\\						
 \hline
-SSSP preprocessing	&	0.021	&	0.018	&	0.018	&	0.027	&	0.026	&	0.026	\\
-SSSP average/root	&	0.056	&	0.058	&	0.064	&	0.125	&	0.126	&	0.131	\\
-BFS preprocessing	&	6.291	&	6.102	&	6.364	&	18.325	&	17.887	&	17.256	\\
-BFS average/root	&	0.033	&	0.010	&	0.004	&	0.102	&	0.031	&	0.010	\\
-grid				&	0.064	&	0.031	&	0.023	&	0.230	&	0.096	&	0.055
+SSSP preprocessing	&	0.010	&	0.011	&	0.009	&	0.018	&	0.018	&	0.019	\\
+SSSP average/root	&	0.005	&	0.006	&	0.007	&	0.012	&	0.013	&	0.014	\\
+BFS preprocessing	&	2.925	&	2.861	&	2.866	&	11.97	&	11.93	&	11.59	\\
+BFS average/root	&	0.020	&	0.006	&	0.002	&	0.085	&	0.022	&	0.006	\\
+grid				&	0.048	&	0.024	&	0.016	&	0.190	&	0.070	&	0.040
 \end{tabular}
 \caption{Times for shortest paths in rectangles with 4 small holes.}
 \label{table4}
 \end{table}
 
 
+
 \begin{table}[ht]
 \begin{tabular}{l*{3}{r}|*{3}{r}}
-Rectangle 4 large holes & \multicolumn{3}{c|}{5K points} & \multicolumn{3}{c}{10K points}\\
+\textbf{Rectangle 4 large holes} & \multicolumn{3}{c|}{5K points} & \multicolumn{3}{c}{10K points}\\
 size rectangle	&	$32\times 8$	&	$64\times 16$	&	$128\times 32$	&	$32\times 8$	&	$64\times 16$	&	$128\times 32$\\						
 \hline
-SSSP preprocessing	&	0.007	&	0.009	&	0.009	&	0.012	&	0.018	&	0.019	\\
-SSSP average/root	&	0.027	&	0.028	&	0.026	&	0.057	&	0.054	&	0.053	\\
-BFS preprocessing	&	1.420	&	1.420	&	1.390	&	5.740	&	5.660	&	5.720	\\
-BFS average/root	&	0.007	&	0.003	&	0.002	&	0.028	&	0.013	&	0.007	\\
-grid				&	0.019	&	0.013	&	0.010	&	0.060	&	0.038	&	0.027
+SSSP preprocessing	&	0.004	&	0.005	&	0.005	&	0.013	&	0.015	&	0.009	\\
+SSSP average/root	&	0.003	&	0.003	&	0.003	&	0.006	&	0.005	&	0.005	\\
+BFS preprocessing	&	0.715	&	0.734	&	0.717	&	2.897	&	2.910	&	3.182	\\
+BFS average/root	&	0.005	&	0.002	&	0.001	&	0.019	&	0.008	&	0.004	\\
+grid				&	0.013	&	0.010	&	0.008	&	0.045	&	0.026	&	0.020
 \end{tabular}
 \caption{Times for shortest paths in rectangles with 4 large holes.}
 \label{table5}
@@ -1122,26 +1122,30 @@ It seems that the choice of the hole does not substantially affect the experimen
 We also constructed an instance with the rectangle of size $32\times 8$, one small hole,
 the original 2K points, and 1K extra points quite cluttered
 around the portion of $st$ in the domain. The generic algorithm took 427 seconds and the new
-algorithm took 259 seconds.
+algorithm took 259 seconds. 
+
 
 \begin{table}[ht]
 \begin{tabular}{l*{4}{r}}
-Rectangle 1 small hole & \multicolumn{4}{c}{2K points}\\
+\textbf{Rectangle 1 small hole} & \multicolumn{4}{c}{2K points}\\
 size rectangle	&	$8\times 2$	&	$16\times 4$	&	$32\times 8$ & $64\times 16$ \\	
 \hline
-new separation algorithm	&	65	&	64	&	53	&	38  \\
-generic algorithm			&	215	&	87	&	43	&	29
+new separation algorithm	&	41	&	41	&	32	&	30  \\
+generic algorithm			&	155	&	60	&	26	&	21 \\
+cycle length				&   9   &   20  &   46  &   126
 \end{tabular}
 \caption{Times for minimum separation with 1 hole.}
 \label{table6}
 \end{table}
+
 \begin{table}[ht]
 \begin{tabular}{l*{3}{r}|*{3}{r}}
-Rectangle 4 holes & \multicolumn{3}{c|}{2K points, small holes} & \multicolumn{3}{c}{5K points, large holes}\\
+\textbf{Rectangle 4 holes} & \multicolumn{3}{c|}{2K points, small holes} & \multicolumn{3}{c}{5K points, large holes}\\
 size rectangle	&	$32\times 8$ &	$64\times 16$ & $128\times 32$ & $32\times 8$ &	$64\times 16$ & $128\times 32$\\	
 \hline
-new separation algorithm	&	29	&	35	&	35	&	413 & 451 & 388  \\
-generic algorithm			&	80	&	40	&	30	&	416 & 266 & 206
+new separation algorithm	&	20	&	18	&	5.6	&	233 & 259 & 240  \\
+generic algorithm			&	26	&	17	&	4.1	&	269 & 168 & 120 \\
+cycle length				&	23  &   68	&	201 &	29	& 77  & 342 
 \end{tabular}
 \caption{Times for minimum separation with 4 holes.}
 \label{table7}
