@@ -1119,10 +1119,13 @@ Besides the new algorithm we also implemented the generic algorithm of Section~\
 The measured times are in Tables~\ref{table6}--\ref{table7}.
 For the case of $4$ holes we always put $t$ above the rectangle and $s$ in one hole. 
 It seems that the choice of the hole does not substantially affect the experimental time in our setting.
-We also constructed an instance with the rectangle of size $32\times 8$, one small hole,
-the original 2K points, and 1K extra points quite cluttered
-around the portion of $st$ in the domain. The generic algorithm took 427 seconds and the new
-algorithm took 259 seconds. 
+
+To show that our new algorithm can work substantially faster than the generic algorithm,
+we created an instance where we expect so.
+For this we take the a rectangle of size $32\times 8$ with one small hole,
+the original 2K points, and add 1K extra points quite cluttered
+around the portion of $st$ in the domain. The generic algorithm took XXX seconds and the new
+algorithm took XXX seconds. If instead we add 2K points...
 
 
 \begin{table}[ht]
