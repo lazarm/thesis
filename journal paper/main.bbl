@@ -1,0 +1,142 @@
+\begin{thebibliography}{10}
+
+\bibitem{BK09}
+S.~Bereg and D.~G. Kirkpatrick.
+\newblock Approximating barrier resilience in wireless sensor networks.
+\newblock {\em Proc. 5th ALGOSENSORS}, pp.~29--40. Springer, LNCS 5804, 2009,
+  \url{http://dx.doi.org/10.1007/978-3-642-05434-1_5}.
+
+\bibitem{CG16}
+S.~Cabello and P.~Giannopoulos.
+\newblock The complexity of separating points in the plane.
+\newblock {\em Algorithmica} 74(2):643--663, 2016,
+  \url{http://dx.doi.org/10.1007/s00453-014-9965-6}.
+
+\bibitem{CJ15}
+S.~Cabello and M.~Jej{\v c}i{\v c}.
+\newblock Shortest paths in intersection graphs of unit disks.
+\newblock {\em Comput. Geom.} 48(4):360--367, 2015,
+  \url{http://dx.doi.org/10.1016/j.comgeo.2014.12.003}.
+
+\bibitem{CK15}
+S.~Cabello and M.~Kerber.
+\newblock Semi-dynamic connectivity in the plane.
+\newblock {\em Algorithms and Data Structures - 14th International Symposium,
+  {WADS} 2015. Proceedings}, pp.~115--126. Springer, Lecture Notes in Computer
+  Science 9214, 2015, \url{http://dx.doi.org/10.1007/978-3-319-21840-3_10}.
+
+\bibitem{ChanS16}
+T.~M. Chan and D.~Skrepetos.
+\newblock All-pairs shortest paths in unit-disk graphs in slightly subquadratic
+  time.
+\newblock {\em 27th International Symposium on Algorithms and Computation,
+  {ISAAC} 2016}, pp.~24:1--24:13, LIPIcs~64, 2016,
+  \url{http://dx.doi.org/10.4230/LIPIcs.ISAAC.2016.24}.
+
+\bibitem{bkos-08}
+M.~{de Berg}, O.~Cheong, M.~{van Kreveld}, and M.~Overmars.
+\newblock {\em Computational Geometry: Algorithms and Applications}.
+\newblock Springer-Verlag, 3rd ed. edition, 2008,
+  \url{http://dx.doi.org/10.1007/978-3-540-77974-2}.
+
+\bibitem{eik-01}
+A.~Efrat, A.~Itai, and M.~J. Katz.
+\newblock Geometry helps in bottleneck matching and related problems.
+\newblock {\em Algorithmica} 31(1):1--28, 2001,
+  \url{http://dx.doi.org/10.1007/s00453-001-0016-8}.
+
+\bibitem{GG11}
+J.~Gao and L.~Guibas.
+\newblock Geometric algorithms for sensor networks.
+\newblock {\em Philosophical Transactions of the Royal Society of London A:
+  Mathematical, Physical and Engineering Sciences} 370(1958):27--51, 2011,
+  \url{http://dx.doi.org/10.1098/rsta.2011.0215}.
+
+\bibitem{gkpvv-16}
+M.~Gibson, G.~Kanade, R.~Penninger, K.~Varadarajan, and I.~Vigan.
+\newblock On isolating points using unit disks.
+\newblock {\em J. of Computational Geometry} 7(1):540--557, 2016,
+  \url{http://dx.doi.org/10.20382/jocg.v7i1a22}.
+
+\bibitem{gkv-ipud-11}
+M.~Gibson, G.~Kanade, and K.~Varadarajan.
+\newblock On isolating points using disks.
+\newblock {\em Proc. 19th ESA}, pp.~61--69. Springer, LNCS 6942, 2011,
+  \url{http://dx.doi.org/10.1007/978-3-642-23719-5_6}.
+
+\bibitem{HS95}
+M.~L. Huson and A.~Sen.
+\newblock Broadcast scheduling algorithms for radio networks.
+\newblock {\em {IEEE MILCOM '95}}, vol.~2, pp.~647-651 vol.2, 1995,
+  \url{http://dx.doi.org/10.1109/MILCOM.1995.483546}.
+
+\bibitem{cgal:k-vda2-15a}
+M.~Karavelas.
+\newblock {2D} voronoi diagram adaptor.
+\newblock {\em {CGAL} User and Reference Manual}, {4.6} edition. {CGAL
+  Editorial Board}, 2015,
+  \url{http://doc.cgal.org/4.6/Manual/packages.html#PkgVoronoiDiagramAdaptor2Summary}.
+
+\bibitem{KH07}
+S.~Kloder and S.~Hutchinson.
+\newblock Barrier coverage for variable bounded-range line-of-sight guards.
+\newblock {\em Proc. ICRA}, pp.~391-396. IEEE, 2007,
+  \url{http://dx.doi.org/10.1109/ROBOT.2007.363818}.
+
+\bibitem{KWZ03}
+F.~Kuhn, R.~Wattenhofer, and A.~Zollinger.
+\newblock Ad-hoc networks beyond unit disk graphs.
+\newblock {\em Proceedings of the 2003 Joint Workshop on Foundations of Mobile
+  Computing}, pp.~69--78, DIALM-POMC '03, 2003,
+  \url{http://doi.acm.org/10.1145/941079.941089}.
+
+\bibitem{KLA07}
+S.~Kumar, T.-H. Lai, and A.~Arora.
+\newblock Barrier coverage with wireless sensors.
+\newblock {\em Wireless Networks} 13(6):817--834, 2007,
+  \url{http://doi.org/10.1007/s11276-006-9856-0}.
+
+\bibitem{LP10}
+Z.~Lotker and D.~Peleg.
+\newblock Structure and algorithms in the {SINR} wireless model.
+\newblock {\em SIGACT News} 41(2):74--84, 2010,
+  \url{http://doi.acm.org/10.1145/1814370.1814391}.
+
+\bibitem{cgal:n-rstd-15a}
+G.~Neyer.
+\newblock {dD} range and segment trees.
+\newblock {\em {CGAL} User and Reference Manual}, {4.6} edition. {CGAL
+  Editorial Board}, 2015,
+  \url{http://doc.cgal.org/4.6/Manual/packages.html#PkgRangeSegmentTreesDSummary}.
+
+\bibitem{pv-2013}
+R.~Penninger and I.~Vigan.
+\newblock Point set isolation using unit disks is {NP}-complete.
+\newblock {\em CoRR} abs/1303.2779, 2013, \url{http://arxiv.org/abs/1303.2779}.
+
+\bibitem{cgal:tf-ssd-15a}
+H.~Tangelder and A.~Fabri.
+\newblock {dD} spatial searching.
+\newblock {\em {CGAL} User and Reference Manual}, {4.6} edition. {CGAL
+  Editorial Board}, 2015,
+  \url{http://doc.cgal.org/4.6/Manual/packages.html#PkgSpatialSearchingDSummary}.
+
+\bibitem{cgal}
+{The CGAL Project}.
+\newblock {\em {CGAL} User and Reference Manual}.
+\newblock {CGAL Editorial Board}, 4.6 edition, 2015,
+  \url{http://doc.cgal.org/4.6/Manual/packages.html}.
+
+\bibitem{WGM06}
+Y.~Wang, J.~Gao, and J.~S.~B. Mitchell.
+\newblock Boundary recognition in sensor networks by topological methods.
+\newblock {\em Proceedings of the 12th Annual International Conference on
+  Mobile Computing and Networking}, pp.~122--133, MobiCom '06, 2006,
+  \url{http://doi.acm.org/10.1145/1161089.1161104}.
+
+\bibitem{zg-wsn-04}
+F.~Zhao and L.~Guibas.
+\newblock {\em Wireless Sensor Networks: An Information Processing Approach}.
+\newblock Elsevier/Morgan-Kaufmann, 2004.
+
+\end{thebibliography}

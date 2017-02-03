@@ -1,23 +1,20 @@
-\documentclass[a4paper,USenglish]{lipics}
+\documentclass[a4paper,11pt]{article}
 
-\usepackage{graphicx}
-\usepackage{wrapfig}
-\graphicspath{{figs/}}
-\usepackage{latexsym}
-\usepackage{url}
-\usepackage{amssymb}
-\usepackage{amsmath}
-%\usepackage{amsthm}
-\usepackage{amsfonts}
-\usepackage{ifthen}
-\usepackage{clrscode3e}
-\usepackage{fancybox}
+\usepackage[margin=30mm]{geometry}
 \usepackage{cite} % sort references within the same \cite command
 \usepackage{enumerate} % fancy options for enumerate environment
+\usepackage{amsmath,amsfonts,amssymb,amsthm}
+\usepackage{graphicx,epsfig,wrapfig}
+\usepackage[colorlinks=true,citecolor=black,linkcolor=black,urlcolor=blue]{hyperref}
+\usepackage{color,xcolor}
 \usepackage{microtype} % better line breaks and fewer overfull hboxes
+\usepackage{fancybox}
+\usepackage{stmaryrd}
+\usepackage{clrscode3e}
 \usepackage{varwidth}
 
-\usepackage{todonotes}
+
+\graphicspath{{figs/}}
 
 \renewcommand{\floatpagefraction}{.98}
 \renewcommand{\textfraction}{0.01}
@@ -31,12 +28,11 @@
 
 %\usepackage{fullpage}
 
-%\newtheorem{theorem}{Theorem}
-%\newtheorem{corollary}[theorem]{Corollary}
-%\newtheorem{lemma}[theorem]{Lemma}
-%\newtheorem{problem}[theorem]{Problem}
-%\newtheorem{proposition}[theorem]{Proposition}
-%\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{proposition}[theorem]{Proposition}
 
 \newcommand{\RR}{\ensuremath{\mathbb R}}  % real numbers
 \newcommand{\ZZ}{\ensuremath{\mathbb Z}}  % integer numbers
@@ -64,21 +60,14 @@
 
 \newcommand{\out}[1]{}
 
-\def\myparagraph#1{\medskip\noindent\textbf{#1.}}
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\title{Two Optimization Problems for Unit Disks}
-\titlerunning{Two Optimization Problems for Unit Disks}
+\title{Two Optimization Problems for Unit Disks\thanks{Supported by the Slovenian Research Agency, program P1-0297 and project L7-5459.}}
 
+\author{Sergio~Cabello\footnote{FMF, University of Ljubljana, and 
+	Institute of Mathematics, Physics and Mechanics, Slovenia.}}
+\author{Lazar~Milinkovi\'c\footnote{FMF and FRI, University of Ljubljana, Slovenia.}}
 
-\author[1]{Sergio~Cabello\footnote{Supported by the Slovenian Research Agency, program P1-0297 and project L7-5459.}}
-\author[2]{Lazar~Milinkovi\'c}
-\authorrunning{Sergio Cabello and Lazar~Milinkovi\'c}
-
-\affil[1]{FMF, University of Ljubljana, and 
-	Institute of Mathematics, Physics and Mechanics, Slovenia}
-\affil[2]{FMF and FRI, University of Ljubljana, Slovenia}
 
 %------------------------------ Text -------------------------------------
 
@@ -161,8 +150,8 @@ are a basic subroutine for several other more complex tasks.
 A somehow unexpected application of shortest paths in unit-disk graphs
 to boundary recognition is given in~\cite{WGM06}.
 The minimum-separation problem and variants thereof have been considered 
-in~\cite{CG16,gkv-ipud-11,pv-2013}. 
-The problem is dual to the barrier-resilience problem considered in~\cite{BK09,KH07,KLA05,KLA07}.
+in~\cite{CG16,gkpvv-16}. 
+The problem is dual to the barrier-resilience problem considered in~\cite{BK09,KH07,KLA07}.
 It is not obvious that the minimum-separation problem can be solved optimally
 in polynomial time, and the known algorithm for this uses as a subroutine 
 shortest paths in unit disk graphs. 
@@ -170,31 +159,36 @@ Thus, both problems considered in this paper are related and it is worth to
 consider them together.
 
 
-\myparagraph{Our contribution}
-We are aware of two algorithms to compute shortest-path trees in unit disk graphs in
-$O(n\log n)$ worst-case time: one by Cabello and Jej\v{c}i\v{c}~\cite{CJ15} and one Efrat, Itai and Katz~\cite{eik-01}. 
+\paragraph{Our contribution}
+We are aware of three algorithms to compute shortest-path trees in unit disk graphs in
+$O(n\log n)$ worst-case time: one by Cabello and Jej\v{c}i\v{c}~\cite{CJ15}, 
+one by Chan and Skrepetos~\cite{ChanS16}, and one Efrat, Itai and Katz~\cite{eik-01}. 
 Here we report on an implementation of a modification of the algorithm in~\cite{CJ15},
 and compare it against two obvious alternatives.
 The only complex ingredients in the algorithm is computing the Delaunay triangulation
-and static nearest-neighbour queries,
-but efficient libraries are available for this.
+and static nearest-neighbour queries, but efficient libraries are available for this.
 The algorithm of~\cite{eik-01} would be substantially harder to implement 
-and it has worse constants hidden in the $O$-notation. 
+and it has worse constants hidden in the $O$-notation. The algorithm of~\cite{ChanS16}
+for single source shortest paths is implementable and we expect that it would work
+good in practice. However, this last algorithm has been published only
+very recently, when we had completed our research.
 
 As mentioned before, it is not obvious that the minimum-separation problem 
 can be solved in polynomial time. 
-A 2-approximation algorithm is given by Gibson, Kanade, and Varadarajan~\cite{gkv-ipud-11}. 
+In particular, the conference version~\cite{gkv-ipud-11} of~\cite{gkpvv-16} gave
+2-approximation algorithm for the problem. 
 Cabello and Giannopoulos~\cite{CG16} provide an exact algorithm that takes $O(n^3)$ 
 worst-case time and works for arbitrary shapes, not just disks. 
 In this paper we improve this last algorithm to near-quadratic time for the 
 special case of unit disks. 
 The basic principle of the algorithm is the same, but several additional tools
-from Computational Geometry have to be employed to reduce the worst-case running time. 
-We implement a variant of the new, near-quadratic-time algorithm and report
+from Computational Geometry exploiting that we have unit disks
+have to be employed to reduce the worst-case running time. 
+Furthermore, we implement a variant of the new, near-quadratic-time algorithm and report
 on the experiments.
 
 
-\myparagraph{Assumptions} 
+\paragraph{Assumptions} 
 We will assume that \emph{unit disk} means that it has radius $1/2$. 
 Up to scaling the input data, this choice is irrelevant.
 However, it is convenient for the exposition
@@ -206,7 +200,7 @@ Henceforth $P$ will be the set of centers of $\D$.
 All the computation will be concentrated on $P$. 
 In particular, we assume that $P$ is known.
 (For the shortest path problem, one could possibly consider weaker models based 
-on adjacencies. )
+on adjacencies.)
 
 We will work with the graph $\GG(P)$ with vertex set $P$ 
 and an edge between two points $p,q\in P$ 
@@ -219,7 +213,7 @@ It is trivial to adapt to the general case, for example
 treating each connected component separately.
 The implementation does not make this assumption.
 
-\myparagraph{Organization of the paper} 
+\paragraph{Organization of the paper} 
 In Section~\ref{sec:algorithms} we discuss the theoretical
 algorithms for both problems and their guarantees.
 In Section~\ref{sec:implementation} we discuss the implementations 
@@ -367,14 +361,69 @@ a very concrete family cycles, as follows.
 Consider any optimal cycle $W^*$ and let $r^*$ be any vertex in $W^*$.
 Fix a shortest-path tree $T_{r^*}$ from $r^*$ in $G$.
 When there are many, the choice of $T_{r^*}$ is irrelevant. 
-Then, the set of cycles $\{ \cycle(T_{r^*},e)\mid e\in E(G)\setminus E(T_{r^*})\}$
+Then, the set of cycles 
+\[
+	\{ \cycle(T_{r^*},e)\mid e\in E(G)\setminus E(T_{r^*})\}
+\]
 contains an optimal solution.
-This follows from the co-called 3-path condition; 
-see~\cite{CG16} for the ideas, and Appendix~\ref{sec:3-path-condition} 
-for a self-contained proof. Since we do not know $r^*$, we just try all
-possible roots. (This leads to the option of having a randomized algorithm,
+This follows from the co-called 3-path condition.
+We include here the key property that implies this claim and
+spell out a self-contained proof. See~\cite{CG16} for very similar ideas.
+
+\begin{lemma}
+	Let $W^*$ be a shortest cycle in $G$ that crosses the segment 
+	$st$ an odd number of times and let $r^*$ be any vertex in $W^*$.
+	Fix a shortest-path tree $T_{r^*}$ from $r^*$ in $G$.
+	Then, the set of cycles $\{ \cycle(T_{r^*},e)\mid e\in E(G)\setminus E(T_{r^*})\}$
+	contains a shortest cycle of $G$ that crosses $st$ an odd number of times.
+\end{lemma}
+\begin{proof}
+	For any points $p$ and $q$ of $P$, let $T_{r^*}[p \rightarrow q]$ be the 
+	unique path contained in $T_{r^*}$ from $p$ to $q$.
+	For every edge $pq$ of $G$, let $\walk(T_{r^*},pq)$ be the closed walk that follows 
+	$T_{r^*}[r^*\rightarrow p]$, then the edge $pq$, and finally $T_{r^*}[q\rightarrow r^*]$.
+	We then have the following relation modulo 2:
+	\begin{align*}
+		\sum_{pq\in W^*}& \CR(st,\walk(T_{r^*},pq)) \\ 
+		&=~ 
+		\sum_{pq\in W^*} \bigl( \CR(st,T_{r^*}[r^* \rightarrow p])+ \CR(st,pq) + 
+						\CR(st,T_{r^*}[q \rightarrow r^*]) \bigr) \\
+		&=~ \sum_{pq\in W^*} \CR(st,pq)  \\
+		&=~ \CR(st,W^*) \\
+		&=~ 1. 		
+	\end{align*}
+	In the second equality we have used that each path
+	$T_{r^*}[r^*\rightarrow p]$ and its reverse $T_{r^*}[p\rightarrow r^*]$ 
+	appears an even number of times in the sum,
+	and thus cancel out modulo 2.
+	Parity implies that, for some edge $p_0q_0$ of $W^*$, 
+	we have $\CR(st,\walk(T_{r^*},p_0q_0))=1$.
+	It must be that $p_0q_0\notin E(T_{r^*})$ because for each edge $pq$ of $T_{r^*}$
+	it holds $\CR(st,\walk(T_{r^*},pq))=0$.
+	
+	Since $\CR(st,\walk(T_{r^*},p_0q_0))= \CR(st,\cycle(T_{r^*},p_0q_0))$ 
+	because the path from $r^*$ to the lowest common ancestor of $p$ and $q$ in $T_{r^*}$ 
+	is counted twice on the left side of the equality, 
+	we have $\CR(st,\cycle(T_{r^*},p_0q_0))=1$. 
+
+	Since $r^*$ is a vertex of $W^*$ and $p_0q_0$ is an edge of $W^*$,
+	the length of $W^*$ is at least the length of $T_{r^*}[r^* \rightarrow p_0]$ plus $1$,
+	for the edge $p_0q_0$,
+	plus the length of $T_{r^*}[q_0 \rightarrow r^*]$. However, this second part
+	is exactly the length of $\walk(T_{r^*},p_0q_0)$, which is at least the length of 
+	$\cycle(T_{r^*},p_0q_0)$.
+
+	We have shown that, for some edge $p_0q_0\in E(G)\setminus E(T_{r^*})$,
+	the cycle $\cycle(T_{r^*},p_0q_0)$ is not longer than $W^*$ 
+	and crosses $st$ an odd number of times. The result follows.
+\end{proof}
+
+
+Since we do not know a vertex $r^*$ in the shortest cycle of $G$, we just try all
+possible roots as candidates. (This leads to the option of having a randomized algorithm,
 by selecting some roots at random, for the case where the optimal solution is large.)
-In summary, the size of the optimal solution is given by
+Thus, for each vertex $r$ of $G$, we fix a shortest-path tree $T_r$ from $r$ in $G$,
+and then the size of the optimal solution is given by
 \[
 	\min \{ 1+d_G(r,p)+d_G(r,q) \mid
 		r\in P,~ pq\in E(G)\setminus E(T_r),~
@@ -382,7 +431,7 @@ In summary, the size of the optimal solution is given by
 \]
 
 The values $\CR (st, \cycle(T_r,e))$ can be computed in constant amortized time per edge
-with some easy bookkeeping. Consider a fixed tree $T_r$.
+with some easy bookkeeping, as follows. Consider a fixed tree $T_r$.
 For each point $p\in P$ we store $N[p]$ as the parity of the number of crossings
 of the path in $T_r$ from $r$ to $p$. When $p$ is not the root,
 the value $N[p]$ can be computed from the value of its parent $\pi[p]$ in $T_r$
@@ -482,8 +531,14 @@ of $T$.
 	These are standard concepts in Computational Geometry;
 	see for example~\cite[Chapters 5 and 8]{bkos-08}.
 	We assume that the reader is familiar with the topic.
-	For readers that are not very familiar with point-line duality,
-	Figure~\ref{fig:duality} in the appendix may be helpful.
+	Figure~\ref{fig:duality} may be helpful in the following discussion.
+
+	\begin{figure}[htb]
+		\centering
+		\includegraphics[width=\textwidth]{duality}
+		\caption{Transformation in the proof of Lemma~\ref{lem:block}.}
+		\label{fig:duality}
+	\end{figure}
 	
 	We use the following precise point-line duality: 
 	the non-vertical line $\ell \equiv y=mx+c$ 
@@ -581,7 +636,7 @@ of $T$.
 	$\{ b\in B \mid \text{$ab$ does not intersect $\sigma$ and $|ab|\le 1$}\}$
 	is done similarly (and the same data structure works), we just have
 	to query for 2 of the other quadrants. 
-	(The top-left quadrant of $\phi(a)$ is always empty.)
+	(The top-left quadrant of $\varphi(a)$ is always empty.)
 \end{proof}
 
 Inside the data structure of Lemma~\ref{lem:block} we are using a data structure
@@ -647,7 +702,7 @@ Up to symmetry, we have the following cases:
 	obtained an edge $pq_p$ of $G$ with $\CR(\cycle(T_r,pq_p))=1$
 	and $\dist[p]+\dist[q_p]+1=i+i'+1$.
 	If for each $p$ we have $|pq_p|> 1$, then $L_i^j\times L_{i'}^{1-j}$
-	does not contain any edge of $G$
+	does not contain any edge of $G$.
 	The overall running time, if $m=|L_i^j|+|L_{i'}^{1-j}|$, is
 	$O(m\log m)$.
 \item If we want to search the candidates $(p,q)\in L_i^j\times R_{i'}^{j}$
@@ -690,7 +745,7 @@ case of unit disks the previous, generic algorithm.
 	as before, consider the graph $G=\GG(P)$.
 	For each root $r\in P$ we build the shortest-path tree
 	and the sets $W_i,L_i^0,L_i^1,R_i^0,L_i^1$ for all $i$ in $O(n\log n)$ time.
-	We then have at most $n$ iterations where, in iteration $i$
+	We then have at most $n$ iterations where, at iteration $i$,
 	we spend $O(|W_i\cup W_{i-1}|\log^3 |W_i\cup W_{i-1}|)$ time.
 	Since the sets $W_i$ are disjoint,
 	adding over $i$, this means that we spend $O(n\log^3 n)$ time per root $r\in P$.
@@ -699,6 +754,7 @@ case of unit disks the previous, generic algorithm.
 	that the algorithm is computing the same as the generic algorithm.
 \end{proof}
 
+\out{%SHORT VERSION
 \begin{figure}[htb]
 \begin{center}
 \ovalbox{~~~~
@@ -739,339 +795,12 @@ case of unit disks the previous, generic algorithm.
 \caption{Work for each vertex in the new algorithm for minimum separation with unit disks.}
 \label{fig:compact}
 \end{figure}
+}
 
-The work for each root is described schematically in Figure~\ref{fig:compact}.
-A slightly more precise version of the algorithm is given 
-as \proc{SeparationUnitDisksCompact} in Appendix~\ref{sec:FULLAlgorithm}.
-As before, the variable $\best$ stores the length of the shortest cycle (or actually
-rooted closed walk) that we have found so far. We can start setting $\best=n+1$
-at start.
-If eventually we finish with the value $\best=n+1$, it means that there is no
-feasible solution for the separation problem.
-When we consider a root $r$ we are interested in closed walks rooted at $r$
-and length at most $\best$. Since any closed walk through a vertex of $W_i$ has
-length at least $2i$, we only need to consider indices $i$ such that $2i<\best$.
-Moreover (and this is not described in the algorithm, but it is done
-in the implementation), we can consider first
-the pairs that give walks for length $2i$ first, like for example $L^0_i\times L^1_{i-1}$ 
-and then the ones that give length  $2i+1$, like for example $L^0_i\times L^1_i$.
-If we use this order, as soon as we find an edge in 
-the while-loop, we can finish the work for the root $r$, and move onto the next root.
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Implementation and experiments}
-\label{sec:implementation}
-
-We have implemented the algorithms of Section~\ref{sec:algorithms}
-in C++ using CGAL version~4.6.3~\cite{cgal}
-because it provides the more complex procedures we need:
-Delaunay triangulations and Voronoi diagrams~\cite{cgal:k-vda2-15a}, 
-range trees~\cite{cgal:n-rstd-15a}, and nearest neighboours~\cite{cgal:tf-ssd-15a}.
-Although in some cases we had to make small modifications, it was
-very helpful to have the CGAL code available as a starting point. 
-The coordinates of the points were Cartesian doubles.
-
-Experiments were carried out in a laptop with CPU i5-5200U at 2.20 Ghz, 
-8GB of RAM, and Windows 10. \emph{All times we report are in seconds.}
-
-\myparagraph{Data generation}
-Data points were generated uniformly at random in the following polygonal domains:
-rectangles without holes, rectangles with a "small" rectangular hole, rectangles
-with a "large" rectangular hole, rectangles with 4 "small" rectangular holes, 
-and rectangles with 4 "large" rectangular holes. The precise proportions of the domains
-with holes are in Figures~\ref{fig:data_generation1} and~\ref{fig:data_generation2}.
-We generated 1K, 2K, 5K, 10K, 20K and 50K points for the cases where the outer rectangle
-has sizes $4\times 1$, $8\times 2$,\ldots, $128\times 32$.
-The data was generated once and stored.
-For the minimum-separation problem $s$ was placed in the middle of a hole and 
-$t$ vertically above $s$ in the outer face.  
-Some of these domains are not meaningful for the minimum-separation problem 
-because the disks centered at the points cover $s$. 
-
-\begin{figure}
-	\includegraphics[width=\textwidth,page=1]{data_generation}
-	\caption{Data generation with a small hole (left) and a large hole (right).}
-	\label{fig:data_generation1}
-\end{figure}
-
-\begin{figure}
-	\includegraphics[width=\textwidth,page=2]{data_generation}
-	\caption{Data generation with four small holes (right) and four large holes (right).}
-	\label{fig:data_generation2}
-\end{figure}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%
-\myparagraph{Shortest-path tree in unit-disk graphs}
-We have implemented the algorithm described in Section~\ref{sec:algorithm-sptree}.
-For the shortest-path tree we used the Delaunay triangulation as provided by CGAL.
-The data structure for nearest neighbour queries is a small extension of
-the one provided by~\cite{cgal:k-vda2-15a}. 
-In the tables we refer to this algorithm as \DEF{SSSP}.
-
-We compared the implementation with two obvious alternative algorithms to
-compute shortest-path trees.
-The first alternative is to build the graph $G=\GG(P)$ explicitly. 
-Thus, for each pair of points $p,q$ we check whether their distance is
-at most one and add an edge to a graph data structure.
-We can then use breadth-first-search (BFS) from the given root $r$.
-The preprocessing is quadratic, and the time spent to compute
-a shortest-path tree depends on the density of the graph $G$.
-In the tables we refer to this algorithm as \DEF{BFS}.
-
-The second alternative we consider is to use a unit-length grid. 
-Two points $(x,y)$ and $(x',y')$ are in the same grid cell
-if and only if 
-$(\lfloor x\rfloor ,\lfloor y\rfloor)=(\lfloor x'\rfloor ,\lfloor y'\rfloor)$.
-We store all the points of a grid cell $c$ in a list $\ell(c)$.
-The non-empty lists $\ell(c)$ are stored in a dictionary,
-where the bottom-left corner of the cell is used as key.
-We can then run some sort of BFS using this structure. 
-The list $\ell(c)$ for a cell $c$ maintains the points that
-have not been visited by the BFS tree yet. When processing
-a point $p$ in a cell $c$, we have to treat all the points 
-in the lists of $c$ and its $8$ adjacent cells as candidate points.
-Any point that is adjacent to $p$ is then removed from the list of its cell. 
-The preprocessing is linear, and the time spent to compute
-a shortest-path tree depends on the distribution of the points.
-It is easy to produce cases where the algorithm would need quadratic time.
-For each shortest-path tree we compute the lists and the dictionary anew.
-(This step is very fast in any case.)
-In the tables we refer to this algorithm as \DEF{grid}.
-
-The measured times are in Tables~\ref{table1}--\ref{table5}.
-For SSSP and BFS we report the preprocessing time that is independent of the source
-(like building the Delaunay triangulation or building the graph) and the average
-time spent for a shortest-path tree over 50 choices of the root.
-For grid we just report the total running time; assigning points to
-the grid cells and putting them into a dictionary is almost negligible.
-As it can be seen, the results for SSSP are very much independent of the shape and,
-for dense point sets it outperforms the other algorithms.
-
-%For smaller instances the time of SSSP is worse, 
-%but comparable to grid and BFS.
-While the algorithm SSSP has guarantees in the worst case,
-for BFS and grid one can construct instances 
-where the behavior will be substantially bad. 
-For example, to the instance with 10K points in a rectangle of size $32\times 8$ 
-with a small hole we added 1K points quite cluttered. 
-The increase in time with respect to the original instance 
-was for SSSP 9,7\% (preprocessing) and 13,6\% (one root), for BFS it was
-21,9\% (preprocessing) and 56,5\% (one root), and for grid it was 25\%.
-
-
-\begin{table}
-\begin{tabular}{l*{6}{r}}
-Rectangle without holes & \multicolumn{6}{c}{20K points}\\						
-size rectangle	&	$4\times 1$	&	$8\times 2$	&	$16\times 4$	&	$32\times 8$	&	$64\times 16$	&	$128\times 32$	\\
-\hline
-SSSP preprocessing	&	0.025	&	0.027	&	0.025	&	0.025	&	0.025	&	0.026	\\
-SSSP average/root	&	0.131	&	0.130	&	0.127	&	0.126	&	0.129	&	0.136	\\
-BFS preprocessing	&	25.057	&	20.433	&	17.773	&	17.734	&	17.347	&	17.179	\\
-BFS average/root	&	3.406	&	1.359	&	0.404	&	0.088	&	0.025	&	0.009	\\
-grid	&	1.605	&	1.647	&	0.695	&	0.227	&	0.089	&	0.053	\vspace{.2cm}	\\
-\hline
-  & \multicolumn{6}{c}{50K points}\\						
-\hline
-SSSP preprocessing	&	0.091	&	0.091	&	0.070	&	0.071	&	0.070	&	0.069	\\
-SSSP average/root	&	0.592	&	0.562	&	0.375	&	0.377	&	0.372	&	0.366	\\
-BFS preprocessing	&	>3min	&	159.812	&	144.965	&	140.404	&	131.854	&	132.475	\\
-BFS average/root	& memory limit & 9.378	&	2.789	&	0.584	&	0.144	&	0.044	\\
-grid				&	11.567	&	13.660	&	4.592	&	1.346	&	0.432	&	0.187
-\end{tabular}
-\caption{Times for shortest paths in rectangles without holes.}
-\label{table1}
-\end{table}
-
-\begin{table}
-\begin{tabular}{l*{6}{r}}
-Rectangle 1 small hole & \multicolumn{6}{c}{10K points}\\						
-size rectangle	&	$4\times 1$	&	$8\times 2$	&	$16\times 4$	&	$32\times 8$	&	$64\times 16$	&	$128\times 32$	\\
-\hline
-SSSP preprocessing	&	0.021	&	0.012	&	0.012	&	0.012	&	0.012	&	0.012	\\
-SSSP average/root	&	0.104	&	0.059	&	0.060	&	0.061	&	0.064	&	0.070	\\
-BFS preprocessing	&	8.500	&	4.300	&	4.100	&	4.100	&	4.000	&	4.000	\\
-BFS average/root	&	1.183	&	0.318	&	0.091	&	0.026	&	0.008	&	0.003	\\
-grid	&	0.486	&	0.513	&	0.168	&	0.072	&	0.035	&	0.026\vspace{.2cm}	\\
-\hline
-  & \multicolumn{6}{c}{20K points}\\						
-\hline
-SSSP preprocessing	&	0.027	&	0.026	&	0.025	&	0.025	&	0.025	&	0.025	\\
-SSSP average/root	&	0.142	&	0.137	&	0.136	&	0.136	&	0.138	&	0.145	\\
-BFS preprocessing	&	24.813	&	19.817	&	18.396	&	17.976	&	17.542	&	17.313	\\
-BFS average/root	&	3.253	&	1.328	&	0.467	&	0.108	&	0.031	&	0.011	\\
-grid				&	2.181	&	2.627	&	0.668	&	0.262	&	0.104	&	0.060	
-\end{tabular}
-\caption{Times for shortest paths in rectangles with a small hole.}
-\label{table2}
-\end{table}
-
-
-\begin{table}
-\begin{tabular}{l*{3}{r}|*{3}{r}}
-Rectangle 4 small holes & \multicolumn{3}{c|}{10K points} & \multicolumn{3}{c}{20K points}\\
-size rectangle	&	$32\times 8$	&	$64\times 16$	&	$128\times 32$	&	$32\times 8$	&	$64\times 16$	&	$128\times 32$\\						
-\hline
-SSSP preprocessing	&	0.021	&	0.018	&	0.018	&	0.027	&	0.026	&	0.026	\\
-SSSP average/root	&	0.056	&	0.058	&	0.064	&	0.125	&	0.126	&	0.131	\\
-BFS preprocessing	&	6.291	&	6.102	&	6.364	&	18.325	&	17.887	&	17.256	\\
-BFS average/root	&	0.033	&	0.010	&	0.004	&	0.102	&	0.031	&	0.010	\\
-grid				&	0.064	&	0.031	&	0.023	&	0.230	&	0.096	&	0.055
-\end{tabular}
-\caption{Times for shortest paths in rectangles with 4 small holes.}
-\label{table4}
-\end{table}
-
-
-\begin{table}
-\begin{tabular}{l*{3}{r}|*{3}{r}}
-Rectangle 4 large holes & \multicolumn{3}{c|}{5K points} & \multicolumn{3}{c}{10K points}\\
-size rectangle	&	$32\times 8$	&	$64\times 16$	&	$128\times 32$	&	$32\times 8$	&	$64\times 16$	&	$128\times 32$\\						
-\hline
-SSSP preprocessing	&	0.007	&	0.009	&	0.009	&	0.012	&	0.018	&	0.019	\\
-SSSP average/root	&	0.027	&	0.028	&	0.026	&	0.057	&	0.054	&	0.053	\\
-BFS preprocessing	&	1.420	&	1.420	&	1.390	&	5.740	&	5.660	&	5.720	\\
-BFS average/root	&	0.007	&	0.003	&	0.002	&	0.028	&	0.013	&	0.007	\\
-grid				&	0.019	&	0.013	&	0.010	&	0.060	&	0.038	&	0.027
-\end{tabular}
-\caption{Times for shortest paths in rectangles with 4 large holes.}
-\label{table5}
-\end{table}
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%
-\myparagraph{Minimum separation with unit-disk}
-We have implemented the algorithm \proc{GenericMinimumSeparation}
-and the new algorithm based on a compact treatment of the edges.
-The shortest-path trees are constructed using the algorithm of Section~\ref{sec:algorithm-sptree}.
-The table $N[~]$ and the sets $L^0_i,L^1_i,R^0_i,R^1_i$
-are constructed at the time of computing the shortest-path tree.
-
-In the data structure of Lemma~\ref{lem:block},
-we do use a 2-dimensional tree as the primary structure, making some modifications
-of~\cite{cgal:n-rstd-15a}. In the secondary structure, for nearest neighbour, 
-instead of using Voronoi diagrams, we used a small modification of
-the $kd$-trees implemented in~\cite{cgal:tf-ssd-15a}. 
-In some preliminary experiments this seemed to be a better choice.
-In our modification, we make a range search query for points at distance at most $1$,
-and finish the search whenever we get the first point.
-%
-In the new algorithm, before calling to the function to candidates pairs, like for example $L_i^0\times R^i_1$,
-we test that both sets are non-empty. This simple test reduced the time by 30-50\%
-in our test cases.
-
-Besides the new algorithm we also implemented the generic algorithm of Section~\ref{sec:generic}.
-The measured times are in Tables~\ref{table6}--\ref{table7}.
-For the case of $4$ holes we always put $t$ above the rectangle and $s$ in one hole. % It seems that the choice of the hole does not substantially affect the experimental time in our setting.
- We also constructed an instance with the rectangle of size $32\times 8$, one small hole,
-the original 2K points, and 1K extra points quite cluttered
-around the portion of $st$ in the domain. The generic algorithm took 427 seconds and the new
-algorithm took 259 seconds.
-
-\begin{table}[h!]
-\begin{tabular}{l*{4}{r}}
-Rectangle 1 small hole & \multicolumn{4}{c}{2K points}\\
-size rectangle	&	$8\times 2$	&	$16\times 4$	&	$32\times 8$ & $64\times 16$ \\	
-\hline
-new separation algorithm	&	65	&	64	&	53	&	38  \\
-generic algorithm			&	215	&	87	&	43	&	29
-\end{tabular}
-\caption{Times for minimum separation with 1 hole.}
-\label{table6}
-\end{table}
-\begin{table}[h!]
-\begin{tabular}{l*{3}{r}|*{3}{r}}
-Rectangle 4 holes & \multicolumn{3}{c|}{2K points, small holes} & \multicolumn{3}{c}{5K points, large holes}\\
-size rectangle	&	$32\times 8$ &	$64\times 16$ & $128\times 32$ & $32\times 8$ &	$64\times 16$ & $128\times 32$\\	
-\hline
-new separation algorithm	&	29	&	35	&	35	&	413 & 451 & 388  \\
-generic algorithm			&	80	&	40	&	30	&	416 & 266 & 206
-\end{tabular}
-\caption{Times for minimum separation with 4 holes.}
-\label{table7}
-\end{table}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\myparagraph{Conclusions on the experiments.}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\bibliographystyle{abbrv}
-\bibliography{biblio}
-
-
-
-\newpage
-\begin{appendix}
-\section{Appendix}
-\label{appendix}
-
-\subsection{Additional material}
-\label{sec:3-path-condition}
-\label{sec:FULLAlgorithm}
-
-\begin{lemma}
-	Let $W^*$ be a shortest cycle in $G$ that crosses the segment 
-	$st$ an odd number of times and let $r^*$ be any vertex in $W^*$.
-	Fix a shortest-path tree $T_{r^*}$ from $r^*$ in $G$.
-	Then, the set of cycles $\{ \cycle(T_{r^*},e)\mid e\in E(G)\setminus E(T_{r^*})\}$
-	contains a shortest cycle of $G$ that crosses $st$ an odd number of times.
-\end{lemma}
-\begin{proof}
-	The proof is a standard consequence of the 3-path condition and 
-	very similar to that given in~\cite{CG16}. We spell it out.
-	
-	For any points $p$ and $q$ of $P$, let $T_{r^*}[p \rightarrow q]$ be the 
-	unique path contained in $T_{r^*}$ from $p$ to $q$.
-	For every edge $pq$ of $G$, let $\walk(T_{r^*},pq)$ be the closed walk that follows 
-	$T_{r^*}[r^*\rightarrow p]$, then the edge $pq$, and finally $T_{r^*}[q\rightarrow r^*]$.
-	We then have the following relation modulo 2:
-	\begin{align*}
-		\sum_{pq\in W^*} \CR(st,\walk(T_{r^*},pq)) ~&=~ 
-		\sum_{pq\in W^*} \bigl( \CR(st,T_{r^*}[r^* \rightarrow p])+ \CR(st,pq) + 
-						\CR(st,T_{r^*}[q \rightarrow r^*]) \bigr) \\
-		&=~ \sum_{pq\in W^*} \CR(st,pq)  \\
-		&=~ \CR(st,W^*) \\
-		&=~ 1. 		
-	\end{align*}
-	In the second equality we have used that each path
-	$T_{r^*}[r^*\rightarrow p]$ and its reverse $T_{r^*}[p\rightarrow r^*]$ 
-	appears an even number of times in the sum,
-	and thus cancel out modulo 2.
-	Parity implies that, for some edge $p_0q_0$ of $W^*$, 
-	we have $\CR(st,\walk(T_{r^*},p_0q_0))=1$.
-	It must be that $p_0q_0\notin E(T_{r^*})$ because for each edge $pq$ of $T_{r^*}$
-	it holds $\CR(st,\walk(T_{r^*},pq))=0$.
-	
-	Since $\CR(st,\walk(T_{r^*},p_0q_0))= \CR(st,\cycle(T_{r^*},p_0q_0))$ 
-	because the path from $r^*$ to the lowest common ancestor of $p$ and $q$ in $T_{r^*}$ 
-	is counted twice on the left side of the equality, 
-	we have $\CR(st,\cycle(T_{r^*},p_0q_0))=1$. 
-
-	Since $r^*$ is a vertex of $W^*$ and $p_0q_0$ is an edge of $W^*$,
-	the length of $W^*$ is at least the length of $T_{r^*}[r^* \rightarrow p_0]$ plus $1$,
-	for the edge $p_0q_0$,
-	plus the length of $T_{r^*}[q_0 \rightarrow r^*]$. However, this second part
-	is exactly the length of $\walk(T_{r^*},p_0q_0)$, which is at least the length of 
-	$\cycle(T_{r^*},p_0q_0)$.
-
-	We have shown that, for some edge $p_0q_0\in E(G)\setminus E(T_{r^*})$,
-	the cycle $\cycle(T_{r^*},p_0q_0)$ is not longer than $W^*$ 
-	and crosses $st$ an odd number of times. The result follows.
-\end{proof}
-
-
-\begin{figure}[htb]
-	\centering
-	\includegraphics[width=\textwidth]{duality}
-	\caption{Transformation in the proof of Lemma~\ref{lem:block}.}
-	\label{fig:duality}
-\end{figure}
 
 \begin{figure}[htb]
 \begin{center}
-\scalebox{.92}{%
+\scalebox{.85}{%
 \ovalbox{~~~~
 \begin{varwidth}{\linewidth}
 \begin{codebox}
@@ -1134,12 +863,188 @@ generic algorithm			&	80	&	40	&	30	&	416 & 266 & 206
 \end{codebox}
 \end{varwidth}~~~~}}
 \end{center}
-%\caption{New algorithm for minimum separation with unit disks.}
-%\label{fig:FULL}
+\caption{New algorithm for minimum separation with unit disks.}
+\label{fig:FULLAlgorithm}
 \end{figure}
 
 
-\begin{table}[h]
+%The work for each root is described schematically in Figure~\ref{fig:compact}.
+The resulting new algorithm is given in Figure~\ref{fig:FULLAlgorithm}.
+As before, the variable $\best$ stores the length of the shortest cycle (or actually
+rooted closed walk) that we have found so far. We can start setting $\best=n+1$
+at start.
+If eventually we finish with the value $\best=n+1$, it means that there is no
+feasible solution for the separation problem.
+When we consider a root $r$ we are interested in closed walks rooted at $r$
+and length at most $\best$. Since any closed walk through a vertex of $W_i$ has
+length at least $2i$, we only need to consider indices $i$ such that $2i<\best$.
+Moreover (and this is not described in the algorithm, but it is done
+in the implementation), we can consider first
+the pairs that give walks for length $2i$ first, like for example $L^0_i\times L^1_{i-1}$ 
+and then the ones that give length  $2i+1$, like for example $L^0_i\times L^1_i$.
+If we use this order, as soon as we find an edge in 
+the while-loop, we can finish the work for the root $r$, and move onto the next root.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Implementation and experiments}
+\label{sec:implementation}
+
+We have implemented the algorithms of Section~\ref{sec:algorithms}
+in C++ using CGAL version~4.6.3~\cite{cgal}
+because it provides the more complex procedures we need:
+Delaunay triangulations and Voronoi diagrams~\cite{cgal:k-vda2-15a}, 
+range trees~\cite{cgal:n-rstd-15a}, and nearest neighboours~\cite{cgal:tf-ssd-15a}.
+Although in some cases we had to make small modifications, it was
+very helpful to have the CGAL code available as a starting point. 
+The coordinates of the points were Cartesian doubles.
+
+Experiments were carried out in a laptop with CPU i5-5200U at 2.20 Ghz, 
+8GB of RAM, and Windows 10. \emph{All times we report are in seconds.}
+
+\paragraph{Data generation}
+Data points were generated uniformly at random in the following polygonal domains:
+rectangles without holes, rectangles with a "small" rectangular hole, rectangles
+with a "large" rectangular hole, rectangles with 4 "small" rectangular holes, 
+and rectangles with 4 "large" rectangular holes. The precise proportions of the domains
+with holes are in Figures~\ref{fig:data_generation1} and~\ref{fig:data_generation2}.
+We generated 1K, 2K, 5K, 10K, 20K and 50K points for the cases where the outer rectangle
+has sizes $4\times 1$, $8\times 2$,\ldots, $128\times 32$.
+The data was generated once and stored.
+For the minimum-separation problem $s$ was placed in the middle of a hole and 
+$t$ vertically above $s$ in the outer face.  
+Some of these domains are not meaningful for the minimum-separation problem 
+because the disks centered at the points cover $s$. 
+
+\begin{figure}
+	\includegraphics[width=\textwidth,page=1]{data_generation}
+	\caption{Data generation with a small hole (left) and a large hole (right).}
+	\label{fig:data_generation1}
+\end{figure}
+
+\begin{figure}
+	\includegraphics[width=\textwidth,page=2]{data_generation}
+	\caption{Data generation with four small holes (right) and four large holes (right).}
+	\label{fig:data_generation2}
+\end{figure}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\paragraph{Shortest-path tree in unit-disk graphs}
+We have implemented the algorithm described in Section~\ref{sec:algorithm-sptree}.
+For the shortest-path tree we used the Delaunay triangulation as provided by CGAL.
+The data structure for nearest neighbour queries is a small extension of
+the one provided by~\cite{cgal:k-vda2-15a}, which in turn is based on the Delaunay triangulation.
+When making a query for nearest neighbour, 
+we have the option to provide an extra parameter that acts as some sort of hint: 
+if the nearest neighbour is near the hint, the algorithm is faster. 
+For our algorithm, using as hint the previous nearest neighbour 
+reduced the running time substantially, so we used this feature in the implementation.
+Note that this does not come with guarantees.
+In the tables we refer to this algorithm as \DEF{SSSP}.
+
+We compared the implementation with two obvious alternative algorithms to
+compute shortest-path trees.
+The first alternative is to build the graph $G=\GG(P)$ explicitly. 
+Thus, for each pair of points $p,q$ we check whether their distance is
+at most one and add an edge to a graph data structure.
+We can then use breadth-first-search (BFS) from the given root $r$.
+The preprocessing is quadratic, and the time spent to compute
+a shortest-path tree depends on the density of the graph $G$.
+In the tables we refer to this algorithm as \DEF{BFS}.
+
+The second alternative we consider is to use a unit-length grid. 
+Two points $(x,y)$ and $(x',y')$ are in the same grid cell
+if and only if 
+$(\lfloor x\rfloor ,\lfloor y\rfloor)=(\lfloor x'\rfloor ,\lfloor y'\rfloor)$.
+We store all the points of a grid cell $c$ in a list $\ell(c)$.
+The non-empty lists $\ell(c)$ are stored in a dictionary,
+where the bottom-left corner of the cell is used as key.
+We can then run some sort of BFS using this structure. 
+The list $\ell(c)$ for a cell $c$ maintains the points that
+have not been visited by the BFS tree yet. When processing
+a point $p$ in a cell $c$, we have to treat all the points 
+in the lists of $c$ and its $8$ adjacent cells as candidate points.
+Any point that is adjacent to $p$ is then removed from the list of its cell. 
+The preprocessing is linear, and the time spent to compute
+a shortest-path tree depends on the distribution of the points.
+It is easy to produce cases where the algorithm would need quadratic time.
+For each shortest-path tree we compute the lists and the dictionary anew.
+(This step is very fast in any case.)
+In the tables we refer to this algorithm as \DEF{grid}.
+
+As mentioned earlier, we did not implement the algorithm of Chan and Skrepetos~\cite{ChanS16}
+because of time constraints. We expect that it would work good.
+
+The measured times are in Tables~\ref{table1}--\ref{table5}.
+For SSSP and BFS we report the preprocessing time that is independent of the source
+(like building the Delaunay triangulation or building the graph) and the average
+time spent for a shortest-path tree over 50 choices of the root.
+For grid we just report the total running time; assigning points to
+the grid cells and putting them into a dictionary is almost negligible.
+As it can be seen, the results for SSSP are very much independent of the shape and,
+for dense point sets it outperforms the other algorithms.
+
+%For smaller instances the time of SSSP is worse, 
+%but comparable to grid and BFS.
+While the algorithm SSSP has guarantees in the worst case,
+for BFS and grid one can construct instances 
+where the behavior will be substantially bad. 
+For example, to the instance with 10K points in a rectangle of size $32\times 8$ 
+with a small hole we added 1K points quite cluttered. 
+The increase in time with respect to the original instance 
+was for SSSP 9,7\% (preprocessing) and 13,6\% (one root), for BFS it was
+21,9\% (preprocessing) and 56,5\% (one root), and for grid it was 25\%.
+
+
+\begin{table}[ht]
+\begin{tabular}{l*{6}{r}}
+Rectangle without holes & \multicolumn{6}{c}{20K points}\\						
+size rectangle	&	$4\times 1$	&	$8\times 2$	&	$16\times 4$	&	$32\times 8$	&	$64\times 16$	&	$128\times 32$	\\
+\hline
+SSSP preprocessing	&	0.025	&	0.027	&	0.025	&	0.025	&	0.025	&	0.026	\\
+SSSP average/root	&	0.131	&	0.130	&	0.127	&	0.126	&	0.129	&	0.136	\\
+BFS preprocessing	&	25.057	&	20.433	&	17.773	&	17.734	&	17.347	&	17.179	\\
+BFS average/root	&	3.406	&	1.359	&	0.404	&	0.088	&	0.025	&	0.009	\\
+grid	&	1.605	&	1.647	&	0.695	&	0.227	&	0.089	&	0.053	\vspace{.2cm}	\\
+\hline
+  & \multicolumn{6}{c}{50K points}\\						
+\hline
+SSSP preprocessing	&	0.091	&	0.091	&	0.070	&	0.071	&	0.070	&	0.069	\\
+SSSP average/root	&	0.592	&	0.562	&	0.375	&	0.377	&	0.372	&	0.366	\\
+BFS preprocessing	&	>3min	&	159.812	&	144.965	&	140.404	&	131.854	&	132.475	\\
+BFS average/root	& memory limit & 9.378	&	2.789	&	0.584	&	0.144	&	0.044	\\
+grid				&	11.567	&	13.660	&	4.592	&	1.346	&	0.432	&	0.187
+\end{tabular}
+\caption{Times for shortest paths in rectangles without holes.}
+\label{table1}
+\end{table}
+
+\begin{table}[ht]
+\begin{tabular}{l*{6}{r}}
+Rectangle 1 small hole & \multicolumn{6}{c}{10K points}\\						
+size rectangle	&	$4\times 1$	&	$8\times 2$	&	$16\times 4$	&	$32\times 8$	&	$64\times 16$	&	$128\times 32$	\\
+\hline
+SSSP preprocessing	&	0.021	&	0.012	&	0.012	&	0.012	&	0.012	&	0.012	\\
+SSSP average/root	&	0.104	&	0.059	&	0.060	&	0.061	&	0.064	&	0.070	\\
+BFS preprocessing	&	8.500	&	4.300	&	4.100	&	4.100	&	4.000	&	4.000	\\
+BFS average/root	&	1.183	&	0.318	&	0.091	&	0.026	&	0.008	&	0.003	\\
+grid	&	0.486	&	0.513	&	0.168	&	0.072	&	0.035	&	0.026\vspace{.2cm}	\\
+\hline
+  & \multicolumn{6}{c}{20K points}\\						
+\hline
+SSSP preprocessing	&	0.027	&	0.026	&	0.025	&	0.025	&	0.025	&	0.025	\\
+SSSP average/root	&	0.142	&	0.137	&	0.136	&	0.136	&	0.138	&	0.145	\\
+BFS preprocessing	&	24.813	&	19.817	&	18.396	&	17.976	&	17.542	&	17.313	\\
+BFS average/root	&	3.253	&	1.328	&	0.467	&	0.108	&	0.031	&	0.011	\\
+grid				&	2.181	&	2.627	&	0.668	&	0.262	&	0.104	&	0.060	
+\end{tabular}
+\caption{Times for shortest paths in rectangles with a small hole.}
+\label{table2}
+\end{table}
+
+
+\begin{table}[ht]
 \begin{tabular}{l*{3}{r}|*{3}{r}}
 Rectangle 1 large hole & \multicolumn{3}{c|}{5K points} & \multicolumn{3}{c}{10K points}\\
 size rectangle	&	$32\times 8$	&	$64\times 16$	&	$128\times 32$	&	$32\times 8$	&	$64\times 16$	&	$128\times 32$\\						
@@ -1156,5 +1061,95 @@ grid				&	0.043	&	0.021	&	0.017	&	0.573	&	0.541	&	0.172
 
 
 
-\end{appendix}
+\begin{table}[ht]
+\begin{tabular}{l*{3}{r}|*{3}{r}}
+Rectangle 4 small holes & \multicolumn{3}{c|}{10K points} & \multicolumn{3}{c}{20K points}\\
+size rectangle	&	$32\times 8$	&	$64\times 16$	&	$128\times 32$	&	$32\times 8$	&	$64\times 16$	&	$128\times 32$\\						
+\hline
+SSSP preprocessing	&	0.021	&	0.018	&	0.018	&	0.027	&	0.026	&	0.026	\\
+SSSP average/root	&	0.056	&	0.058	&	0.064	&	0.125	&	0.126	&	0.131	\\
+BFS preprocessing	&	6.291	&	6.102	&	6.364	&	18.325	&	17.887	&	17.256	\\
+BFS average/root	&	0.033	&	0.010	&	0.004	&	0.102	&	0.031	&	0.010	\\
+grid				&	0.064	&	0.031	&	0.023	&	0.230	&	0.096	&	0.055
+\end{tabular}
+\caption{Times for shortest paths in rectangles with 4 small holes.}
+\label{table4}
+\end{table}
+
+
+\begin{table}[ht]
+\begin{tabular}{l*{3}{r}|*{3}{r}}
+Rectangle 4 large holes & \multicolumn{3}{c|}{5K points} & \multicolumn{3}{c}{10K points}\\
+size rectangle	&	$32\times 8$	&	$64\times 16$	&	$128\times 32$	&	$32\times 8$	&	$64\times 16$	&	$128\times 32$\\						
+\hline
+SSSP preprocessing	&	0.007	&	0.009	&	0.009	&	0.012	&	0.018	&	0.019	\\
+SSSP average/root	&	0.027	&	0.028	&	0.026	&	0.057	&	0.054	&	0.053	\\
+BFS preprocessing	&	1.420	&	1.420	&	1.390	&	5.740	&	5.660	&	5.720	\\
+BFS average/root	&	0.007	&	0.003	&	0.002	&	0.028	&	0.013	&	0.007	\\
+grid				&	0.019	&	0.013	&	0.010	&	0.060	&	0.038	&	0.027
+\end{tabular}
+\caption{Times for shortest paths in rectangles with 4 large holes.}
+\label{table5}
+\end{table}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\paragraph{Minimum separation with unit-disk}
+We have implemented the algorithm \proc{GenericMinimumSeparation}
+and the new algorithm based on a compact treatment of the edges.
+The shortest-path trees are constructed using the algorithm of Section~\ref{sec:algorithm-sptree}.
+The table $N[~]$ and the sets $L^0_i,L^1_i,R^0_i,R^1_i$
+are constructed at the time of computing the shortest-path tree.
+
+In the data structure of Lemma~\ref{lem:block},
+we do use a 2-dimensional tree as the primary structure, making some modifications
+of~\cite{cgal:n-rstd-15a}. In the secondary structure, for nearest neighbour, 
+instead of using Voronoi diagrams, we used a small modification of
+the $kd$-trees implemented in~\cite{cgal:tf-ssd-15a}. 
+In some preliminary experiments this seemed to be a better choice.
+In our modification, we make a range search query for points at distance at most $1$,
+and finish the search whenever we get the first point.
+%
+In the new algorithm, before calling to the function to candidates pairs, like for example $L_i^0\times R^i_1$,
+we test that both sets are non-empty. This simple test reduced the time by 30-50\%
+in our test cases.
+
+Besides the new algorithm we also implemented the generic algorithm of Section~\ref{sec:generic}.
+The measured times are in Tables~\ref{table6}--\ref{table7}.
+For the case of $4$ holes we always put $t$ above the rectangle and $s$ in one hole. 
+It seems that the choice of the hole does not substantially affect the experimental time in our setting.
+We also constructed an instance with the rectangle of size $32\times 8$, one small hole,
+the original 2K points, and 1K extra points quite cluttered
+around the portion of $st$ in the domain. The generic algorithm took 427 seconds and the new
+algorithm took 259 seconds.
+
+\begin{table}[ht]
+\begin{tabular}{l*{4}{r}}
+Rectangle 1 small hole & \multicolumn{4}{c}{2K points}\\
+size rectangle	&	$8\times 2$	&	$16\times 4$	&	$32\times 8$ & $64\times 16$ \\	
+\hline
+new separation algorithm	&	65	&	64	&	53	&	38  \\
+generic algorithm			&	215	&	87	&	43	&	29
+\end{tabular}
+\caption{Times for minimum separation with 1 hole.}
+\label{table6}
+\end{table}
+\begin{table}[ht]
+\begin{tabular}{l*{3}{r}|*{3}{r}}
+Rectangle 4 holes & \multicolumn{3}{c|}{2K points, small holes} & \multicolumn{3}{c}{5K points, large holes}\\
+size rectangle	&	$32\times 8$ &	$64\times 16$ & $128\times 32$ & $32\times 8$ &	$64\times 16$ & $128\times 32$\\	
+\hline
+new separation algorithm	&	29	&	35	&	35	&	413 & 451 & 388  \\
+generic algorithm			&	80	&	40	&	30	&	416 & 266 & 206
+\end{tabular}
+\caption{Times for minimum separation with 4 holes.}
+\label{table7}
+\end{table}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliographystyle{abuser}
+\bibliography{biblio}
+
 \end{document}
