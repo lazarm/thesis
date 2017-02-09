@@ -640,6 +640,7 @@ class Range_tree_d: public Tree_base< C_Data,  C_Window>
 				if (std::get<0>(rez6)==true) {
 					Point_2<EK> p6 = std::get<1>(rez6);
 					(*result++) = p6;
+					return result;
 				}
 				
 			}
@@ -654,6 +655,7 @@ class Range_tree_d: public Tree_base< C_Data,  C_Window>
 			  if (CGAL::squared_distance(*w->object.first.originalPoint, a) <= 1) {
 				(*result++)=*((w)->object.first.originalPoint);
 				//cout << *w->object.first.originalPoint << "  -|-  " << a << endl;
+				return result;
 			  }
 			}
 	      v = left(v);
@@ -665,6 +667,7 @@ class Range_tree_d: public Tree_base< C_Data,  C_Window>
 	    //(*result++)=v->object; lazar
 		if (CGAL::squared_distance(*v->object.first.originalPoint, a) <= 1) {
 		  (*result++)=*(v->object.first.originalPoint);
+		  return result;
 		}
 	  }
       v = right(split_node);
@@ -683,8 +686,8 @@ class Range_tree_d: public Tree_base< C_Data,  C_Window>
 			//cout << "subtree1" << endl;
 			if (std::get<0>(rez4) == true) {
 				Point_2<EK> p4 = std::get<1>(rez4);
-				
 				(*result++) = p4;
+				return result;
 			}
 		}
 	    else
@@ -696,6 +699,7 @@ class Range_tree_d: public Tree_base< C_Data,  C_Window>
 	      //(*result++)=left(v)->object; lazar
 		  if (CGAL::squared_distance(*left(v)->object.first.originalPoint, a) <= 1) {
 		    (*result++)=*(left(v)->object.first.originalPoint);
+			return result;
 		  }
 		}
 	  }
@@ -709,6 +713,7 @@ class Range_tree_d: public Tree_base< C_Data,  C_Window>
 	//(*result++)=v->object;
          if (CGAL::squared_distance(*v->object.first.originalPoint, a) <= 1) {	
 		   (*result++)=*(v->object.first.originalPoint);
+		   return result;
 		 }
       }
     }

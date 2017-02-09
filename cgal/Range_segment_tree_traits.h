@@ -149,7 +149,7 @@ template<class Key_2,class Key>
 
 
 
-template <class Rep, class T>
+template <class T>
 class Range_tree_map_traits_2{
  public:
   typedef   T Value;

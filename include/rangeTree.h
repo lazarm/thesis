@@ -12,7 +12,7 @@
 #include <psapi.h>
 
 
-typedef CGAL::Range_tree_map_traits_2<DualPoint, NNTree> rangeTraits;
+typedef CGAL::Range_tree_map_traits_2<NNTree> rangeTraits;
 typedef rangeTraits::Key RangeKey;
 typedef rangeTraits::Pure_key RangePure_key;
 typedef rangeTraits::Interval Interval;
@@ -54,26 +54,15 @@ template <class Iterator>
 RangeTree buildRangeTree(Iterator begin, Iterator end, Segment_2 st)
 {
 	vector<RangeKey> inputList;
-	//cout << distance(begin, end) << endl;
-	CGAL::Timer cost;
-	cost.reset(); cost.start();
 	for (Iterator it = begin; it != end; ++it)
 	{
 		NNTree voronoiTree;
 		Point_2 pt = *it;
 		unique_ptr < RangePure_key> dp(new RangePure_key(it._Ptr, st));
-		//cout << "point: " << pt << "  /  dual: " << dp->point << endl;
 		inputList.push_back(RangeKey(*dp, voronoiTree));
 	}
-	cost.stop();
-	cost.reset(); cost.start();
 	RangeTree rangeTree(inputList.begin(), inputList.end());
-	cost.stop();
-	//cout << "build range tree: " << cost.time() << endl;
-	cost.reset(); cost.start();
 	traverse_and_populate_with_data(rangeTree.range_tree_2->root());
-	cost.stop();
-	//cout << "traverse range tree: " << cost.time() << endl;
 	return rangeTree;
 }
 
@@ -116,11 +105,6 @@ void traverse_and_populate_with_data(RangeNode* node)
 	// za node klici sublayer, dobis range_tree_d=1
 	// potem lahko klices zgornjo funkcijo
 	if (node->left_link == 0) { return; }
-	/*MEMORYSTATUSEX memInfo;
-	memInfo.dwLength = sizeof(MEMORYSTATUSEX);
-	GlobalMemoryStatusEx(&memInfo);
-	DWORDLONG totalPhysMem = memInfo.ullTotalPhys;
-	*/
 	queue<RangeNode*> nodes_to_visit;
 	nodes_to_visit.push(node);
 	CGAL::Timer cost;
@@ -140,7 +124,6 @@ void traverse_and_populate_with_data(RangeNode* node)
 			nodes_to_visit.push(nd->right_link);
 		}
 	}
-	//cout << "total cast: " << total_cast << endl;
 }
 
 /*
@@ -152,8 +135,7 @@ original point). That point is contained in the iterator (result).
 At the end we are left with a set of points s.t. dist(a,b) <= 1 and ab intersects the segment st. We choose b* with minimum
 w_a + w_b*. 
 */
-template <class Iterator>
-Iterator rangeTree_query(RangeTree* rangeTree, DualPoint* a, Iterator it)
+void rangeTree_query(RangeTree* rangeTree, DualPoint* a, vector<Point_2> queryResults)
 {
 	DualPoint xinf = DualPoint();
 	DualPoint infy = DualPoint();
@@ -161,15 +143,11 @@ Iterator rangeTree_query(RangeTree* rangeTree, DualPoint* a, Iterator it)
 	infy.point = Point_2((numeric_limits<double>::infinity)(), a->point.y());
 
 	Interval second_quadrant = Interval(xinf, infy);
-
 	Point_2 a_orig = *(a->originalPoint);
-	rangeTree->window_query_modified(second_quadrant, a_orig, it);
-
-	return it;
+	rangeTree->window_query_modified(second_quadrant, a_orig, back_inserter(queryResults));
 }
 
-template <class Iterator>
-Iterator rangeTree_query_complement(RangeTree* rangeTree, DualPoint* a, Iterator it)
+void rangeTree_query_complement(RangeTree* rangeTree, DualPoint* a, vector<Point_2> queryResults)
 {
 	DualPoint infinfNeg = DualPoint();
 	DualPoint xy = DualPoint();
@@ -183,9 +161,11 @@ Iterator rangeTree_query_complement(RangeTree* rangeTree, DualPoint* a, Iterator
 	Interval third_quadrant = Interval(infinfNeg, xy);
 
 	Point_2 a_orig = *(a->originalPoint);
-	rangeTree->window_query_modified(first_quadrant, a_orig, it);
-	rangeTree->window_query_modified(third_quadrant, a_orig, it);
-	return it;
+	rangeTree->window_query_modified(first_quadrant, a_orig, back_inserter(queryResults));
+	if (queryResults.size() > 0) {
+		return;
+	}
+	rangeTree->window_query_modified(third_quadrant, a_orig, back_inserter(queryResults));
 }
 
 

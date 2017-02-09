@@ -12,28 +12,27 @@ private:
 	vector<vector<Point_2>> l1;
 	vector<vector<Point_2>> r0;
 	vector<vector<Point_2>> r1;
-	DT dt;
 	Segment_2 st;
 	bool useForSeparation;
-	//DT dt;
-	void take(shared_ptr<Point_2> q, int i, DH_vertex_handle p);
+	bool useCategorization;
+	DT dt;
 	bool onLeft(Point_2* p);
-	int updateNr(int nr, Point_2 p, Point_2 q);
 	void categorize(int i, Point_2* p);
+	void clearSets();
 public:
 	SSSPTree();
 	template <class Iterator>
 	SSSPTree(Iterator begin, Iterator end);
 	template <class Iterator>
-	SSSPTree(Iterator begin, Iterator end, Segment_2 st);
+	SSSPTree(Iterator begin, Iterator end, Segment_2 st) : SSSPTree(begin, end, st, true) {};
+	template <class Iterator>
+	SSSPTree(Iterator begin, Iterator end, Segment_2 st, bool useCategorization);
 	~SSSPTree(){};
 	DT getDT(){ return dt; }
 	vector< vector<vector<Point_2>> > getAllSets();
 	void createTreeFromRoot(Point_2 r);
-	void clearSets();
+	int updateNr(int nr, Point_2 p, Point_2 q);
 	void resetSSSPTreeDTVertices();
-	template <class Iterator>
-	vector<Point_2> getPoints(Iterator begin, Iterator end);
 };
 
 template <class Iterator>
@@ -43,15 +42,15 @@ SSSPTree::SSSPTree(Iterator begin, Iterator end)
 	dt.insert(begin, end);
 }
 
-
 /*
 source point r has to be one of the points in the vector defined by begin and end
 */
 template <class Iterator>
-SSSPTree::SSSPTree(Iterator begin, Iterator end, Segment_2 sta)
+SSSPTree::SSSPTree(Iterator begin, Iterator end, Segment_2 sta, bool useCategorization2)
 {
 	st = sta;
 	useForSeparation = true;
+	useCategorization = useCategorization2;
 	dt.insert(begin, end);
 }
 
@@ -106,22 +105,6 @@ void SSSPTree::categorize(int i, Point_2 *p)
 	}
 }
 
-void SSSPTree::take(shared_ptr<Point_2> par2, int i, DH_vertex_handle p) {
-	p->point().setVisited(true);
-	p->point().setDist(i);
-	p->point().setParent(par2);
-	// set nr and categorize are for separation usage
-	if (useForSeparation) {
-		p->point().setNr(i == 0 ? 0 : updateNr(par2->getNr(), p->point(), *par2));
-		categorize(i, &p->point());
-	}
-	//cout << "p: " << p->point() << endl;
-	//cout << "p dist: " << p->point().getDist() << endl;
-	//if (i > 0) {
-	//	cout << "p par: " << *(p->point().getParent().get()) << endl;
-	//}
-}
-
 /*
 wip and wi are vectors that in i-th iteration store points/vertices with dist=i
 we want to store and return points of Point_2 type, but we also need vertex handles
@@ -134,7 +117,7 @@ alternativa: Vertex_handle handle = T.nearest_vertex(Point_2(1, 1));
 */
 void SSSPTree::createTreeFromRoot(Point_2 r)
 {
-	l0.clear(); l1.clear(); r0.clear(); r1.clear();
+	clearSets();
 	l0.push_back(vector<Point_2>{}); l1.push_back(vector<Point_2>{});
 	r0.push_back(vector<Point_2>{}); r1.push_back(vector<Point_2>{});
 	vector<DH_vertex_handle> wi_1_delaunayVertices;
@@ -149,13 +132,16 @@ void SSSPTree::createTreeFromRoot(Point_2 r)
 		cout << "Point r does not coincide with any of DT vertices." << endl;
 		return;
 	}
-
 	Point_2 *rPoint;
 	rPoint = &rVertex->point();
 	rPoint->setDist(0);
 	shared_ptr<Point_2> rootParent(nullptr);
 	rPoint->setParent(rootParent);
 	rPoint->setVisited(true);
+	if (useForSeparation) {
+		rPoint->setNr(0);
+		categorize(0, rPoint);
+	}
 	wi_1_delaunayVertices.push_back(rVertex);
 	int i = 1;
 	int sum = 0;
@@ -163,11 +149,7 @@ void SSSPTree::createTreeFromRoot(Point_2 r)
 		l0.push_back(vector<Point_2>{}); l1.push_back(vector<Point_2>{});
 		r0.push_back(vector<Point_2>{}); r1.push_back(vector<Point_2>{});
 		DTWithFaceMap dt_nearestNeighbour;
-		/* THIS INSERT METHOD DOESNT USE SPATIAL SORT BECAUSE IT NEEDS A VECTOR OF POINTS, WHICH COPIES POINT OBJECTS, TO SORT IT OUT AND THEN INSERT INTO DT.
-		WE WANT THE ORIGINAL POINTS TO BE STORED IN DTNN, NOT COPIES, TO BE ABLE TO RETRIEVE STARTING FACE. BUT IT SEEMS THAT SPATIAL SORT IS NOT NEEDED ANYWAY,
-		BECAUSE W_1_dV ARE ALREADY ALMOST SORTED (ENOUGH THAT COPYING DVERTICES TO VECTOR AND SORTING THEM IS NOT BENEFICIAL).
-		*/
-		dt_nearestNeighbour.insert(wi_1_delaunayVertices.begin(), wi_1_delaunayVertices.end());
+		dt_nearestNeighbour.insert(wi_1_delaunayVertices);
 		deque<DH_vertex_handle> queue(wi_1_delaunayVertices.begin(), wi_1_delaunayVertices.end());
 		vector<DH_vertex_handle> wi_delaunayVertices;
 		while (queue.size() > 0) {
@@ -183,8 +165,6 @@ void SSSPTree::createTreeFromRoot(Point_2 r)
 			else {
 				origFace = dt_nearestNeighbour.getFaceFromPoint(&(q->point()));
 			}
-			//Point_2* orp = q->point().getDist() == i ? q->point().getParent().get() : &(q->point());
-			//DH_face_handle origFace = i == 1 ? dt_nearestNeighbour.getFaceFromPoint(rPoint) : dt_nearestNeighbour.getFaceFromPoint(orp);
 			DH_vertex_circulator p = dt.incident_vertices(q), done(p);
 			do {
 				// besides usual vertices, DT also stores an infinite vertex, which we have to exclude
@@ -199,14 +179,17 @@ void SSSPTree::createTreeFromRoot(Point_2 r)
 						p->point().setParent(par2);
 						wi_delaunayVertices.push_back(p);
 						queue.push_back(p);
-						//take(make_shared<Point_2>(res), i, p);
+						if (useForSeparation) {
+							p->point().setNr(i == 0 ? 0 : updateNr(par2->getNr(), p->point(), *par2));
+							if (useCategorization)
+								categorize(i, &p->point());
+						}
 					}
 				}
 			} while (++p != done);
 		}
 		wi_1_delaunayVertices.clear();
 		wi_1_delaunayVertices = wi_delaunayVertices;
-		//l0.push_back(l0i); l1.push_back(l1i); r0.push_back(r0i); r1.push_back(r1i);
 		i++;
 		
 	}
@@ -220,17 +203,6 @@ vector< vector<vector<Point_2>> > SSSPTree::getAllSets()
 	allSets.push_back(r0);
 	allSets.push_back(r1);
 	return allSets;
-}
-
-
-/*
-Re-assigns distances of all points to infinity to start building new SSSP tree from fresh start.
-*/
-void resetPointDistances(vector<Point_2>::iterator begin, vector<Point_2>::iterator end)
-{
-	for (auto p = begin; p != end; ++p) {
-		(*p).setDist((std::numeric_limits<int>::max)());
-	}
 }
 
 void SSSPTree::resetSSSPTreeDTVertices()

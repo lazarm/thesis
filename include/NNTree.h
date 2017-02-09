@@ -59,12 +59,5 @@ tuple<bool, Point_2> NNTree::query(Point_2 q, int idx)
 {
 	Fuzzy_circle exact_range(q, 1);
 	list<Point_2> result;
-	A[idx]->search_exists(back_inserter(result), exact_range);
-	if (result.size() == 0) {
-		return tuple<bool, Point_2> {false, Point_2(0, 0)};
-	}
-	else {
-		Point_2 first = result.front();
-		return tuple<bool, Point_2> {true, first};
-	}
+	return A[idx]->search_exists(exact_range);
 }
