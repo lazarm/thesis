@@ -109,11 +109,6 @@ G.~Neyer.
   Editorial Board}, 2015,
   \url{http://doc.cgal.org/4.6/Manual/packages.html#PkgRangeSegmentTreesDSummary}.
 
-\bibitem{pv-2013}
-R.~Penninger and I.~Vigan.
-\newblock Point set isolation using unit disks is {NP}-complete.
-\newblock {\em CoRR} abs/1303.2779, 2013, \url{http://arxiv.org/abs/1303.2779}.
-
 \bibitem{cgal:tf-ssd-15a}
 H.~Tangelder and A.~Fabri.
 \newblock {dD} spatial searching.
