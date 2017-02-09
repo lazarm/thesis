@@ -1131,9 +1131,9 @@ It seems that the choice of the hole does not substantially affect the experimen
 To show that our new algorithm can work substantially faster than the generic algorithm,
 we created an instance where we expect so.
 For this we take the a rectangle of size $32\times 8$ with one small hole,
-the original 2K points, and add 1K extra points on a vertical strip of width $1$ within the domain
-and symmetric with respect to segment $st$. The generic algorithm took XXX seconds and the new
-algorithm took XXX seconds. If instead we add 2K points...
+the original 2K points, and add 500 extra points on a vertical strip of width $1$ within the domain
+and symmetric with respect to segment $st$. The generic algorithm took 94 seconds and the new
+algorithm took 435 seconds. If instead we add 1K points, the generic algorithm takes more than 15 minutes and the new algorithm takes 173 seconds.
 
 
 \begin{table}[ht]
@@ -1142,7 +1142,7 @@ algorithm took XXX seconds. If instead we add 2K points...
 size rectangle	&	$8\times 2$	&	$16\times 4$	&	$32\times 8$ & $64\times 16$ \\	
 \hline
 new separation algorithm	&	41	&	41	&	32	&	30  \\
-generic algorithm			&	155	&	60	&	26	&	21 \\
+generic algorithm			&	730	&	215	&	67	&	30 \\
 cycle length				&   9   &   20  &   46  &   126
 \end{tabular}
 \caption{Times for minimum separation with 1 hole.}
@@ -1154,9 +1154,9 @@ cycle length				&   9   &   20  &   46  &   126
 \textbf{Rectangle 4 holes} & \multicolumn{3}{c|}{2K points, small holes} & \multicolumn{3}{c}{5K points, large holes}\\
 size rectangle	&	$32\times 8$ &	$64\times 16$ & $128\times 32$ & $32\times 8$ &	$64\times 16$ & $128\times 32$\\	
 \hline
-new separation algorithm	&	20	&	18	&	5.6	&	233 & 259 & 240  \\
-generic algorithm			&	26	&	17	&	4.1	&	269 & 168 & 120 \\
-cycle length				&	23  &   68	&	201 &	29	& 77  & 342 
+new separation algorithm	&	20	&	25	&	5.6	&	233 & 259 & 240  \\
+generic algorithm			&	62	&	25	&	6.4	&	875 & 428 & 248 \\
+cycle length				&	24  &   61	&	201 &	29	& 77  & 342 
 \end{tabular}
 \caption{Times for minimum separation with 4 holes.}
 \label{table7}
