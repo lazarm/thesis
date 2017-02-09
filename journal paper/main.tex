@@ -935,12 +935,20 @@ We have implemented the algorithm described in Section~\ref{sec:algorithm-sptree
 For the shortest-path tree we used the Delaunay triangulation as provided by CGAL.
 The data structure for nearest neighbour queries is a small extension of
 the one provided by~\cite{cgal:k-vda2-15a}, which in turn is based on the Delaunay triangulation.
-When making a query for nearest neighbour, 
+When making a query for nearest neighbour of $p$ in $W_{i-1}$ (line 17 in Figure~\ref{fig:BFS}), 
 we have the option to provide an extra parameter that acts as some sort of hint: 
 if the nearest neighbour is near the hint, the algorithm is faster. 
-For our algorithm, using as hint the previous nearest neighbour 
-reduced the running time substantially, so we used this feature in the implementation.
-Note that this does not come with guarantees.
+For our implementation, we exploit this as follows. 
+Consider an iteration of the while loop (lines 13--22). If the point $q$ is from $W_{i-1}$
+then we use a point in a face of $DT(W_{i-1})$ incident to $q$ as the hint
+for all the points $p$ considered in the iteration.
+If the point $q$ is not from $W_{i-1}$, then we already know that $q\in W_i$ and 
+thus $\pi[q]\in W_{i-1}$. In this case we use use a point in a face of $DT(W_{i-1})$
+incident to $\pi[q]$
+as hint for all the points $p$ considered in the iteration.
+Using such hints reduced the running time substantially, 
+so we used this feature in the implementation.
+Note that this improvement does not come with guarantees in the worst-case.
 In the tables we refer to this algorithm as \DEF{SSSP}.
 
 We compared the implementation with two obvious alternative algorithms to
