@@ -484,7 +484,7 @@ Drevo je parametrizirano s tremi predlogami: podatki, oknom in geometrijskimi zn
 \end{figure}
 
 
-\chapter{Teorija}
+\chapter{Teoretični opis algoritmov}
 Naj bo $P$ množica točk, ki predstavljajo središča krogov $\D$. $P$ predstavlja vhod našega algoritma in vse operacije ter uporabljene podatkovne strukture se vrtijo okoli te množice. Kardinalnost množice je enaka $n$.
 
 \begin{figure}
@@ -1054,7 +1054,7 @@ Pravilnost algoritma sledi iz dejstva, da računa isto kot splošni algoritem.
 
 Opis postopka za posamezen koren je shematično prikazan na sliki~\ref{fig:compact}. (Appendix: celotni algoritem???) Kot pri splošnem algoritmu spremenljivka $best$ hrani dolžino trenutno najkrajšega cikla. Na začetku lahko njeno vrednost nastavimo na $n+1$. Če algoritem konča z isto vrednostjo spremenljivke, potem za dane točke ne obstaja rešitev za problem minimalne ločitve. Ko obravnavamo določen koren $r$, nas zanimajo samo cikli s korenom $r$ in dolžino največ $best$. Ker ima poljuben cikel, ki gre skozi vozlišče v $W_i$, dolžino najmanj $2i$, lahko obravnavamo samo indekse $i$, za katere velja $2i < best$. Poleg tega lahko dodatno omejimo iskanje (kar sicer ni opisano v algoritmu, je pa uporabljeno pri implementaciji) tako, da najprej obravnavamo pare, ki tvorijo cikel z dolžino $2i$, na primer $L^0_i\times L^1_{i-1}$, in šele potem tiste z dolžino $2i+1$, na primer $L^0_i\times L^1_i$. Z uporabo takega zaporedja lahko končamo z iskanjem za koren $r$ takoj, ko najdemo povezavo v $while$ zanki, in preidemo na naslednji koren.
 
-\chapter{Implementacija algoritma}
+\chapter{Implementacija algoritmov}
 \label{ch3}
 
 
@@ -1068,12 +1068,13 @@ Za implementacijo smo uporabili razred $SSSPTree$ s štirimi zasebnimi atributi.
 \label{point-refs}
 Algoritem zgradi drevo implicitno. To pomeni, da kot rezultat ne dobimo nobene nove strukture, ampak konstruktor vsako točko doda v enega od štirih seznamov in pri tem spremeni vrednost dveh njenih atributov:
 
-\begin{itemize}
-\item dist: hrani razdaljo do korena drevesa in je tipa $unsigned\texttt{\_}int$
-\item parent: hrani svojega starša in je tipa deljen kazalec ($ang.$ shared pointer) - zakaj že shared???
-\end{itemize}
+\begin{description}
+\item[dist] hrani razdaljo do korena drevesa. Koren drevesa ima za razdaljo vrednost $0$, točke, ki jih ni moč doseči iz korena, pa največjo možno vrednost števila tipa $int$, tj. $numeric\U limits<int>::max()$
+\item[parent] hrani deljen kazalec ($shared\U ptr<Point\U 2>$) na svojega starša v drevesu
+\item[visited] hrani logično vrednost ($true$ ali $false$), ki pove, če je vozlišče bilo že dodano v drevo. To bi sicer lahko izvedeli tudi preko atributa $dist$
+\end{description}
 
-Noben imed omenjenih atributov ni del razreda $Point\texttt{\_}2$ v CGAL, zato smo jih sami dodali. S pomočjo kazalca na starša se je tako od vsake točke drevesa možno sprehoditi do korena, nasprotno pa to ne velja.
+Noben imed omenjenih atributov ni del razreda $Point\U 2$ v CGAL, zato smo jih sami dodali. S pomočjo kazalca na starša se je tako od vsake točke drevesa možno sprehoditi do korena, nasprotno pa to ne velja.
 
 \subsection{Podatkovna struktura za iskanje najbližjega soseda}
 \label{why dt}
@@ -1123,6 +1124,12 @@ ptrdiff_t insert(vector<DH_vertex_handle> points) {
 
 Kot vidimo v kodi, metoda poleg najbližjega soseda vrne tudi spremenljivko logičnega tipa, ki nam pove, če je razdalja med točko poizvedbe in njenim najbližjim sosedom manjša ali enaka 1.
 
+\begin{figure}
+\centerline{\includegraphics{pics/pointsToFaceHandlers.pdf}}
+\caption{.}
+\label{pointsToFace}
+\end{figure}
+
 \subsection{Izgradnja drevesa} 
 
 Za drevo SSSP smo napisali razred SSSPTree. Lahko je uporabljen samostojno ali za potrebe problema ločitve. Ponuja dva konstruktorja; prvi je SSSPTree(Iterator begin, Iterator end), drugi pa kot tretji argument sprejme še daljico $st$. Metoda $createTreeFromRoot(Point\U 2$ $r)$ zgradi drevo s podanim korenom. Če je bil uporabljen drugi konstruktur, se bodo v tej metodi poleg izgradnje drevesa izvedle še dodatne operacije, ki so opisane v naslednjem poglavju. 
@@ -1140,11 +1147,17 @@ Povezave oziroma sosede $q$ najdemo s krožnim iteratorjem, ki ga vrne metoda $i
 
 Zadnji dve točki nista omenjeni v psevdokodi, ker njuna uporabnost pride v poštev šele kasneje pri separaciji z diski. $updateNr$ vrne novo vrednost za atribut $nr$ točke $p$. Funkcija preveri, če daljica $pw$ seka $st$ in če jo, vrne $(w.getNr() + 1)$ $\%$ $2$, sicer vrne $w.getNr()$. $categorize$ točko $p$ na podlagi njenega atributa $nr$ in relativnega položaja glede na $st$ (ki je ali levo ali desno) doda v enega od štirih seznamov l0, l1, r0 ali r1.
 
+\begin{figure}
+\centerline{\includegraphics{pics/categorization.pdf}}
+\caption{Vozlišča drevesa SSSP, ki so označena glede na skupino, v katero so uvrščena glede na daljico $st$. S krogi so označena vozlišča $L0$, s polnimi krogi vozlišča $L1$, s kvadrati vozlišča $R0$ in s polnimi kvadrati vozlišča $R1$. }
+\label{categorization}
+\end{figure}
+
 \section{Minimalna ločitev}
 \subsection{Prilagoditev drevesa SSSP}
 Ko je SSSPTree uporabljen izključno za izgradnjo drevesa, je vse, kar pravzaprav naredimo, to da vsem danim točkam v DT nastavimo kazalec na njihovega starša, ki ga hranijo kot atribut. Če za inicializacijo objekta razreda SSSPTree uporabimo konstruktor, ki poleg točk sprejme kot tretji argument še daljico $st$, bo metoda za izgradnjo drevesa poleg staršev točkam nastavila še vrednosti atributov $nr$ in jih kategorizirala tako, da jih bo dodala v enega od štirih seznamov tipa $vector$, ki jih razred SSSPTree hrani kot zasebne atribute. Seznami sovpadajo z razredi $L0, L1, R0, R1$, kjer seznam $R0$ hrani točke, ki ležijo desno od daljice $st$ in imajo vrednost atributa $nr$ enako $0$. Seznami v resnici kot elemente hranijo zopet sezname, šele ti pa dejansko hranijo točke glede na njihovo razdaljo od korena drevesa. Seznam $R0$ tako na $i$-tem mestu  hrani seznam, ki vsebuje vse točke drevesa z razdaljo $i$ in ostalimi že omenjenimi lastnostmi.
 
-Za točko $p$ izračunamo $nr$ ali število presečišč med daljico $st$ in potjo $pr$ (kjer je $r$ koren drevesa) po modulu $2$ tako, da prevzamemo vrednost $nr$  njegovega starša $q$ in jo spremenimo samo v primeru, če daljica $qp$ seka $st$. Za to uporabimo funkcijo v CGAL-u $do\U intersect(seg1, seg2)$. Ker obstaja možnost, da $p$ ali $q$ ležita na daljici $st$ ali sta kolinearna z njenima krajiščema (ker je $st$ vedno navpična daljica, to pomeni, da imajo vse tri enako vrednost koordinate $y$), je potrebno definirati, kaj storiti v takem primeru. Za točke s tako lego vedno določimo, da so levo od $st$.  V primeru, da $p$ leži na $st$, moramo zato za spremembo njenega atributa $nr$ poleg presečišč preveriti tudi, da se $q$ in $p$ nahajata na različni strani. $p.nr\neq q.nr$, kjer $p\in st$, velja torej natanko takrat, ko se $q$ nahaja desno od $p$. S tem dodatnim pogojem preprečimo nepričakovano obnašanje algoritma (glej sliko. NARIŠI PRIMER TREH TOČK qps, KJER JE p NA ST, in pokaži, da imata brez dodatnega pogoja q in s enak nr).
+Za točko $p$ izračunamo $nr$ ali število presečišč med daljico $st$ in potjo $pr$ (kjer je $r$ koren drevesa) po modulu $2$ tako, da prevzamemo vrednost $nr$  njegovega starša $q$ in jo spremenimo samo v primeru, če daljica $qp$ seka $st$. Za to uporabimo funkcijo v CGAL-u $do\U intersect(seg1, seg2)$. Ker obstaja možnost, da $p$ ali $q$ ležita na daljici $st$ ali sta kolinearna z njenima krajiščema (ker je $st$ vedno navpična daljica, to pomeni, da imajo vse tri enako vrednost koordinate $y$), je potrebno definirati, kaj storiti v takem primeru. Za točke s tako lego vedno določimo, da so desno od $st$.  V primeru, da $p$ leži na $st$, moramo zato za spremembo njenega atributa $nr$ poleg presečišč preveriti tudi, da se $q$ in $p$ nahajata na različni strani. $p.nr\neq q.nr$, kjer $p\in st$, velja torej natanko takrat, ko se $q$ nahaja levo od $p$. S tem dodatnim pogojem preprečimo nepričakovano obnašanje algoritma (glej sliko. NARIŠI PRIMER TREH TOČK qps, KJER JE p NA ST, in pokaži, da imata brez dodatnega pogoja q in s enak nr).
 
 Časovna zahtevnost izračuna vrednosti $nr$ je konstantna. Enako velja za kategorizacijo, ki poleg $nr$ izračuna še orientacijo s predikatom $on\U left$. Za dostop do podseznama, kamor vstavimo točke glede na kategorizacijo in razdaljo od korena drevesa, uporabimo operator $[]$, za vstavljanje točke pa metodo $push\U back(p)$. Oba zagotavljata amortizirano časovno zahtevnost $\OO(1)$. S tem, ko sproti izračunamo $N[p]$ za vsako točko drevesa ter podsezname $L_i^0, L_i^1, R_i^0$ in $L_i^1$, se znebimo bloka $3-5$ v teoretičnem opisu algoritma, ki bi nam sicer vzel $O(n)$ časa.
 
@@ -1166,9 +1179,15 @@ Odločili smo se razlikovati po tipu med navadnimi točkami in točkami v dualne
 
 \subsection{Območno drevo}
 Za dvodimenzionalna območna drevesa smo uporabili implementacijo v knjižnici CGAL, ki jo predstavlja razred $Range\texttt{\_}tree\texttt{\_}2$. Vsako vozlišče hrani par $kljuc$ in $ vrednost$. $Vrednost$ dodatno opisuje vozlišče in je lahko tudi prazna, ključ pa se uporablja pri izgradnji drevesa in poizvedbah. Oba argumenta sta predlogi, kar pomeni, da moramo pri konstrukciji drevesa zanju podati konkretna tipa. 
-Za ključ smo uporabili naš razred $DualPoint$, kot vrednost pa vsako vozlišče hrani svoje kd drevo.
+Za ključ smo uporabili naš razred $DualPoint$, kot vrednost pa vsako vozlišče hrani svoje kd drevo. Zaradi tega smo morali vnesti nekaj sprememb v CGAL-u. Razred za značilnosti območnih dreves $Range\U tree\U map\U traits\U 2$ je parametriziran z modelom predstavitve dvodimenzionalnih točk tipa $Point\U 2$ in s tipom ta vrednost. Drevo torej kot ključ vedno uporabi objekt tipa $Point\U 2<K>$, kjer je $K$ model predstavitve (v naši implementaciji je ta vedno $Cartesian<double>$). Iz razreda značilnosti smo zato odstranili prvi parameter in v njem zamenjali tip ključa na $DualPoint$. Spremeniti smo morali tudi operatorja za primerjavo ključev v razredih $C\U Compare\U 1$ (za primarno drevo) in $C\U Compare\U 2$ (za sekundarno drevo). Funkciji kličeta predikata $compare\U x$ oziroma $compare\U y$ neposredno nad objekti obeh ključev. Ker so objekti v našem primeru tipa $DualPoint$, smo funkciji spremenili tako, da predikatoma poda atribut ključev $point$, ki je tipa $Point\U 2$ in hrani točko v dualnem prostoru.
 
 Pri inicializaciji drevesu podamo seznam parov dualnih točk in praznih kd dreves. Nato se iterativno sprehodimo (tako kot pri preiskovanju v širino) po prvem nivoju drevesa - primarnem drevesu - s funkcijo \\$traverse\texttt{\_}and\texttt{\_}populate\texttt{\_}with\texttt{\_}data$. Za vsako vozlišče pokličemo funkcijo \\$build\U Kd\U on\U layer2$, ki rekurzivno  od spodaj navzgor za vsako vozlišče v sekundarnem drevesu, na katerega kaže vozlišče v primarnem drevesu, vstavi v (do tistega trenutka prazno) njegovo kd drevo točke, ki jih hranita kd drevesi njegovih otrok. Pri listih je v kd drevo vstavljena točka, čigar dualna točka je uporabljena kot ključ vozlišča. Rekurzivni klic funkcije se torej kliče pred vstavljanjem točk v kd drevo. S pomočjo rekurzije je vsakemu notranjemu vozlišču v sekundarnem drevesu seznam točk v njegovem poddrevesu, ki ga potrebujemo za izgradnjo njegovega kd drevesa, direktno podan preko kd dreves njegovih otrok. Če bi kd drevesa gradili od zgoraj navzdol v sekundarnem drevesu, bi morali za vsako vozlišče narediti sprehod po njegovem poddrevesu. Primarno drevo za razliko od sekundarnih ne hrani nobenih dreves kot vrednosti v svojih vozliščih.
+
+\begin{figure}
+\centerline{\includegraphics[scale=0.75]{pics/range-dual-kd.pdf}}
+\caption{. }
+\label{range-dual-kd}
+\end{figure}
 
 \subsubsection{Poizvedbe v območnem drevesu}
 Razredu $Range\texttt{\_}tree\texttt{\_}d$ smo za poizvedbe dodali funkcijo \\ $window\texttt{\_}query\texttt{\_}impl\texttt{\_}modified$, ki  kot osnovo uporablja obstoječo funkcijo $window\texttt{\_}query\texttt{\_}impl$. Argumenti funkcije so $OutputIterator$, kamor se vstavljajo vrnjene točke, interval $I$, ki ga definirata dve dualni točki, tretji argument, ki ga v obstoječi funkciji ni, pa je točka $a$, ki jo uporabimo za poizvedbe najbližjega soseda v kd drevesih. Pri dvodimenzionalnih območnih drevesih je geometrijska predstavitev intervala pravokotnik; levo krajišče intervala ustreza spodnjemu levemu oglišču pravokotnika, desno krajišče pa zgornjemu desnemu oglišču. Interval je zaprt. 
@@ -1269,8 +1288,8 @@ V metodi $nnSeparation$ za vse pare množic točk $(S_1, S_2)$ na isti strani da
 
 V $rangeSeparation$ preverimo pare v sledečem vrstnem redu: $L_i^0\times R_{i-1}^0$, $L_i^1\times R_{i-1}^0$, $L_i^1\times R_{i-1}^1$, $L_i^0\times R_{i-1}^1$, $L_{i-1}^0\times R_{i}^0$, $L_{i-1}^0\times R_{i}^1$, $L_{i-1}^1\times R_{i}^0$, $L_{i-1}^1\times R_{i}^1$, $L_{i}^0\times R_{i}^0$, $L_{i}^0\times R_{i}^1$, $L_{i}^1\times R_{i}^0$, $L_{i}^1\times R_{i}^1$. Območnih dreves ne gradimo za vsak par posebej, temveč enkrat za vsako od množic $R_{i-1}^0, R_{i-1}^1, R_{i}^0, R_{i}^1$, če je to potrebno. Tudi tukaj namreč ne preverjamo parov, pri katerih je ena od množic prazna. Za pare, kjer iščemo kandidate, ki sekajo $st$, uporabimo metodo $rangeTree\U query$, za kandidate, ki ne sekajo $st$, pa metodo $rangeTree\U query\U complement$. Na koncu z metodo $nnSeparation$ preverimo še zadnja dva para $L_i^0\times L_i^1$ in $R_i^0\times R_i^1$. S takim zaporedjem parov lahko v trenutku, ko naletimo na prvi par, ki vrne neprazen rezultat, prenehamo z iskanjem z ostalimi pari, zaključimo zanko in s tem iskanje cikla za koren $r$.
 
-\subsection{Izgradnja cikla}
-Ko dobimo par točk $a, b\in P$, ki določata minimalno zaprto pot, ki ločuje točki $s$ in $t$, v seznam shranimo vse točke, ki tvorijo cikel. S pomočjo funkcije $getParent()$ lahko za vsako točko $p$ v drevesu $SSSP(r, P)$ dobimo njegovega starša in s tem pot $T_r[p]$ v obratnem vrstnem redu (z začetkom pri točki $p$ in koncem pri točki $r$), ki jo označimo kot $T_r^{-1}[p]$. Pot $T_r[p]$ brez točke $r$ označimo z $T_{r-1}[p]$. Cikel lahko potem dobimo z združitvijo dveh poti $T_r^{-1}[a] + T_{r-1}[b]$, s čimer dobimo pot $(a,...,r,...b)$. Vrnjen seznam predstavlja cikel, v katerem je začetna točka shranjena samo enkrat. Za dolžino najbolj optimalne poti se do konca izvajanja programa hrani vsota dolžin točk $a$ in $b$. Dolžina, ki jo program vrne kot rezultat, je povečana za 1.
+\subsection{Izgradnja minimalnega cikla}
+Ko dobimo par točk $a, b\in P$, ki določata minimalno zaprto pot, ki ločuje točki $s$ in $t$, v seznam shranimo vse točke, ki tvorijo cikel. S pomočjo funkcije $getParent()$ lahko za vsako točko $p$ v drevesu $SSSP(r, P)$ dobimo njegovega starša in s tem pot $T_r[p]$ v obratnem vrstnem redu (z začetkom pri točki $p$ in koncem pri točki $r$), ki jo označimo kot $T_r^{-1}[p]$. Pot $T_r[p]$ brez točke $r$ označimo z $T_{r-1}[p]$. Cikel lahko potem dobimo z združitvijo dveh poti $T_r^{-1}[a] + T_{r-1}[b]$, ki se vedno stikata v natanko eni točki, tj. korenu drevesa. Z drugimi besedami: najmanjši skupni prednik (ang. $lowest$ $common$ $ancestor$) točk $a$ in $b$ v drevesu najkrajših poti $SSSP(r, P)$ je vedno $r$. Če to ne bi veljalo in bi bil njun najmanjši skupni prednik točka $r^\star$, bi potem obstajal krajši cikel v drevesu $SSSP(r^\star, P)$, kjer bi $a$ in $b$ določala minimalno zaprto pot in bi bil njun najmanjši skupni prednik zopet točka $r^\star$. Z združitvijo obeh poti dobimo pot $(a,...,r,...b)$. Vrnjen seznam predstavlja cikel, v katerem je začetna točka shranjena samo enkrat.  Za dolžino najbolj optimalne poti se do konca izvajanja programa hrani vsota dolžin točk $a$ in $b$. Dolžina, ki jo program vrne kot rezultat, je povečana za 1. 
 
 \section{Obravnava posebnih vhodnih primerov}
 Pri algoritmu ločevanja z diski smo večkrat omenili, da je za daljico $\sigma$ privzeto, da je vertikalna. Če želimo uporabiti algoritem na primeru, kjer daljica ni vertikalna, je potrebno vse vhodne točke predhodno rotirati 
@@ -1517,6 +1536,48 @@ generičen algoritem &	416 & 266 & 206
 
 Opiši implementacijo splošnega algoritma.
 
+\begin{table}
+\begin{center}
+\begin{tabular}{l*{3}{r}}
+Pravokotnik brez lukenj & \multicolumn{3}{c}{50K točk}\\						
+dimenzije pravokotnika	&	$4\times 1$	&	$8\times 2$	&	$16\times 4$ \\
+\hline
+SSSP	&	25.2	&	22.3	&	20.1		\\
+mreža	&	23.2	&	22.4	&	22.2	\vspace{.2cm}	\\
+
+&	$32\times 8$	&	$64\times 16$	&	$128\times 32$	\\
+\hline
+SSSP &	19.3	&	19	&	18.7 \\
+BFS &	204.2	&	68.8	&	28.5 \\
+mreža &	21.9	&	22	&	23 \vspace{.2cm} \\
+\end{tabular}
+\caption{Max ram brez lukenj.}
+\label{table-ram-tree-1}
+\end{center}
+\end{table}
+
+\begin{table}
+\begin{center}
+\begin{tabular}{l*{3}{r}}
+Pravokotnik s 4 velikimi luknjami & \multicolumn{3}{c}{5K točk}\\						
+dimenzije pravokotnika	&	$32\times 8$	&	$64\times 16$	&	$128\times 32$	\\
+\hline
+SSSP	&	3.1	&	2.8	&	2.5		\\
+BFS &	4.2	&	2.9	&	2.3 \\
+mreža	&	2.7	&	2.7	&	2.9	\vspace{.2cm}	\\
+\hline
+& \multicolumn{3}{c}{10K točk} \\
+\hline
+SSSP	&	5.6	 &	5.0	&	4.5		\\
+BFS &	12.6	&	7.6	&	5.3 \\
+mreža	&	4.9	&	4.9	&	5.1	\vspace{.2cm}	\\
+\end{tabular}
+\caption{Max ram - velike luknje}
+\label{table-ram-tree-2}
+\end{center}
+\end{table}
+
+
 \subsection{Analiza}
 \begin{table}[h!]
 \begin{center}
@@ -1535,10 +1596,15 @@ mreža &	25\%
 \end{table}
 
 Za razliko od SSSP algoritma BFS in mreža nimata nikakršne garancije za najslabši primer. Za oba lahko zgradimo takšne vhodne množice $P$, pri katerih bo njuna izvedba zelo počasna. Kot primer smo testirali $P$ s 10000 točkami v pravokotniku, ki ima dimenzije $32\times 8$ in majhno luknjo. Med krajiščema daljice $st$ smo nato v majhnem zgoščenem prostoru dodali še dodatnih 1000 točk. Čas izvajanja je glede na prvotno instanco najmanj narastel za SSSP, največ pa za BFS (glej tabelo~\ref{table-increase}).
+
+Omeni, da je optimalen cikel najden skoraj instantno (znotraj 5 odstotkov prvih korenov).
 \chapter{Sklepne ugotovitve}
 \label{ch4}
 
-Improvements: najti točko preloma za število točk, pri katerih se začne splačati uporabljati nn search namesto preveriti vse pare L0i x L1i itd. To je odvisno tako od velikosti strukture, po kateri delamo poizvedbe, kot od števila poizvedb. V našem primeru smo naredili samo to, da strukture nismo zgradili, če smo vedeli, da je število poizvedb nič.
+Čeprav se algoritem za minimalno ločevanje obnaša bistveno bolje od splošnega algoritma, ko so točke gosto poseljene, temu ni tako, ko je gostota točk majhna. To smo videli tudi pri rezultatih eksperimentov. Implementirali bi lahko tudi prilagojen algoritem, ki bi se obnašal različno glede na velikost množic $L_i^j$ in $R_i^j$. To smo deloma tudi storili tako, da smo izpustili obravnavo  tistih parov, kjer je bila ena od množic prazna. Lahko pa bi šli tudi korak dlje. Z eksperimenti bi lahko našli točko preloma za velikost obeh množic, pri kateri se začne splačati uporabiti kar "brute force" metodo in preveriti vse možne pare $(p,q), p\in L_i^j, q\in R_i^j$. Velik vpliv na to ima predvsem velikost $L_i^j$, torej število poizvedb. Pohitritev, ki jo dobimo s takšnim algoritmom, bi lahko demonstrirali z eksperimenti, kjer so točke neenakomerno razporejene. S tako množico točk $P$ bi imeli tako gosta kot redka območja točk in algoritem bi se obnašal glede na to, na kakšnem območju se nahajajo točke v $L_i^j$ in $R_i^j$.
+
+
+Poiskati LCA(p,q) za najden optimalen cikel(p,r,q) za koren r. Če LCA = z != r, potem lahko skrajšamo cikel na (p,z,q). V naših testih se ne pozna razlika, ker so točke enakomerno razporejene in je optimalen cikel hitro najden.
 
 
 \bibliographystyle{abbrv}
