@@ -731,6 +731,7 @@ V tem poglavju je opisan algoritem, ki problem minimalne ločitve z enotskimi di
 \end{itemize}
 
 \subsection{Splošni algoritem za ločevanje z diski}
+\label{generic-section}
 \begin{figure}[htb]
 \begin{center}
 \ovalbox{~~~~
@@ -1488,7 +1489,10 @@ mreža &	0.060	&	0.038	&	0.027
 \end{center}
 \end{table}
 
-\section{Minimalno ločevanje}
+\section{Minimalna ločitev}
+Kot merilo uspešnosti algoritma za minimalno ločitev smo njegove rezultate primerjali z rezultati splošnega algoritma za ločevanje, opisanega v poglavju~\ref{generic-section}. Za potrebe implementacije splošnega algoritma smo razredu $Point\U 2$ dodali še atribut $neighbours$, ki za posamezno točko hrani seznam kazalcev na njene sosede v grafu $G$. Najprej z inicializacijo objekta $SSSPTree$ zgradimo DT(P). Nato se algoritem z iteratorjem sprehodi čez vozlišča triangulacije, pred katerih lahko dostopamo do objektov točk. Za vsako vozlišče $u$ gremo ponovno skozi iterator vozlišč, le da ima ta začetek pri trenutnem vozlišču (skupno število iteracij je torej $\frac{n\times (n-1)}{2}$). Za vsako vozlišče $v$ druge iteracije preverimo $\dist(u.p,v.p)$ in če je ta največ 1, v seznam $u.p.neighbours$ dodamo kazalec na točko $v.p$. Ker se drugi iterator ne začne s prvim vozliščem, povezavo $uv$ shranimo samo enkrat.
+
+V glavni zanki se zopet sprehodimo skozi iterator vozlišč in za vsako njegovo točko $r$ zgradimo drevo $SSSPTree(r)$. S tem se za vsako točko $p$ hkrati izračuna tudi število presečišč poti $rp$ z $st$ po modulu 2. Z dodatno zastavico v konstruktorju drevesa smo izklopili kategorizacijo točk v štiri sezname, saj tukaj ni potrebna. Čez povezave $E(G)$ se sprehodimo tako, da gremo zopet z iteratorjem čez vsa vozlišča in za vsako točko vozlišča preverimo vse njegove sosede s pomočjo seznama kazalcev.  
 \begin{table}[h!]
 \begin{center}
 \begin{tabular}{l*{4}{r}}
@@ -1524,17 +1528,15 @@ generičen algoritem &	416 & 266 & 206
 
 \begin{figure}
 \centerline{\includegraphics[scale=0.3]{pics/separation-64-1-1000-narrow-2.png}}
-\caption{. }
+\caption{Primer rezultata - najkrajšega cikla - algoritma za minimalno ločitev. Modre točke so del poti cikla, samostojna rdeča točka predstavlja koren drevesa $r$, s katerim smo našli cikel, par rdečih točk $p,q$ pa z rdečo povezavo najkrajši poti od $r$ do $p$ in $r$ do $q$ združi v cikel. Zelena daljica predstavlja daljico $st$.}
 \label{sep-64-1-1000-narrow}
 \end{figure}
 
 \begin{figure}
 \centerline{\includegraphics[scale=0.3]{pics/32-1-5000-stuffed.png}}
-\caption{. }
+\caption{Primer eksperimenta, kjer se nov algoritem za ločevanje odreže bistveno bolje od splošnega algoritma. 2000 izvirnim točkam smo dodali 1000 novih točk blizu $st$, ki s tem bistveno povečajo velikost množice $E(G(P))$.}
 \label{sep-stuffed}
 \end{figure}
-
-Opiši implementacijo splošnega algoritma.
 
 \begin{table}
 \begin{center}
@@ -1601,10 +1603,12 @@ Omeni, da je optimalen cikel najden skoraj instantno (znotraj 5 odstotkov prvih 
 \chapter{Sklepne ugotovitve}
 \label{ch4}
 
-Čeprav se algoritem za minimalno ločevanje obnaša bistveno bolje od splošnega algoritma, ko so točke gosto poseljene, temu ni tako, ko je gostota točk majhna. To smo videli tudi pri rezultatih eksperimentov. Implementirali bi lahko tudi prilagojen algoritem, ki bi se obnašal različno glede na velikost množic $L_i^j$ in $R_i^j$. To smo deloma tudi storili tako, da smo izpustili obravnavo  tistih parov, kjer je bila ena od množic prazna. Lahko pa bi šli tudi korak dlje. Z eksperimenti bi lahko našli točko preloma za velikost obeh množic, pri kateri se začne splačati uporabiti kar "brute force" metodo in preveriti vse možne pare $(p,q), p\in L_i^j, q\in R_i^j$. Velik vpliv na to ima predvsem velikost $L_i^j$, torej število poizvedb. Pohitritev, ki jo dobimo s takšnim algoritmom, bi lahko demonstrirali z eksperimenti, kjer so točke neenakomerno razporejene. S tako množico točk $P$ bi imeli tako gosta kot redka območja točk in algoritem bi se obnašal glede na to, na kakšnem območju se nahajajo točke v $L_i^j$ in $R_i^j$.
+Čeprav se algoritem za minimalno ločevanje obnaša bistveno bolje od splošnega algoritma, ko so točke gosto poseljene, temu ni tako, ko je gostota točk majhna. To smo videli tudi pri rezultatih eksperimentov. Implementirali bi lahko tudi prilagojen algoritem, ki bi se obnašal različno glede na velikost množic $L_i^j$ in $R_i^j$, ki je pogosto precej majhna. To smo deloma tudi storili tako, da smo izpustili obravnavo  tistih parov, kjer je bila ena od množic prazna. Lahko pa bi šli tudi korak dlje. Z eksperimenti bi lahko našli točko preloma za velikost obeh množic, pri kateri se začne splačati uporabiti kar "brute force" metodo in preveriti vse možne pare $(p,q), p\in L_i^j, q\in R_i^j$. Velik vpliv na to ima predvsem velikost $L_i^j$, torej število poizvedb. Pohitritev, ki jo dobimo s takšnim algoritmom, bi lahko demonstrirali z eksperimenti, kjer so točke neenakomerno razporejene. S tako množico točk $P$ bi imeli tako gosta kot redka območja točk in algoritem bi se obnašal glede na to, na kakšnem območju se nahajajo točke v $L_i^j$ in $R_i^j$. Namesto iskanja točke preloma bi lahko uporabili tudi preprosto hevristiko s časovno zahtevnostjo obeh metod. Naj bo $n$ velikost množice $L$ in $m$ velikost množice $R$. Uporaba kd dreves bi se s hevristiko potem splačala, če $(n+m)\log m < nm$ (kjer $(n+m)\log m$ predstavlja skupno časovno zahtevnost izgradnje kd drevesa z $m$ elementi in $n$ poizvedb, $nm$ pa časovno zahtevnost $brute$ $force$ metode). Podobno bi se območna drevesa splačala, če $(n+m)\log^3 m < nm$.
 
 
 Poiskati LCA(p,q) za najden optimalen cikel(p,r,q) za koren r. Če LCA = z != r, potem lahko skrajšamo cikel na (p,z,q). V naših testih se ne pozna razlika, ker so točke enakomerno razporejene in je optimalen cikel hitro najden.
+
+Hitrost najdbe najkrajšega cikla je odvisna od njegove dolžine.
 
 
 \bibliographystyle{abbrv}
