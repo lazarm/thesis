@@ -1275,12 +1275,6 @@ Interval $I$ je odvisen od točke poizvedbe $a$ in tega, ali v drevesu iščemo 
 \label{fig:sep-overall}
 \end{figure}
 
-\begin{figure}
-\centerline{\includegraphics[scale=0.7]{pics/primer1.png}}
-\caption{Dodaj primer množic L0, L1, R0, R1. }
-\label{primer-sep}
-\end{figure}
-
 Program kot prvi argument sprejme tekstovno datoteko, ki vsebuje po eno točko v vsaki vrstici kot par koordinat. Kot drugi argument je podano začetno krajišče daljice $\sigma$, točka $s$, kot tretji pa točka $t$ kot končno krajišče daljice. Nato se pokliče glavna metoda programa, v kateri se izvedejo vsi izračuni in se okvirno ujema z~\ref{fig:FULL}.
 
 Najprej se inicializira objekt SSSPTree, ki v konstruktorju zgradi DT. Za vsako točko $r\in P$ se nato zgradi drevo s korenom $r$. Iz drevesa dobimo ven štiri sezname $L0, L1, R0, R1$. V $while$ zanki nato preverimo kandidate v istem vrstnem redu, kot so nanizani v~\ref{fig:FULL}. Za kandidate na isti strani daljice $st$ se pokliče metoda $nnSeparation$, za ostale pa $rangeSeparation$.
@@ -1352,9 +1346,9 @@ RAM(kd drevo) [mb] & 1.9 & 3.8 & 9.5 & 19 & 28.5 & 38.1
 
 
 \section{Drevo najkrajših poti}
-Implementacijo algoritma SSSP smo primerjali z dvema očitnima alternativnima algoritmoma za drevesa najkrajših poti. Pri prvi eksplicitno zgradimo graf $G=\GG(P)$ tako, da za vse možne pare $p, q\in P$ dodamo povezavo $pq$ v strukturo grafa, če je razdalja med $p$ in $q$ največ 1. Za dan koren $r$ nato za izgradnjo drevesa uporabimo splošno iskanje v širino (BFS). Predprocesiranje (izgradnja grafa $\GG(P)$) ima kvadratno časovno zahtevnost, čas izgradnje drevesa pa je odvisen od gostote grafa.
+Implementacijo algoritma SSSP smo primerjali z dvema očitnima alternativnima algoritmoma za drevesa najkrajših poti. Pri prvi eksplicitno zgradimo graf $G=\GG(P)$ tako, da za vse možne pare $p, q\in P$ dodamo povezavo $pq$ v strukturo grafa, če je razdalja med $p$ in $q$ največ 1. Za dan koren $r$ nato za izgradnjo drevesa uporabimo splošno iskanje v širino (BFS). Predprocesiranje (izgradnja grafa $\GG(P)$) ima kvadratno časovno zahtevnost, čas izgradnje drevesa pa je odvisen od gostote grafa. Za vsako točko iz vhodnega seznama, ki ga nespremenjenega hranimo ves čas, zgradimo vozlišče. Za vozlišče grafa smo napisali strukturo $GraphNode$, ki hrani točko tipa $Point\U 2$, kazalec na starša in sosede kot seznam indeksov, ki določajo položaj soseda/točke v vhodnem seznamu. Za vsako vozlišče preverimo razdaljo do ostalih vozlišč (brez simetričnih primerov; skupno preverimo torej $\frac{n(n-1)}{2}$ parov) in za vsak par vozlišč z razdaljo največ 1 dodamo drug drugega v seznam sosedov. Drevo najkrajših poti potem zgradimo s klasičnim algoritmom za preiskovanje v širino (glej~\ref{fig:genericBfs}). 
 
-Kot drugo alternativo uporabimo mrežo enotskih razdalj (glej poglavje~\ref{grid-chapter}). Dve točki $(x,y)$ in $(x',y')$ se nahajata v isti celici mreže natanko takrat, ko velja $(\lfloor x\rfloor ,\lfloor y\rfloor)=(\lfloor x'\rfloor ,\lfloor y'\rfloor)$. Vse točke v celici $c$ shranimo v seznam $\ell(c)$. Vse neprazne sezname $\ell(c)$ shranimo v slovar, v katerem je kot ključ uporabljeno spodnje levo oglišče celice. S tako strukturo nato izvedemo nekakšno preiskovanje v širino. Seznam $\ell(c)$ celice $c$ hrani točke, ki še niso bile obiskane z drevesom najkrajših poti. Ko procesiramo točko $p$ v celici $c$, moramo kot kandidate obravnavati vse ostale točke v $\ell(c)$ in točke v seznamih osmih sosednih celic. Vsaka točka, ki je sosedna $p$, je nato odstranjena iz seznama svoje celice. Predprocesiranje (izgradnja slovarja) ima linearno časovno zahtevnost, čas izgradnje drevesa pa je odvisen od porazdelitve točk. Enostavno se da najti primere, kjer bi bil ta čas kvadratičen. Za vsako najkrajše drevo slovar zgradimo od začetka. Ker je čas, ki ga porabimo za to, zanemarljiv, čas predprocesiranja za mrežo ni prikazan med rezultati.  
+Kot drugo alternativo uporabimo mrežo enotskih razdalj (glej poglavje~\ref{grid-chapter}). Dve točki $(x,y)$ in $(x',y')$ se nahajata v isti celici mreže natanko takrat, ko velja $(\lfloor x\rfloor ,\lfloor y\rfloor)=(\lfloor x'\rfloor ,\lfloor y'\rfloor)$. Vse točke v celici $c$ shranimo v seznam $\ell(c)$. Vse neprazne sezname $\ell(c)$ shranimo v slovar, v katerem je kot ključ uporabljeno spodnje levo oglišče celice. S tako strukturo nato izvedemo nekakšno preiskovanje v širino. Seznam $\ell(c)$ celice $c$ hrani točke, ki še niso bile obiskane z drevesom najkrajših poti. Ko procesiramo točko $p$ v celici $c$, moramo kot kandidate obravnavati vse ostale točke v $\ell(c)$ in točke v seznamih osmih sosednih celic. Vsaka točka, ki je sosedna $p$, je nato odstranjena iz seznama svoje celice. Predprocesiranje (izgradnja slovarja) ima linearno časovno zahtevnost, čas izgradnje drevesa pa je odvisen od porazdelitve točk. Enostavno se da najti primere, kjer bi bil ta čas kvadratičen. Za vsako najkrajše drevo slovar zgradimo od začetka. Ker je čas, ki ga porabimo za to, zanemarljiv, čas predprocesiranja za mrežo ni prikazan med rezultati. Za seznam točk v celicah smo pri implementaciji uporabili strukturo $list$ in ne $vector$. Razlog za to je ta, da je vsaka točka slej ko prej odstranjena iz seznama svoje celice. $vector$ v C++ omogoča samo brisanje vsebine elementa na $i$-tem mestu, ne pa brisanja samega elementa oziroma je časovna kompleksnost tega $O(n)$. Po drugi strani $list$ porabi nekaj več spomina, ker vsak element hrani še kazalca na prejšnji in naslednji element, ima enak čas vstavljanja elementa na konec seznama kot $vector$, vendar je časovna kompleksnost brisanja (in vstavljanja) elementa sredi seznama $O(1)$, ker samo preveže njegovega predhodnika in naslednika. Za slovar celic smo uporabili strukturo $unordered\U map$, ki kot ključ hrani par celih števil, ki predstavljajo spodnje levo oglišče celice. Za ključ smo morali definirati tudi dobro $hash$ funkcijo, odporno na trke (ang. $collisions$). Uporabili smo Cantorjevo funkcijo $\pi (k_1, k_2) = \frac{1}{2}(k_1+k_2)(k_1+k_2+1) + k_2$.
 
 \begin{table}
 \begin{center}
@@ -1500,7 +1494,7 @@ Pravokotnik 1 manjša luknja & \multicolumn{4}{c}{2K točk}\\
 dimenzije pravokotnika	&	$8\times 2$	&	$16\times 4$	&	$32\times 8$ & $64\times 16$ \\	
 \hline
 nov algoritem za ločevanje	&	65	&	64	&	53	&	38  \\
-generičen algoritem			&	215	&	87	&	43	&	29
+splošni algoritem			&	215	&	87	&	43	&	29
 \end{tabular}
 \caption{Časi za minimalno ločevanje z eno manjšo luknjo.}
 \label{table6}
@@ -1514,12 +1508,12 @@ Pravokotnik 4 luknje & \multicolumn{3}{c}{2K točk, manjše luknje} \\
 dimenzije pravokotnika	&	$32\times 8$ &	$64\times 16$ & $128\times 32$ \\	
 \hline
 nov algoritem za ločevanje	&	29	&	35	&	35	\\
-generičen algoritem			&	80	&	40	&	30	\\
+splošni algoritem			&	80	&	40	&	30	\\
 \hline
 & \multicolumn{3}{c}{5K točk, večje luknje} \\
 \hline
 nov algoritem za ločevanje &	413 & 451 & 388  \\
-generičen algoritem &	416 & 266 & 206
+splošni algoritem &	416 & 266 & 206
 \end{tabular}
 \caption{Časi za minimalno ločevanje s 4 luknjami.}
 \label{table7}
@@ -1579,6 +1573,25 @@ mreža	&	4.9	&	4.9	&	5.1	\vspace{.2cm}	\\
 \end{center}
 \end{table}
 
+\begin{table}
+\begin{center}
+\begin{tabular}{l*{3}{r}}
+Pravokotnik s 4 luknjami & \multicolumn{3}{c}{2K točk, manjše luknje}\\						
+dimenzije pravokotnika	&	$32\times 8$	&	$64\times 16$	&	$128\times 32$	\\
+\hline
+nov algoritem za ločevanje	&	5.4	&	3.3	&	2		\\
+splošni algoritem	&	2.9	&	2.1	&	1.8	\vspace{.2cm}	\\
+\hline
+& \multicolumn{3}{c}{5K točk, večje luknje} \\
+\hline
+nov algoritem za ločevanje	& 12.9	&	8.1	&	5.8		\\
+splošni algoritem	&	8.7	&	6	&	4.2	\vspace{.2cm}	\\
+\end{tabular}
+\caption{Max ram - velike luknje}
+\label{table-ram-sep}
+\end{center}
+\end{table}
+
 
 \subsection{Analiza}
 \begin{table}[h!]
@@ -1597,19 +1610,27 @@ mreža &	25\%
 \end{center}
 \end{table}
 
-Za razliko od SSSP algoritma BFS in mreža nimata nikakršne garancije za najslabši primer. Za oba lahko zgradimo takšne vhodne množice $P$, pri katerih bo njuna izvedba zelo počasna. Kot primer smo testirali $P$ s 10000 točkami v pravokotniku, ki ima dimenzije $32\times 8$ in majhno luknjo. Med krajiščema daljice $st$ smo nato v majhnem zgoščenem prostoru dodali še dodatnih 1000 točk. Čas izvajanja je glede na prvotno instanco najmanj narastel za SSSP, največ pa za BFS (glej tabelo~\ref{table-increase}).
+Za razliko od SSSP algoritma BFS in mreža nimata nikakršne garancije za najslabši primer. Za oba lahko zgradimo takšne vhodne množice $P$, pri katerih bo njuna izvedba zelo počasna. Kot primer smo testirali $P$ s 10000 točkami v pravokotniku, ki ima dimenzije $32\times 8$ in majhno luknjo. Med krajiščema daljice $st$ smo nato v majhnem zgoščenem prostoru dodali še dodatnih 1000 točk. Širina tega prostora je $1$, tako da se število povezav v grafu $G$ bistveno poveča. Čas izvajanja je glede na prvotno instanco najmanj narastel za SSSP, največ pa za BFS (glej tabelo~\ref{table-increase}).
 
-Omeni, da je optimalen cikel najden skoraj instantno (znotraj 5 odstotkov prvih korenov).
+Podobno smo storili z algoritmom za minimalno ločevanje. Uporabili smo enako območje s 500 in 1000 dodatnimi točkami. V prvem primeru nov algoritem porabi 94 sekund (skoraj trikrat več kot brez dodatnih točk), splošni algoritem pa 435 (šestkrat več kot brez dodatnih točk). V drugem primeru nov algoritem porabi 173 sekund, splošni algoritem pa več kot 15 minut. Podobno kot pri eksperimentih z drevesi najkrajših poti se tudi tukaj nov algoritem izkaže bolje v primerih, kjer so točke bolj gosto poseljene in je med njimi več povezav. Delež dreves, ki jih moramo zgraditi, da najdemo najkrajši cikel, je odvisen od velikosti lukenj oziroma širine območja, kjer se točke nahajajo, kar vpliva na dolžino cikla. Pri ožjih območjih je manjše število možnih poti in verjetnost, da naletimo na tako drevo, čigar koren je del najkrajšega cikla, je s tem večja. Zaradi večjih lukenj je tudi dolžina cikla večja in je tako razmerje med številom točk v ciklu in številom vseh točk večji.
+
+Zaradi omenjenih lastnosti eksperimentov in enakomerne razporeditve točk v njih je najkrajši cikel najden praktično v trenutku. Ker je večina možnih ciklov podobne dolžine kot najkrajši cikel, se pri eksperimentih tudi ne izrazi optimizacijski doprinos pogoja $2i < best$ v glavni zanki algoritma. Razliko bi lahko ponazorili z eksperimentom brez lukenj, kjer bi zelo malo ciklov imelo enako dolžino. Zaradi velike variacije dolžin ciklov in dolžine najkrajšega cikla slednjega ne bi odkrili tako hitro, bi pa z omenjenim pogojem velik delež ciklov vnaprej zavrgli.
+
+\begin{figure}
+\centerline{\includegraphics[scale=0.9]{pics/lca.pdf}}
+\caption{Primer drevesa s korenom $r$ in ciklom, ki ga tvorita poti od $p$ do $r$ in $q$ do $r$, kjer pa obstaja tudi krajši cikel v poddrevesu s korenom $lca(p,q)$.}
+\label{fig:lca}
+\end{figure}
+
+Še ena možna optimizacija algoritma, ki je nismo naknadno implementirali, ker se ne obnese v naših eksperimentih, bi bila za najden trenutno najkrajši cikel, ki ga tvorita točki $p$ in $q$, ugotoviti, če je koren drevesa enak najmanjšemu skupnemu predniku $lca(p,q)$ obeh točk v drevesu (glej sliko~\ref{fig:lca}). Če temu ni tako, potem vemo, da obstaja krajši cikel, ki ga dobimo z drevesom, ki ima za koren točko $lca(p,q)$, zato tak cikel določimo kot trenutno najkrajšega. Do takega drevesa bi sicer prišli slej ko prej, a pri primerih, kjer imajo cikli zelo različne dolžine, lahko s pogojem $2i < best$ do takrat, ko pridemo do tega drevesa, zavržemo dosti ciklov vnaprej.
+
+Pri porabi spomina se SSSP v povprečju odreže najbolje. Splošni BFS se odreže bistveno slabše pri manjših območjih, kjer je število povezav v grafu $G$ večje. Rezultati mreže ne odstopajo znatno. Pri bolj gostih območjih se izkaže malenkost bolje kot SSSP, najmanjšo porabo pa ima pri srednje velikih območjih. Je edini od algoritmov, ki mu poraba spomina malenkost naraste pri največjem območju. To gre pripisati temu, da je zaradi enakomerne razporeditve točk potrebno zgraditi več celic v večjih območjih. 
+
+Poraba spomina novega algoritma za ločevanje je po drugi strani nekoliko večja kot pri splošnem algoritmu. Razmerje sicer malenkost pade pri 5K točkah glede na 2K točk. Porabo spomina smo približno izmerili tudi na območju $32\times 8$ z eno luknjo in 20K točk (približno zato, ker porabe nismo merili celotni čas izvajanja, ki bi bil precej velik). Novi algoritem porabi 45MB spomina, splošni pa 85MB. Razlog za večjo porabo spomina novega algoritma pri manj točkah najbrž leži v tem, da kljbu manjši prostorski kompleksnosti nekaj dodatnega spomina zasede sama izgradnja CGAL struktur območnih in kd dreves. 
 \chapter{Sklepne ugotovitve}
 \label{ch4}
 
 Čeprav se algoritem za minimalno ločevanje obnaša bistveno bolje od splošnega algoritma, ko so točke gosto poseljene, temu ni tako, ko je gostota točk majhna. To smo videli tudi pri rezultatih eksperimentov. Implementirali bi lahko tudi prilagojen algoritem, ki bi se obnašal različno glede na velikost množic $L_i^j$ in $R_i^j$, ki je pogosto precej majhna. To smo deloma tudi storili tako, da smo izpustili obravnavo  tistih parov, kjer je bila ena od množic prazna. Lahko pa bi šli tudi korak dlje. Z eksperimenti bi lahko našli točko preloma za velikost obeh množic, pri kateri se začne splačati uporabiti kar "brute force" metodo in preveriti vse možne pare $(p,q), p\in L_i^j, q\in R_i^j$. Velik vpliv na to ima predvsem velikost $L_i^j$, torej število poizvedb. Pohitritev, ki jo dobimo s takšnim algoritmom, bi lahko demonstrirali z eksperimenti, kjer so točke neenakomerno razporejene. S tako množico točk $P$ bi imeli tako gosta kot redka območja točk in algoritem bi se obnašal glede na to, na kakšnem območju se nahajajo točke v $L_i^j$ in $R_i^j$. Namesto iskanja točke preloma bi lahko uporabili tudi preprosto hevristiko s časovno zahtevnostjo obeh metod. Naj bo $n$ velikost množice $L$ in $m$ velikost množice $R$. Uporaba kd dreves bi se s hevristiko potem splačala, če $(n+m)\log m < nm$ (kjer $(n+m)\log m$ predstavlja skupno časovno zahtevnost izgradnje kd drevesa z $m$ elementi in $n$ poizvedb, $nm$ pa časovno zahtevnost $brute$ $force$ metode). Podobno bi se območna drevesa splačala, če $(n+m)\log^3 m < nm$.
-
-
-Poiskati LCA(p,q) za najden optimalen cikel(p,r,q) za koren r. Če LCA = z != r, potem lahko skrajšamo cikel na (p,z,q). V naših testih se ne pozna razlika, ker so točke enakomerno razporejene in je optimalen cikel hitro najden.
-
-Hitrost najdbe najkrajšega cikla je odvisna od njegove dolžine.
-
 
 \bibliographystyle{abbrv}
 \bibliography{biblia}

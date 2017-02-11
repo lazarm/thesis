@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2016.10.21)  10 FEB 2017 12:47
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2016.10.21)  11 FEB 2017 18:05
 entering extended mode
 **./Separation3.tex
 (Separation3.tex
@@ -929,7 +929,7 @@ LaTeX Warning: Reference `nntree' on page 58 undefined on input line 1167.
 
 [58]
 
-Package caption Warning: \label without proper reference on input line 1334.
+Package caption Warning: \label without proper reference on input line 1328.
 See the caption package documentation for explanation.
 
 
@@ -937,7 +937,7 @@ LaTeX Warning: Reference `cpu_compare' on page 59 undefined on input line 1173.
 
 
 
-Package caption Warning: \label without proper reference on input line 1346.
+Package caption Warning: \label without proper reference on input line 1340.
 See the caption package documentation for explanation.
 
 
@@ -1014,92 +1014,96 @@ Overfull \hbox (45.96622pt too wide) in paragraph at lines 1273--1273
  [][] 
  []
 
-<pics/primer1.png, id=497, 458.31226pt x 447.47176pt>
-File: pics/primer1.png Graphic file (type png)
- <use pics/primer1.png>
-Package pdftex.def Info: pics/primer1.png used on input line 1279.
-(pdftex.def)             Requested size: 320.81638pt x 313.22809pt.
+[63] [64] [65] [66] [67] [68
 
-[63] [64] [65] [66] [67] [68 <./pics/primer1.png>]
+]
 Poglavje 5.
-<pics/data_generation.pdf, id=517, page=1, 530.38153pt x 102.69768pt>
+<pics/data_generation.pdf, id=516, page=1, 530.38153pt x 102.69768pt>
 File: pics/data_generation.pdf Graphic file (type pdf)
 
 <use pics/data_generation.pdf, page 1>
 Package pdftex.def Info: pics/data_generation.pdf, page1 used on input line 130
-6.
+0.
 (pdftex.def)             Requested size: 397.78517pt x 77.02306pt.
 
-<pics/data_generation.pdf, id=518, page=2, 530.38153pt x 102.69768pt>
+<pics/data_generation.pdf, id=517, page=2, 530.38153pt x 102.69768pt>
 File: pics/data_generation.pdf Graphic file (type pdf)
 
 <use pics/data_generation.pdf, page 2>
-Package pdftex.def Info: pics/data_generation.pdf, page2 used on input line 131
-2.
+Package pdftex.def Info: pics/data_generation.pdf, page2 used on input line 130
+6.
 (pdftex.def)             Requested size: 397.78517pt x 77.02306pt.
- [69
-
- <./pics/data_generation.pdf>]
+ [69 <./pics/data_generation.pdf>]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [70 <./pics/data_generation.pdf>]
-Overfull \hbox (6.94588pt too wide) in paragraph at lines 1357--1358
+ [70 <./pics/data_generation.pdf>] [71]
+Overfull \hbox (6.94588pt too wide) in paragraph at lines 1351--1352
 []\OT1/cmr/m/n/12 Kot drugo al-ter-na-tivo upo-ra-bimo mrezo enot-skih raz-dal
 j (glej po-glavje 2.4[]).
  []
 
-[71]
-Overfull \hbox (3.68332pt too wide) in paragraph at lines 1493--1494
+
+Overfull \hbox (3.68332pt too wide) in paragraph at lines 1487--1488
 \OT1/cmr/m/n/12 ka-zal-cev na njene so-sede v grafu $\OML/cmm/m/it/12 G$\OT1/cm
 r/m/n/12 . Naj-prej z ini-ci-a-li-za-cijo objekta $\OML/cmm/m/it/12 SSSPTree$
  []
 
 
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [72]
+[73] [74] [75]
+
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-<pics/separation-64-1-1000-narrow-2.png, id=562, 1734.48pt x 873.0216pt>
+<pics/separation-64-1-1000-narrow-2.png, id=574, 1734.48pt x 873.0216pt>
 File: pics/separation-64-1-1000-narrow-2.png Graphic file (type png)
 
 <use pics/separation-64-1-1000-narrow-2.png>
 Package pdftex.def Info: pics/separation-64-1-1000-narrow-2.png used on input l
-ine 1530.
+ine 1524.
 (pdftex.def)             Requested size: 520.34802pt x 261.9085pt.
 
-<pics/32-1-5000-stuffed.png, id=564, 1734.48pt x 873.0216pt>
+<pics/32-1-5000-stuffed.png, id=576, 1734.48pt x 873.0216pt>
 File: pics/32-1-5000-stuffed.png Graphic file (type png)
 
 <use pics/32-1-5000-stuffed.png>
-Package pdftex.def Info: pics/32-1-5000-stuffed.png used on input line 1536.
+Package pdftex.def Info: pics/32-1-5000-stuffed.png used on input line 1530.
 (pdftex.def)             Requested size: 520.34802pt x 261.9085pt.
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [72]
-[73] [74] [75] [76 <./pics/separation-64-1-1000-narrow-2.png>] [77 <./pics/32-1
--5000-stuffed.png>]
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[78] [79] [80]
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [76]
+[77 <./pics/separation-64-1-1000-narrow-2.png>] [78 <./pics/32-1-5000-stuffed.p
+ng>] [79] [80] <pics/lca.pdf, id=594, 200.14775pt x 180.87675pt>
+File: pics/lca.pdf Graphic file (type pdf)
+
+<use pics/lca.pdf>
+Package pdftex.def Info: pics/lca.pdf used on input line 1620.
+(pdftex.def)             Requested size: 180.13129pt x 162.78757pt.
+
+Underfull \vbox (badness 2521) has occurred while \output is active []
+
+ [81]
+Underfull \vbox (badness 1661) has occurred while \output is active []
+
+ [82 <./pics/lca.pdf>] [83] [84
+
+]
 Poglavje 6.
 
-Overfull \hbox (6.232pt too wide) in paragraph at lines 1606--1607
+Overfull \hbox (6.232pt too wide) in paragraph at lines 1633--1634
 []\OT1/cmr/m/n/12 Ceprav se al-go-ri-tem za mi-ni-malno locevanje obnasa bi-s
 tveno bo-lje od splosnega
  []
 
+(Separation3.bbl [85] [86
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [81
-
-]
-(Separation3.bbl [82] [83
-
-]) [84] (Separation3.aux)
+] [87]) [88] (Separation3.aux)
 
 LaTeX Warning: There were undefined references.
 
@@ -1108,13 +1112,13 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 9100 strings out of 493334
- 126429 string characters out of 3140953
+ 9101 strings out of 493334
+ 126421 string characters out of 3140953
  246039 words of memory out of 3000000
- 12413 multiletter control sequences out of 15000+200000
+ 12414 multiletter control sequences out of 15000+200000
  16648 words of font info for 64 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 40i,13n,58p,1729b,1409s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 40i,13n,58p,2214b,1409s stack positions out of 5000i,500n,10000p,200000b,50000s
  <C:\Users\lmilinkovic\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\d
 pi600\tcrm1200.pk><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx1
 2.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmcsc10.pfb><C:/P
@@ -1140,9 +1144,9 @@ blic/amsfonts/cm/cmti8.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts
 /cm/cmtt10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmtt12.p
 fb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/latxfont/lcircle1.pfb><
 C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on Separation3.pdf (100 pages, 1040526 bytes).
+Output written on Separation3.pdf (104 pages, 1015895 bytes).
 PDF statistics:
- 684 PDF objects out of 1000 (max. 8388607)
+ 712 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  96 words of extra memory for PDF output out of 10000 (max. 10000000)
 

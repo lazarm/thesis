@@ -52,6 +52,6 @@
 \contentsline {chapter}{\numberline {5}Eksperimenti in rezultati}{69}
 \contentsline {section}{\numberline {5.1}Generator vhodnih podatkov}{69}
 \contentsline {section}{\numberline {5.2}Drevo najkraj\IeC {\v s}ih poti}{71}
-\contentsline {section}{\numberline {5.3}Minimalna lo\IeC {\v c}itev}{72}
-\contentsline {subsection}{\numberline {5.3.1}Analiza}{78}
-\contentsline {chapter}{\numberline {6}Sklepne ugotovitve}{81}
+\contentsline {section}{\numberline {5.3}Minimalna lo\IeC {\v c}itev}{76}
+\contentsline {subsection}{\numberline {5.3.1}Analiza}{79}
+\contentsline {chapter}{\numberline {6}Sklepne ugotovitve}{85}
