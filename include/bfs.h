@@ -5,21 +5,15 @@ class GraphNode
 public:
 	Point_2 p;
 	vector<int> neighbours;
-	int dist;
-	bool visited;
 	shared_ptr<GraphNode> parent;
 	
 	GraphNode(double x, double y) {
 		p = Point_2(x, y);
-		dist = (numeric_limits<int>::max)();
-		visited = false;
 		parent = nullptr;
 	}
 
 	GraphNode(Point_2 ps) { 
 		p = ps;
-		dist = (numeric_limits<int>::max)();
-		visited = false;
 		parent = nullptr;
 	}
 };
@@ -44,8 +38,8 @@ void constructG(Iterator begin, Iterator end)
 
 void runBfs(shared_ptr<GraphNode> s, vector<shared_ptr<GraphNode>> nodes)
 {
-	s->dist = 0;
-	s->visited = true;
+	s->p.dist = 0;
+	s->p.visited = true;
 	deque <shared_ptr<GraphNode>> Q;
 	Q.push_back(s);
 	int k = 0;
@@ -56,11 +50,11 @@ void runBfs(shared_ptr<GraphNode> s, vector<shared_ptr<GraphNode>> nodes)
 		for (auto it = v->neighbours.begin(); it != v->neighbours.end(); ++it)
 		{
 			shared_ptr<GraphNode> u = nodes.at(*it);
-			if (!(u->visited))
+			if (!(u->p.visited))
 			{
 				k++;
-				u->visited = true;
-				u->dist = v->dist+1;
+				u->p.visited = true;
+				u->p.dist = v->p.dist+1;
 				u->parent = v;
 				Q.push_back(u);
 			}
@@ -70,8 +64,8 @@ void runBfs(shared_ptr<GraphNode> s, vector<shared_ptr<GraphNode>> nodes)
 
 void resetGraphNodes(vector<shared_ptr<GraphNode>> nodes) {
 	for (auto n : nodes) {
-		n->dist = (numeric_limits<int>::max)();
-		n->visited = false;
+		n->p.dist = (numeric_limits<int>::max)();
+		n->p.visited = false;
 		n->parent = nullptr;
 	}
 }
@@ -80,36 +74,4 @@ void resetGraph(vector<shared_ptr<GraphNode>> nodes) {
 	for (auto n : nodes) {
 		n->neighbours.clear();
 	}
-}
-
-void testBfs(vector<Point_2> points)
-{
-	vector<shared_ptr<GraphNode>> nodes;
-	for (auto p: points) {
-		nodes.push_back(shared_ptr<GraphNode>(new GraphNode (p)));
-	}
-	CGAL::Timer cost;
-	double totalQueryTime = 0;
-	double totalConstructionTime = 0;
-	for (int k = 0; k < 5; ++k) {
-		cost.reset(); cost.start();
-		constructG(nodes.begin(), nodes.end());
-		cost.stop();
-		totalConstructionTime += cost.time();
-		
-		cost.reset();
-		size_t nodesLength = nodes.size();
-		for (int i = 0; i < 50; ++i) {
-			int idx = ceil(rand()*nodesLength / RAND_MAX);
-			shared_ptr<GraphNode> n = nodes[idx];
-			cost.start();
-			runBfs(n, nodes);
-			cost.stop();
-			resetGraphNodes(nodes);
-		}
-		totalQueryTime += cost.time()/50.0;
-		resetGraph(nodes);
-	}
-	cout << "Average time (5 iterations) for construction of graph G: " << totalConstructionTime/5.0 << endl;
-	cout << "Average time (5 iterations) for running 50 iterations of bfs algortithm on G: " << totalQueryTime / 5.0 << endl;
 }

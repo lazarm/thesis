@@ -340,24 +340,26 @@ void main_procedure(vector<Point_2>::iterator begin, vector<Point_2>::iterator e
 
 		while (2 * i <= min(get<2>(best_r), maxdist*2-1)) {
 			tuple<Point_2, Point_2, int> res1 = nnSeparation(&l0, &l1, &r0, &r1, i);
-			if (get<2>(res1) < (numeric_limits<int>::max)())
-				res1 = getDistToLCA(res1);
+			/*if (get<2>(res1) < (numeric_limits<int>::max)())
+				res1 = getDistToLCA(res1);*/
 			if (get<2>(res1) < get<2>(best_r)) {
 				cout << "dist: " << get<2>(res1) << endl;
+				cout << k + 1 << endl;
 				best_r = res1;
 				break;
 			}
 			res1 = rangeSeparation(&l0, &l1, &r0, &r1, i, st);
-			if (get<2>(res1) < (numeric_limits<int>::max)())
-				res1 = getDistToLCA(res1);
+			/*if (get<2>(res1) < (numeric_limits<int>::max)())
+				res1 = getDistToLCA(res1);*/
 			if (get<2>(res1) < get<2>(best_r)) {
 				cout << "dist: " << get<2>(res1) << endl;
+				cout << k + 1 << endl;
 				best_r = res1;
 				break;
 			}
 			i++;
 		}
-
+		k++;
 		ssspTree.resetSSSPTreeDTVertices();
 	}
 	cost.stop();
@@ -413,11 +415,11 @@ void constructGSeparation(vector<shared_ptr<GNode>> nodes)
 }
 
 void constructDTSeparation(SSSPTree* tree) {
-	for (DH_Vertex_iterator it = tree->getDT().finite_vertices_begin(); it != tree->getDT().finite_vertices_end(); ++it) {
+	for (DH_Vertex_iterator it = tree->dt.finite_vertices_begin(); it != tree->dt.finite_vertices_end(); ++it) {
 		DH_Vertex_iterator it2 = it;
 		advance(it2, 1);
 		Point_2 p1 = it->handle()->point();
-		while (it2 != tree->getDT().finite_vertices_end()) {
+		while (it2 != tree->dt.finite_vertices_end()) {
 			Point_2 p2 = it2->handle()->point();
 			if (CGAL::squared_distance(p1, p2) <= 1) {
 				it->handle()->point().neighbours.push_back(&(it2->handle()->point()));
@@ -434,11 +436,10 @@ void testSepGeneral(vector<Point_2> points, Segment_2 st) {
 	constructDTSeparation(&tree);
 	int best = (numeric_limits<int>::max)();
 	tuple<Point_2, Point_2, int> connects;
-	for (DH_Vertex_iterator it = tree.getDT().finite_vertices_begin(); it != tree.getDT().finite_vertices_end(); ++it) {
+	for (DH_Vertex_iterator it = tree.dt.finite_vertices_begin(); it != tree.dt.finite_vertices_end(); ++it) {
 		Point_2 p = it->handle()->point();
 		tree.createTreeFromRoot(p);
-		double t1 = cost.time();
-		for (DH_Vertex_iterator it2 = tree.getDT().finite_vertices_begin(); it2 != tree.getDT().finite_vertices_end(); ++it2) {
+		for (DH_Vertex_iterator it2 = tree.dt.finite_vertices_begin(); it2 != tree.dt.finite_vertices_end(); ++it2) {
 			Point_2 ap = it2->handle()->point();
 			for (Point_2* bpPtr : ap.neighbours) {
 				Point_2 bp = *bpPtr;
@@ -451,15 +452,14 @@ void testSepGeneral(vector<Point_2> points, Segment_2 st) {
 				}
 			}
 		}
-		cout << "time: " << cost.time() - t1 << endl;
 		tree.resetSSSPTreeDTVertices();
 	}
 	cost.stop();
 	vector<Point_2> cycle{};
 	cycle = make_cycle(connects, cycle);
-	/*for (auto c : cycle) {
-		cout << c << endl;
-	}*/
+	//for (auto c : cycle) {
+	//	cout << c << endl;
+	//}
 	cout << best << endl;
 	cout << "total time: " << cost.time() << endl;
 }

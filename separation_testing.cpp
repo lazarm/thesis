@@ -57,9 +57,13 @@ int main(int argc, char* argv[]) {
 	if (!(ss2 >> repeats))
 		cerr << "Invalid number " << argv[3] << '\n';
 	// TODO: test method for separation algorithm
-	for (int i = 0; i < repeats; i++) {
+	cout << "start" << endl;
+	/*for (int i = 0; i < repeats; i++) {
 		testSepGeneral(readPoints, st);
-	}
+	}*/
+	
+	std::srand(unsigned(std::time(0)));
+	std::random_shuffle(readPoints.begin(), readPoints.end());
 	for (int i = 0; i < repeats; i++) {
 		main_procedure(readPoints.begin(), readPoints.end(), st);
 	}

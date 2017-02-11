@@ -15,7 +15,6 @@ private:
 	Segment_2 st;
 	bool useForSeparation;
 	bool useCategorization;
-	DT dt;
 	bool onLeft(Point_2* p);
 	void categorize(int i, Point_2* p);
 	void clearSets();
@@ -28,6 +27,7 @@ public:
 	template <class Iterator>
 	SSSPTree(Iterator begin, Iterator end, Segment_2 st, bool useCategorization);
 	~SSSPTree(){};
+	DT dt;
 	DT getDT(){ return dt; }
 	vector< vector<vector<Point_2>> > getAllSets();
 	void createTreeFromRoot(Point_2 r);

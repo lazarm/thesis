@@ -50,7 +50,6 @@ void TreeTimeTester::testSSPT()
 			cost.stop();
 
 			tree.resetSSSPTreeDTVertices();
-			tree.clearSets();
 		}
 		totalQueryTime += (cost.time() / double(algorithmRepeats));
 	}
