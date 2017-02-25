@@ -276,7 +276,7 @@ The master thesis presents two algorithms dealing with the shortest path problem
 \chapter{Uvod}
 V magistrski nalogi smo obravnavali dva geometrijska optimizacijska problema na ravnini, pri katerih osrednjo vlogo predstavljajo enotski krogi. Predstavili smo učinkovita algoritma, ki rešita omenjena problema, opisali njuno implementacijo ter predložili rezultate eksperimentov.
 
-Pri prvem problemu bi radi izračunali drevo najkrajših poti iz neuteženega grafa presekov enotskih krogov. Kot vhod je dana množica $\D$ $n$ krogov enake velikosti, kjer je vsak krog opisan z njegovim središčem. Vozlišča grafa presekov predstavljajo krogi, pri čemer med dvema vozliščema obstaja povezava natanko takrat, ko obstaja presečišče med njunima krogoma $D$ in $D'$. Graf presekov lahko predstavimo tudi na drug, bolj priročen način, kjer vozlišča predstavlja množica $P$ središč krogov, povezava med dvema točkama $p$ in $q$ pa obstaja, če je njuna evklidska razdalja $\|pq\|$ manjša ali enaka premeru enotskega kroga. Za podan koren $r \in P$ lahko iz takega grafa izračunamo drevo najkrajših poti brez eksplicitne izgradnje grafa, s čimer je časovna zahtevnost algoritma enaka $\OO(n\log n)$.
+Pri prvem problemu bi radi izračunali drevo najkrajših poti iz neuteženega grafa presekov enotskih krogov. Kot vhod je dana množica $\D$ $n$ krogov enake velikosti, kjer je vsak krog opisan z njegovim središčem. Vozlišča grafa presekov predstavljajo krogi, pri čemer med dvema vozliščema obstaja povezava natanko takrat, ko obstaja presečišče med njunima krogoma $D$ in $D'$. Graf presekov lahko predstavimo tudi na drug, bolj priročen način, kjer vozlišča predstavlja množica $P$ središč krogov, povezava med dvema točkama $p$ in $q$ pa obstaja, če je njuna evklidska razdalja $\|pq\|$ manjša ali enaka premeru enotskega kroga. Za podan koren $r \in P$ lahko iz takega grafa izračunamo drevo najkrajših poti brez eksplicitne izgradnje grafa, s čimer je časovna zahtevnost algoritma enaka $\OO(n\log n)$~\cite{CJ15}.
 
 Drugi problem, ki ga obravnavamo, je problem minimalne ločitve. Kot vhod je dana množica $\D$ $n$ enotskih krogov na ravnini in dve točki $s$ in $t$, ki nista vsebovani v nobenem od krogov iz $\D$. Pravimo, da $\D$ ločuje $s$ in $t$, če vsaka pot v ravnini od $s$ do $t$ seka nek krog v $\D$. Cilj je najti minimalno kardinalno podmnožico množice $\D$, ki ločuje $s$ in $t$, kar formalno zapišemo kot 
 
@@ -289,6 +289,8 @@ Drugi problem, ki ga obravnavamo, je problem minimalne ločitve. Kot vhod je dan
 Polinomsko časovno zahtevnost algoritma $\OO(n^2log^3n)$ dosežemo tako, da za del rešitve uporabimo algoritem prvega problema za izgradnjo drevesa najkrajših poti. Oba problema sta tako povezana in ju je smiselno obravnavati skupaj.
 
 Enotski krogi so najbolj standarden geometrijski model, ki se uporablja za brezžična senzorska omrežja (zanj se pogosto uporablja kratica UDG). Tak model predstavlja ustrezen kompromis med enostavnostjo in natačnostjo, saj je za bolj natančne modele dosti težje najti učinkovite algoritme. To pomeni tudi, da je izkoriščanje geometrijskih lastnosti modela UDG bolj zahtevno, algoritmi, ki se zanašajo na tak model, pa zaradi nerealističnih predpostavk pogosto odpovejo v praksi (kjer komunikacijski doseg ni idealen krog)~\cite{WGM06}. Drevesa najkrajših poti v grafu enotskih krogov igrajo pomembno vlogo pri usmerjanju in se pogosto uporabljajo pri bolj kompleksnih nalogah. Primer take uporabe v senzorskih omrežjih je pri algoritmu za prepoznavanje meja, ki tvorijo luknje s premalo senzorskimi vozlišči. Zaradi takih lukenj veliko požrešnih algoritmov za posredovanje paketov po omrežju odpove, ker predpostavljajo, da je omrežje dovolj gosto~\cite{FGG06}.
+
+Pred kratkim je bil odkrit nov algoritem za izgradnjo najkrajših dreves v grafu enotskih diskov, ki ga je prav tako možno implementirati in bi se v praksi najbrž obnesel zelo dobro~\cite{ChanS16}. Ravno zaradi dejstva, da je bil odkrit zelo nedavno, ga nismo vključili v magistrsko nalogo.
 
 Problem minimalne ločitve je obravnavan že v~\cite{CG16}, kjer je podan tudi algoritem s časovno zahtevnostjo $\OO(n^3)$ v najslabšem primeru, ki deluje za poljubne like. Z omejitvijo likov na enotne kroge in uporabo več različnih orodij iz računske geometrije lahko zmanjšamo časovno zahtevnost, lažje izvedljiva pa postane tudi implementacija algoritma.
 
@@ -311,7 +313,7 @@ V tem poglavju so na kratko opisani programska knjižnica CGAL in podatkovne str
 CGAL (Computational Geometry Algorithms Library) je programski paket, ki omogoča enostaven dostop do učinkovitih in zanesljivih geometrijskih algoritmov v obliki C\texttt{+}\texttt{+} knjižnice. Uporablja se na različnih področjih, ki potrebujejo geometrijsko računanje, kot so geografski informacijski sistemi, računalniško podprto načrtovanje, molekularna biologija, medicina, računalniška grafika in robotika. Knjižnica vsebuje:
 
 \begin{itemize}
-\item jedro z geometrijskimi osnovami, kot so točke, vektorji, črte, predikati za preizkušanje stvari (na primer relativni položaji točk) in opravila, kot so izračunavanje presekov ter razdalj
+\item jedro z geometrijskimi osnovami, kot so točke, vektorji, črte, predikati (na primer za relativne položaje točk) in opravila, kot so izračunavanje presekov ter razdalj
 \item osnovno knjižnico, ki je zbirka standardnih podatkovnih struktur in geometrijskih algoritmov, kot so konveksna ovojnica v 2D/3D, Delaunayova triangulacija v 2D/3D, ravninski zemljevid, polieder, Voronoijev diagram, območna drevesa (range trees) itd.
 \item podporna knjižnica, ki ponuja vmesnike do drugih paketov, na primer za V/I in vizualizacijo~\cite{cgal:bfghhkps-lgk23-16b}.
 \end{itemize}
@@ -324,13 +326,13 @@ Jedro sestavljajo nespremenljivi geometrijski primitivni objekti konstantne veli
 Eden od osnovnih problemov, s katerimi se soočimo pri implementaciji geometrijskih algoritmov, je eksaktno računanje z realnimi števili. Zaokroževanje pri uporabi aritmetike nad števili, predstavljenimi s plavajočo vejico, lahko privede do nekonsistentnih odločitev in nepričakovanih napakah že pri nekaterih osnovnih geometrijskih algoritmih. CGAL ponuja izbiro številskih tipov in aritmetike. Pri uporabi eksaktne aritmetike dobimo točne rezultate, a po drugi strani se čas izvajanja in prostorska poraba algoritma povečata.
 
 \subsubsection{Predstavitev objektov jedra}
-Vsi objekti jedra so predloge s parametrom, ki omogoča uporabniku izbiro predstavitve objektov. Dve družini modelov predstavitve temeljita na kartezični predstavitvi točk, dve pa na homogenični predstavitvi. Pri kartezični predstavitvi je vsaka točka predstavljena s kartezičnimi koordinatami, ki privzamejo $d$-dimenzionalni afini Evklidski prostor s koordinatnim izhodiščem in $d$ pravokotnimi osmi. Točke (in vektorji) so potem predstavljeni z $d$-terko $(c_o, c_1,..., c_{d-1})$. Pri homogeni predstavitvi so točke predstavljene z $(d+1)$-terko $(h_o, h_1,...,h_d)$. V kartezično predstavitev jih lahko pretvorimo s formulo $c_i = h_i/h_d$, ena od možnih homogenih predstavitev točke s kartezičnimi koordinatami pa je $(c_0, c_1,..., c_{d-1}, 1)$ (ker homogene koordinate niso enolične). Prednost uporabe homogenih koordinat v CGAL-u je, da se z njimi izognemo uporabi deljenja. Vmesnik objektov v jedru je napisan tako, da hkrati omogoča uporabo kartezične in homogene predstavitve. 
+Vsi objekti jedra so predloge s parametrom, ki omogoča uporabniku izbiro predstavitve objektov. Dve družini modelov predstavitve temeljita na kartezični predstavitvi točk, dve pa na homogenični predstavitvi. Pri kartezični predstavitvi je vsaka točka predstavljena s kartezičnimi koordinatami, ki privzamejo $d$-dimenzionalni afini evklidski prostor s koordinatnim izhodiščem in $d$ pravokotnimi osmi. Točke (in vektorji) so potem predstavljeni z $d$-terko $(c_o, c_1,..., c_{d-1})$. Pri homogeni predstavitvi so točke predstavljene z $(d+1)$-terko $(h_o, h_1,...,h_d)$. V kartezično predstavitev jih lahko pretvorimo s formulo $c_i = h_i/h_d$, ena od možnih homogenih predstavitev točke s kartezičnimi koordinatami pa je $(c_0, c_1,..., c_{d-1}, 1)$ (ker homogene koordinate niso enolične). Prednost uporabe homogenih koordinat v CGAL-u je, da se z njimi izognemo uporabi deljenja. Vmesnik objektov v jedru je napisan tako, da hkrati omogoča uporabo kartezične in homogene predstavitve. 
 
-\paragraph{Številski tipi}
+\paragraph*{Številski tipi}
 Obe družini predstavitve objektov sta nadalje parametrizirani s številskim tipom za koordinate. CGAL ponuja dva tipa predloge za številske tipe. Eden se nanaša na algebrsko strukturo kolobar, kjer je možno seštevati, odštevati in množiti, drugi pa na polje, kjer je poleg omenjenih operacij možno tudi deliti. Vgrajeni tip $int$ tako spada v prvo skupino, ker operacija deljenja ni inverz množenja, $double$ pa v drugo. Če želimo nad katerokoli algebrsko strukturo uporabiti številski tip s poljubno natančnostjo, lahko uporabimo tip $MP\U Float$, ki ga ponuja sam CGAL, ali tipe, za  katere v CGAL-u obstajajo ovojni razredi ali vmesniki. Primer so tipi iz GMP (\textit{GNU Multiple Precision Arithmetic Library}) in LEDA (\textit{Library of Efficient Data types and Algorithms})~\cite{cgal:hhkps-nt-16b}.
 
 \bigbreak
-Če se pri računanju zanašamo samo na vhodne podatke in ne računamo novih točk, lahko uporabimo kartezično predstavitev točk, celo tako s kolobarskim številskim tipom. To velja med drugim za taka računanja, ki vrednotijo predikate, pri katerih ne gre za nič drugega kot računanje determinante. Primeri so računanje triangulacije in konveksne ovojnice. Če pa algoritmi obsegajo tudi računanja novih točk, prihaja do uporabe deljenja, zato moramo uporabiti kartezično predstavitev s številskim tipom za polja, recimo $double$,  ali homogeno predstavitev. $double$ sicer ni popolnoma natančen, a ga ponavadi uporabljajo tisti, ki jim je pomembna hitrost in se zadovoljijo tudi s približnimi rezultati.
+Če se pri računanju zanašamo samo na vhodne podatke in ne računamo novih točk, lahko uporabimo kartezično predstavitev točk, celo tako s kolobarskim številskim tipom. To velja med drugim za taka računanja, ki vrednotijo predikate, pri katerih ne gre za nič drugega kot računanje determinante. Primeri so računanje triangulacije in konveksne ovojnice. Če pa algoritmi obsegajo tudi računanja novih točk, prihaja do uporabe deljenja, zato moramo uporabiti kartezično predstavitev s številskim tipom za polja - recimo $double$ - ali homogeno predstavitev. $double$ sicer ni popolnoma natančen, a ga ponavadi uporabljajo tisti, ki jim je pomembna hitrost in se zadovoljijo tudi s približnimi rezultati.
 
 Algoritmi in podatkovne strukture v osnovni knjižnici CGAL so med drugim parametrizirani z razredom geometrijskih značilnosti, ki zajema objekte, nad katerimi algoritmi in strukture
 delujejo. Za večino slednjih je dovolj za to uporabiti jedro.
@@ -342,7 +344,7 @@ Poleg tega so v CGAL-u na voljo premice, poltraki, daljice, ravnine, trikotniki,
 Dve poljubni točki na premici definirata njeno orientacijo ter razdelitev ravnine na pozitivno in negativno stran. Poltrak je orientiran iz smeri njegovega končnega vozlišča, vozlišča daljic pa so urejena in definirajo isto orientacijo kot premica, na kateri daljice ležijo. Vsi geometrijski objekti imajo metodo za testiranje relativne lokacije dane točke glede na objekt. Ker so objekti in njihove meje predstavljene z istim tipom (na primer sfera in krogla ali krožnica in krog), svojo okolico razdelijo na omejen in neomejen del (krožnica) ali dva neomejena dela (hiperravnina). Vsi objekti so privzeto orientirani, kar pomeni, da je eden od delov označen kot pozitivna, drugi pa kot negativna stran. Prej omenjena metoda torej določa, ali se dana točka nahaja na pozitivni strani, negativni strani ali na meji objekta. 
 
 \bigbreak
-Predikati so osrčje jedra, saj predstavljajo osnovno enoto  pri izgradnji algoritmov, zato je njihova pravilnost ključnega pomena pri pravilni implementaciji. Predikati v CGAL-u ne vračajo nujno $boolean$ vrednosti, ampak tudi vrednosti tipa $enum$. Na voljo so predikati za orientacijo množice točk, primerjavo točk glede na dano zaporedje, primerjavo razdalj in testi za vsebovanost točke v krogu. Vse ostale metode, ki niso tipa $boolean$ ali $enum$, se imenujejo konstrukcije, ker vsebujejo računanja novih numeričnih vrednosti, ki so lahko nenatančna, če ni uporabljeno jedro z eksaktnim številskim tipom. Primer take metode, ki je na voljo za večino geometrijskih objektov, je afina transformacija. Druga dva tipična primera sta računanje presečišč med objekti in kvadrata razdalje~\cite{cgal:bfghhkps-lgk23-16b}.
+Predikati so osrčje jedra, saj predstavljajo osnovno enoto  pri izgradnji algoritmov, zato je njihova pravilnost ključnega pomena pri pravilni implementaciji. Predikati v CGAL-u ne vračajo nujno logičnih vrednosti, ampak tudi vrednosti tipa $enum$. Na voljo so predikati za orientacijo množice točk, primerjavo točk glede na dano zaporedje, primerjavo razdalj in testi za vsebovanost točke v krogu. Vse ostale metode, ki ne vračajo logičnih ali $enum$ vrednosti, se imenujejo konstrukcije, ker vsebujejo računanja novih numeričnih vrednosti, ki so lahko nenatančna, če ni uporabljeno jedro z eksaktnim številskim tipom. Primer take metode, ki je na voljo za večino geometrijskih objektov, je afina transformacija. Druga dva tipična primera sta računanje presečišč med objekti in kvadratne razdalje~\cite{cgal:bfghhkps-lgk23-16b}.
 
 \section{Kd drevesa}
 
@@ -351,9 +353,9 @@ Predikati so osrčje jedra, saj predstavljajo osnovno enoto  pri izgradnji algor
 \caption{Dvodimenzionalno kd drevo.}		
 \label{kd-primer}		
 \end{figure}
-Kd drevo je podatkovna struktura za organiziranje k-dimenzionalnih točk z razbitjem prostora. Najpogosteje se uporablja za območna iskanja in iskanja najbližjih sosedov.
+Kd drevo je podatkovna struktura za organizacijo k-dimenzionalnih točk z razbitjem prostora. Najpogosteje se uporablja za območna iskanja in iskanja najbližjih sosedov.
 Kd drevo je v osnovi binarno drevo, kjer vsako notranje vozlišče razdeli prostor na dva polprostora (polravnini), ki ju ločuje hiperravnina (premica). Točke levo od hiperravnine so vsebovane v levem poddrevesu vozlišča, točke desno od hiperravnine pa v desnem poddrevesu. Smer hiperravnine je odvisna od tega, po kateri dimenziji vozlišče razdeli prostor.
-Za i-ti nivo drevesa velja, da je hiperravnina, ki razdeli prostor, pravokotna na koordinatno os, ki predstavlja $j = ((i-1) mod k + 1)$-to dimenzijo prostora. Vozlišče na drugem nivoju dvodimenzionalnega kd drevesa tako razdeli
+Za i-ti nivo drevesa velja, da je hiperravnina, ki razdeli prostor, pravokotna na koordinatno os, ki predstavlja $j = ((i-1)$ $mod$ $k + 1)$-to dimenzijo prostora. Vozlišče na drugem nivoju dvodimenzionalnega kd drevesa tako razdeli
 ravnino s premico, ki je vzporedna abscisni osi. Točke v spodnji polravnini se nahajajo v levem poddrevesu vozlišča, točke v zgornji polravnini pa v desnem poddrevesu. Hiperravnina, ki jo predstavlja neko vozlišče $v$ v $i$-tem nivoju,
 gre skozi tisto točko, čigar $j$-ta koordinata predstavlja mediano v množici vseh točk, ki se nahajajo v drevesu s korenom. Točke so shranjene v listih drevesa.
 
@@ -363,10 +365,10 @@ gre skozi tisto točko, čigar $j$-ta koordinata predstavlja mediano v množici 
 je $reg(v)$ v celoti vsebovana v poizvedbenem območju, v rezultat dodamo celotno poddrevo $v$. Če pridemo do lista, preverimo, če je vozlišče shranjeno v njem vsebovano v območju. Primer poizvedbe je prikazan na sliki ~\ref{kd-primer} (pri čemer je treba opozoriti, da pri drevesu na sliki za razdelitev prostora ni bila vedno izbrana mediana).
 
 \subsection{Kd drevesa v CGAL-u}
-Implementacija podatkovne strukture dosledno sledi njenem teoretičnem opisu. Za poizvedbe je uporabljen standarden algoritem, ki rekurzivno preišče drevo. Ko pridemo do nekega vozlišča v drevesu, najprej obiščemo otroka, ki je bližje poizvedbeni točki. 
+Implementacija podatkovne strukture dosledno sledi njenemu teoretičnemu opisu. Za poizvedbe je uporabljen standarden algoritem, ki rekurzivno preišče drevo. Ko pridemo do nekega vozlišča v drevesu, najprej obiščemo otroka, ki je bližje poizvedbeni točki. 
 
 \section{Drevesa najkrajših poti z eno izvorno točko (SSSP)}
-Drevo najkrajših poti z eno izvorno točko je vpeto drevo $T$ grafa $G$ s korenom $v$, za katerega velja, da je razdalja poti od $v$ do $u \in T$ enaka razdalji najkrajše poti od $v$ do $u$. Tako drevo lahko zgradimo s pomočjo algoritma za iskanje najkrajše poti med dvema danima točkama (tipična primera sta Dijkstrov in Bellman-Fordov algoritem). Izvorno točko $v$ fiksiramo in poženemo algoritem za vse pare $(v, u), v,u \in G.$ Časovna kompleksnost Dijkstrovega algoritma je $\OO((m+n)\log n)$, kjer je $n$ število vozlišč, $m$ pa število povezav v $G$. Ker moramo algoritem pognati za $n-1$ parov, lahko drevo zgradimo v času $\OO((n^2 + nm)\log n)$. Če predpostavimo, da za vhodni graf $G$ veljajo določene omejitve (v primeru našega algoritma povezava med vozliščema v grafu obstaja samo, če je njuna razdalja največ 1), ki se jih da izkoristiti pri izgradnji hitrejšega algoritma, se časovna kompleksnost lahko izboljša.
+Drevo najkrajših poti z eno izvorno točko je vpeto drevo $T$ grafa $G$ s korenom $v$, za katerega velja, da je razdalja poti od $v$ do $u \in T$ enaka razdalji najkrajše poti od $v$ do $u$. Tako drevo lahko zgradimo s pomočjo algoritma za iskanje najkrajše poti med dvema danima točkama (tipična primera sta Dijkstrov in Bellman-Fordov algoritem). Izvorno točko $v$ fiksiramo in poženemo algoritem za vse pare $(v, u), v,u \in G.$ Časovna kompleksnost Dijkstrovega algoritma je $\OO((m+n)\log n)$, kjer je $n$ število vozlišč, $m$ pa število povezav v $G$. Če predpostavimo, da za vhodni graf $G$ veljajo določene omejitve (v primeru našega algoritma povezava med vozliščema v grafu obstaja samo, če je njuna razdalja največ 1), ki se jih da izkoristiti pri izgradnji hitrejšega algoritma, se časovna kompleksnost lahko izboljša.
 \section{Graf kvadratne mreže}
 \label{grid-chapter}
 Dvodimenzionalni graf kvadratne mreže je $m \times n$ mrežni graf $G_{m,n}$, ki predstavlja kartezični produkt dveh grafov poti z $n-1$ in $m-1$ povezavami. Vsi mrežni grafi so dvodelni, kar se da enostavno pokazati s tem, da se vozlišča pobarva z dvema barvama z vzorcem šahovnice.
@@ -376,7 +378,7 @@ Vozlišča grafa ponavadi sovpadajo s točkami v ravnini, pri katerih koordinate
 
 
 \section{Delaunayeva triangulacija}
-Delaunayeva triangulacija nad točkami $P$ je triangulacija $DT(P)$, ki izpolnjuje Delaunayev pogoj. Ta pravi, da se nobena točka iz $P$ ne nahaja znotraj očrtanega kroga poljubnega trikotnika triangulacije. Taka triangulacija
+Delaunayeva triangulacija nad točkami $P$ je triangulacija $DT(P)$, ki izpolnjuje Delaunayev pogoj. Ta pravi, da se nobena točka iz $P$ ne nahaja znotraj poljubnemu trikotniku očrtanega kroga triangulacije. Taka triangulacija
 maksimizira minimalni kot med vsemi koti trikotnikov. Množica $P$ s kolinearnimi točkami predstavlja izrojen primer, za katerega ne obstaja nobena Delaunayeva triangulacija. Če točke v $P$ ležijo na istem krogu, rešitev ni enolična.
 
 Med točko $p$ in njenim najbližjim sosedom $q$, kjer $p,q\in P$, vedno obstaja povezava $pq\in E(DT(P))$, ker je graf najbližjih sosedov nad množico $P$ podgraf Delaunayeve triangulacije. Za dolžino najkrajše poti $dist(\pi (p,q))$ med dvema 
@@ -395,32 +397,32 @@ Za izgradnjo triangulacije poznamo več algoritmov. Najpogosteje uporabljeni so:
 \end{description}
 
 \subsection{Delaunayeva triangulacija v CGAL-u}
-Razred Delaunay\U triangulation\U 2 implementira Delaunayevo triangulacijo in deduje iz razreda Triangulation\U 2. Iz slednjega uporablja nekatere metode, kot so vstavljanje ali lociranje točke, nekatere pa tudi povozi, kot je recimo obračanje trikotnikov, ker trikotnikom v navadni triangulaciji ni potrebno izpolnjevati Delaunayevega pogoja. Poleg tega vsebuje dodatne metode za iskanje najbližjega soseda in konstrukcijo elementov Delaunayi triangulaciji dualnega Voronoijevega diagrama.
+Razred Delaunay\U triangulation\U 2 implementira Delaunayevo triangulacijo in deduje iz razreda Triangulation\U 2. Iz slednjega uporablja nekatere metode, kot so vstavljanje ali lociranje točke, nekatere pa tudi povozi, kot je recimo obračanje trikotnikov, ker trikotnikom v navadni triangulaciji ni potrebno izpolnjevati Delaunayevega pogoja. Poleg tega vsebuje dodatne metode za iskanje najbližjega soseda in izgradnjo elementov Delaunayevi triangulaciji dualnega Voronoijevega diagrama.
 
-Razred je parametriziran z dvema predlogama; prvi je razred geometrijskih značilnosti, drugi pa razred podatkovne strukture za triangulacijo. Za slednjega CGAL ponuja privzeti razred Triangulation\U data\U structure\U 2, ki vsebuje zbirki vozlišč in lic. Razred geometrijskih značilnosti mora biti model koncepta DelaunayTriangulationTraits\U 2, ki je dodelana verzija koncepta TriangulationTraits\U 2. Ta vsebuje predikata za primerjavo koordinat dveh točk in test orientacije treh točk. DelaunayTriangulationTraits\U 2 dodatno vsebuje še predikat side\U of\U oriented\U circle, ki za štiri dane točke $p, q, r, s$ določi položaj točke $s$ glede na krožnico, ki gre skozi točke $p, q$ in $r$.
+Razred je parametriziran z dvema predlogama. Prvi je razred geometrijskih značilnosti, drugi pa razred podatkovne strukture za triangulacijo. Za slednjega CGAL ponuja privzeti razred \textit{ Triangulation\U data\U structure\U 2}, ki vsebuje zbirki vozlišč in lic. Razred geometrijskih značilnosti mora biti model koncepta \textit{DelaunayTriangulationTraits\U 2}, ki je dodelana verzija koncepta \textit{TriangulationTraits\U 2}. Ta vsebuje predikata za primerjavo koordinat dveh točk in test orientacije treh točk. \textit{DelaunayTriangulationTraits\U 2} dodatno vsebuje še predikat \textit{side\U of\U oriented\U circle}, ki za štiri dane točke $p, q, r, s$ določi položaj točke $s$ glede na krožnico, ki gre skozi točke $p, q$ in $r$.
 
-Izgradnja triangulacije uporablja inkrementalni algoritem z obračanjem. 
+Implementacija izgradnje triangulacije uporablja inkrementalni algoritem z obračanjem. 
 
 \subsubsection{Operacije nad strukturo}
 \begin{description}
 \item[lociranje točke] Je implementirano s sprehodom po povezavah. Sprehod se začne pri vozlišču podanega lica, ali pri naključnem vozlišču, če lice ni podano. Povprečna časovna zahtevnost je $\OO(\sqrt{n})$.
 \item[vstavljanje nove točke] Najprej je uporabljena metoda $locate$ za lociranje lica, ki vsebuje novo točko, nato pa se lice razbije na tri dele. Novo triangulacijo se nato popravi z $\OO(d)$ obračanji (v povprečju $\OO(1)$), kjer je $d$ stopnja novega vozlišča
-\item[iskanje najbližjega soseda] Uporabljena je metoda $locate$, nato pa je potrebnega $\OO(1)$ časa za najdbo najbližjega soseda pri enakomerno porazdeljenih vozliščih, v najslabšem primeru pa $\OO(n)$ časa.
+\item[iskanje najbližjega soseda] Uporabljena je metoda $locate$, nato pa potrebujemo $\OO(1)$ časa za najdbo najbližjega soseda pri enakomerno porazdeljenih vozliščih, v najslabšem primeru pa $\OO(n)$ časa.
 \end{description}
 
 \subsubsection{Hierarhija triangulacij}
-Za učinkovito lociranje točk lahko uporabimo razred Triangulation\U hierarchy\U 2, ki hrani hierarhijo triangulacij. Na najnižjem nivoju se nahaja izvirna triangulacija, nad katero se izvajajo operacije in lociranje točk. Na vsakem višjem nivoju je nato zgrajena triangulacija nad manjšo množico naključno izbranih vozlišč iz triangulacije na predhodnem nivoju (recimo 3\% vozlišč). Lociranje točke se izvede od zgoraj navzdol po strukturi: na najvišjem nivoju se naivno izvede poizvedba najbližjega soseda, nato pa se na vsakem naslednjem nivoju najde najbližjega soseda s sprehodom po povezavah z začetkom pri najbližjem sosedu, najdenem na višjem nivoju. Taka struktura je najbolj primerna ravno za Delaunayeve triangulacije. Poleg hitrega delovanja na realnih podatkih ima dobro časovno zahtevnost v najslabšem primeru, in nizko prostorsko kompleksnost~\cite{Olivier}.
+Za učinkovito lociranje točk lahko uporabimo razred \\$Triangulation\U hierarchy\U 2$, ki hrani hierarhijo triangulacij. Na najnižjem nivoju se nahaja izvirna triangulacija, nad katero se izvajajo operacije in lociranje točk. Na vsakem višjem nivoju je nato zgrajena triangulacija nad manjšo množico naključno izbranih vozlišč iz triangulacije na predhodnem nivoju (recimo 3\% vozlišč). Lociranje točke se izvede od zgoraj navzdol po strukturi: na najvišjem nivoju se naivno izvede poizvedba najbližjega soseda, nato pa se na vsakem naslednjem nivoju najbližjega soseda poišče s sprehodom po povezavah z začetkom pri najbližjem sosedu, najdenem na višjem nivoju. Taka struktura je najbolj primerna ravno za Delaunayeve triangulacije. Poleg hitrega delovanja na realnih podatkih ima dobro časovno zahtevnost v najslabšem primeru in nizko prostorsko kompleksnost~\cite{Olivier}.
 
 \section{Voronoijev diagram}
 \begin{figure}
 \centerline{\includegraphics[scale=0.8]{pics/voronoi-dt2.pdf}}
-\caption{Evklidski Voronoijev diagram brez degeneracij, označen z rdečimi odebeljenimi povezavami. Voronoijeva središča, obarvana z modro barvo, predstavljajo hkrati tudi vozlišča v Delaunayevi triangulaciji, dualni Voronoijevemu diagramu, in je označena s tanjšimi črnimi povezavami.}
+\caption{Evklidski Voronoijev diagram brez degeneracij, označen z rdečimi odebeljenimi povezavami. Voronoijeva središča, obarvana z modro barvo, predstavljajo hkrati tudi vozlišča v Delaunayevi triangulaciji (dualni Voronoijevemu diagramu), ki je označena s tanjšimi črnimi povezavami.}
 \label{vd}
 \end{figure}
 
-Voronoijev diagram ~\cite{cgal:k-vda2-15a} je definiran na množici točk, imenovanih Voronoijeva središča (angleško $sites$), ki ležijo v nekem prostoru $\sum$, in z metriko oziroma funkcijo razdalje med točkami. Za ravninski Voronoijev diagram, opisan v nadaljevanju, velja $\sum = \mathbb{R}^2$.
+Voronoijev diagram ~\cite{cgal:k-vda2-15a} je definiran na množici točk, imenovanih Voronoijeva središča (angleško $sites$), in z metriko oziroma funkcijo razdalje med točkami.
 
-Naj bo S = $S = \{S_1,S_2,...,S_n\}$ množica Voroijevih središč in naj bo $\delta(x,S_i)$ funkcija razdalje med središčem $S_i$ in neko točko $x \in \mathbb{R}^2$. Množica točk $V_{ij}$, ki so bližje središču $S_i$ kot središču $S_2$ na podlagi funkcije $\delta(x,\cdot)$, je množica:
+Naj bo $S = \{S_1,S_2,...,S_n\}$ množica Voronoijevih središč in naj bo $\delta(x,S_i)$ funkcija razdalje med središčem $S_i$ in neko točko $x \in \mathbb{R}^2$. Množica točk $V_{ij}$, ki so bližje središču $S_i$ kot središču $S_2$ na podlagi funkcije $\delta(x,\cdot)$, je množica:
 
 \begin{equation}
 V_{ij} = \{x \in \mathbb{R}^2: \delta(x,S_i) < \delta(x,S_j)\}. 
@@ -436,18 +438,25 @@ V_i = \bigcap_{i \neq j} V_{ij} .
 
 Množico $V_i$ imenujemo tudi Voronoijeva celica ali Voronijevo lice središča $S_i$. Lokus točk, ki so enako oddaljene od dveh središč, se imenuje Voronijev bisektor. Povezani podmnožici slednjega pravimo Voronoijev rob. Točki, ki je enako oddaljena od treh ali več središč, pravimo Voronoijevo vozlišče. Voronoijev diagram na množici $S$ in z metriko $\delta(x,\cdot)$ je zbirka Voronoijevih celic, robov in vozlišč ter je primer ravninskega grafa.
 
-Celice si ponavadi predstavljamo kot 2-dimenzionalne, robove kot 1-dimenzionalne in vozlišča kot 0-dimenzionalne objekte. Za določene kombinacije središč in metrik to ne drži. Voronijev diagram z metriko $L_1$ ali $L_{\infty}$ lahko na primer vsebuje dvodimenzionalne robove. Takim Voronoijevim diagramom, za katere zgornja omejitev drži in imajo lastnost, da so njihove celice preprosto povezano območje v ravnini, pravimo preprosti Voronoijevi diagrami. Najbolj tipičen primer slednjih je evklidski Voronoijev diagram (slika ~\ref{vd}), ki ga uporabljamo v našem algoritmu.
+Celice si ponavadi predstavljamo kot 2-dimenzionalne, robove kot 1-dimen\- zionalne in vozlišča kot 0-dimenzionalne objekte. Za določene kombinacije središč in metrik to ne drži. Voronijev diagram z metriko $L_1$ ali $L_{\infty}$ lahko na primer vsebuje dvodimenzionalne robove. Takim Voronoijevim diagramom, za katere zgornja omejitev drži in imajo lastnost, da so njihove celice preprosto povezano območje v ravnini, pravimo preprosti Voronoijevi diagrami. Najbolj tipičen primer slednjih je evklidski Voronoijev diagram (slika ~\ref{vd}), ki ga uporabljamo v našem algoritmu.
 
 \subsection{Voronoijev diagram v CGAL-u}
-Knjižnica CGAL vsebuje razred Voronoi\texttt{\_}diagram\texttt{\_}2$<DG,AT,AP>$, ki deluje kot prilagoditveni paket. Ta Delaunayevo triangulacijo na podlagi podanih kriterijev prilagodi pripadajočemu Voronoijevemu diagramu, ki je predstavljen kot DCEL (doubly connected edge list) struktura. Paket je torej zasnovan tako, da na zunaj deluje kot DCEL struktura, znotraj pa v resnici hrani strukturo grafa, ki predstavlja graf triangulacije.
+Knjižnica CGAL vsebuje razred Voronoi\texttt{\_}diagram\texttt{\_}2$<DG,AT,AP>$, ki deluje kot prilagoditveni paket. Ta Delaunayevo triangulacijo na podlagi podanih kriterijev prilagodi pripadajočemu Voronoijevemu diagramu, ki je predstavljen kot struktura DCEL (\textit{doubly connected edge list}). Paket je torej zasnovan tako, da na zunaj deluje kot struktura DCEL, znotraj pa v resnici hrani strukturo grafa, ki predstavlja graf triangulacije.
 
-Razred je parametriziran s tremi predlogami. Prvi, DT, mora biti model koncepta razreda DelaunayGraph\texttt{\_}2. Primeri takih struktur so Delaunayeva triangulacija, navadna triangulacija, Apollonov graf in hierarhija triangulacij. Druga predloga, AT, predstavlja lastnosti pretvorbe Delaunayeve triangulacije v Voronoijev diagram ter definira tipe struktur in funktorje, ki jih razred potrebuje za dostop do geometrijskih lastnosti Delaunayeve triangulacije. Funktor mora biti recimo definiran za konstrukcijo Voronoijevih vozlišč iz njihovih dualnih lic v Delaunayevi triangulaciji. Za našo implementacijo algoritma ločevanja z diski je pomemben funktor za poizvedbe najbližjih središč, ki kot rezultat vrne informacijo o tem, koliko in katera središča so enako oddaljena od točke poizvedbe. Bolj konkretno, rezultat je Delaunayevo vozlišče, lice ali rob, na katerem točka poizvedbe leži oziroma z njim sovpada. Če je na primer točka poizvedbe $q$, enako oddaljena od treh središč, potem sovpada z nekim Voronoijevim vozliščem, zato funktor vrne Delaunayevo lice, ki je dualno temu vozlišču. Razred, ki predstavlja Delaunayevo lice, omogoča iteracijo po Delaunayevih vozliščih, ki definirajo lice, ta pa so dualna trem Voronoijevim središčem.
+Razred je parametriziran s tremi predlogami. Prvi, $DT$, mora biti model koncepta razreda \textit{DelaunayGraph\U 2}. Primeri takih struktur so Delaunayeva triangulacija, navadna triangulacija, Apollonov graf in hierarhija triangulacij. Druga predloga, $AT$, predstavlja lastnosti pretvorbe Delaunayeve triangulacije v Voronoijev diagram ter definira tipe struktur in funktorje, ki jih razred potrebuje za dostop do geometrijskih lastnosti Delaunayeve triangulacije. Funktor mora biti recimo definiran za konstrukcijo Voronoijevih vozlišč iz njihovih dualnih lic v Delaunayevi triangulaciji. Pomemben je tudi funktor za poizvedbe najbližjih središč, ki kot rezultat vrne informacijo o tem, koliko in katera središča so enako oddaljena od točke poizvedbe. Bolj konkretno, rezultat je Delaunayevo vozlišče, lice ali rob, na katerem točka poizvedbe leži oziroma z njim sovpada. Če je na primer točka poizvedbe $q$, enako oddaljena od treh središč, potem sovpada z nekim Voronoijevim vozliščem, zato funktor vrne Delaunayevo lice, ki je dualno temu vozlišču. Razred, ki predstavlja Delaunayevo lice, omogoča iteracijo po Delaunayevih vozliščih, ki definirajo lice, ta pa so dualna trem Voronoijevim središčem.
 
-Tretja predloga predstavlja režim adaptacije Delaunayeve triangulacije Voronoijevemu diagramu. 
-Če množica središč, ki določa graf Delaunayeve triangulacije, vsebuje podmmnožice središč, ki so v izrojenem položaju, ima dualni graf - Voronoijev diagram - lahko robove dolžine nič in po možnosti tudi celice s ploščino nič. Režim adaptacije določa, kaj storiti v takih primerih. V našem projektu smo uporabili režim \\ \textit{Delaunay\U triangulation\U caching\U degeneracy\U removal\U policy\U 2}. Kot pove že ime, ta tip poskrbi, da so vse zgoraj opisane celice in robovi odstranjeni iz Voronoijevega diagrama. Poleg tega uporablja $cache$ pri ugotavljanju, ali ima določena celica oziroma rob degenerirane lastnosti. Ker je slednje precej zahtevna operacija, se ta tip izplača pri vhodnih podatkih (središčih) z veliko izrojenimi primeri.
+Tretja predloga predstavlja režim prilagoditve Delaunayeve triangulacije Voronoijevemu diagramu. 
+Če množica središč, ki določa graf Delaunayeve triangulacije, vsebuje podmmnožice središč, ki so v izrojenem položaju, ima dualni graf - Voronoijev diagram - lahko robove z dolžino nič in po možnosti tudi celice s ploščino nič. Režim prilagoditve določa, kaj storiti v takih primerih. V našem projektu smo uporabili režim \\ \textit{Delaunay\U triangulation\U caching\U degeneracy\U removal\U policy\U 2}. Kot pove že ime, ta tip poskrbi, da so vse zgoraj opisane celice in robovi odstranjeni iz Voronoijevega diagrama. Poleg tega uporablja predpomnilnik pri ugotavljanju, ali ima določena celica oziroma rob degenerirane lastnosti. Ker je slednje precej zahtevna operacija, se ta tip izplača pri vhodnih podatkih (središčih) z veliko izrojenimi primeri.
  
 \section{Območna drevesa}
-Območna drevesa so še ena podatkovna struktura za poizvedbe nad pravokotnimi območji. V primerjavi s kd drevesi imajo boljši čas poizvedbe ($\OO(\log^2 n + k)$), ampak slabšo prostorsko kompleksnost ($\OO(n\log n)$). Namesto, da razdelimo prostor izmenično po abscisni in ordinatni osi, imamo tukaj kot glavno drevo uravnoteženo dvojiško iskalno drevo $\T$, zgrajeno nad $x$ koordinatami točk. Vsako vozlišče $v$ drevesa ima potem kazalec na uravnoteženo dvojiško iskalno poddrevo $\T_{assoc}(v)$, zgrajeno nad $y$ koordinatami točk, ki so shranjene v listih poddrevesa v $\T$ s korenom $v$.
+
+\begin{figure}
+\centerline{\includegraphics[scale=1]{pics/rangeTree2.pdf}}
+\caption{Dvodimenzionalno območno drevo.}
+\label{range-primer}
+\end{figure}
+
+Območna drevesa so še ena podatkovna struktura za poizvedbe nad pravokotnimi območji. V primerjavi s kd drevesi imajo boljši čas poizvedbe ($\OO(\log^2 n + k)$), ampak slabšo prostorsko kompleksnost ($\OO(n\log n)$). Namesto, da razdelimo prostor izmenično po abscisni in ordinatni osi, imamo tukaj kot glavno drevo uravnoteženo dvojiško iskalno drevo $\T$, zgrajeno nad prvimi koordinatami točk (koordinatami $x$). Vsako vozlišče $v$ drevesa ima potem kazalec na uravnoteženo dvojiško iskalno poddrevo $\T_{assoc}(v)$, zgrajeno nad drugimi ($y$) koordinatami točk, ki so shranjene v listih poddrevesa v $\T$ s korenom $v$. Primer drevesa je prikazan na sliki~\ref{range-primer}.
 
 Poizvedba $[x:x'] \times [y:y']$ v taki strukturi poteka na sledeč način: v glavnem drevesu iščemo z intervalom $x:x'$, dokler ne pridemo do vozlišča $v_{split}$, kjer se iskanje razcepi na dva dela. Iskanje nadaljujemo v smeri njegovega levega otroka in pri vsakem obiskanem vozlišču $v$, kjer se pot iskanja nadaljuje levo, označimo njegovega desnega otroka. Podobno nadaljujemo v smeri desnega otroka vozlišča $v_{split}$ in označimo levega otroka obiskanega vozlišča $v$, pri katerem se iskanje nadaljuje v desno. 
 V tem trenutku imamo označenih $\OO(\log n)$ poddreves. Za vsako poddrevo s korenom $v$ $P(v)$ naredimo poizvedbo $[y:y']$ na sekundarnem drevesu $\T_{assoc}(v)$, ki hrani vse točke iz $P(v)$. 
@@ -457,25 +466,18 @@ Dejanske točke so shranjene v drevesih $\T_{assoc}$. Na danem nivoju drevesa $\
 Časovna zahtevnost enodimenzionalne poizvedbe v poddrevesu $\T_{assoc}(v)$ je $\OO(\log n + k_v)$, kjer je $k_v$ število vrnjenih točk. Celotni čas poizvedbe je $\sum_v\OO(\log n + k_v)$, torej vsota vseh obiskanih vozlišč v $T$. Ker je dolžina obeh iskalnih poti (ki se razcepita pri vozlišču $v_{split}$) enaka $\OO(\log n)$, in je vsota $\sum_v k_v$ enaka številu vseh vrnjenih točk poizvedbe $k$, je časovna zahtevnost celotne poizvedbe $\OO(log^2n + k)$.
 
 \subsection{Območna drevesa v CGAL-u}
-Vhodni podatkovni tip za $d$-dimenzionalno območno drevo je zbirka, ki vsebuje podatkovni tip za $d$-dimenzionalno točko in opcijsko tip vrednosti, s katerim lahko shranimo poljubni podatek. Primer uporabe slednjega bi lahko bila množica točk, ki sestavljajo več večkotnikov. Vsako vozlišče drevesa bi potem kot ključ shranilo neko točko, kot vrednost pa poligon, kateremu ta točka pripada. 
+Vhodni podatkovni tip za $d$-dimenzionalno območno drevo je zbirka, ki vsebuje podatkovni tip za $d$-dimenzionalno točko in po želji tip vrednosti, s katerim lahko shranimo poljubni podatek. Primer uporabe slednjega bi lahko bila množica točk, ki sestavljajo več večkotnikov. Vsako vozlišče drevesa bi potem kot ključ shranilo neko točko, kot vrednost pa poligon, kateremu ta točka pripada. 
 
-Razred za območno drevo je popolnoma generičen, kar pomeni, da z njim lahko definiramo večnivojska drevesa. $d$-dimenzionalno večnivojsko drevo  (z $d$ nivoji) je na $d$-tem nivoju preprosto drevo, $k$-ti nivo, $1 \leq k \leq d-1$, pa drevo, kjer vsako notranje vozlišče vsebuje večnivojsko drevo dimenzije $d-k+1$. $k-1$-dimenzionalno drevo, ki je vgnezdeno drevo v $k$-dimenzionalnem drevesu \T, imenujemo podnivojsko drevo drevesa \T. 
+Razred za območno drevo je popolnoma generičen, kar pomeni, da z njim lahko definiramo večnivojska drevesa. $d$-dimenzionalno večnivojsko drevo  (z $d$ nivoji) je na $d$-tem nivoju preprosto drevo, na $k$-tem nivoju, $1 \leq k \leq d-1$, pa drevo, kjer vsako notranje vozlišče vsebuje večnivojsko drevo dimenzije $d-k+1$. $k-1$-dimenzionalno drevo, ki je vgnezdeno drevo v $k$-dimenzionalnem drevesu \T, imenujemo podnivojsko drevo drevesa \T. 
 
 
 Razred je neodvisen tako od vrste podatkov kot od njihove konkretne predstavitve. Za tako splošnost moramo definirati, kako je predstavljeno drevo na vsakem nivoju in kako so vhodni podatki organizirani. Drevesa z dimenzijo $k$, $ 1 < k < 4$, so zato v CGAL-u definirana v lastnih razredih, pripravljenih za takojšnjo uporabo. Ko je drevo enkrat zgrajeno, dodajanje ali brisanje podatkov iz njega ni več mogoče.
 
 \bigbreak
-Drevo je parametrizirano s tremi predlogami: podatki, oknom in geometrijskimi značilnostmi. Prvi definira vrsto podatkov, drugi poizvedbeno območje, tretji pa podajajo implementacijo metod, ki jih drevo uporablja za dostop do podatkov. Da bi se izognili uporabi vgnezdenih predlog za argumente (do česar pride, če bi drevo na vsakem nivoju imelo predlogo za tip poddrevesa), so drevesa definirana s pomočjo objektnega programiranja. CGAL je definiral virtualni bazni razred $Tree\U base$, iz katerega je izpeljan razred $Range\U tree\U d$. Konstrukturju slednjega moramo kot argument podati prototip poddrevesa tipa $Tree\U base$, ki je lahko zopet objekt razreda $Range\U tree\U d$. Za zaustavitev rekurzije je iz $Tree\U base$ izpeljan še razred $Tree\U anchor$, čigar konstruktor ne pričakuje nobenega argumenta. Tako opisana konstrukcija sledi modelu prototipa in v njej je poddrevo definirano s pomočjo objektnega programiranja v času izvajanja programa, kar pa predstavlja zanemarljiv časovni strošek.
-
-\begin{figure}
-\centerline{\includegraphics[scale=1]{pics/rangeTree2.pdf}}
-\caption{Dvodimenzionalno območno drevo.}
-\label{range-primer}
-\end{figure}
-
+Drevo je parametrizirano s tremi predlogami: podatki, oknom in geometrijskimi značilnostmi. Prvi definira vrsto podatkov, drugi poizvedbeno območje, tretji pa podajajo implementacijo metod, ki jih drevo uporablja za dostop do podatkov. Da bi se izognili uporabi vgnezdenih predlog za argumente (do česar pride, če bi drevo na vsakem nivoju imelo predlogo za tip poddrevesa), so drevesa definirana s pomočjo objektnega programiranja. CGAL je definiral virtualni bazni razred $Tree\U base$, iz katerega je izpeljan razred $Range\U tree\U d$. Konstrukturju slednjega moramo kot argument podati prototip poddrevesa tipa $Tree\U base$, ki je lahko zopet objekt razreda $Range\U tree\U d$. Za zaustavitev rekurzije je iz $Tree\U base$ izpeljan še razred $Tree\U anchor$, čigar konstruktor ne pričakuje nobenega argumenta. Tako opisana konstrukcija sledi modelu prototipa in v njej je poddrevo sicer definirano s pomočjo objektnega programiranja v času izvajanja programa, kar pa predstavlja zanemarljiv časovni strošek.
 
 \chapter{Teoretični opis algoritmov}
-Naj bo $P$ množica točk, ki predstavljajo središča krogov $\D$. $P$ predstavlja vhod našega algoritma in vse operacije ter uporabljene podatkovne strukture se vrtijo okoli te množice. Kardinalnost množice je enaka $n$.
+Naj bo $P$ množica točk, ki predstavljajo središča krogov $\D$. $P$ predstavlja vhod našega algoritma in vse operacije ter uporabljene podatkovne strukture se vrtijo okrog te množice. Kardinalnost množice je enaka $n$.
 
 \begin{figure}
 \centerline{\includegraphics[scale=0.6,page=5]{pics/unitdisks.pdf}}
@@ -483,7 +485,7 @@ Naj bo $P$ množica točk, ki predstavljajo središča krogov $\D$. $P$ predstav
 \label{gdisks}
 \end{figure}
 
-Naj bo $G(P)$ graf z množico vozlišč $P$ s povezavo med točkama $p,q \in P$, če velja $|pq| <= 1$ z evklidsko metriko (glej sliko~\ref{gdisks}). Vse povezave so neobtežene.
+Naj bo $G(P)$ graf z množico vozlišč $P$ s povezavo med točkama $p,q \in P$, če velja $|pq| <= 1$, kjer je uporabljena evklidska metrika (glej sliko~\ref{gdisks}). Vse povezave so neutežene.
 
 V nadaljevanju bomo namesto $G(P)$ pisali preprosto $G$, brez izgube splošnosti pa predpostavili, da je $z=(0,0)$ in $z'=(0,s)$. $zz'$ je torej daljica, v nadaljevanju imenovana $\sigma$, ki je vsebovana v koordinatni osi $y$. Če dana vhodna daljica ne leži na osi $y$, lahko naredimo translacijo nad $\sigma$ in $P$. Ce daljica ni niti navpična, lahko naredimo tudi rotacijo daljice in točk, kjer pa je treba upoštevati, da pri tem pride do numeričnih napak in se prave razdalje med točkami izgubijo. 
 \section{Drevo SSSP}
@@ -520,23 +522,25 @@ V nadaljevanju bomo namesto $G(P)$ pisali preprosto $G$, brez izgube splošnosti
 \end{codebox}
 \end{varwidth}
 ~~~~}\end{center}
-\caption{Psevdokoda eksplicitnega (splošnega) algoritma za preiskovanje v širino in posledično izgradnjo drevesa najkrajših poti.}
+\caption{Psevdokoda eksplicitnega (splošnega) algoritma za izgradnjo drevesa najkrajših poti s preiskovanjem v širino.}
 \label{fig:genericBfs}
 \end{figure}
 
+Najenostavnejši način izgradnje drevesa najkrajših poti nad množico točk $P$ je uporabiti preiskovanje v širino nad grafom $G(P)$. V vrsti hranimo še ne obiskane točke, ki so sosedne že obiskanim (na začetku je to izbrani koren). Vsaki točki, ki jo obiščemo, nastavimo za starša sosedno točko, prek katere smo do nje prišli, in ji nastavimo razdaljo, ki je za 1 večja od razdalje njenega starša. Prav tako jo označimo kot obiskano točko in s tem preprečimo, da bi neko točko dodali v vrsto več kot enkrat. Psevdokoda algoritma je prikazana na sliki~\ref{fig:genericBfs}. Očitna slabost algoritma je nujnost izgradnje grafa $G(P)$, ki ima časovno zahtevnost $\OO(n^2)$. Časovna zahtevnost izgradnje drevesa najkrajših poti je $\OO(n + |E|)$, kjer $|E|$ predstavlja število povezav v grafu. To pomeni, da je izgradnja drevesa časovno odvisna od gostote grafa (ker povezave v grafu $G(P)$ obstajajo samo med točkami z razdaljo največ 1), in v najslabšem primeru je čas izradnje kvadratičen. Prednost uporabe algoritma s preiskovanjem v širino je enostavnost rešitve (in implementacije). V situacijah, kjer ima graf $G(P)$ malo povezav in je vnaprej znan ali ga je treba izračunati v vsakem primeru, ima tak algoritem tudi očitno prednost pred ostalimi rešitvami. 
+
 %\afterpage{\FloatBarrier}
 
-\subsection{Preiskovanje v širino z uporabo grafa kvadratne mreže}
+\subsection{Preiskovanje v širino z uporabo grafa kvadratne mreže (grid)}
 \begin{figure}
 \centerline{\includegraphics[scale=1.2]{pics/grid.pdf}}
-\caption{grid.}
+\caption{Primer mrežnega grafa, v katerem do točk posamezne celice dostopamo prek vozlišča grafa (ključa), ki sovpada s spodnjim levim vozliščem celice. Točke so predstavljene z isto barvo kot njihov ključ.}
 \label{grid-fig}
 \end{figure}
 
 %\afterpage{\FloatBarrier}
 Graf enotske kvadratne mreže je med drugim uporaben za preiskovanje v širino kot alternativa klasičnemu algoritmu BFS nad grafom enotskih razdalj. Vsaki točki iz dane množice $P$ lahko izračunamo njen ključ tako, da poiščemo spodnje levo vozlišče celice grafa kvadratne mreže, v kateri se točka nahaja (glej sliko ~\ref{grid-fig}). Graf $G(P)$ lahko tako predstavimo s slovarjem, kjer ključi predstavljajo vozlišča grafa kvadratne mreže, kot vrednosti pa hranijo seznam vseh točk v celici, ki se nahaja zgoraj desno od ključa. Preiskovanje v širino nad takim grafom poteka tako, da za dano točko preverimo samo tiste kandidate, ki se nahajajo v isti ali eni izmed sosednjih celic grafa kvadratne mreže, točki pa povežemo, če je njuna razdalja največ 1. 
 
-\subsection{Prilagojen algoritem za enotske diske}
+\subsection{Prilagojen algoritem za enotske diske (SSSP)}
 \label{sssp-true}
 
 \begin{figure}
@@ -553,33 +557,35 @@ Algoritem dobi kot vhod poleg množice $P$ izvorno točko $s\in P$ in nato inkre
 \[	W_i = \{ p\in P \mid d_{G(P)}(s,p) = i\}.
 	\]
 
-Velja torej $W_0 = \{s\}$. Za izgradnjo $W_i$ ne potrebujemo celotnega grafa, zgrajenega do $i-1$-te iteracije, temveč samo množico $W_{i-1}$.  Za vsak $q\in W_i$ velja, da je povezan s točko $p = NN(q, W_{i-1})$. $p$ je torej izmed točk v $W_{i-1}$ najbližje $q$.
+Velja torej $W_0 = \{s\}$. Za izgradnjo $W_i$ ne potrebujemo celotnega grafa, zgrajenega do $i-1$-te iteracije, temveč samo množico $W_{i-1}$.  Za vsak $q\in W_i$ velja, da je povezan z natanko eno točko $p$ v množici $W_{i-1}$,  ki je izmed točk v $W_i$ najbližje $q$.
 
 Pri izgradnji $W_i$ ne pregledujemo vseh še ne dodanih točk. Že v samem začetku najprej zgradimo Delaunayevo triangulacijo $DT(P)$, ki nam je v pomoč pri iskanju primernih kandidatov za $W_i$. To so:
 
 \begin{itemize}
-\item točke sosednje $W_{i-1}$ v $DT(P)$
-\item točke sosednje (do tega trenutka zgrajeni) $W_i$ v $DT(P)$.
+\item točke, ki so sosedne $W_{i-1}$ v $DT(P)$
+\item točke, ki so sosedne (do tega trenutka zgrajeni) $W_i$ v $DT(P)$.
 \end{itemize} 
 
 \begin{lema}
 \label{lema1}
-Naj bo $p$ točka v $P\backslash \{s\}$, za katero velja $d(s,p) < \infty$. Obstajata točka $w$ v $P$ in pot $\Pi$ v $DT(P)$ od $w$ do $p$, za kateri velja $d(s,w)+1 = d(s,p)$ in $d(s,p_j) = d(s,p)$ za vsako notranje vozlišče $p_j$ v $\Pi$.
+Naj bo $p$ točka v $P\backslash \{s\}$, za katero velja $d(s,p) < \infty$. Obstajata točka $w$ v $P$ in pot $\pi$ v $DT(P)$ od $w$ do $p$, za kateri velja $d(s,w)+1 = d(s,p)$ in $d(s,p_j) = d(s,p)$ za vsako notranje vozlišče $p_j$ v $\pi$.
 \end{lema}
 
 \begin{figure}
 \centerline{\includegraphics[scale=1]{pics/path.pdf}}
-\caption{aa}
+\caption{Grafična predstavitev dokaza leme ~\ref{lema1}.}
 \label{c1c2}
 \end{figure}
 
 \begin{proof}
 Naj bo $i = d(s,p)$, $w$ pa naj bo točka z $d(s,w) = i - 1$, ki je najbližje $p$ po evklidski razdalji. Ker $d(s,p) < \infty$, mora veljati $\|w - p\| \leq 1$. Naj bo $D_{wp}$ krog s premerom $wp$.
 
-Predpostavimo, da segment $wp$ ne gre skozi nobeno vozlišče VD nad $P$.  Pobliže si poglejmo zaporedje Voronoijevih celic $cell(p_1, P),..., cell(p_k, P)$, ki ga seka segment $wp$, ko se sprehodimo od $w$ do $p$ (glej sliko~\ref{c1c2}). Očitno velja $w = p_1$ in $p = p_k$. Za vsak $1 \leq j < k$ je povezava $p_jp_{j+1}$ v $DT(P)$, ker sta si celici $cell(p_j, P)$ in $cell(p_{j+1}, P)$ sosedni prek neke točke v $wp$. Pot $\pi = p_1p_2...p_k$ je zato vsebovana v $DT(P)$ in povezuje $w$ s $p$. Za katerikoli indeks $j$, kjer $1 < j < k$, naj bo $a_j$ katerakoli točka v $wp \cap cell(p_j, P)$. Ker velja $\|a_jp_j\| \leq \{\|a_jw\|, \|a_jp\|\}$, je točka $p_j$ vsebovana v $D_{wp}$. Potem je celotna pot $\pi$ vsebovana v $D_{wp}$, in ker je premer $D_{wp}$ največ 1, je vsaka povezava poti $\pi$ tudi v $G(P)$. S tem sklenemo, da je $\pi$ pot v $DT(P) \cap G(P)$.
+Predpostavimo, da daljica $wp$ ne gre skozi nobeno vozlišče grafa $VD(P)$. Pobliže si poglejmo zaporedje Voronoijevih celic $cell(p_1, P),..., cell(p_k, P)$, ki ga seka daljica $wp$, ko se sprehodimo od $w$ do $p$ (glej sliko~\ref{c1c2}). Očitno velja $w = p_1$ in $p = p_k$. Za vsak $1 \leq j < k$ je povezava $p_jp_{j+1}$ vsebovana v $DT(P)$, ker sta si celici $cell(p_j, P)$ in $cell(p_{j+1}, P)$ sosedni prek neke točke v $wp$. Pot $\pi = p_1p_2...p_k$ je zato vsebovana v $DT(P)$ in povezuje $w$ s $p$. Za katerikoli indeks $j$, kjer $1 < j < k$, naj bo $a_j$ katerakoli točka v $wp \cap cell(p_j, P)$. Ker velja $\|a_jp_j\| \leq \{\|a_jw\|, \|a_jp\|\}$, je točka $p_j$ vsebovana v $D_{wp}$. Potem je celotna pot $\pi$ vsebovana v $D_{wp}$, in ker je premer $D_{wp}$ največ 1, je vsaka povezava poti $\pi$ tudi v $G(P)$. S tem sklenemo, da je $\pi$ pot v $DT(P) \cap G(P)$.
 
 Vzemimo katerokoli točko $p_j$ v $\pi$, ki je potem vsebovana v $D_{wp}$. Ker $\|w - p_j\| \leq \|w - p\| \leq 1$, velja $d(s, p_j) \leq d(s, w) + 1 = i$. Ker $\|p_j - p\| \leq \|w - p\| \leq 1$, velja $d(s, p_j) \geq d(s, p) - 1 = i - 1$. Ampak izbira $w$ kot točke najbližje $p$ pomeni, da $d(s, p_j) \neq i - 1$, ker $\|p_j - p\| < \|w - p\|$. Zato velja $d(s, p_j) = i$. Iz tega sklenemo, da za vsa notranja vozlišča $p_j$ v $\pi$ velja $d(s, p_j) = i$. 
 \end{proof}
+
+Celotni algoritem, ki ga poimenujmo $UnweightedShortestPath$, je prikazan na sliki~\ref{fig:SSSP}.
 
 \begin{lema}
 \label{lema2}
@@ -595,7 +601,7 @@ Poleg tega za vsako točko $p \in P \backslash \{s\}$ velja $dist[p] = d(s,p)$ i
 \begin{proof}
 Za dokaz uporabimo indukcijo nad $i$. $W_0 = \{s\}$ je nastavljen v vrstici 6 in kasneje ne spremeni vrednosti. Za $i = 0$ potem izjava velja.
 
-Preden obravnavamo indukcijski korak, izpostavimo, da so množice $W_0, W_1,...$ parno disjunktne. To je razvidno tudi iz psevdokode. Točka $p$  je v vrstici 21 dodana v nek $W_i$, po tem, ko nastavimo $dist[p] = i$ v vrstici 18. Po tem je pogoj v vrstici 17 vedno neresničen in $p$ ni dodan v nobeno drugo množico $W_j$.
+Preden obravnavamo indukcijski korak, izpostavimo, da so množice $W_0$, $W_1$,... parno disjunktne. To je razvidno tudi iz psevdokode. Točka $p$  je v vrstici 22 dodana v nek $W_i$ takrat, ko nastavimo $dist[p] = i$ v vrstici 19. Po tem je pogoj v vrstici 16 vedno neresničen in $p$ ni dodan v nobeno drugo množico $W_j$.
 
 Vzemimo katerikoli $i \ge 0$. Po indukcijski predpostavki velja
 
@@ -603,19 +609,19 @@ Vzemimo katerikoli $i \ge 0$. Po indukcijski predpostavki velja
 W_{i-1} = \{p \in P \mid d(s,p) = i - 1\}.
 \end{equation}
 
-V algoritmu dodamo točke v $W_i$ samo v vrstici 21. Če je $p$ dodan v $W_i$, potem velja $\|p - w\| \leq 1$ za nek $w \in W_{i-1}$ zaradi pogoja v vrstici 17. Potem vsak $p$, dodan v $W_i$, zadostuje pogoju $d(s,p) \leq i$. Ker $p \notin W_{i-1}$, iz disjunkcije množic $W_0, W_1,...$ sledi $d(s,p) = i$. Sklenemo, da
+V algoritmu dodamo točke v $W_i$ samo v vrstici 22. Če je $p$ dodan v $W_i$, potem velja $\|p - w\| \leq 1$ za nek $w \in W_{i-1}$ zaradi pogoja v vrstici 18. Potem vsak $p$, dodan v $W_i$, zadostuje pogoju $d(s,p) \leq i$. Ker $p \notin W_{i-1}$, iz disjunkcije množic $W_0, W_1,...$ sledi $d(s,p) = i$. Sklenemo, da
 
 \begin{equation}
 W_i \subseteq \{p \in P \mid d(s,p) = i\}.
 \end{equation}
 
-Da dobimo vsebovanost v drugo smer, naj bo $p$ neka točka, za katero velja $d(s,p) = i$. Pokazati moramo, da je z algoritmom $p$ dodan v $W_i$. Vzemimo točko $w$ in pot $\pi = p_1...p_k$, zagotovljeno z lemo ~\ref{lema1}. Z indukcijsko hipotezo imamo $w = p_1 \in W_{i-1}$ in zato je $w$ dodan v $Q$ v vrstici 10. V nekem trenutku je povezava $p_1p_2$ obravnavana v vrstici 15 in točka $p2$ je dodana v $W_i$ in $Q$. Po $indukcijski tezi$(!!!) so potem vse točke $p_3,...,p_k$ dodane v $W_i$ in $Q$ (po možnosti v različnem vrstnem redu). Sledi, da je $p_k = p$ dodan v $W_i$ in zato
+Da dobimo vsebovanost v drugo smer, naj bo $p$ neka točka, za katero velja $d(s,p) = i$. Pokazati moramo, da je z algoritmom $p$ dodan v $W_i$. Vzemimo točko $w$ in pot $\pi = p_1...p_k$, zagotovljeno z lemo ~\ref{lema1}. Z indukcijsko predpostavko imamo $w = p_1 \in W_{i-1}$ in zato je $w$ dodan v $Q$ v vrstici 10. V nekem trenutku je povezava $p_1p_2$ obravnavana v vrstici 15 in točka $p_2$ je dodana v $W_i$ in $Q$. Zaradi indukcije so potem vse točke $p_3,...,p_k$ dodane v $W_i$ in $Q$ (po možnosti v različnem vrstnem redu). Sledi, da je $p_k = p$ dodan v $W_i$ in zato
 
 \begin{equation}
 W_i = \{p \in P \mid d(s,p) = i \}.
 \end{equation}
 
-Ker je $p$ dodan v $W_i$ ob istem času, ko je nastavljen $dist[p] = i$, sledi, da $dist[p] = i = d(s,p)$. Ker $\pi[p] \in W_{i-1}$ in $\|p - \pi[p] \| \leq 1$ (vrstice 16, 17 in 19), obstaja najkrajša pot v $G(P)$ od $s$ do $p$, ki uporablja $(i-1)$-to povezavo poti od $s$ do $\pi[p]$, po indukciji pa ji sledi povezava $\pi[p]p$.
+Ker je $p$ dodan v $W_i$ ob istem času, ko je nastavljen $dist[p] = i$, sledi, da $dist[p] = i = d(s,p)$. Ker $\pi[p] \in W_{i-1}$ in $\|p - \pi[p] \| \leq 1$ (vrstice 17, 18 in 20), obstaja najkrajša pot v $G(P)$ od $s$ do $p$, ki uporablja $(i-1)$-to povezavo poti od $s$ do $\pi[p]$, po indukciji pa ji sledi povezava $\pi[p]p$.
 \end{proof}
 
 \begin{figure}[htb]
@@ -662,25 +668,31 @@ Ker je $p$ dodan v $W_i$ ob istem času, ko je nastavljen $dist[p] = i$, sledi, 
 \label{fig:SSSP}
 \end{figure}
 
-Da dobimo odgovor na vprašanje, ali je nek kandidat $p\in W_i$, uporabimo podatkovno strukturo, ki zna v zglednem času najti najbližjega soseda $q$ in preveriti, če je razdalja med njima manjša ali enaka 1.
-
-Celotni algoritem je podan na sliki~\ref{fig:SSSP}.
+Da dobimo odgovor na vprašanje, ali je nek kandidat $p$ vsebovan v $W_i$, uporabimo podatkovno strukturo, ki zna v zglednem času najti najbližjega soseda $q$ in preveriti, če je razdalja med njima manjša ali enaka 1.
 
 \begin{lema}
 \label{lema3}
-Za izgradnjo drevesa SSSP potrebuje algoritem $UnweightedShortestPath(P,s)$ $\OO(n\log n)$ časa, kjer je $n$ velikost množice $P$.
+Za izgradnjo drevesa SSSP potrebuje algoritem \\$UnweightedShortestPath(P,s)$ $\OO(n\log n)$ časa, kjer je $n$ velikost množice $P$.
 \end{lema}
 
 \begin{proof}
-Glavne opazke, uporabljene v dokazu, so sledeče: vsaka točka v $P$ je dodana v $Q$ največ enkrat v vrstici 10 in enkrat v vrstici 20, izvajanje vrstic 13-21 za točko $q$ vzame $\OO(\deg_{DT(P)}(q)\log n)$, vsota stopenj v $DT(P)$ je $\OO(n)$, in v vrstici 9 porabimo $\OO(n\log n)$ časa skupaj za vse iteracije. Sledijo podrobnosti.
+Glavne opazke, uporabljene v dokazu, so sledeče:
+\begin{itemize}
+\item vsaka točka v $P$ je dodana v $Q$ največ enkrat v vrstici 10 in enkrat v vrstici 21,
+\item izvajanje vrstic 13-22 za točko $q$ vzame $\OO(\deg_{DT(P)}(q)\log n)$ časa,
+\item vsota stopenj v $DT(P)$ je $\OO(n)$,
+\item v vrstici 9 porabimo $\OO(n\log n)$ časa skupaj za vse iteracije
+\end{itemize}
+Sledijo podrobnosti.
 
-Delaunayeva triangulacija nad $n$ točkami se lahko izračuna v času $\OO(n\log n)$. Inicializacija v vrsticah 1-7 tako vzame $\OO(n\log n)$ časa. Dokazati moramo še, da zanka v vrsticah 8-22 vzame $\OO(n\log n)$ časa.
+Delaunayeva triangulacija nad $n$ točkami se lahko izračuna v času \\ $\OO(n\log n)$. Inicializacija v vrsticah 1-7 tako porabi $\OO(n\log n)$ časa. Dokazati moramo še, da tudi zanka v vrsticah 8-22 vzame $\OO(n\log n)$ časa.
 
 Izvajanje vrstic 9-11 vzame $\OO(|W_{i-1}|\log |W_{i-1}|) = \OO(|W_{i-1}|\log n)$ časa. Vsaka kasnejša poizvedba najbližjega soseda se izvede v času $\OO(\log n)$.
 
-Vsaka izvedba vrstic 16-21 se izvede v času $\OO(\log n)$, kjer je najbolj zahteven korak poizvedba v vrstici 16. Vsaka izvedba vrstic 13-21 se izvede v času $\OO(\deg_{DT(P)}(q)\cdot\log n)$, ker se vrstice 16-21 izvedejo $\deg_{DT(P)}(q)$-krat.
+Vsaka izvedba vrstic 16-22 se izvede v času $\OO(\log n)$, kjer je najbolj zahteven korak poizvedba v vrstici 17. Vsaka izvedba vrstic 13-22 se izvede v času $\OO(\deg_{DT(P)}(q)\cdot\log n)$, ker se vrstice 16-22 izvedejo $\deg_{DT(P)}(q)$-krat.
 
-Obravnavajmo eno izvedbo vrstic 9-22. Točke so dodane v $Q$ v vrsticah 10 in 20. V slednji je točka $p$ dodana v $Q$ natanko takrat, ko je dodana v $W_i$ (v vrstici 21). Iz tega sledi, da je $p$ dodana v $Q$ natanko takrat, ko pripada množici $W_{i-1}\cup W_i$. Poleg tega je vsaka točka iz $W_{i-1}\cup W_i$ dodana v $Q$ natanko enkrat: za vsako točko $p$, ki je dodana v $Q$, velja $dist[p]\leq i < \infty$, in da ne bo dodana nikoli več zaradi pogoja v vrstici 17.Iz tega sledi, da se zanka v vrsticah 12-22 izvede v času
+Obravnavajmo eno izvedbo vrstic 9-22. Točke so dodane v $Q$ v vrsticah 10 in 21. V slednji je točka $p$ dodana v $Q$ natanko takrat, ko je dodana v $W_i$ (v vrstici 22). Iz tega sledi, da je $p$ dodana v $Q$ natanko takrat, ko pripada množici $W_{i-1}\cup W_i$. Poleg tega je vsaka točka iz $W_{i-1}\cup W_i$ dodana v $Q$ natanko enkrat: za vsako točko $p$, ki je dodana v $Q$, velja $dist[p]\leq i < \infty$, in kasneje ne bo več dodana zaradi pogoja v vrstici 16
+. Iz tega sledi, da se zanka v vrsticah 12-22 izvede v času
 
 \begin{equation}
 \sum_{q\in W_{i-1}\cup W_i} \OO(\deg_{DT(P)}(q) \cdot \log n).
@@ -722,7 +734,7 @@ Cabello in Giannopoulos~\cite{CG16} sta predstavila splošen algoritem za proble
 V tem poglavju je opisan algoritem, ki problem minimalne ločitve z enotskimi diski reši v skoraj kvadratičnem času. Izboljšava temelji na treh sestavinah:
 \begin{itemize}
 \item reinterpretacija generičnega algoritma za diske. V izvirnem algoritmu moramo označiti točko znotraj vsake oblike. Pri diskih je izbira očitna - njihovo središče. S tem se opis in interpretacija algoritma poenostavita.
-\item učinkovit algoritem za drevesa najkrajših poti nad grafom $G$. Primeren kandidat je algoritem, opisan v poglavju ~\ref{sssp-true}, ker izkorišča lastnosti grafa $G$.
+\item učinkovit algoritem za drevesa najkrajših poti nad grafom $G$. Primeren kandidat je algoritem, opisan v poglavju ~\ref{sssp-true}, ker izkorišča lastnosti grafa $G$. V praksi bi se verjetno dobro obnesel tudi algoritem iz~\cite{ChanS16}.
 \item kompaktna obravnava povezav v $G$ z uporabo sledečih orodij iz računske geometrije: območnih dreves, iskanja najbližjega soseda in dualnosti med točko in premico. 
 \end{itemize}
 
@@ -1160,13 +1172,10 @@ Za točko $p$ izračunamo $nr$ ali število presečišč med daljico $st$ in pot
 
 Časovna zahtevnost izračuna vrednosti $nr$ je konstantna. Enako velja za kategorizacijo, ki poleg $nr$ izračuna še orientacijo s predikatom $on\U left$. Za dostop do podseznama, kamor vstavimo točke glede na kategorizacijo in razdaljo od korena drevesa, uporabimo operator $[]$, za vstavljanje točke pa metodo $push\U back(p)$. Oba zagotavljata amortizirano časovno zahtevnost $\OO(1)$. S tem, ko sproti izračunamo $N[p]$ za vsako točko drevesa ter podsezname $L_i^0, L_i^1, R_i^0$ in $L_i^1$, se znebimo bloka $3-5$ v teoretičnem opisu algoritma, ki bi nam sicer vzel $O(n)$ časa.
 
-\subsection{Drevo najbližjega soseda}
-Za podatkovno strukturo s poizvedbami najbližjega soseda smo sprva hoteli uporabiti VD, vendar smo se kasneje odločili za Kd drevo. Razlog za to je implementacija VD v knjižnici CGAL. Ker je prostorska kompleksnost VD $\OO(n)$, bi pričakovali, da poraba prostora raste linearno z večanjem VD. Izkaže se, da je rast počasnejša od linearne, kar pomeni, da na primer 100 VD objektov velikosti 10 porabi več prostora kot 10 objektov velikosti 100. Posledično poraba prostora ni enaka za vsak nivo drevesa, temveč z globino raste. Razlike se v celotnem algoritmu potem še potencirajo, ker zgradimo VD v (skoraj) vsakem vozlišču drevesa najbližjega soseda, vsako tako drevo pa v vsakem vozlišču sekundarnega drevesa v območnem drevesu. Ko smo testirali implementacijo Kd dreves v CGAL, smo ugotovili tudi, da je čas konstrukcije bistveno krajši kot pri VD. Primerjave med konstrukcijama obeh podatkovnih struktur (procesorski čas in poraba RAM-a) so prikazane v poglavju Rezultati.
-
 \subsection{Kd drevo}
-Za podatkovno strukturo opisano v lemi~\ref{lema-ds2} kot primarno strukturo uporabljamo območna drevesa. Za strukturo, ki jo v sekundarnem drevesu območnega drevesa uporabljamo za iskanje najbližjega soseda, smo se namesto VD odločili uporabiti kd drecesa. O slabostih implementacije VD smo govorili že v poglavju~\ref{why dt}. Obe strukturi smo tudi direktno primerjali na podlagi dejanske časovne in prostorske porabe in  združili rezultate v tabelah~\ref{cpu-compare} in~\ref{ram_compare}. DT prav tako ne pride v poštev, ker brez dobrega začetnega lica, ki ga v tem primeru ne moremo zagotoviti, poizvedba s sprehodom vzame $O(\sqrt{n})$ časa.
+Za podatkovno strukturo s poizvedbami najbližjega soseda smo sprva hoteli uporabiti VD, vendar smo se kasneje odločili za Kd drevo. Razlog za to je implementacija VD v knjižnici CGAL. Ker je prostorska kompleksnost VD $\OO(n)$, bi pričakovali, da poraba prostora raste linearno z večanjem VD. Izkaže se, da je rast počasnejša od linearne, kar pomeni, da na primer 100 VD objektov velikosti 10 porabi več prostora kot 10 objektov velikosti 100. Posledično poraba prostora ni enaka za vsak nivo drevesa, temveč z globino raste. Ko smo testirali implementacijo kd dreves v CGAL-u, smo ugotovili tudi, da je čas izgradnje strukture bistveno krajši kot pri VD. Primerjave med izradnjama obeh podatkovnih struktur (procesorski čas in poraba RAM-a) so prikazane v poglavju~\ref{Rezultati}. DT prav tako ne pride v poštev, ker brez dobrega začetnega lica, ki ga v tem primeru ne moremo zagotoviti, poizvedba s sprehodom vzame $O(\sqrt{n})$ časa.
 
-Kot osnovo smo za poizvedbe najbližjega soseda uporabili funkcijo $search$ v razredu $Kd{\_}tree$, ki je namenjena območnemu iskanju. Razlog za to je, da nas po lemi~\ref{lema-ds2} v resnici ne zanima najbližji sosed, ampak poljubna točka, ki je od poizvedbene točke oddaljena največ $1$. Kot argument sprejme $OutputIterator$, kamor se shranjujejo objekti, ki jih poizvedba vrne, in $FuzzyQueryItem$, ki je v dvodimenzionalnem primeru lahko krog ali pravokotnik in določa območje iskanja. Podamo mu lahko vrednost $\epsilon$, ki določa stopnjo mehkosti (ang. fuzzyness) in se jo uporablja pri aproksimacijskih poizvedbah, ki pa jih v našem algoritmu nismo potrebovali. Tip, ki smo ga uporabili, je $Fuzzy\U circle$ s središčem, ki ga določa točka poizvedbe in polmerom $1$. Časovna kompleksnost funkcije $search$ oziroma območnega iskanja v kd drevesu enaka $\OO(\sqrt{n} + k)$, kjer je $k$ število vrnjenih točk znotraj območja iskanja. Ker naš algoritem zahteva čas $\OO(\log n)$, smo v razredu $Kd{\_}tree$ napisali podobno funkcijo, ki vrne par $(boolean, Point\U 2)$. Kot smo omenili, nas v resnici namesto najbližje točke zanima le, če območje iskanja vsebuje kakšno točko. To pomeni, da lahko iskanje po kd drevesu zaključimo v tistem trenutku, ko ugotovimo, da je ta pogoj izpolnjen. Konkretno je ta pogoj izpolnjen takrat, ko za neko poddrevo ugotovimo, da se njegove točke v celoti nahajajo v območju iskanja. Naša metoda v tem primeru vrne par $true$ in prvo točko v takem poddrevesu. S tem za poizvedbe zagotovimo povprečno časovno zahtevnost $\OO(\log n)$.
+Kot osnovo smo za poizvedbe najbližjega soseda uporabili funkcijo $search$ v razredu $Kd{\_}tree$, ki je namenjena območnemu iskanju. Razlog za to je, da nas po lemi~\ref{lema-ds2} v resnici ne zanima najbližji sosed, ampak poljubna točka, ki je od poizvedbene točke oddaljena največ $1$. Kot argument sprejme $OutputIterator$, kamor se shranjujejo objekti, ki jih poizvedba vrne, in \\ $FuzzyQueryItem$, ki je v dvodimenzionalnem primeru lahko krog ali pravokotnik in določa območje iskanja. Podamo mu lahko vrednost $\epsilon$, ki določa stopnjo mehkosti (ang. fuzzyness) in se jo uporablja pri aproksimacijskih poizvedbah, ki pa jih v našem algoritmu nismo potrebovali. Tip, ki smo ga uporabili, je $Fuzzy\U circle$ s središčem, ki ga določa točka poizvedbe in polmerom $1$. Časovna kompleksnost funkcije $search$ oziroma območnega iskanja v kd drevesu enaka $\OO(\sqrt{n} + k)$, kjer je $k$ število vrnjenih točk znotraj območja iskanja. Ker naš algoritem zahteva čas $\OO(\log n)$, smo v razredu $Kd{\_}tree$ napisali podobno funkcijo, ki vrne par $(boolean, Point\U 2)$. Kot smo omenili, nas v resnici namesto najbližje točke zanima le, če območje iskanja vsebuje kakšno točko. To pomeni, da lahko iskanje po kd drevesu zaključimo v tistem trenutku, ko ugotovimo, da je ta pogoj izpolnjen. Konkretno je ta pogoj izpolnjen takrat, ko za neko poddrevo ugotovimo, da se njegove točke v celoti nahajajo v območju iskanja. Naša metoda v tem primeru vrne par $true$ in prvo točko v takem poddrevesu. S tem za poizvedbe zagotovimo povprečno časovno zahtevnost $\OO(\log n)$.
 
 \subsection{DualPoint - implementacija dualne točke}
 

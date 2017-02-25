@@ -22,6 +22,13 @@ S.~Cabello and M.~Jej{\v c}i{\v c}.
 \newblock Shortest paths in intersection graphs of unit disks.
 \newblock {\em Comput. Geom.}, 48(4):360--367, 2015.
 
+\bibitem{ChanS16}
+T.~M. Chan and D.~Skrepetos.
+\newblock All-pairs shortest paths in unit-disk graphs in slightly subquadratic
+  time.
+\newblock In {\em 27th International Symposium on Algorithms and Computation,
+  {ISAAC} 2016}, volume~64 of {\em LIPIcs}, pages 24:1--24:13, 2016.
+
 \bibitem{cgal:dd-ss-15a}
 C.~Delage and O.~Devillers.
 \newblock Spatial sorting.
