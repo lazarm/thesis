@@ -1,9 +1,24 @@
 \begin{thebibliography}{10}
 
-\bibitem{bkos-08}
+\bibitem{bkos-08-all}
 M.~d. Berg, O.~Cheong, M.~v. Kreveld, and M.~Overmars.
 \newblock {\em Computational Geometry: Algorithms and Applications}.
 \newblock Springer-Verlag, 3rd ed. edition, 2008.
+
+\bibitem{bkos-08-dual}
+M.~d. Berg, O.~Cheong, M.~v. Kreveld, and M.~Overmars.
+\newblock Duality.
+\newblock  \cite{bkos-08-all}, pages 177--179.
+
+\bibitem{bkos-08-kd}
+M.~d. Berg, O.~Cheong, M.~v. Kreveld, and M.~Overmars.
+\newblock Kd-trees.
+\newblock  \cite{bkos-08-all}, pages 99--105.
+
+\bibitem{bkos-08-range}
+M.~d. Berg, O.~Cheong, M.~v. Kreveld, and M.~Overmars.
+\newblock Range trees.
+\newblock  \cite{bkos-08-all}, pages 105--109.
 
 \bibitem{cgal:bfghhkps-lgk23-16b}
 H.~Br{\"o}nnimann, A.~Fabri, G.-J. Giezeman, S.~Hert, M.~Hoffmann, L.~Kettner,
@@ -41,6 +56,11 @@ O.~Devillers.
 \newblock In {\em Proceedings of the 14th Annual ACM Symposium on Computational
   Geometry}, pages 106--115, 1998.
 
+\bibitem{eik-01}
+A.~Efrat, A.~Itai, and M.~J. Katz.
+\newblock Geometry helps in bottleneck matching and related problems.
+\newblock {\em Algorithmica}, 31(1):1--28, 2001.
+
 \bibitem{FGG06}
 Q.~Fang, J.~Gao, and L.~J. Guibas.
 \newblock Locating and bypassing routing holes in sensor networks.
@@ -64,5 +84,11 @@ Y.~Wang, J.~Gao, and J.~S. Mitchell.
 \newblock Boundary recognition in sensor networks by topological methods.
 \newblock In {\em Proceedings of the 12th Annual International Conference on
   Mobile Computing and Networking}, MobiCom '06, pages 122--133, 2006.
+
+\bibitem{cgal:y-t2-16b}
+M.~Yvinec.
+\newblock {2D} triangulation.
+\newblock In {\em {CGAL} User and Reference Manual}. {CGAL Editorial Board},
+  {4.6} edition, 2016.
 
 \end{thebibliography}
