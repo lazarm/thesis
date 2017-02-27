@@ -496,9 +496,7 @@ Naj bo $P$ množica točk, ki predstavljajo središča krogov $\D$. $P$ predstav
 \label{gdisks}
 \end{figure}
 
-Naj bo $G(P)$ graf z množico vozlišč $P$ s povezavo med točkama $p,q \in P$, če velja $|pq| <= 1$, kjer je uporabljena evklidska metrika (glej sliko~\ref{gdisks}). Vse povezave so neutežene.
-
-V nadaljevanju bomo namesto $G(P)$ pisali preprosto $G$, brez izgube splošnosti pa predpostavili, da je $z=(0,0)$ in $z'=(0,s)$. $zz'$ je torej daljica, v nadaljevanju imenovana $\sigma$, ki je vsebovana v koordinatni osi $y$. Če dana vhodna daljica ne leži na osi $y$, lahko naredimo translacijo nad $\sigma$ in $P$. Ce daljica ni niti navpična, lahko naredimo tudi rotacijo daljice in točk, kjer pa je treba upoštevati, da pri tem pride do numeričnih napak in se prave razdalje med točkami izgubijo. 
+Naj bo $G(P)$ graf z množico vozlišč $P$ s povezavo med točkama $p,q \in P$, če velja $|pq| <= 1$, kjer je uporabljena evklidska metrika (glej sliko~\ref{gdisks}). Vse povezave so neutežene. V nadaljevanju bomo namesto $G(P)$ pisali preprosto $G$.
 \section{Drevo SSSP}
 \subsection{Eksplicitna uporaba preiskovanja v širino (BFS)}
 \begin{figure}[htb]
@@ -549,7 +547,9 @@ Najenostavnejši način izgradnje drevesa najkrajših poti nad množico točk $P
 \end{figure}
 
 %\afterpage{\FloatBarrier}
-Graf enotske kvadratne mreže je med drugim uporaben za preiskovanje v širino kot alternativa klasičnemu algoritmu BFS nad grafom enotskih razdalj. Vsaki točki iz dane množice $P$ lahko izračunamo njen ključ tako, da poiščemo spodnje levo vozlišče celice grafa kvadratne mreže, v kateri se točka nahaja (glej sliko ~\ref{grid-fig}). Graf $G(P)$ lahko tako predstavimo s slovarjem, kjer ključi predstavljajo vozlišča grafa kvadratne mreže, kot vrednosti pa hranijo seznam vseh točk v celici, ki se nahaja zgoraj desno od ključa. Preiskovanje v širino nad takim grafom poteka tako, da za dano točko preverimo samo tiste kandidate, ki se nahajajo v isti ali eni izmed sosednjih celic grafa kvadratne mreže, točki pa povežemo, če je njuna razdalja največ 1. 
+Graf enotske kvadratne mreže je lahko za preiskovanje v širino uporabljen kot alternativa klasičnemu algoritmu BFS nad grafom enotskih razdalj. Vsaki točki iz dane množice $P$ lahko izračunamo njen ključ tako, da poiščemo spodnje levo vozlišče celice grafa kvadratne mreže, v kateri se točka nahaja (glej sliko ~\ref{grid-fig}). Graf $G(P)$ lahko tako predstavimo s slovarjem, kjer ključi predstavljajo vozlišča grafa kvadratne mreže, kot vrednosti pa hranijo seznam vseh točk v celici, ki se nahaja zgoraj desno od ključa. Preiskovanje v širino nad takim grafom poteka tako, da za dano točko preverimo samo tiste kandidate, ki se nahajajo v isti ali eni izmed sosednjih celic grafa kvadratne mreže, točki pa povežemo, če je njuna razdalja največ 1.
+
+Graf v taki obliki lahko zgradimo v linearnem času. Za vsako točko v povprečju porabimo $\OO(1)$ časa, da izračunamo njen ključ in $\OO(1)$ časa, da jo vstavimo v seznam ključa. Ker graf med gradnjo drevesa najkrajših poti spreminjamo, ga moramo za vsako drevo zgraditi na novo. V tem smislu je od navadnega algoritma BFS bistveno hitrejši. Po drugi strani je tako kot pri BFS časovna zahtevnost izgradnje drevesa odvisna od porazdelitve točk. Večja kot je gostota točk, manj celic vsebuje točke oziroma je povprečje točk, ki jih posamezna celica vsebuje, višje.
 
 \subsection{Prilagojen algoritem za enotske kroge (SSSP)}
 \label{sssp-true}
@@ -740,9 +740,21 @@ Zaradi leme ~\ref{lema3} porabi algoritem $UnweightedShortestPath(P,s)$ $\OO(n\l
 \label{walk}
 \end{figure}
 
-Cabello in Giannopoulos~\cite{CG16} sta predstavila splošen algoritem za problem minimalne ločitve, ki se v najslabšem scenariju izvede v kubičnem času. Algoritem deluje za poljubne smiselne oblike, kot so recimo daljice ali elipse, in ne samo za enotske kroge. Njegova splošnost je sicer prednost, a po drugi strani ne izkorišča nobenih lastnosti enotskih krogov.
+Naj bo $\D$ množica $n$ enotskih krogov, pri čemer njihova središča tvorijo množico $P$. Naj bosta $s$ in $t$ dve dani točki, ki nista vsebovani v nobenem krogu iz množice $\D$. Pravimo, da $\D$ ločuje $s$ in $t$, če vsaka pot v ravnini od $s$ do $t$ seka nek krog v $\D$.
 
-V tem poglavju je opisan algoritem, ki problem minimalne ločitve z enotskimi krogi reši v skoraj kvadratičnem času. Izboljšava temelji na treh sestavinah:
+Obravnavajmo problem pridobitve minimalne kardinalne podmnožice množice $\D$, ki ločuje $s$ in $t$, kar formalno zapišemo kot 
+
+\begin{align*}
+	\min ~~		& |\D'|\\
+	 \mbox{tako da}~~ & \D'\subset \D\\
+				&	\D'\text{ ločuje $s$ in $t$}. 
+\end{align*}
+
+Brez izgube splošnosti bomo predpostavili, da je $s=(0,0)$ in $t=(0,t)$. $st$ je torej daljica, v nadaljevanju imenovana $\sigma$, ki je vsebovana v koordinatni osi $y$. Če dana vhodna daljica ne leži na osi $y$, lahko naredimo translacijo nad $\sigma$ in množico $P$. Ce daljica ni niti navpična, lahko naredimo tudi rotacijo daljice in točk, kjer pa je treba upoštevati, da pri tem pride do numeričnih napak in se prave razdalje med točkami izgubijo. 
+
+Cabello in Giannopoulos~\cite{CG16} sta predstavila splošen algoritem za problem minimalne ločitve, ki se v najslabšem scenariju izvede v kubičnem času. Algoritem deluje za poljubne smiselne oblike, kot so recimo daljice ali elipse, in ne samo za enotske kroge. Njegova splošnost je lahko sicer prednost, a po drugi strani ne izkorišča nobenih lastnosti enotskih krogov.
+
+V tem poglavju je opisan algoritem, ki problem minimalne ločitve z enotskimi krogi reši v skoraj kvadratičnem času. Izboljšava temelji na treh elementih:
 \begin{itemize}
 \item reinterpretacija generičnega algoritma za kroge. V izvirnem algoritmu moramo označiti točko znotraj vsake oblike. Pri krogih je izbira očitna - njihovo središče. S tem se opis in interpretacija algoritma poenostavita.
 \item učinkovit algoritem za drevesa najkrajših poti nad grafom $G$. Primeren kandidat je algoritem, opisan v poglavju ~\ref{sssp-true}, ker izkorišča lastnosti grafa $G$. V praksi bi se verjetno dobro obnesel tudi algoritem iz~\cite{ChanS16}.
@@ -807,6 +819,13 @@ ker se presečišča, ki smo jih šteli dvakrat, izničijo po modulu $2$. Podrob
 Poglejmo si časovno kompleksnost algoritma. Za vsako točko $r\in P$ moramo izračunati drevo najkrajših poti v $G$. Kot smo omenili v poglavju ~\ref{sssp-true}, je to izvedljivo v času $\OO(n\log n)$. Za vsako povezavo $pq$ potem porabimo $\OO(1)$ časa. Za vsako točko $r$ to skupaj znese $O(n\log n+|E(G)|)$ časa, kar v najslabšem primeru pomeni kubično časovno zahtevnost. Boljši čas lahko dobimo s kompaktno obravnavo vseh povezav v $G$, ki je opisana v poglavju ~\ref{compact}.  
 
 \subsection{Dualnost in dualni prostor}
+\begin{figure}
+\centerline{\includegraphics[scale=1]{pics/dual-lines-example.pdf}}
+\caption{Na levi sliki sta prikazani točki $p$ in $q$ ter premica $m$ v primarnem prostoru. Desno so v dualnem prostoru prikazani dualni elementi: točka $m*$ ter premici $p*$ in $q*$. S sivo barvo je označeno območje (oziroma del njega), ki jo sestavlja množica točk, ki v primarnem prostoru predstavljajo premice, ki sekajo $s$.} 
+\label{dual-ex}
+\end{figure}
+
+
 Točka v ravnini ima dva parametra: koordinati $x$ in $y$. Nenavpična premica v ravnini ima prav tako dva parametra: smerni koeficient in odsek na ordinatni osi. To pomeni, da lahko naredimo bijektivno preslikavo množice točk v množico premic. Pri nekaterih preslikavah se lahko nekatere lastnosti množice točk prenesejo v določene lastnosti množice premic. Lep primer so tri točke na premici, ki se preslikajo v tri premice, ki grejo skozi isto točko. Preslikavam, ki to omogočajo, pravimo dualne transformacije. Za dualno transformacijo pravimo, da objekte preslika iz primarnega v dualni prostor. Sliki objekta v dualnem prostoru pravimo $dvojnik$. Preprost primer dualne transformacije je sledeč. Naj bo $p \gets (p_x, p_y)$ točka v ravnini. Njen dvojnik $p^*$ je premica, definirana kot $p^* \gets (y \gets p_xx - p_y)$. Dvojnik premice $l: y \gets mx + b$ je taka točka $p$, da za njo velja $p^* \gets l$. Ali drugače rečeno, $l^* \gets (m, -b)$.  
 
 Določene lastnosti, ki držijo v primarnem, držijo tudi v  dualnem prostoru. Naj bo $p$ točka, $l$ pa premica v ravnini. Dualna transformacija $o \mapsto o^*$ ima naslednje lastnosti:
@@ -815,10 +834,16 @@ Določene lastnosti, ki držijo v primarnem, držijo tudi v  dualnem prostoru. N
 \item ohranja vrstni red: $p$ leži nad $l$ natanko takrat,ko $l^*$ leži nad $p^*$.  
 \end{itemize}
 
-Dualno transformacijo se lahko uporabi tudi na drugih objektih, kot so recimo daljice. Smiselna izbira za $s^*$, kjer je $s$ daljica $pq$, bi bila unija vseh dvojnikov točk na $s$. Rezultat je neskončna množica premic, ki se sekajo v eni točki. Grafično si to lahko predstavljamo kot unijo dveh območij $s^*$, ki sta omejeni s premicama $p^*$ in $q^*$ in se stikata v točki njunega presečišča (glej tudi sliko)~\cite{bkos-08-dual}.
+Dualno transformacijo se lahko uporabi tudi na drugih objektih, kot so recimo daljice. Smiselna izbira za $s^*$, kjer je $s$ daljica $pq$, bi bila unija vseh dvojnikov točk na $s$. Rezultat je neskončna množica premic, ki se sekajo v eni točki. Grafično si to lahko predstavljamo kot unijo dveh območij $s^*$, ki sta omejeni s premicama $p^*$ in $q^*$ in se stikata v točki njunega presečišča (glej sliko~\ref{dual-ex})~\cite{bkos-08-dual}.
 
 \subsection{Hitrejši algoritem}
 \label{compact}
+\begin{figure}
+\centerline{\includegraphics[scale=1.2]{pics/slab.pdf}}
+\caption{TODO.} 
+\label{hslab}
+\end{figure}
+
 \begin{figure}
 \centerline{\includegraphics[scale=1.2]{pics/dual_problem3.pdf}}
 \caption{Množici $A$ (rdeči točki) ter $B$ (zelene točke) levo in desno od daljice $st$ (zgornja slika). Črtkani črti predstavljata premici, čigar koeficienta sta uporabljena za izračun koordinat dualne točke $\varphi (a_1)$, predstavljata pa tudi vidno polje točke $a_1$.} 
@@ -847,7 +872,7 @@ Naj bo $\LL$ množica nenavpičnih premic, $\sigma^*$ pa množica točk dualnih 
 		\sigma^* ~=~ \{ l^* \mid \ell\in \LL, \ell\cap \sigma\neq \emptyset\} 
 \]
 
-V dualnem prostoru je množica $\sigma^*$ $horizontal slab$
+V dualnem prostoru je množica $\sigma^*$ $horizontal slab$ (glej sliko~\ref{hslab})
 
 \[
 		\sigma^* ~=~ \{ (m,-c)\in \RR^2\mid 0\le c\le s\},

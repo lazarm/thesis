@@ -29,9 +29,9 @@
 \contentsline {subsection}{\numberline {3.1.2}Preiskovanje v \IeC {\v s}irino z uporabo grafa kvadratne mre\IeC {\v z}e (grid)}{24}
 \contentsline {subsection}{\numberline {3.1.3}Prilagojen algoritem za enotske kroge (SSSP)}{25}
 \contentsline {section}{\numberline {3.2}Minimalna lo\IeC {\v c}itev z enotskimi krogi}{29}
-\contentsline {subsection}{\numberline {3.2.1}Splo\IeC {\v s}ni algoritem za lo\IeC {\v c}evanje s krogi}{35}
-\contentsline {subsection}{\numberline {3.2.2}Dualnost in dualni prostor}{37}
-\contentsline {subsection}{\numberline {3.2.3}Hitrej\IeC {\v s}i algoritem}{38}
+\contentsline {subsection}{\numberline {3.2.1}Splo\IeC {\v s}ni algoritem za lo\IeC {\v c}evanje s krogi}{36}
+\contentsline {subsection}{\numberline {3.2.2}Dualnost in dualni prostor}{38}
+\contentsline {subsection}{\numberline {3.2.3}Hitrej\IeC {\v s}i algoritem}{39}
 \contentsline {chapter}{\numberline {4}Implementacija algoritmov}{49}
 \contentsline {section}{\numberline {4.1}Drevo SSSP}{49}
 \contentsline {subsection}{\numberline {4.1.1}Podatkovna struktura za to\IeC {\v c}ko}{49}
