@@ -32,23 +32,23 @@
 \contentsline {subsection}{\numberline {3.2.1}Splo\IeC {\v s}ni algoritem za lo\IeC {\v c}evanje s krogi}{36}
 \contentsline {subsection}{\numberline {3.2.2}Dualnost in dualni prostor}{38}
 \contentsline {subsection}{\numberline {3.2.3}Hitrej\IeC {\v s}i algoritem}{39}
-\contentsline {chapter}{\numberline {4}Implementacija algoritmov}{49}
-\contentsline {section}{\numberline {4.1}Algoritem SSSP}{49}
-\contentsline {subsection}{\numberline {4.1.1}Podatkovna struktura za to\IeC {\v c}ko}{49}
-\contentsline {subsection}{\numberline {4.1.2}Podatkovna struktura za iskanje najbli\IeC {\v z}jega soseda}{50}
-\contentsline {subsection}{\numberline {4.1.3}Izgradnja drevesa}{53}
-\contentsline {section}{\numberline {4.2}Minimalna lo\IeC {\v c}itev z enotskimi krogi}{57}
-\contentsline {subsection}{\numberline {4.2.1}Prilagoditev drevesa SSSP}{57}
-\contentsline {subsection}{\numberline {4.2.2}Kd drevo}{58}
-\contentsline {subsection}{\numberline {4.2.3}DualPoint - implementacija dualne to\IeC {\v c}ke}{60}
-\contentsline {subsection}{\numberline {4.2.4}Obmo\IeC {\v c}no drevo}{60}
-\contentsline {subsubsection}{\numberline {4.2.4.1}Poizvedbe v obmo\IeC {\v c}nem drevesu}{62}
-\contentsline {subsection}{\numberline {4.2.5}Celotna struktura algoritma}{63}
-\contentsline {subsection}{\numberline {4.2.6}Izgradnja minimalnega cikla}{64}
-\contentsline {chapter}{\numberline {5}Eksperimenti in rezultati}{67}
-\contentsline {section}{\numberline {5.1}Uporaba kd dreves namesto VD}{67}
-\contentsline {section}{\numberline {5.2}Generator vhodnih podatkov}{69}
-\contentsline {section}{\numberline {5.3}Drevo najkraj\IeC {\v s}ih poti}{70}
-\contentsline {section}{\numberline {5.4}Minimalna lo\IeC {\v c}itev}{71}
-\contentsline {subsection}{\numberline {5.4.1}Analiza}{78}
-\contentsline {chapter}{\numberline {6}Sklepne ugotovitve}{83}
+\contentsline {chapter}{\numberline {4}Implementacija algoritmov}{51}
+\contentsline {section}{\numberline {4.1}Algoritem SSSP}{51}
+\contentsline {subsection}{\numberline {4.1.1}Podatkovna struktura za to\IeC {\v c}ko}{51}
+\contentsline {subsection}{\numberline {4.1.2}Podatkovna struktura za iskanje najbli\IeC {\v z}jega soseda}{52}
+\contentsline {subsection}{\numberline {4.1.3}Izgradnja drevesa}{55}
+\contentsline {section}{\numberline {4.2}Minimalna lo\IeC {\v c}itev z enotskimi krogi}{59}
+\contentsline {subsection}{\numberline {4.2.1}Prilagoditev drevesa SSSP}{59}
+\contentsline {subsection}{\numberline {4.2.2}Kd drevo}{60}
+\contentsline {subsection}{\numberline {4.2.3}DualPoint - implementacija dualne to\IeC {\v c}ke}{62}
+\contentsline {subsection}{\numberline {4.2.4}Obmo\IeC {\v c}no drevo}{62}
+\contentsline {subsubsection}{\numberline {4.2.4.1}Poizvedbe v obmo\IeC {\v c}nem drevesu}{64}
+\contentsline {subsection}{\numberline {4.2.5}Celotna struktura algoritma}{65}
+\contentsline {subsection}{\numberline {4.2.6}Izgradnja minimalnega cikla}{66}
+\contentsline {chapter}{\numberline {5}Eksperimenti in rezultati}{69}
+\contentsline {section}{\numberline {5.1}Uporaba kd dreves namesto VD}{69}
+\contentsline {section}{\numberline {5.2}Generator vhodnih podatkov}{71}
+\contentsline {section}{\numberline {5.3}Drevo najkraj\IeC {\v s}ih poti}{72}
+\contentsline {section}{\numberline {5.4}Minimalna lo\IeC {\v c}itev}{73}
+\contentsline {subsection}{\numberline {5.4.1}Analiza}{80}
+\contentsline {chapter}{\numberline {6}Sklepne ugotovitve}{85}

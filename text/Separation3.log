@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2016.10.21)  8 MAR 2017 22:58
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2016.10.21)  9 MAR 2017 21:20
 entering extended mode
 **./Separation3.tex
 (Separation3.tex
@@ -782,25 +782,26 @@ File: pics/dual-lines-example.pdf Graphic file (type pdf)
 Package pdftex.def Info: pics/dual-lines-example.pdf used on input line 824.
 (pdftex.def)             Requested size: 297.51076pt x 93.40373pt.
  [38 <./pics/dual-lines-example.pdf>]
-<pics/slab.pdf, id=310, 131.26741pt x 88.15134pt>
-File: pics/slab.pdf Graphic file (type pdf)
- <use pics/slab.pdf>
-Package pdftex.def Info: pics/slab.pdf used on input line 843.
-(pdftex.def)             Requested size: 157.52008pt x 105.78105pt.
+<pics/duality-vertical.pdf, id=310, 131.85963pt x 325.6165pt>
+File: pics/duality-vertical.pdf Graphic file (type pdf)
+
+<use pics/duality-vertical.pdf>
+Package pdftex.def Info: pics/duality-vertical.pdf used on input line 843.
+(pdftex.def)             Requested size: 131.8593pt x 325.61569pt.
 
 <pics/dual_problem3.pdf, id=311, 193.12149pt x 200.14775pt>
 File: pics/dual_problem3.pdf Graphic file (type pdf)
 
 <use pics/dual_problem3.pdf>
 Package pdftex.def Info: pics/dual_problem3.pdf used on input line 849.
-(pdftex.def)             Requested size: 231.74463pt x 240.17607pt.
+(pdftex.def)             Requested size: 193.12102pt x 200.14725pt.
 
 <pics/dual_problem4.pdf, id=312, 282.45525pt x 266.39525pt>
 File: pics/dual_problem4.pdf Graphic file (type pdf)
 
 <use pics/dual_problem4.pdf>
 Package pdftex.def Info: pics/dual_problem4.pdf used on input line 855.
-(pdftex.def)             Requested size: 338.94458pt x 319.67268pt.
+(pdftex.def)             Requested size: 282.45454pt x 266.39459pt.
 
 Overfull \hbox (25.41483pt too wide) in paragraph at lines 864--865
 \OT1/cmr/m/it/12 vamo po-i-zvedbe za ugo-ta-vlja-nje, ali je mnozica $\OMS/cms
@@ -808,8 +809,8 @@ y/m/n/12 f\OML/cmm/m/it/12 b \OMS/cmsy/m/n/12 2 \OML/cmm/m/it/12 B \OMS/cmsy/m/
 n/12 j []g$
  []
 
-[39 <./pics/slab.pdf>] [40 <./pics/dual_problem3.pdf>] [41 <./pics/dual_problem
-4.pdf>] [42] [43]
+[39] [40 <./pics/duality-vertical.pdf>] [41 <./pics/dual_problem3.pdf>]
+[42 <./pics/dual_problem4.pdf>] [43]
 Overfull \hbox (7.30232pt too wide) in paragraph at lines 926--927
 [][]\OT1/cmr/m/n/12 Cas zgra-di-tve dvo-di-men-zi-o-nal-nega obmocnega dre-ves
 a je $\OMS/cmsy/m/n/12 O\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 n [] n\OT1/cmr/m/n/12
@@ -842,17 +843,17 @@ Overfull \hbox (5.46626pt too wide) in paragraph at lines 1103--1104
 13[]. Kot pri splosnem
  []
 
-[47] [48]
-Poglavje 4.
-[49
+[47] [48] [49] [50
 
-] [50] [51]
+]
+Poglavje 4.
+[51] [52] [53]
 Overfull \hbox (1.82372pt too wide) in paragraph at lines 1142--1143
 \OT1/cmr/m/n/12 turo, De-la-u-na-yeva tri-an-gu-la-cija vse-buje tudi me-todo, 
 ki kot ar-gu-ment sprejme
  []
 
-[52] <pics/pointsToFaceHandlers.pdf, id=420, 382.9286pt x 334.46657pt>
+[54] <pics/pointsToFaceHandlers.pdf, id=444, 382.9286pt x 334.46657pt>
 File: pics/pointsToFaceHandlers.pdf Graphic file (type pdf)
 
 <use pics/pointsToFaceHandlers.pdf>
@@ -866,8 +867,8 @@ Overfull \hbox (3.90689pt too wide) in paragraph at lines 1166--1167
 12 2$
  []
 
-[53] [54 <./pics/pointsToFaceHandlers.pdf>]
-<pics/categorization.pdf, id=478, 184.25136pt x 295.35344pt>
+[55] [56 <./pics/pointsToFaceHandlers.pdf>]
+<pics/categorization.pdf, id=503, 184.25136pt x 295.35344pt>
 File: pics/categorization.pdf Graphic file (type pdf)
 
 <use pics/categorization.pdf>
@@ -876,19 +877,19 @@ Package pdftex.def Info: pics/categorization.pdf used on input line 1178.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [55]
-[56 <./pics/categorization.pdf>]
-<pics/nrSideExample.pdf, id=495, 144.71866pt x 145.89807pt>
+ [57]
+[58 <./pics/categorization.pdf>]
+<pics/nrSideExample.pdf, id=519, 144.71866pt x 145.89807pt>
 File: pics/nrSideExample.pdf Graphic file (type pdf)
 
 <use pics/nrSideExample.pdf>
 Package pdftex.def Info: pics/nrSideExample.pdf used on input line 1188.
 (pdftex.def)             Requested size: 144.71829pt x 145.89769pt.
- [57 <./pics/nrSideExample.pdf>] [58]
+ [59 <./pics/nrSideExample.pdf>] [60]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [59]
-[60] <pics/range-dual-kd.pdf, id=520, 372.58046pt x 216.54903pt>
+ [61]
+[62] <pics/range-dual-kd.pdf, id=545, 372.58046pt x 216.54903pt>
 File: pics/range-dual-kd.pdf Graphic file (type pdf)
 
 <use pics/range-dual-kd.pdf>
@@ -909,23 +910,23 @@ Overfull \hbox (12.2062pt too wide) in paragraph at lines 1219--1220
 
 Underfull \vbox (badness 4391) has occurred while \output is active []
 
- [61 <./pics/range-dual-kd.pdf>]
+ [63 <./pics/range-dual-kd.pdf>]
 
 LaTeX Warning: \oval, \circle, or \line size unavailable on input line 1261.
 
-[62]
+[64]
 
 LaTeX Warning: \oval, \circle, or \line size unavailable on input line 1298.
 
 
 Underfull \vbox (badness 7486) has occurred while \output is active []
 
- [63]
-[64] [65] [66]
+ [65]
+[66] [67] [68]
 Poglavje 5.
-[67
+[69
 
-] <pics/data_generation.pdf, id=595, page=1, 530.38153pt x 102.69768pt>
+] <pics/data_generation.pdf, id=619, page=1, 530.38153pt x 102.69768pt>
 File: pics/data_generation.pdf Graphic file (type pdf)
 
 <use pics/data_generation.pdf, page 1>
@@ -933,7 +934,7 @@ Package pdftex.def Info: pics/data_generation.pdf, page1 used on input line 134
 9.
 (pdftex.def)             Requested size: 397.78517pt x 77.02306pt.
 
-<pics/data_generation.pdf, id=596, page=2, 530.38153pt x 102.69768pt>
+<pics/data_generation.pdf, id=620, page=2, 530.38153pt x 102.69768pt>
 File: pics/data_generation.pdf Graphic file (type pdf)
 
 <use pics/data_generation.pdf, page 2>
@@ -943,26 +944,26 @@ Package pdftex.def Info: pics/data_generation.pdf, page2 used on input line 135
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [68 <./pics/data_generation.pdf>] [69 <./pics/data_generation.pdf>]
+ [70 <./pics/data_generation.pdf>] [71 <./pics/data_generation.pdf>]
 Overfull \hbox (6.94588pt too wide) in paragraph at lines 1367--1368
 []\OT1/cmr/m/n/12 Kot drugo al-ter-na-tivo upo-ra-bimo mrezo enot-skih raz-dal
 j (glej po-glavje 2.4[]).
  []
 
-[70]
+[72]
 Overfull \hbox (3.68332pt too wide) in paragraph at lines 1503--1504
 \OT1/cmr/m/n/12 ka-zal-cev na njene so-sede v grafu $\OML/cmm/m/it/12 G$\OT1/cm
 r/m/n/12 . Naj-prej z ini-ci-a-li-za-cijo objekta $\OML/cmm/m/it/12 SSSPTree$
  []
 
-[71] [72] [73] [74]
+[73] [74] [75] [76]
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<pics/separation-64-1-1000-narrow-2.png, id=652, 1734.48pt x 873.0216pt>
+<pics/separation-64-1-1000-narrow-2.png, id=676, 1734.48pt x 873.0216pt>
 File: pics/separation-64-1-1000-narrow-2.png Graphic file (type png)
 
 <use pics/separation-64-1-1000-narrow-2.png>
@@ -970,7 +971,7 @@ Package pdftex.def Info: pics/separation-64-1-1000-narrow-2.png used on input l
 ine 1540.
 (pdftex.def)             Requested size: 520.34802pt x 261.9085pt.
 
-<pics/32-1-5000-stuffed.png, id=654, 1734.48pt x 873.0216pt>
+<pics/32-1-5000-stuffed.png, id=678, 1734.48pt x 873.0216pt>
 File: pics/32-1-5000-stuffed.png Graphic file (type png)
 
 <use pics/32-1-5000-stuffed.png>
@@ -979,8 +980,8 @@ Package pdftex.def Info: pics/32-1-5000-stuffed.png used on input line 1546.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [75]
-[76 <./pics/separation-64-1-1000-narrow-2.png>] [77 <./pics/32-1-5000-stuffed.p
+ [77]
+[78 <./pics/separation-64-1-1000-narrow-2.png>] [79 <./pics/32-1-5000-stuffed.p
 ng>]
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
@@ -988,40 +989,40 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 Underfull \vbox (badness 1412) has occurred while \output is active []
 
- [78]
-[79]
+ [80]
+[81]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [80]
-[81] [82
+ [82]
+[83] [84
 
 ]
 Poglavje 6.
 
 Underfull \vbox (badness 5260) has occurred while \output is active []
 
- [83]
-<pics/lca.pdf, id=685, 200.14775pt x 180.87675pt>
+ [85]
+<pics/lca.pdf, id=710, 200.14775pt x 180.87675pt>
 File: pics/lca.pdf Graphic file (type pdf)
  <use pics/lca.pdf>
 Package pdftex.def Info: pics/lca.pdf used on input line 1645.
 (pdftex.def)             Requested size: 180.13129pt x 162.78757pt.
 
-(Separation3.bbl [84 <./pics/lca.pdf>] [85
+(Separation3.bbl [86 <./pics/lca.pdf>] [87
 
 ])
 
 Package caption Warning: Unused \captionsetup[lstlisting] on input line 39.
 See the caption package documentation for explanation.
 
-[86] (Separation3.aux)
+[88] (Separation3.aux)
 
 LaTeX Warning: There were undefined references.
 
  ) 
 Here is how much of TeX's memory you used:
  8680 strings out of 493334
- 122683 string characters out of 3140953
+ 122743 string characters out of 3140953
  232039 words of memory out of 3000000
  12000 multiletter control sequences out of 15000+200000
  16648 words of font info for 64 fonts, out of 3000000 for 9000
@@ -1052,9 +1053,9 @@ blic/amsfonts/cm/cmti8.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts
 /cm/cmtt12.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/latxfont/lc
 ircle1.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm10.
 pfb>
-Output written on Separation3.pdf (104 pages, 1101973 bytes).
+Output written on Separation3.pdf (106 pages, 1115659 bytes).
 PDF statistics:
- 783 PDF objects out of 1000 (max. 8388607)
+ 807 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  111 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -840,20 +840,20 @@ Dualno transformacijo se lahko uporabi tudi na drugih objektih, kot so recimo da
 \subsection{Hitrejši algoritem}
 \label{compact}
 \begin{figure}
-\centerline{\includegraphics[scale=1.2]{pics/slab.pdf}}
-\caption{TODO.} 
+\centerline{\includegraphics[scale=1]{pics/duality-vertical.pdf}}
+\caption{Točke v primarnem prostoru (zgornja slika), njim dualne premice (srednja slika) in slike točk, definirane s preslikavo $\varphi$. Problem iskanja premic $ab_i$, ki sekajo $st$, smo s pomočjo dualnosti preslikali v problem območnega iskanja.} 
 \label{hslab}
 \end{figure}
 
 \begin{figure}
-\centerline{\includegraphics[scale=1.2]{pics/dual_problem3.pdf}}
-\caption{Množici $A$ (rdeči točki) ter $B$ (zelene točke) levo in desno od daljice $st$ (zgornja slika). Črtkani črti predstavljata premici, čigar koeficienta sta uporabljena za izračun koordinat dualne točke $\varphi (a_1)$, predstavljata pa tudi vidno polje točke $a_1$.} 
+\centerline{\includegraphics[scale=1]{pics/dual_problem3.pdf}}
+\caption{Množici $A$ (rdeči točki) ter $B$ (zelene točke) levo in desno od daljice $st$ (zgornja slika). Črtkani črti predstavljata premici, čigar koeficienta sta uporabljena za izračun koordinat dualne točke $\varphi (a_1)$, in označujeta vidno polje točke $a_1$.} 
 \label{dualp}
 \end{figure}
 
 \begin{figure}
-\centerline{\includegraphics[scale=1.2]{pics/dual_problem4.pdf}}
-\caption{Spodaj so prikazane točke iz slike ~\ref{dualp} v dualnem prostoru. Obarvano območje v sredini predstavlja prostor, v katerem se nahajajo vse take dualne točke $\varphi (b)$, za katere velja $b \in B(a_1)$. Obarvani območji levo in zgoraj predstavljata prostor dualnih točk $\varphi (b)$, za katere velja, da je presečišče premice $a_1b$ z osjo $y$ pod oziroma nad daljico $st$.} 
+\centerline{\includegraphics[scale=1]{pics/dual_problem4.pdf}}
+\caption{Na sliki so prikazane točke, ki so rezultat preslikave $\varphi$ premic, dualnih točkam na sliki ~\ref{dualp}. Obarvano območje v sredini predstavlja prostor, v katerem se nahajajo vse take slike $\varphi (b)$, za katere velja $b \in B(a_1)$. Obarvani območji levo in zgoraj predstavljata prostor slik $\varphi (b)$, za katere velja, da je presečišče premice $a_1b$ z osjo $y$ pod oziroma nad daljico $st$.} 
 \label{dualp2}
 \end{figure}
 
@@ -887,7 +887,7 @@ Za vsako točko $b\in B$ naj bo $L^* _b$ množica točk, dualnih premicam, ki gr
 		L^*_b=\{ \ell^* \mid \ell\in \LL, b \in \ell, \text{ in } \sigma\cap \ell\not= \emptyset\}.
 	\]
 
-V dualnem prostoru je $L^* _b$ daljica, ki je popolnoma vsebovana v slabu $\sigma^*$ in ima krajišči $(\varphi_1(b),0)$ in $(\varphi_2(b),-\tau)$ na obeh njegovih mejah. $\varphi_1(b)$ predstavlja smerni koeficient premice, ki seka točki $(0,0)$ in $b$, $\varphi_2(b)$ pa smerni koeficient premice, ki seka točki $(0,\tau)$ in $b$.
+V dualnem prostoru je $L^* _b$ daljica, ki je popolnoma vsebovana v slabu $\sigma^*$ in ima krajišči $(\varphi_1(b),0)$ in $(\varphi_2(b),-\tau)$ na obeh njegovih mejah. $\varphi_1(b)$ predstavlja smerni koeficient premice, ki seka točki $s$ in $b$, $\varphi_2(b)$ pa smerni koeficient premice, ki seka točki $t$ in $b$.
 
 Definirajmo točko preslikave $\varphi(b)=(\varphi_1(b),\varphi_2(b))$. Funkcija preslikave $\varphi$ torej preslika točke z nenegativnimi koordinatami $x$ v točke v ravnini.
 
@@ -1163,7 +1163,7 @@ pointsToFaceHandlers[\&((*p)-$>$point())] = f;
 
 \subsection{Izgradnja drevesa} 
 
-Za drevo SSSP smo napisali razred \textit{SSSPTree}. Lahko je uporabljen samostojno ali za potrebe problema ločitve. Ponuja dva konstruktorja; prvi je \textit{SSSPTree(Iterator begin, Iterator end)}, ostala dva pa sta namenjena uporabi pri obeh algoritmih za minimalno ločitev. Metoda $createTreeFromRoot(Point\U 2$ $r)$ zgradi drevo s podanim korenom. 
+Za drevo SSSP smo napisali razred \textit{SSSPTree}. Lahko je uporabljen samostojno ali za potrebe problema ločitve. Ponuja tri konstruktorje; prvi je \textit{SSSPTree(Iterator begin, Iterator end)}, ostala dva pa sta namenjena uporabi pri obeh algoritmih za minimalno ločitev. Metoda $createTreeFromRoot(Point\U 2$ $r)$ zgradi drevo s podanim korenom. 
 
 Konstruktor najprej zgradi DT nad $P$. Nato za izvorno točko $r\in P$ s pomočjo metode $locate$ poišče vozlišče v DT, s katerim sovpada. Pri tem preventivno preveri, da je tip rezultata, ki ga vrne $locate$, resnično \\ 
 \textit{Delaunay\U Vertex\U Handle}, sicer $r$ ni vsebovan v $P$. Za vse točke vozlišč v DT velja predpostavka, da sta vrednosti njihovih atributov $dist$ in $parent$ ponastavljeni. Velja torej $\forall p\in P:$ $p.dist = \infty$,  $p.parent = nullptr$. Razred SSSPTree zato vsebuje tudi metodo, ki te vrednosti ponastavi in se jo pokliče pred izgradnjo novega drevesa.
