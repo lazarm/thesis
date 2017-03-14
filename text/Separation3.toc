@@ -43,7 +43,7 @@
 \contentsline {subsection}{\numberline {4.2.3}Kd drevo}{61}
 \contentsline {subsection}{\numberline {4.2.4}Obmo\IeC {\v c}no drevo}{62}
 \contentsline {subsubsection}{\numberline {4.2.4.1}Poizvedbe v obmo\IeC {\v c}nem drevesu}{64}
-\contentsline {subsection}{\numberline {4.2.5}Celotna struktura algoritma}{64}
+\contentsline {subsection}{\numberline {4.2.5}Celotna struktura algoritma}{65}
 \contentsline {subsection}{\numberline {4.2.6}Izgradnja minimalnega cikla}{66}
 \contentsline {chapter}{\numberline {5}Eksperimenti in rezultati}{69}
 \contentsline {section}{\numberline {5.1}Uporaba kd dreves namesto VD}{69}

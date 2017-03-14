@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2016.10.21)  13 MAR 2017 22:29
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2016.10.21)  14 MAR 2017 19:19
 entering extended mode
 **./Separation3.tex
 (Separation3.tex
@@ -894,62 +894,58 @@ OT1/cmr/m/n/12 (\OML/cmm/m/it/12 b\OT1/cmr/m/n/12 ))$ (glej po-glavje 3.2.3[]),
  po-tem $\OML/cmm/m/it/12 originalPoint$
  []
 
-[60] [61] [62] <pics/range-dual-kd.pdf, id=545, 372.58046pt x 216.54903pt>
-File: pics/range-dual-kd.pdf Graphic file (type pdf)
+[60] [61] <pics/range-dual-kd-2.pdf, id=542, 368.56546pt x 274.37608pt>
+File: pics/range-dual-kd-2.pdf Graphic file (type pdf)
 
-<use pics/range-dual-kd.pdf>
-Package pdftex.def Info: pics/range-dual-kd.pdf used on input line 1212.
-(pdftex.def)             Requested size: 279.43465pt x 162.41136pt.
+<use pics/range-dual-kd-2.pdf>
+Package pdftex.def Info: pics/range-dual-kd-2.pdf used on input line 1207.
+(pdftex.def)             Requested size: 368.56456pt x 274.3754pt.
+ [62 <./pics/range-dual-kd-2.pdf>]
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
-Overfull \hbox (4.89227pt too wide) in paragraph at lines 1218--1219
+ [63]
+Overfull \hbox (4.89227pt too wide) in paragraph at lines 1220--1221
 \OT1/cmr/m/it/12 pl[]mo-di-fied\OT1/cmr/m/n/12 , ki kot osnovo upo-ra-blja ob-s
 tojeco funk-cijo v CGAL-u \OT1/cmr/m/it/12 win-dow[]que-
  []
 
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [63 <./pics/range-dual-kd.pdf>]
-
-LaTeX Warning: \oval, \circle, or \line size unavailable on input line 1260.
-
-
-LaTeX Warning: \oval, \circle, or \line size unavailable on input line 1297.
-
 [64]
-Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [65]
-[66] [67] [68]
+LaTeX Warning: \oval, \circle, or \line size unavailable on input line 1262.
+
+
+LaTeX Warning: \oval, \circle, or \line size unavailable on input line 1299.
+
+[65] [66] [67] [68]
 Poglavje 5.
 [69
 
-] <pics/data_generation.pdf, id=619, page=1, 530.38153pt x 102.69768pt>
+] <pics/data_generation.pdf, id=621, page=1, 530.38153pt x 102.69768pt>
 File: pics/data_generation.pdf Graphic file (type pdf)
 
 <use pics/data_generation.pdf, page 1>
-Package pdftex.def Info: pics/data_generation.pdf, page1 used on input line 134
-8.
+Package pdftex.def Info: pics/data_generation.pdf, page1 used on input line 135
+0.
 (pdftex.def)             Requested size: 397.78517pt x 77.02306pt.
 
-<pics/data_generation.pdf, id=620, page=2, 530.38153pt x 102.69768pt>
+<pics/data_generation.pdf, id=622, page=2, 530.38153pt x 102.69768pt>
 File: pics/data_generation.pdf Graphic file (type pdf)
 
 <use pics/data_generation.pdf, page 2>
 Package pdftex.def Info: pics/data_generation.pdf, page2 used on input line 135
-4.
+6.
 (pdftex.def)             Requested size: 397.78517pt x 77.02306pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [70 <./pics/data_generation.pdf>] [71 <./pics/data_generation.pdf>]
-Overfull \hbox (6.94588pt too wide) in paragraph at lines 1366--1367
+Overfull \hbox (6.94588pt too wide) in paragraph at lines 1368--1369
 []\OT1/cmr/m/n/12 Kot drugo al-ter-na-tivo upo-ra-bimo mrezo enot-skih raz-dal
 j (glej po-glavje 2.4[]).
  []
 
 [72]
-Overfull \hbox (3.68332pt too wide) in paragraph at lines 1502--1503
+Overfull \hbox (3.68332pt too wide) in paragraph at lines 1504--1505
 \OT1/cmr/m/n/12 ka-zal-cev na njene so-sede v grafu $\OML/cmm/m/it/12 G$\OT1/cm
 r/m/n/12 . Naj-prej z ini-ci-a-li-za-cijo objekta $\OML/cmm/m/it/12 SSSPTree$
  []
@@ -961,19 +957,19 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<pics/separation-64-1-1000-narrow-2.png, id=676, 1734.48pt x 873.0216pt>
+<pics/separation-64-1-1000-narrow-2.png, id=678, 1734.48pt x 873.0216pt>
 File: pics/separation-64-1-1000-narrow-2.png Graphic file (type png)
 
 <use pics/separation-64-1-1000-narrow-2.png>
 Package pdftex.def Info: pics/separation-64-1-1000-narrow-2.png used on input l
-ine 1539.
+ine 1541.
 (pdftex.def)             Requested size: 520.34802pt x 261.9085pt.
 
-<pics/32-1-5000-stuffed.png, id=678, 1734.48pt x 873.0216pt>
+<pics/32-1-5000-stuffed.png, id=680, 1734.48pt x 873.0216pt>
 File: pics/32-1-5000-stuffed.png Graphic file (type png)
 
 <use pics/32-1-5000-stuffed.png>
-Package pdftex.def Info: pics/32-1-5000-stuffed.png used on input line 1545.
+Package pdftex.def Info: pics/32-1-5000-stuffed.png used on input line 1547.
 (pdftex.def)             Requested size: 520.34802pt x 261.9085pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
@@ -1000,10 +996,10 @@ Poglavje 6.
 Underfull \vbox (badness 5260) has occurred while \output is active []
 
  [85]
-<pics/lca.pdf, id=710, 200.14775pt x 180.87675pt>
+<pics/lca.pdf, id=712, 200.14775pt x 180.87675pt>
 File: pics/lca.pdf Graphic file (type pdf)
  <use pics/lca.pdf>
-Package pdftex.def Info: pics/lca.pdf used on input line 1644.
+Package pdftex.def Info: pics/lca.pdf used on input line 1646.
 (pdftex.def)             Requested size: 180.13129pt x 162.78757pt.
 
 (Separation3.bbl [86 <./pics/lca.pdf>] [87
@@ -1020,8 +1016,8 @@ LaTeX Warning: There were undefined references.
  ) 
 Here is how much of TeX's memory you used:
  8716 strings out of 493334
- 123271 string characters out of 3140953
- 231039 words of memory out of 3000000
+ 123281 string characters out of 3140953
+ 232039 words of memory out of 3000000
  12031 multiletter control sequences out of 15000+200000
  20309 words of font info for 80 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -1051,9 +1047,9 @@ blic/amsfonts/cm/cmti8.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts
 /cm/cmtt12.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/latxfont/lc
 ircle1.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm10.
 pfb>
-Output written on Separation3.pdf (106 pages, 1115679 bytes).
+Output written on Separation3.pdf (106 pages, 1107353 bytes).
 PDF statistics:
- 807 PDF objects out of 1000 (max. 8388607)
+ 809 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  111 words of extra memory for PDF output out of 10000 (max. 10000000)
 
