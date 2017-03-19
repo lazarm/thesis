@@ -222,11 +222,10 @@ z vpisno številko \textbf{27122037}, sem avtor magistrskega dela z naslovom:
 		dr.\ Sergia Cabella,
 
 	\item	so elektronska oblika magistrskega dela, naslov (slov., angl.), povzetek (slov., angl.) ter ključne besede (slov., angl.) identični s tiskano obliko magistrskega dela
-	\item soglašam z javno objavo elektronske oblike diplomskega dela v zbirki ''Dela FRI''.
 \end{itemize}
 
 \vspace{1cm}
-\noindent V Ljubljani, dne 11. januarja 2016 \hfill Podpis avtorja:
+\noindent V Ljubljani, dne 20. marca 2017 \hfill Podpis avtorja:
 
 % prazna stran
 \clearemptydoublepage
@@ -250,13 +249,14 @@ z vpisno številko \textbf{27122037}, sem avtor magistrskega dela z naslovom:
 % prazna stran
 \clearemptydoublepage
 
-\chapter*{Seznam uporabljenih kratic}
+\chapter*{Seznam uporabljenih kratic in sinonimov}
 \begin{table}[H]
 \begin{tabular*}{\textwidth}{l|l}
 \textbf{kratica} & \textbf{pomen} \\
 \hline
 DT & Delaunayeva triangulacija \\
-VD & Voronoijev diagram
+VD & Voronoijev diagram \\
+SSSP & algoritem iz ~\cite{CJ15}
 \end{tabular*}
 \end{table}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -756,7 +756,7 @@ Cabello in Giannopoulos~\cite{CG16} sta predstavila splošen algoritem za proble
 V tem poglavju je opisan algoritem, ki problem minimalne ločitve z enotskimi krogi reši v skoraj kvadratičnem času. Izboljšava temelji na treh elementih:
 \begin{itemize}
 \item reinterpretacija generičnega algoritma za kroge. V izvirnem algoritmu moramo označiti točko znotraj vsake oblike. Pri krogih je izbira očitna - njihovo središče. S tem se opis in interpretacija algoritma poenostavita.
-\item učinkovit algoritem za drevesa najkrajših poti nad grafom $G$. Primeren kandidat je algoritem, opisan v poglavju ~\ref{sssp-true}, ker izkorišča lastnosti grafa $G$. V praksi bi se verjetno dobro obnesel tudi algoritem iz~\cite{ChanS16}.
+\item učinkovit algoritem za drevesa najkrajših poti nad grafom $G$. Primeren kandidat je algoritem, opisan v poglavju ~\ref{sssp-tree}, ker izkorišča lastnosti grafa $G$. V praksi bi se verjetno dobro obnesel tudi algoritem iz~\cite{ChanS16}.
 \item kompaktna obravnava povezav v $G$ z uporabo sledečih orodij iz računske geometrije: območnih dreves, iskanja najbližjega soseda in dualnosti med točko in premico. 
 \end{itemize}
 
@@ -815,7 +815,7 @@ Za vsako drevo najkrajših poti $T_r$ imamo potem
 \end{align*}
 ker se presečišča, ki smo jih šteli dvakrat, izničijo po modulu $2$. Podrobneje, pot v $T_r$ iz $r$ do najmanjšega skupnega prednika $p$ in $q$ je upoštevana dvakrat. Iz tega sledi, da je dovolj za vse povezave $pq$ v $G$ preveriti, če je vsota $N[p]+N[q]+\CR(st,pq)$ enaka $0$ po modulu $2$. Končni algoritem je podan na sliki ~\ref{fig:generic}.
 
-Poglejmo si časovno kompleksnost algoritma. Za vsako točko $r\in P$ moramo izračunati drevo najkrajših poti v $G$. Kot smo omenili v poglavju ~\ref{sssp-true}, je to izvedljivo v času $\OO(n\log n)$. Za vsako povezavo $pq$ potem porabimo $\OO(1)$ časa. Za vsako točko $r$ to skupaj znese $O(n\log n+|E(G)|)$ časa, kar v najslabšem primeru pomeni kubično časovno zahtevnost. Boljši čas lahko dobimo s kompaktno obravnavo vseh povezav v $G$, ki je opisana v poglavju ~\ref{compact}.  
+Poglejmo si časovno kompleksnost algoritma. Za vsako točko $r\in P$ moramo izračunati drevo najkrajših poti v $G$. Kot smo omenili v poglavju ~\ref{sssp-tree}, je to izvedljivo v času $\OO(n\log n)$. Za vsako povezavo $pq$ potem porabimo $\OO(1)$ časa. Za vsako točko $r$ to skupaj znese $O(n\log n+|E(G)|)$ časa, kar v najslabšem primeru pomeni kubično časovno zahtevnost. Boljši čas lahko dobimo s kompaktno obravnavo vseh povezav v $G$, ki je opisana v poglavju ~\ref{compact}.  
 
 \subsection{Dualnost in dualni prostor}
 \label{dual-chapter}
@@ -1133,7 +1133,7 @@ Kot smo omenili pri teoretičnem opisu algoritma v poglavju~\ref{sssp-tree}, pri
 V praksi se pri uporabi knjižnice CGAL izkaže, da je za iskanje najbližjega soseda bolje uporabiti DT. Do tega sklepa smo prišli z analizo implementacije obeh struktur:
 
 \begin{itemize}
-\item Za iskanje najbližjega soseda z VD uporabimo funkcijo $locate(Point$ $q)$, ki za rezultat vrne Voronoijevo središče, vozlišče, ali rob. V našem primeru vedno iščemo najbližje Voronoijevo središče, tako da v primeru, da je rezultat vozlišče ali rob, vrnemo enega od enako oddaljenih središč. Ker v CGAL-u objekt VD interno hrani strukturo DT, v praksi potemtakem pravzaprav iščemo vozlišče v DT. Funkcija $locate$ za izračun uporablja funktor za iskanje najbližjega Delaunayevega vozlišča, ki je definiran z drugo predlogo VD-ja. Imenuje se $Delaunay\U triangulation\U nearest\U site\U 2.$ Ta nato kliče funkcijo $nearest\U vertex(Point$ $q)$ v DT. Rezultat slednje je pravzaprav tisto, kar iščemo od samega začetka, zato se lahko znebimo VD kot vmesnika in direktno uporabljamo DT. 
+\item Za iskanje najbližjega soseda z VD uporabimo funkcijo $locate(Point$ $q)$, ki za rezultat vrne Voronoijevo središče, vozlišče, ali rob. V našem primeru vedno iščemo najbližje Voronoijevo središče, tako da v primeru, da je rezultat vozlišče ali rob, vrnemo enega od enako oddaljenih središč. Ker v CGAL-u objekt VD interno hrani strukturo DT, v praksi potemtakem pravzaprav iščemo vozlišče v DT. Funkcija $locate$ za izračun uporablja funktor za iskanje najbližjega Delaunayevega vozlišča, ki je definiran z drugo predlogo VD-ja. Imenuje se \textit{Delaunay\U triangulation\U nearest\U site\U 2}. Ta nato kliče funkcijo \textit{nearest\U vertex (Point q)} v DT. Rezultat slednje je pravzaprav tisto, kar iščemo od samega začetka, zato se lahko znebimo VD kot vmesnika in direktno uporabljamo DT. 
 \item Poleg poenostavitve kode in rešitve je pomemben faktor tudi optimizacija. Teoretična časovna kompleksnost iskanja najbližjega soseda je $\OO(\log n)$, povprečna časovna zahtevnost funkcije $nearest\U vertex(Point$ $q)$, ki za najdbo najbližjega vozlišča uporablja sprehod po povezavah triangulacije (ang. $line$ $walk$), pa je $\OO(\sqrt{n})$. DT v CGAL-u vsebuje tudi funkcijo $nearest\U vertex(Point$ $q,$ $Face\U handle$ $hint)$, kateri kot drugi argument podamo lice v DT, pri katerem se iskanje začne. Če znamo podati dobro začetno lice, se časovna kompleksnost bistveno zmanjša (na $k$ korakov, kjer $k << n$). Problem pri uporabi VD je potem tudi ta, da njena funkcija $locate$ ne podpira dodatnega argumenta za začetno lice. Tudi če bi tako funkcijo napisali sami, bi nastal problem pri tem, kako najti primerno lice VD-ja oziroma kako dostopati do njega. 
 \item Sama izbira lica v DT je očitna. Za točko $q$, ki jo dobimo iz vrste, in točko $p$, s katero tvorita povezavo v DT(P) (glej psevdokodo~\ref{fig:SSSP}), imamo za poizvedbo točki $p$ najbližjega vozlišča dve možnosti za dobrega kandidata za začetno lice. Če $q\in DT(W_{i-1})$, je dober kandidat katerokoli lice vozlišča $q$, sicer pa je to katerokoli lice starša točke $q$ v drevesu SSSP, ker je starš zagotovo vsebovan v $DT(W_{i-1})$. 
 \end{itemize}
@@ -1154,9 +1154,15 @@ f = DT::insert((*p)-$>$point(), f)-$>$ face();\\
 pointsToFaceHandlers[\&((*p)-$>$point())] = f;
 \end{quote}
 
+%\begin{figure}
+%\centerline{\includegraphics{pics/pointsToFaceHandlers.pdf}}
+%\caption{.}
+%\label{pointsToFace}
+%\end{figure}
+
 \begin{figure}
-\centerline{\includegraphics{pics/pointsToFaceHandlers.pdf}}
-\caption{.}
+\centerline{\includegraphics[scale=0.6]{pics/pointsToFaceHandlers-all.pdf}}
+\caption{Ko gradimo množico $W_2$, pri $v$ preverimo vse njegove sosede v DT(P), ki še niso bile obiskane in dodane v drevo. To je edino vozlišče $u$, ki ga dodamo v $W_2$ in $Q$. Ker je $v$ sosed $u$ in del $DT(W_1)$, uporabimo njegovo lice $f_2$ kot začetno lice pri iskanju najbližjega soseda točke $u$. $u$ nato dodamo v drevo, njegov starš pa je $v$. Ko vzamemo $u$ iz vrste in preverimo soseda $z$, pri slednjem za začetno lice uporabimo isto lice, kot smo ga uporabili pri sosedu $u$, ker je ta že dodan v $W_2$.}
 \label{pointsToFace}
 \end{figure}
 
@@ -1169,7 +1175,7 @@ Konstruktor najprej zgradi DT nad $P$. Nato za izvorno točko $r\in P$ s pomočj
 
 Kot generator točk kandidatk uporabljamo objekt tipa $deque$, ki hrani elemente v vrsti (FIFO). V teoretičnem opisu algoritma smo za $q\in Q$ rekli, da je poljubna točka v $Q$. V implementaciji je $q$ vedno prva točka v vrsti, kar je bolj optimalno, kot smo omenili v poglavju~\ref{why dt}, ko smo govorili o smiselnem zaporedju točk v $W_i$, pri čemer pa nismo izpostavili tega, da je potrebni pogoj za to tudi, da so točke smiselno podane iz vrste. Za $W_i$ in $W_{i-1}$ v zanki hranimo seznam Delaunayevih vozlišč (objekte tipa $DT\U Vertex\U Handle$). Seznam $W_{i-1}$ vstavimo v strukturo $DTWithFaceMap$. 
 
-Za vsak $q\in Q$ poiščemo lice $f$, ki ga bomo uporabili kot namig pri iskanju najbližjega soseda. Če je razdalja $q$ enaka $i$, pomeni, da $q$ ni vsebovan v $W_{i-1}$ oziroma strukturi $DTWithFaceMap$. Ker pa je $q$ oziroma njena interna točka že vsebovana v drevesu najkrajših poti, lahko dostopamo do točke $qs$ (tipa $Point\U 2$), ki je njen starš.  Lice $f$ dobimo tako, da poiščemo vrednost objekta v mapi $pointsToFaceHandlers$, kot ključ pa uporabimo kazalec na starša $qs$. Če je razdalja $q$ manjša od $i$, kot ključ uporabimo kar kazalec na točko, ki jo interno hrani $q$.  
+Za vsak $q\in Q$ poiščemo lice $f$, ki ga bomo uporabili kot namig pri iskanju najbližjega soseda. Če je razdalja $q$ enaka $i$, pomeni, da $q$ ni vsebovan v $W_{i-1}$ oziroma strukturi $DTWithFaceMap$. Ker pa je $q$ oziroma njena interna točka že vsebovana v drevesu najkrajših poti, lahko dostopamo do točke $qs$ (tipa $Point\U 2$), ki je njen starš.  Lice $f$ dobimo tako, da poiščemo vrednost objekta v mapi $pointsToFaceHandlers$, kot ključ pa uporabimo kazalec na starša $qs$. Če je razdalja $q$ manjša od $i$, kot ključ uporabimo kar kazalec na točko, ki jo interno hrani $q$ (glej tudi sliko~\ref{pointsToFace}).  
 
 Povezave oziroma sosede $q$ najdemo s krožnim iteratorjem, ki ga vrne metoda $incident\U vertices(q)$ v DT. Ker ima v CGAL implementaciji DT poleg standardnih vozlišč še eno neskončno vozlišče, ki je sosedno vsem ostalim, moramo takega soseda ignorirati. Za ostale sosede $p$ najprej preverimo, če je njena točka bila že obiskana. Če ni, poiščemo njenega najbližjega soseda $w$ v $W_{i-1}$ z metodo $nearestVertex$, ki ji kot argument podamo $p$ in lice $f$. Če $|pw| <= 1$, usvarimo objekt tipa \textit{shared\U ptr\textless Point\U 2 \textgreater}, ki hrani kazalec na $w$. Ta objekt nato nastavimo kot starša točki v $p$. Točko tudi označimo kot obiskano in ji nastavimo razdaljo $i$, vozlišče $p$ pa vstavimo v seznam $W_i$. Na koncu iteracije $i$ seznam $W_{i-1}$ zamenjamo z $W_i$.
 
@@ -1213,8 +1219,6 @@ Za dvodimenzionalna območna drevesa smo uporabili implementacijo v knjiž\-ni\-
 Za ključ smo uporabili naš razred $ImagePoint$, kot vrednost pa vsako vozlišče hrani svoje kd drevo. Zaradi tega smo morali vnesti nekaj sprememb v CGAL-u. Razred za značilnosti območnih dreves $Range\U tree\U map\U traits\U 2$ je parametriziran z modelom predstavitve dvodimenzionalnih točk tipa $Point\U 2$ in s tipom za vrednost vozlišča. Drevo torej kot ključ vedno uporabi objekt tipa \textit{Point\U 2 \textless K \textgreater}, kjer je $K$ model predstavitve (v naši implementaciji je ta vedno \textit{Cartesian \textless double \textgreater}). Iz razreda značilnosti smo zato odstranili prvi parameter in namesto tega samodejno nastavili tip ključa na \textit{ImagePoint}. Spremeniti smo morali tudi operatorja za primerjavo ključev v razredih $C\U Compare\U 1$ (za primarno drevo) in $C\U Compare\U 2$ (za sekundarno drevo). Funkciji kličeta predikata $compare\U x$ oziroma $compare\U y$ neposredno nad objekti obeh ključev. Ker so objekti v našem primeru tipa $ImagePoint$, smo funkciji spremenili tako, da predikatoma poda atribut ključev $point$, ki je tipa $Point\U 2$ in hrani preslikano točko.
 
 Pri inicializaciji drevesu podamo seznam slik tipa $ImagePoint$ in praznih kd dreves. Nato se iterativno sprehodimo (tako kot pri preiskovanju v širino) po prvem nivoju drevesa - primarnem drevesu - s funkcijo \textit{traverse\U and\U popu\-la\-te\U with\U data}. Za vsako vozlišče pokličemo funkcijo \textit{build\U Kd\U on\U la\-yer2}, ki rekurzivno  od spodaj navzgor za vsako vozlišče v sekundarnem drevesu, na katerega kaže vozlišče v primarnem drevesu, vstavi v (do tistega trenutka prazno) njegovo kd drevo točke, ki jih hranita kd drevesi njegovih otrok. V listih kd drevesa vsebujejo samo točko v primarnem prostoru, pri čemer je njej pripadajoča točka preslikave $\varphi$ uporabljena kot ključ vozlišča. Rekurzivni klic funkcije se torej kliče pred vstavljanjem točk v kd drevo. S pomočjo rekurzije je vsakemu notranjemu vozlišču v sekundarnem drevesu seznam točk v njegovem poddrevesu, ki ga potrebujemo za izgradnjo njegovega kd drevesa, direktno podan preko kd dreves njegovih otrok. Če bi kd drevesa gradili od zgoraj navzdol v sekundarnem drevesu, bi morali za vsako vozlišče narediti sprehod po njegovem poddrevesu. Primarno drevo za razliko od sekundarnih ne hrani nobenih dreves kot vrednosti v svojih vozliščih oziroma so ta prazna. Shema zgradbe sekundarnega drevesa je prikazana na sliki~\ref{range-dual-kd}.
-
-
 
 \subsubsection{Poizvedbe v območnem drevesu}
 Razredu \textit{Range\U tree\U d} smo za poizvedbe dodali funkcijo \textit{window\U que\-ry\U im\-pl\U mo\-di\-fied}, ki  kot osnovo uporablja obstoječo funkcijo v CGAL-u \textit{window\U que\-ry\U impl}. Argumenta funkcije sta interval $I$ in točka $q$, ki jo uporabimo za poizvedbe najbližjega soseda v kd drevesih. Interval $I$ je odvisen od $\varphi (a)$ in je zaprt. Metoda vrne par vrednosti, kjer je prva logičnega tipa, druga pa tipa \textit{Point\U 2}. Pri originalni CGAL metodi sta argumenta interval $I$ in množica $it$, kamor se shranjujejo vsi rezultati območne poizvedbe.
@@ -1638,7 +1642,7 @@ Poraba spomina novega algoritma za ločevanje je po drugi strani nekoliko večja
 \chapter{Sklepne ugotovitve}
 \label{ch4}
 
-Čeprav se algoritem za minimalno ločevanje načeloma obnaša bolje od splo\-šne\-ga algoritma, obstajajo tudi še rezerve. Implementirali bi lahko tudi prilagojen algoritem, ki bi se obnašal različno glede na velikost množic $L_i^j$ in $R_i^j$, ki je pogosto precej majhna. To smo deloma tudi storili tako, da smo izpustili obravnavo  tistih parov, kjer je bila ena od množic prazna. Lahko pa bi šli tudi korak dlje. Z eksperimenti bi lahko našli točko preloma za velikost obeh množic, pri kateri se začne splačati uporabiti kar metodo \textit{brute force} in preveriti vse možne pare $(p,q), p\in L_i^j, q\in R_i^j$. Velik vpliv na to ima predvsem velikost $L_i^j$, torej število poizvedb. Pohitritev, ki jo dobimo s takšnim algoritmom, bi lahko demonstrirali z eksperimenti, kjer so točke neenakomerno razporejene. S tako množico točk $P$ bi imeli tako gosta kot redka območja točk in algoritem bi se obnašal glede na to, na kakšnem območju se nahajajo točke v $L_i^j$ in $R_i^j$. Namesto iskanja točke preloma bi lahko uporabili tudi preprosto hevristiko s časovno zahtevnostjo obeh metod. Naj bo $n$ velikost množice $L$ in $m$ velikost množice $R$. Uporaba kd dreves bi se s hevristiko potem splačala, če $(n+m)\log m < nm$ (kjer $(n+m)\log m$ predstavlja skupno časovno zahtevnost izgradnje kd drevesa z $m$ elementi in $n$ poizvedb, $nm$ pa časovno zahtevnost metode \textit{brute force}). Podobno bi se območna drevesa splačala, če $(n+m)\log^3 m < nm$.
+Čeprav se algoritem za minimalno ločevanje načeloma obnaša bolje od splo\-šne\-ga algoritma, je pri implementaciji algoritma ostalo še nekaj rezerv za izboljšave. Implementirali bi lahko tudi prilagojen algoritem, ki bi se obnašal različno glede na velikost množic $L_i^j$ in $R_i^j$, ki je pogosto precej majhna. To smo deloma tudi storili tako, da smo izpustili obravnavo  tistih parov, kjer je bila ena od množic prazna. Lahko pa bi šli tudi korak dlje. Z eksperimenti bi lahko našli točko preloma za velikost obeh množic, pri kateri se začne splačati uporabiti kar metodo \textit{brute force} in preveriti vse možne pare $(p,q), p\in L_i^j, q\in R_i^j$. Velik vpliv na to ima predvsem velikost $L_i^j$, torej število poizvedb. Pohitritev, ki jo dobimo s takšnim algoritmom, bi lahko demonstrirali z eksperimenti, kjer so točke neenakomerno razporejene. S tako množico točk $P$ bi imeli tako gosta kot redka območja točk in algoritem bi se obnašal glede na to, na kakšnem območju se nahajajo točke v $L_i^j$ in $R_i^j$. Namesto iskanja točke preloma bi lahko uporabili tudi preprosto hevristiko s časovno zahtevnostjo obeh metod. Uporaba kd dreves bi se recimo splačala, če $(n+m)\log m < nm$ (kjer $(n+m)\log m$ predstavlja skupno časovno zahtevnost izgradnje kd drevesa z $m$ elementi in $n$ poizvedb, $nm$ pa časovno zahtevnost metode \textit{brute force}). Podobno bi se območna drevesa splačala, če $(n+m)\log^3 m < nm$.
 
 Zaradi omenjenih lastnosti eksperimentov in enakomerne razporeditve točk v njih je najkrajši cikel najden praktično v trenutku. Ker je večina možnih ciklov podobne dolžine kot najkrajši cikel, se pri eksperimentih tudi ne izrazi optimizacijski doprinos pogoja $2i < best$ v glavni zanki algoritma. Razliko bi lahko ponazorili z eksperimentom brez lukenj, kjer bi zelo malo ciklov imelo enako dolžino. Zaradi velike variacije dolžin ciklov in dolžine najkrajšega cikla slednjega ne bi odkrili tako hitro, bi pa z omenjenim pogojem velik delež ciklov vnaprej zavrgli.
 
@@ -1648,7 +1652,7 @@ Zaradi omenjenih lastnosti eksperimentov in enakomerne razporeditve točk v njih
 \label{fig:lca}
 \end{figure}
 
-Še ena možna optimizacija algoritma, ki je nismo naknadno implementirali, ker se ne obnese v naših eksperimentih, bi bila za najden trenutno najkrajši cikel, ki ga tvorita točki $p$ in $q$, ugotoviti, če je koren drevesa enak najmanjšemu skupnemu predniku $lca(p,q)$ obeh točk v drevesu (glej sliko~\ref{fig:lca}). Če temu ni tako, potem vemo, da obstaja krajši cikel, ki ga dobimo z drevesom, ki ima za koren točko $lca(p,q)$, zato tak cikel določimo kot trenutno najkrajšega. Do takega drevesa bi sicer prišli slej ko prej, a pri primerih, kjer imajo cikli zelo različne dolžine, lahko s pogojem $2i < best$ do takrat, ko pridemo do tega drevesa, zavržemo dosti ciklov vnaprej.
+Še ena možna optimizacija algoritma, ki je nismo naknadno implementirali, ker se ne obnese v naših eksperimentih, bi bila za najden trenutno najkrajši cikel, ki ga tvorita točki $p$ in $q$, ugotoviti, če je koren drevesa enak najmanjšemu skupnemu predniku $lca(p,q)$ obeh točk v drevesu (glej sliko~\ref{fig:lca}). Če temu ni tako, potem vemo, da obstaja krajši cikel, ki ga dobimo z drevesom, ki ima za koren točko $lca(p,q)$, zato tak cikel določimo kot trenutno najkrajšega. Do takega drevesa bi sicer prišli slej ko prej, a pri primerih, kjer imajo cikli zelo različne dolžine, lahko s pogojem $2i < best$ do takrat, ko pridemo do tega drevesa, zavržemo dosti ciklov že vnaprej.
 
 \bibliographystyle{abbrv}
 \bibliography{biblia}
