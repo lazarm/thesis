@@ -741,7 +741,7 @@ Zaradi leme ~\ref{lema3} porabi algoritem $UnweightedShortestPath(P,s)$ $\OO(n\l
 
 Naj bo $\D$ množica $n$ enotskih krogov, pri čemer njihova središča tvorijo množico $P$. Naj bosta $s$ in $t$ dve dani točki, ki nista vsebovani v nobenem krogu iz množice $\D$. Pravimo, da $\D$ ločuje $s$ in $t$, če vsaka pot v ravnini od $s$ do $t$ seka nek krog v $\D$.
 
-Obravnavajmo problem pridobitve minimalne kardinalne podmnožice množice $\D$, ki ločuje $s$ in $t$, kar formalno zapišemo kot 
+Obravnavajmo problem pridobitve minimalne kardinalne podmnožice mno\-ži\-ce $\D$, ki ločuje $s$ in $t$, kar formalno zapišemo kot 
 
 \begin{align*}
 	\min ~~		& |\D'|\\
@@ -860,7 +860,7 @@ Uporabili bomo podatkovno strukturo v naslednji lemi. V osnovi gre za večnivojs
 
 \begin{lema}
 \label{lema-ds2}
-Naj bo $B$ množica točk s pozitivnimi koordinatami $x$. $B$ lahko predprocesiramo v času $\OO(n\log^3n)$, tako da lahko za vsako točko $a\in A$ z negativno koordinato $x$ v času $\OO(\log^3n)$ določimo, če je množica $\{ b\in B \mid \text{$ab$ seka $\sigma$ and $|ab|\le 1$}\}$ prazna. Z isto podatkovno strukturo lahko obravnavamo poizvedbe za ugotavljanje, ali je množica $\{ b\in B \mid \text{$ab$ ne seka $\sigma$ and $|ab|\le 1$}\}$ prazna.
+Naj bo $B$ množica točk s pozitivnimi koordinatami $x$. $B$ lahko predprocesiramo v času $\OO(n\log^3n)$, tako da lahko za vsako točko $a\in A$ z negativno koordinato $x$ v času $\OO(\log^3n)$ določimo, če je množica $\{ b\in B \mid \text{$ab$ seka $\sigma$ in $|ab|\le 1$}\}$ prazna. Z isto podatkovno strukturo lahko obravnavamo poizvedbe za ugotavljanje, ali je množica $\{ b\in B \mid \text{$ab$ ne seka $\sigma$ in }$ \\ $\text{$|ab|\le 1$}\}$ prazna.
 \end{lema}
 
 \begin{proof}
@@ -877,7 +877,7 @@ V dualnem prostoru je množica $\sigma^*$ $horizontal slab$ (glej sliko~\ref{hsl
 \[
 		\sigma^* ~=~ \{ (m,-c)\in \RR^2\mid 0\le c\le s\},
 \]
-ker velja predpostavka $s=(0,0)$ and $t=(0,\tau)$, kjer $\tau\ge 0$.
+ker velja predpostavka $s=(0,0)$ in $t=(0,\tau)$, kjer $\tau\ge 0$.
 
 
 Za vsako točko $b\in B$ naj bo $L^* _b$ množica točk, dualnih premicam, ki gredo skozi $b$ in sekajo $\sigma$:
@@ -940,7 +940,7 @@ Iz teoretičnega vidika bi bilo bolj učinkovito izračunati unijo
 \]
 in tam rešiti problem določanja položaja (ang. \textit{point location}). Ker območja ne morejo imeti veliko presečišč z daljico $\sigma$, lahko dobimo dobre asimptotične meje. V praksi pa se izkaže, da je izboljšava rezultata zanemarljiva.
 \bigbreak
-Obravnavajmo zdaj fiksni koren $r$. Predpostavimo, da so drevo najkrajših poti $T_r$ ter tabele $\pi[~]$, $\dist[~]$ and $N[~]$ že izračunane. Točke združimo glede na njihovo razdaljo od $r$:
+Obravnavajmo zdaj fiksni koren $r$. Predpostavimo, da so drevo najkrajših poti $T_r$ ter tabele $\pi[~]$, $\dist[~]$ in $N[~]$ že izračunane. Točke združimo glede na njihovo razdaljo od $r$:
 \[
 	W_i ~=~ \{ p\in P \mid \dist[p]=i \},~~~ i=0,1,\dots
 \]
@@ -1505,7 +1505,7 @@ grid &	0.060	&	0.038	&	0.027
 \end{table}
 
 \section{Minimalna ločitev}
-Kot merilo uspešnosti algoritma za minimalno ločitev smo njegove rezultate primerjali z rezultati splošnega algoritma za ločevanje, opisanega v poglavju~\ref{generic-section}. Za potrebe implementacije splošnega algoritma smo razredu $Point\U 2$ dodali še atribut $neighbours$, ki za posamezno točko hrani seznam kazalcev na njene sosede v grafu $G$. Najprej z inicializacijo objekta $SSSPTree$ zgradimo DT(P). Nato se algoritem z iteratorjem sprehodi čez vozlišča triangulacije, pred katerih lahko dostopamo do objektov točk. Za vsako vozlišče $u$ gremo ponovno skozi iterator vozlišč, le da ima ta začetek pri trenutnem vozlišču (skupno število iteracij je torej $\frac{n\times (n-1)}{2}$). Za vsako vozlišče $v$ druge iteracije preverimo \textit{dist(u.p,v.p)} in če je ta največ 1, v seznam \textit{u.p.neighbours} dodamo kazalec na točko $v.p$. Ker se drugi iterator ne začne s prvim vozliščem, povezavo $uv$ shranimo samo enkrat.
+Kot merilo uspešnosti algoritma za minimalno ločitev smo njegove rezultate primerjali z rezultati splošnega algoritma za ločevanje, opisanega v poglavju~\ref{generic-section}. Za potrebe implementacije splošnega algoritma smo razredu $Point\U 2$ dodali še atribut $neighbours$, ki za posamezno točko hrani seznam kazalcev na njene sosede v grafu $G$. Najprej z inicializacijo objekta \\$SSSPTree$ zgradimo DT(P). Nato se algoritem z iteratorjem sprehodi čez vozlišča triangulacije, pred katerih lahko dostopamo do objektov točk. Za vsako vozlišče $u$ gremo ponovno skozi iterator vozlišč, le da ima ta začetek pri trenutnem vozlišču (skupno število iteracij je torej $\frac{n\times (n-1)}{2}$). Za vsako vozlišče $v$ druge iteracije preverimo \textit{dist(u.p,v.p)} in če je ta največ 1, v seznam \textit{u.p.neighbours} dodamo kazalec na točko $v.p$. Ker se drugi iterator ne začne s prvim vozliščem, povezavo $uv$ shranimo samo enkrat.
 
 V glavni zanki se zopet sprehodimo skozi iterator vozlišč in za vsako njegovo točko $r$ zgradimo drevo $SSSPTree(r)$. S tem se za vsako točko $p$ hkrati izračuna tudi število presečišč poti $rp$ z $st$ po modulu 2. Z uporabo tretjega konstrukturja razreda SSSPTree izklopimo kategorizacijo, saj tukaj ni potrebna. Čez povezave $E(G)$ se sprehodimo tako, da gremo zopet z iteratorjem čez vsa vozlišča in za vsako točko vozlišča preverimo vse njegove sosede s pomočjo seznama kazalcev.  
 \begin{table}[h!]
