@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2016.10.21)  19 MAR 2017 20:08
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2016.10.21)  1 MAY 2017 19:38
 entering extended mode
 **./Separation3.tex
 (Separation3.tex
@@ -468,26 +468,26 @@ File: lstmisc.sty 2015/06/04 1.6 (Carsten Heinz)
 ) (Separation3.aux)
 \openout1 = `Separation3.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 151.
-LaTeX Font Info:    ... okay on input line 151.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 151.
-LaTeX Font Info:    ... okay on input line 151.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 151.
-LaTeX Font Info:    ... okay on input line 151.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 151.
-LaTeX Font Info:    ... okay on input line 151.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 151.
-LaTeX Font Info:    ... okay on input line 151.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 151.
-LaTeX Font Info:    ... okay on input line 151.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 151.
-LaTeX Font Info:    Try loading font information for TS1+cmr on input line 151.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 169.
+LaTeX Font Info:    ... okay on input line 169.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 169.
+LaTeX Font Info:    ... okay on input line 169.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 169.
+LaTeX Font Info:    ... okay on input line 169.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 169.
+LaTeX Font Info:    ... okay on input line 169.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 169.
+LaTeX Font Info:    ... okay on input line 169.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 169.
+LaTeX Font Info:    ... okay on input line 169.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 169.
+LaTeX Font Info:    Try loading font information for TS1+cmr on input line 169.
 
 
 ("C:\Program Files\MiKTeX\tex\latex\base\ts1cmr.fd"
 File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
-LaTeX Font Info:    ... okay on input line 151.
+LaTeX Font Info:    ... okay on input line 169.
 
 ("C:\Program Files\MiKTeX\tex\latex\ucs\ucsencs.def"
 File: ucsencs.def 2011/01/21 Fixes to fontencodings LGR, T3
@@ -562,17 +562,17 @@ File: uni-1.def 2013/05/13 UCS: Unicode data U+0100..U+01FF
 {C:/Users/lmilinkovic/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}] [2
 
 ]
-LaTeX Font Info:    Try loading font information for U+lasy on input line 189.
+LaTeX Font Info:    Try loading font information for U+lasy on input line 207.
 
 ("C:\Program Files\MiKTeX\tex\latex\base\ulasy.fd"
 File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
 )
-LaTeX Font Info:    Try loading font information for U+msa on input line 189.
+LaTeX Font Info:    Try loading font information for U+msa on input line 207.
 
 ("C:\Program Files\MiKTeX\tex\latex\amsfonts\umsa.fd"
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 189.
+LaTeX Font Info:    Try loading font information for U+msb on input line 207.
 
 ("C:\Program Files\MiKTeX\tex\latex\amsfonts\umsb.fd"
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
@@ -591,28 +591,15 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 \tf@toc=\write4
 \openout4 = `Separation3.toc'.
 
- [12]
-Underfull \hbox (badness 10000) in alignment at lines 254--260
-[][]
- []
-
-[13
+ [12] [13
 
 
 ] [14
 
 ] [15] [16
 
-] [17] [18
-
 ]
 Poglavje 1.
-
-Overfull \hbox (0.25706pt too wide) in paragraph at lines 288--289
-[]\OT1/cmr/m/n/12 Pri pr-vem pro-blemu bi radi izracunali drevo naj-krajsih p
-oti iz ne-utezenega
- []
-
 
 Underfull \vbox (badness 2689) has occurred while \output is active []
 
@@ -626,400 +613,396 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[2] <pics/unitdisks.pdf, id=79, page=4, 281.45149pt x 265.3915pt>
-File: pics/unitdisks.pdf Graphic file (type pdf)
+[2] [3] [4
 
-<use pics/unitdisks.pdf, page 4>
-Package pdftex.def Info: pics/unitdisks.pdf, page4 used on input line 309.
-(pdftex.def)             Requested size: 168.87218pt x 159.23611pt.
-
-Underfull \vbox (badness 4060) has occurred while \output is active []
-
- [3 <./pics/unitdisks.pdf>] [4]
+]
 Poglavje 2.
 [5
-
 
 ]
 
 Package Fancyhdr Warning: \headheight is too small (14.49998pt): 
- Make it at least 29.42502pt.
+ Make it at least 27.05003pt.
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[6] [7] [8] <pics/kdTree4.pdf, id=108, 221.2265pt x 362.25337pt>
+[6] [7] [8] [9] <pics/kdTree4.pdf, id=98, 221.2265pt x 362.25337pt>
 File: pics/kdTree4.pdf Graphic file (type pdf)
 
 <use pics/kdTree4.pdf>
-Package pdftex.def Info: pics/kdTree4.pdf used on input line 363.
+Package pdftex.def Info: pics/kdTree4.pdf used on input line 386.
 (pdftex.def)             Requested size: 265.47046pt x 434.70186pt.
+ [10 <./pics/kdTree4.pdf>] [11]
+<pics/rangeTree2.pdf, id=120, 299.791pt x 273.4215pt>
+File: pics/rangeTree2.pdf Graphic file (type pdf)
 
+<use pics/rangeTree2.pdf>
+Package pdftex.def Info: pics/rangeTree2.pdf used on input line 409.
+(pdftex.def)             Requested size: 299.79027pt x 273.4208pt.
+ [12]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [9]
-[10 <./pics/kdTree4.pdf>]
-Overfull \hbox (0.37881pt too wide) in paragraph at lines 379--380
-\OT1/cmr/m/n/12 opisu. Za po-i-zvedbe je upo-ra-bljen stan-dar-den al-go-ri-tem
-, ki re-kur-zivno preisce
+ [13 <./pics/rangeTree2.pdf>] [14] [15]
+<pics/dt-triangle.pdf, id=162, 540.74826pt x 247.36014pt>
+File: pics/dt-triangle.pdf Graphic file (type pdf)
+
+<use pics/dt-triangle.pdf>
+Package pdftex.def Info: pics/dt-triangle.pdf used on input line 451.
+(pdftex.def)             Requested size: 432.59918pt x 197.88835pt.
+ [16]
+Overfull \hbox (3.30621pt too wide) in paragraph at lines 466--467
+[]\OT1/cmr/m/n/12 Najprej je upo-ra-bljena me-toda \OT1/cmr/m/it/12 lo-cate \OT
+1/cmr/m/n/12 za dolocanje
  []
 
+[17 <./pics/dt-triangle.pdf>]
+<pics/voronoi-dt3.pdf, id=184, 297.85378pt x 369.46632pt>
+File: pics/voronoi-dt3.pdf Graphic file (type pdf)
 
-Overfull \hbox (12.77574pt too wide) in paragraph at lines 381--381
-|[]\OT1/cmr/bx/n/17.28 Drevesa naj-krajsih poti z eno iz-vorno tocko
- []
-
-[11] [12]
-Overfull \hbox (9.06688pt too wide) in paragraph at lines 405--406
-[]\OT1/cmr/m/n/12 Pomembna la-stnost dveh tri-ko-tni-kov ABD in BCD
- []
-
-
-Overfull \hbox (6.10246pt too wide) in paragraph at lines 406--407
-[]\OT1/cmr/m/n/12 Dodaja tocke za-po-re-doma v ob-
- []
-
-[13]
-Underfull \vbox (badness 3209) has occurred while \output is active []
-
- [14]
-<pics/voronoi-dt2.pdf, id=143, 297.85378pt x 369.46632pt>
-File: pics/voronoi-dt2.pdf Graphic file (type pdf)
-
-<use pics/voronoi-dt2.pdf>
-Package pdftex.def Info: pics/voronoi-dt2.pdf used on input line 429.
+<use pics/voronoi-dt3.pdf>
+Package pdftex.def Info: pics/voronoi-dt3.pdf used on input line 475.
 (pdftex.def)             Requested size: 238.28333pt x 295.57344pt.
- [15] [16 <./pics/voronoi-dt2.pdf>]
-Overfull \hbox (3.3598pt too wide) in paragraph at lines 450--451
+ [18] [19 <./pics/voronoi-dt3.pdf>]
+Overfull \hbox (3.3598pt too wide) in paragraph at lines 496--497
 []\OT1/cmr/m/n/12 Celice si po-na-vadi pred-sta-vljamo kot 2-dimenzionalne, ro-
 bove kot 1-dimen-
  []
 
-LaTeX Font Info:    Try loading font information for OML+cmr on input line 453.
-
-("C:\Program Files\MiKTeX\tex\latex\base\omlcmr.fd"
-File: omlcmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
-)
-LaTeX Font Info:    Font shape `OML/cmr/m/it' in size <12> not available
-(Font)              Font shape `OML/cmm/m/it' tried instead on input line 453.
- [17]
-<pics/rangeTree2.pdf, id=162, 299.55814pt x 273.4215pt>
-File: pics/rangeTree2.pdf Graphic file (type pdf)
-
-<use pics/rangeTree2.pdf>
-Package pdftex.def Info: pics/rangeTree2.pdf used on input line 463.
-(pdftex.def)             Requested size: 299.5574pt x 273.4208pt.
- [18] [19 <./pics/rangeTree2.pdf>] [20] [21] [22
+[20] [21] [22
 
 ]
 Poglavje 3.
-<pics/unitdisks.pdf, id=185, page=5, 281.45149pt x 265.3915pt>
+<pics/unitdisks.pdf, id=212, page=4, 281.45149pt x 265.3915pt>
+File: pics/unitdisks.pdf Graphic file (type pdf)
+
+<use pics/unitdisks.pdf, page 4>
+Package pdftex.def Info: pics/unitdisks.pdf, page4 used on input line 515.
+(pdftex.def)             Requested size: 168.87218pt x 159.23611pt.
+
+<pics/unitdisks.pdf, id=213, page=5, 281.45149pt x 265.3915pt>
 File: pics/unitdisks.pdf Graphic file (type pdf)
 
 <use pics/unitdisks.pdf, page 5>
-Package pdftex.def Info: pics/unitdisks.pdf, page5 used on input line 492.
+Package pdftex.def Info: pics/unitdisks.pdf, page5 used on input line 521.
 (pdftex.def)             Requested size: 168.87218pt x 159.23611pt.
 
 
-LaTeX Warning: \oval, \circle, or \line size unavailable on input line 532.
+LaTeX Warning: \oval, \circle, or \line size unavailable on input line 563.
 
-[23] <pics/grid.pdf, id=189, 225.2415pt x 169.0315pt>
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [23 <./pics/unitdisks.pdf>] [24 <./pics/unitdisks.pdf>] [25]
+<pics/grid.pdf, id=245, 225.2415pt x 169.0315pt>
 File: pics/grid.pdf Graphic file (type pdf)
  <use pics/grid.pdf>
-Package pdftex.def Info: pics/grid.pdf used on input line 543.
+Package pdftex.def Info: pics/grid.pdf used on input line 576.
 (pdftex.def)             Requested size: 270.28842pt x 202.83676pt.
-
-[24 <./pics/unitdisks.pdf>]
-<pics/unitdisks.pdf, id=200, page=6, 289.48149pt x 289.48149pt>
+ [26 <./pics/grid.pdf>] <pics/unitdisks.pdf, id=257, page=6, 289.48149pt x 289.
+48149pt>
 File: pics/unitdisks.pdf Graphic file (type pdf)
 
 <use pics/unitdisks.pdf, page 6>
-Package pdftex.def Info: pics/unitdisks.pdf, page6 used on input line 557.
+Package pdftex.def Info: pics/unitdisks.pdf, page6 used on input line 587.
 (pdftex.def)             Requested size: 173.69023pt x 173.69023pt.
- [25]
-<pics/path.pdf, id=205, 211.81433pt x 136.04727pt>
+ [27 <./pics/unitdisks.pdf>]
+<pics/path.pdf, id=283, 211.81433pt x 136.04727pt>
 File: pics/path.pdf Graphic file (type pdf)
  <use pics/path.pdf>
-Package pdftex.def Info: pics/path.pdf used on input line 585.
+Package pdftex.def Info: pics/path.pdf used on input line 615.
 (pdftex.def)             Requested size: 211.8138pt x 136.04692pt.
- [26]
+ [28 <./pics/path.pdf>] [29]
 
-LaTeX Warning: \oval, \circle, or \line size unavailable on input line 676.
+LaTeX Warning: \oval, \circle, or \line size unavailable on input line 706.
 
-[27] [28] <pics/separation.pdf, id=215, page=3, 289.48149pt x 289.48149pt>
+
+Overfull \hbox (0.91307pt too wide) in paragraph at lines 715--716
+[]\OT1/cmr/bx/n/12 Lema 3.3. []\OT1/cmr/m/it/12 Al-go-ri-tem Unweigh-ted-Shor-t
+est-Path(P,s) zgradi drevo SSSP v casu
+ []
+
+[30] [31]
+Overfull \hbox (10.43019pt too wide) in paragraph at lines 730--731
+[]\OT1/cmr/m/n/12 Izvajanje vr-stic 9-11 se iz-vede v casu $\OMS/cmsy/m/n/12 O
+\OT1/cmr/m/n/12 (\OMS/cmsy/m/n/12 j\OML/cmm/m/it/12 W[]\OMS/cmsy/m/n/12 j [] j\
+OML/cmm/m/it/12 W[]\OMS/cmsy/m/n/12 j\OT1/cmr/m/n/12 ) = \OMS/cmsy/m/n/12 O\OT1
+/cmr/m/n/12 (\OMS/cmsy/m/n/12 j\OML/cmm/m/it/12 W[]\OMS/cmsy/m/n/12 j [] \OML/c
+mm/m/it/12 n\OT1/cmr/m/n/12 )$.
+ []
+
+[32] <pics/separation.pdf, id=317, page=3, 289.48149pt x 289.48149pt>
 File: pics/separation.pdf Graphic file (type pdf)
 
 <use pics/separation.pdf, page 3>
-Package pdftex.def Info: pics/separation.pdf, page3 used on input line 737.
+Package pdftex.def Info: pics/separation.pdf, page3 used on input line 767.
 (pdftex.def)             Requested size: 173.69023pt x 173.69023pt.
-
-Overfull \hbox (6.232pt too wide) in paragraph at lines 744--745
+ [33 <./pics/separation.pdf>]
+Overfull \hbox (6.232pt too wide) in paragraph at lines 774--775
 []\OT1/cmr/m/n/12 Obravnavajmo pro-blem pri-do-bi-tve mi-ni-malne kar-di-nalne 
 pod-mnozice mno-
  []
 
-[29] [30] [31 <./pics/grid.pdf> <./pics/unitdisks.pdf>] [32 <./pics/path.pdf>]
-[33] [34 <./pics/separation.pdf>]
-Overfull \hbox (1.26984pt too wide) in paragraph at lines 760--761
-[]\OT1/cmr/m/n/12 kompaktna obrav-nava po-ve-zav v $\OML/cmm/m/it/12 G$ \OT1/cm
+
+Overfull \hbox (4.52953pt too wide) in paragraph at lines 790--791
+[]\OT1/cmr/m/n/12 Kompaktna obrav-nava po-ve-zav v $\OML/cmm/m/it/12 G$ \OT1/cm
 r/m/n/12 z upo-rabo sledecih oro-dij iz racunske
  []
 
+[34]
 
-Overfull \hbox (7.82921pt too wide) in paragraph at lines 763--764
-[]\OT1/cmr/m/n/12 Primer naj-krajsega ci-kla, ki pred-sta-vlja resitev pro-bl
-ema mi-ni-malne locitve,
- []
+LaTeX Warning: \oval, \circle, or \line size unavailable on input line 821.
 
-
-LaTeX Warning: \oval, \circle, or \line size unavailable on input line 791.
-
-[35
-
-] [36] [37] <pics/dual-lines-example.pdf, id=284, 297.51149pt x 93.40396pt>
+[35] [36] [37] <pics/dual-lines-example.pdf, id=341, 297.51149pt x 89.30363pt>
 File: pics/dual-lines-example.pdf Graphic file (type pdf)
 
 <use pics/dual-lines-example.pdf>
-Package pdftex.def Info: pics/dual-lines-example.pdf used on input line 823.
-(pdftex.def)             Requested size: 297.51076pt x 93.40373pt.
- [38 <./pics/dual-lines-example.pdf>]
-<pics/duality-vertical.pdf, id=310, 131.85963pt x 325.6165pt>
-File: pics/duality-vertical.pdf Graphic file (type pdf)
+Package pdftex.def Info: pics/dual-lines-example.pdf used on input line 863.
+(pdftex.def)             Requested size: 297.51076pt x 89.3034pt.
 
-<use pics/duality-vertical.pdf>
-Package pdftex.def Info: pics/duality-vertical.pdf used on input line 842.
-(pdftex.def)             Requested size: 131.8593pt x 325.61569pt.
+<pics/duality-vertical-slab.pdf, id=342, 131.26741pt x 88.15134pt>
+File: pics/duality-vertical-slab.pdf Graphic file (type pdf)
 
-<pics/dual_problem3.pdf, id=311, 193.12149pt x 200.14775pt>
+<use pics/duality-vertical-slab.pdf>
+Package pdftex.def Info: pics/duality-vertical-slab.pdf used on input line 871.
+
+(pdftex.def)             Requested size: 131.26707pt x 88.15111pt.
+
+<pics/dual_problem3.pdf, id=343, 193.12149pt x 200.14775pt>
 File: pics/dual_problem3.pdf Graphic file (type pdf)
 
 <use pics/dual_problem3.pdf>
-Package pdftex.def Info: pics/dual_problem3.pdf used on input line 848.
+Package pdftex.def Info: pics/dual_problem3.pdf used on input line 877.
 (pdftex.def)             Requested size: 193.12102pt x 200.14725pt.
 
-<pics/dual_problem4.pdf, id=312, 282.45525pt x 266.39525pt>
+<pics/dual_problem4.pdf, id=344, 282.45525pt x 266.39525pt>
 File: pics/dual_problem4.pdf Graphic file (type pdf)
 
 <use pics/dual_problem4.pdf>
-Package pdftex.def Info: pics/dual_problem4.pdf used on input line 854.
+Package pdftex.def Info: pics/dual_problem4.pdf used on input line 883.
 (pdftex.def)             Requested size: 282.45454pt x 266.39459pt.
- [39] [40 <./pics/duality-vertical.pdf>] [41 <./pics/dual_problem3.pdf>] [42 <.
-/pics/dual_problem4.pdf>] [43]
-Overfull \hbox (7.30232pt too wide) in paragraph at lines 925--926
+
+Overfull \hbox (11.05983pt too wide) in paragraph at lines 892--893
+\OT1/cmr/m/it/12 obrav-na-vamo po-i-zvedbe za ugo-ta-vlja-nje, ali je mnozica 
+$\OMS/cmsy/m/n/12 f\OML/cmm/m/it/12 b \OMS/cmsy/m/n/12 2 \OML/cmm/m/it/12 B \OM
+S/cmsy/m/n/12 j []$ 
+ []
+
+[38 <./pics/dual-lines-example.pdf>] [39 <./pics/duality-vertical-slab.pdf> <./
+pics/dual_problem3.pdf>] [40 <./pics/dual_problem4.pdf>] [41]
+Overfull \hbox (7.30232pt too wide) in paragraph at lines 953--954
 [][]\OT1/cmr/m/n/12 Cas zgra-di-tve dvo-di-men-zi-o-nal-nega obmocnega dre-ves
 a je $\OMS/cmsy/m/n/12 O\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 n [] n\OT1/cmr/m/n/12
  )$. Vsaka
  []
 
-
-Overfull \hbox (2.7229pt too wide) in paragraph at lines 930--932
+[42]
+Overfull \hbox (2.7229pt too wide) in paragraph at lines 958--960
 \OT1/cmr/m/n/12 po-i-zvedbo naj-blizjega so-seda. Po-i-zvedbe za $\OMS/cmsy/m/
 n/12 f\OML/cmm/m/it/12 b \OMS/cmsy/m/n/12 2 \OML/cmm/m/it/12 B \OMS/cmsy/m/n/12
  j []g$
  []
 
-[44] [45] [46]
-Warning: Indentation ends at level 1 in codebox on page 47.
+[43] [44]
+Warning: Indentation ends at level 1 in codebox on page 45.
 
-LaTeX Warning: \oval, \circle, or \line size unavailable on input line 1061.
-
-
-LaTeX Warning: \oval, \circle, or \line size unavailable on input line 1096.
+LaTeX Warning: \oval, \circle, or \line size unavailable on input line 1087.
 
 
-Overfull \hbox (0.65175pt too wide) in paragraph at lines 1096--1097
+LaTeX Warning: \oval, \circle, or \line size unavailable on input line 1122.
+
+
+Overfull \hbox (0.65175pt too wide) in paragraph at lines 1122--1123
  [] 
  []
 
-
-Overfull \hbox (5.46626pt too wide) in paragraph at lines 1102--1103
-[]\OT1/cmr/m/n/12 Opis al-go-ritma v obliki psev-do-kode pri-ka-zan na sliki 3.
-13[]. Kot pri splosnem
- []
-
-[47] [48] [49] [50
+[45] [46] [47] [48
 
 ]
 Poglavje 4.
-[51] [52] [53] [54]
-<pics/pointsToFaceHandlers-all.pdf, id=444, 409.02812pt x 649.61292pt>
+[49]
+LaTeX Font Info:    Try loading font information for OML+cmr on input line 1146
+.
+ ("C:\Program Files\MiKTeX\tex\latex\base\omlcmr.fd"
+File: omlcmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OML/cmr/m/it' in size <12> not available
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 1146.
+
+ [50] [51] [52]
+[53] <pics/pointsToFaceHandlers-all.pdf, id=480, 409.02812pt x 649.61292pt>
 File: pics/pointsToFaceHandlers-all.pdf Graphic file (type pdf)
 
 <use pics/pointsToFaceHandlers-all.pdf>
 Package pdftex.def Info: pics/pointsToFaceHandlers-all.pdf used on input line 1
-164.
+200.
 (pdftex.def)             Requested size: 245.41876pt x 389.77075pt.
- [55] [56 <./pics/pointsToFaceHandlers-all.pdf>] <pics/categorization.pdf, id=4
-89, 184.25136pt x 295.35344pt>
+
+<pics/categorization.pdf, id=481, 184.25136pt x 300.5559pt>
 File: pics/categorization.pdf Graphic file (type pdf)
 
 <use pics/categorization.pdf>
-Package pdftex.def Info: pics/categorization.pdf used on input line 1183.
-(pdftex.def)             Requested size: 184.2509pt x 295.3527pt.
+Package pdftex.def Info: pics/categorization.pdf used on input line 1210.
+(pdftex.def)             Requested size: 184.2509pt x 300.55515pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [57]
-[58 <./pics/categorization.pdf>]
-<pics/nrSideExample.pdf, id=505, 144.71866pt x 145.89807pt>
+ [54]
+[55 <./pics/pointsToFaceHandlers-all.pdf>] [56 <./pics/categorization.pdf>]
+<pics/nrSideExample.pdf, id=537, 144.62833pt x 145.89807pt>
 File: pics/nrSideExample.pdf Graphic file (type pdf)
 
 <use pics/nrSideExample.pdf>
-Package pdftex.def Info: pics/nrSideExample.pdf used on input line 1193.
-(pdftex.def)             Requested size: 144.71829pt x 145.89769pt.
- [59 <./pics/nrSideExample.pdf>]
-Overfull \hbox (11.1304pt too wide) in paragraph at lines 1204--1205
-\OML/cmm/m/it/12 point$ \OT1/cmr/m/n/12 pred-sta-vlja tocko $(\OML/cmm/m/it/12
- '[]\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 b\OT1/cmr/m/n/12 )\OML/cmm/m/it/12 ; '[]\
-OT1/cmr/m/n/12 (\OML/cmm/m/it/12 b\OT1/cmr/m/n/12 ))$ (glej po-glavje 3.2.3[]),
- po-tem $\OML/cmm/m/it/12 originalPoint$
- []
-
-[60] [61] <pics/range-dual-kd-2.pdf, id=528, 368.56546pt x 274.37608pt>
+Package pdftex.def Info: pics/nrSideExample.pdf used on input line 1220.
+(pdftex.def)             Requested size: 144.62796pt x 145.89769pt.
+ [57 <./pics/nrSideExample.pdf>] [58]
+<pics/range-dual-kd-2.pdf, id=557, 368.56546pt x 274.37608pt>
 File: pics/range-dual-kd-2.pdf Graphic file (type pdf)
 
 <use pics/range-dual-kd-2.pdf>
-Package pdftex.def Info: pics/range-dual-kd-2.pdf used on input line 1213.
+Package pdftex.def Info: pics/range-dual-kd-2.pdf used on input line 1237.
 (pdftex.def)             Requested size: 368.56456pt x 274.3754pt.
- [62 <./pics/range-dual-kd-2.pdf>]
+
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [63]
-Overfull \hbox (4.89227pt too wide) in paragraph at lines 1224--1225
+ [59]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [60 <./pics/range-dual-kd-2.pdf>]
+Overfull \hbox (4.89227pt too wide) in paragraph at lines 1248--1249
 \OT1/cmr/m/it/12 pl[]mo-di-fied\OT1/cmr/m/n/12 , ki kot osnovo upo-ra-blja ob-s
 tojeco funk-cijo v CGAL-u \OT1/cmr/m/it/12 win-dow[]que-
  []
 
-[64]
+[61]
 
-LaTeX Warning: \oval, \circle, or \line size unavailable on input line 1266.
+LaTeX Warning: \oval, \circle, or \line size unavailable on input line 1290.
 
 
-LaTeX Warning: \oval, \circle, or \line size unavailable on input line 1303.
+LaTeX Warning: \oval, \circle, or \line size unavailable on input line 1327.
 
-[65] [66] [67] [68]
+[62] [63] [64] [65] [66]
 Poglavje 5.
-[69
+[67
 
-] <pics/data_generation.pdf, id=607, page=1, 530.38153pt x 102.69768pt>
+] <pics/data_generation.pdf, id=639, page=1, 530.38153pt x 102.69768pt>
 File: pics/data_generation.pdf Graphic file (type pdf)
 
 <use pics/data_generation.pdf, page 1>
-Package pdftex.def Info: pics/data_generation.pdf, page1 used on input line 135
-4.
+Package pdftex.def Info: pics/data_generation.pdf, page1 used on input line 137
+8.
 (pdftex.def)             Requested size: 397.78517pt x 77.02306pt.
 
-<pics/data_generation.pdf, id=608, page=2, 530.38153pt x 102.69768pt>
+<pics/data_generation.pdf, id=640, page=2, 530.38153pt x 102.69768pt>
 File: pics/data_generation.pdf Graphic file (type pdf)
 
 <use pics/data_generation.pdf, page 2>
-Package pdftex.def Info: pics/data_generation.pdf, page2 used on input line 136
-0.
+Package pdftex.def Info: pics/data_generation.pdf, page2 used on input line 138
+4.
 (pdftex.def)             Requested size: 397.78517pt x 77.02306pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [70 <./pics/data_generation.pdf>] [71 <./pics/data_generation.pdf>]
-Overfull \hbox (6.94588pt too wide) in paragraph at lines 1372--1373
-[]\OT1/cmr/m/n/12 Kot drugo al-ter-na-tivo upo-ra-bimo mrezo enot-skih raz-dal
-j (glej po-glavje 2.4[]).
- []
+ [68 <./pics/data_generation.pdf>] [69 <./pics/data_generation.pdf>]
 
-[72] [73] [74] [75] [76]
+LaTeX Warning: Reference `grid-chapter' on page 70 undefined on input line 1396
+.
+
+[70] [71] [72] [73]
+Underfull \vbox (badness 1888) has occurred while \output is active []
+
+ [74]
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-<pics/separation-64-1-1000-narrow-2.png, id=664, 1734.48pt x 873.0216pt>
+<pics/separation-64-1-1000-narrow-2.png, id=696, 1734.48pt x 873.0216pt>
 File: pics/separation-64-1-1000-narrow-2.png Graphic file (type png)
 
 <use pics/separation-64-1-1000-narrow-2.png>
 Package pdftex.def Info: pics/separation-64-1-1000-narrow-2.png used on input l
-ine 1545.
+ine 1569.
 (pdftex.def)             Requested size: 520.34802pt x 261.9085pt.
 
-<pics/32-1-5000-stuffed.png, id=666, 1734.48pt x 873.0216pt>
+<pics/32-1-5000-stuffed.png, id=698, 1734.48pt x 873.0216pt>
 File: pics/32-1-5000-stuffed.png Graphic file (type png)
 
 <use pics/32-1-5000-stuffed.png>
-Package pdftex.def Info: pics/32-1-5000-stuffed.png used on input line 1551.
+Package pdftex.def Info: pics/32-1-5000-stuffed.png used on input line 1575.
 (pdftex.def)             Requested size: 520.34802pt x 261.9085pt.
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [77]
-[78 <./pics/separation-64-1-1000-narrow-2.png>] [79 <./pics/32-1-5000-stuffed.p
-ng>]
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
+[75]
+Underfull \vbox (badness 4181) has occurred while \output is active []
 
-Underfull \vbox (badness 1412) has occurred while \output is active []
+ [76]
+[77]
 
- [80]
-[81]
-Underfull \vbox (badness 10000) has occurred while \output is active []
+LaTeX Warning: Text page 78 contains only floats.
 
- [82]
-[83] [84
-
-]
+[78 <./pics/separation-64-1-1000-narrow-2.png>] [79 <./pics/32-1-5000-stuffed.p
+ng>] [80]
 Poglavje 6.
 
 Underfull \vbox (badness 5260) has occurred while \output is active []
 
- [85]
-<pics/lca.pdf, id=698, 200.14775pt x 180.87675pt>
+ [81
+
+]
+<pics/lca.pdf, id=724, 200.14775pt x 180.87775pt>
 File: pics/lca.pdf Graphic file (type pdf)
  <use pics/lca.pdf>
-Package pdftex.def Info: pics/lca.pdf used on input line 1650.
-(pdftex.def)             Requested size: 180.13129pt x 162.78757pt.
+Package pdftex.def Info: pics/lca.pdf used on input line 1676.
+(pdftex.def)             Requested size: 180.13129pt x 162.78845pt.
 
-(Separation3.bbl [86 <./pics/lca.pdf>] [87
+(Separation3.bbl [82 <./pics/lca.pdf>] [83
 
 ])
 
 Package caption Warning: Unused \captionsetup[lstlisting] on input line 39.
 See the caption package documentation for explanation.
 
-[88] (Separation3.aux) ) 
+[84] (Separation3.aux)
+
+LaTeX Warning: There were undefined references.
+
+ ) 
 Here is how much of TeX's memory you used:
- 8715 strings out of 493334
- 123290 string characters out of 3140953
- 231039 words of memory out of 3000000
- 12030 multiletter control sequences out of 15000+200000
- 20309 words of font info for 80 fonts, out of 3000000 for 9000
+ 8721 strings out of 493334
+ 123428 string characters out of 3140953
+ 232039 words of memory out of 3000000
+ 12034 multiletter control sequences out of 15000+200000
+ 20668 words of font info for 81 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 40i,13n,58p,2278b,582s stack positions out of 5000i,500n,10000p,200000b,50000s
- <C:\Users\lmilinkovic\AppData\Local\MiKTeX\2.9\fonts\p
-k\ljfour\jknappen\ec\dpi600\tcrm1200.pk><C:/Program Files/MiKTeX/fonts/type1/pu
-blic/amsfonts/cm/cmbx12.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfont
-s/cm/cmcsc10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10
-.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Pro
-gram Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Program Files/M
-iKTeX/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Program Files/MiKTeX/fonts/t
-ype1/public/amsfonts/cm/cmmi7.pfb><C:/Program Files/MiKTeX/fonts/type1/public/a
-msfonts/cm/cmmi8.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cm
-mi9.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/P
-rogram Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Files/
-MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Program Files/MiKTeX/fonts/
-type1/public/amsfonts/cm/cmr6.pfb><C:/Program Files/MiKTeX/fonts/type1/public/a
-msfonts/cm/cmr7.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmr
-8.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmr9.pfb><C:/Prog
-ram Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmsl12.pfb><C:/Program Files/Mi
-KTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX/fonts/t
-ype1/public/amsfonts/cm/cmsy6.pfb><C:/Program Files/MiKTeX/fonts/type1/public/a
-msfonts/cm/cmsy7.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cm
-sy8.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy9.pfb><C:/P
-rogram Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmti12.pfb><C:/Program Files
-/MiKTeX/fonts/type1/public/amsfonts/cm/cmti8.pfb><C:/Program Files/MiKTeX/fonts
-/type1/public/amsfonts/cm/cmtt12.pfb><C:/Program Files/MiKTeX/fonts/type1/publi
-c/amsfonts/latxfont/lcircle1.pfb><C:/Program Files/MiKTeX/fonts/type1/public/am
-sfonts/symbols/msbm10.pfb>
-Output written on Separation3.pdf (106 pages, 1062395 bytes).
+ 40i,13n,58p,2303b,582s stack positions out of 5000i,500n,10000p,200000b,50000s
+ <C:\Users\lmilinkovic\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\d
+pi600\tcrm1200.pk><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx1
+2.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmbxti10.pfb><C:/
+Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmcsc10.pfb><C:/Program Fil
+es/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Program Files/MiKTeX/fo
+nts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program Files/MiKTeX/fonts/type1/pu
+blic/amsfonts/cm/cmmi12.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfont
+s/cm/cmmi6.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pf
+b><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Program
+ Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi9.pfb><C:/Program Files/MiKTeX
+/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files/MiKTeX/fonts/type1/
+public/amsfonts/cm/cmr12.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfon
+ts/cm/cmr17.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmr6.pf
+b><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Program 
+Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Program Files/MiKTeX/f
+onts/type1/public/amsfonts/cm/cmr9.pfb><C:/Program Files/MiKTeX/fonts/type1/pub
+lic/amsfonts/cm/cmsl12.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts
+/cm/cmsy10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy6.pf
+b><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Program
+ Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Program Files/MiKTeX
+/fonts/type1/public/amsfonts/cm/cmsy9.pfb><C:/Program Files/MiKTeX/fonts/type1/
+public/amsfonts/cm/cmti12.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfo
+nts/cm/cmti8.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmtt12
+.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/latxfont/lcircle1.pfb
+><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on Separation3.pdf (100 pages, 1094662 bytes).
 PDF statistics:
- 795 PDF objects out of 1000 (max. 8388607)
+ 824 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 111 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 116 words of extra memory for PDF output out of 10000 (max. 10000000)
 

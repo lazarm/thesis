@@ -1,25 +1,5 @@
 \begin{thebibliography}{10}
 
-\bibitem{bkos-08-all}
-M.~d. Berg, O.~Cheong, M.~v. Kreveld, and M.~Overmars.
-\newblock {\em Computational Geometry: Algorithms and Applications}.
-\newblock Springer-Verlag, 3rd ed. edition, 2008.
-
-\bibitem{bkos-08-dual}
-M.~d. Berg, O.~Cheong, M.~v. Kreveld, and M.~Overmars.
-\newblock Duality.
-\newblock  \cite{bkos-08-all}, pages 177--179.
-
-\bibitem{bkos-08-kd}
-M.~d. Berg, O.~Cheong, M.~v. Kreveld, and M.~Overmars.
-\newblock Kd-trees.
-\newblock  \cite{bkos-08-all}, pages 99--105.
-
-\bibitem{bkos-08-range}
-M.~d. Berg, O.~Cheong, M.~v. Kreveld, and M.~Overmars.
-\newblock Range trees.
-\newblock  \cite{bkos-08-all}, pages 105--109.
-
 \bibitem{cgal:bfghhkps-lgk23-16b}
 H.~Br{\"o}nnimann, A.~Fabri, G.-J. Giezeman, S.~Hert, M.~Hoffmann, L.~Kettner,
   S.~Pion, and S.~Schirra.
@@ -37,12 +17,21 @@ S.~Cabello and M.~Jej{\v c}i{\v c}.
 \newblock Shortest paths in intersection graphs of unit disks.
 \newblock {\em Comput. Geom.}, 48(4):360--367, 2015.
 
+\bibitem{CM}
+S.~Cabello and L.~Milinković.
+\newblock Two optimization problems for unit disks, 2017.
+
 \bibitem{ChanS16}
 T.~M. Chan and D.~Skrepetos.
 \newblock All-pairs shortest paths in unit-disk graphs in slightly subquadratic
   time.
 \newblock In {\em 27th International Symposium on Algorithms and Computation,
   {ISAAC} 2016}, volume~64 of {\em LIPIcs}, pages 24:1--24:13, 2016.
+
+\bibitem{bkos-08-all}
+M.~de~Berg, O.~Cheong, M.~van Kreveld, and M.~Overmars.
+\newblock {\em Computational Geometry: Algorithms and Applications}.
+\newblock Springer-Verlag, 3rd ed. edition, 2008.
 
 \bibitem{cgal:dd-ss-15a}
 C.~Delage and O.~Devillers.
@@ -52,7 +41,7 @@ C.~Delage and O.~Devillers.
 
 \bibitem{Olivier}
 O.~Devillers.
-\newblock Improved incremental randomized delaunay triangulation.
+\newblock Improved incremental randomized {Delaunay} triangulation.
 \newblock In {\em Proceedings of the 14th Annual ACM Symposium on Computational
   Geometry}, pages 106--115, 1998.
 
@@ -64,8 +53,8 @@ A.~Efrat, A.~Itai, and M.~J. Katz.
 \bibitem{FGG06}
 Q.~Fang, J.~Gao, and L.~J. Guibas.
 \newblock Locating and bypassing routing holes in sensor networks.
-\newblock In {\em Proc. Mobile Networks and Applications}, volume~11, pages
-  187--200, 2006.
+\newblock In {\em Proc. Mobile Networks and Applications, {MONET} 2006},
+  volume~11, pages 187--200, 2006.
 
 \bibitem{cgal:hhkps-nt-16b}
 M.~Hemmer, S.~Hert, S.~Pion, and S.~Schirra.
@@ -75,7 +64,7 @@ M.~Hemmer, S.~Hert, S.~Pion, and S.~Schirra.
 
 \bibitem{cgal:k-vda2-15a}
 M.~Karavelas.
-\newblock {2D} voronoi diagram adaptor.
+\newblock {2D} {Voronoi} diagram adaptor.
 \newblock In {\em {CGAL} User and Reference Manual}. {CGAL Editorial Board},
   {4.6} edition, 2015.
 
@@ -84,6 +73,12 @@ Y.~Wang, J.~Gao, and J.~S. Mitchell.
 \newblock Boundary recognition in sensor networks by topological methods.
 \newblock In {\em Proceedings of the 12th Annual International Conference on
   Mobile Computing and Networking}, MobiCom '06, pages 122--133, 2006.
+
+\bibitem{DT1998}
+G.~Xia.
+\newblock The stretch factor of the {Delaunay} triangulation is less than
+  1.998.
+\newblock 2011.
 
 \bibitem{cgal:y-t2-16b}
 M.~Yvinec.
