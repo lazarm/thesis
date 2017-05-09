@@ -74,14 +74,14 @@
 \@writefile{lof}{\contentsline {figure}{\numberline {3.2}{\ignorespaces Graf $G(P)$, zgrajen nad mno\IeC {\v z}ico $P$ v sliki~\ref  {separation}.\relax }}{24}}
 \newlabel{gdisks}{{3.2}{24}}
 \@writefile{toc}{\contentsline {section}{\numberline {3.1}Drevo najkraj\IeC {\v s}ih poti v grafu enotskih krogov}{24}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1.1}Eksplicitna uporaba preiskovanja v \IeC {\v s}irino (BFS)}{24}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1.1}Eksplicitna uporaba iskanja v \IeC {\v s}irino (BFS)}{24}}
 \newlabel{bfs-theory}{{3.1.1}{24}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.3}{\ignorespaces Psevdokoda eksplicitnega (splo\IeC {\v s}nega) algoritma za izgradnjo drevesa najkraj\IeC {\v s}ih poti s preiskovanjem v \IeC {\v s}irino.\relax }}{25}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.3}{\ignorespaces Psevdokoda eksplicitnega (splo\IeC {\v s}nega) algoritma za izgradnjo drevesa najkraj\IeC {\v s}ih poti z iskanjem v \IeC {\v s}irino.\relax }}{25}}
 \newlabel{fig:genericBfs}{{3.3}{25}}
 \citation{CJ15}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1.2}Preiskovanje v \IeC {\v s}irino z uporabo kvadratne mre\IeC {\v z}e (grid)}{26}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1.2}Iskanje v \IeC {\v s}irino z uporabo kvadratne mre\IeC {\v z}e (grid)}{26}}
 \newlabel{grid-chapter}{{3.1.2}{26}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1.3}Prilagojen algoritem za enotske kroge (SSSP)}{26}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1.3}Prilagojen algoritem za enotske kroge (CJ)}{26}}
 \newlabel{sssp-tree}{{3.1.3}{26}}
 \@writefile{lof}{\contentsline {figure}{\numberline {3.4}{\ignorespaces Primer mre\IeC {\v z}nega grafa, v katerem do to\IeC {\v c}k posamezne celice dostopamo prek vozli\IeC {\v s}\IeC {\v c}a grafa (klju\IeC {\v c}a), ki sovpada s spodnjim levim vozli\IeC {\v s}\IeC {\v c}em celice. To\IeC {\v c}ke so predstavljene z isto barvo kot njihov klju\IeC {\v c}.\relax }}{27}}
 \newlabel{grid-fig}{{3.4}{27}}
@@ -97,8 +97,11 @@
 \newlabel{fig:SSSP}{{3.7}{30}}
 \newlabel{lema3}{{3.3}{31}}
 \newlabel{bigo1}{{3.1}{32}}
-\citation{CG16}
+\citation{eik-01}
+\citation{ChanS16}
+\newlabel{ssspIzrek}{{3.4}{33}}
 \@writefile{toc}{\contentsline {section}{\numberline {3.2}Minimalna lo\IeC {\v c}itev z enotskimi krogi}{33}}
+\citation{CG16}
 \citation{CM}
 \citation{ChanS16}
 \citation{CG16}
@@ -114,7 +117,7 @@
 \citation{bkos-08-all}
 \@writefile{lof}{\contentsline {figure}{\numberline {3.9}{\ignorespaces Prilagoditev splo\IeC {\v s}nega algoritma iz~\cite  {CG16} za izra\IeC {\v c}un minimalne lo\IeC {\v c}itve z enotskimi krogi.\relax }}{37}}
 \newlabel{fig:generic}{{3.9}{37}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.10}{\ignorespaces Na levi sliki sta prikazani to\IeC {\v c}ki $p$ in $q$ ter premica $m$ v primarnem prostoru. Desno so v dualnem prostoru prikazani dualni elementi: to\IeC {\v c}ka $m*$ ter premici $p*$ in $q*$. S sivo barvo je ozna\IeC {\v c}eno obmo\IeC {\v c}je (oziroma del njega), ki jo sestavlja mno\IeC {\v z}ica to\IeC {\v c}k, ki v primarnem prostoru predstavljajo premice, ki sekajo $s$.\relax }}{38}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.10}{\ignorespaces Na levi sliki sta prikazani to\IeC {\v c}ki $p$ in $q$ ter premica $m$ v primarnem prostoru. Desno so v dualnem prostoru prikazani dualni elementi: to\IeC {\v c}ka $m^*$ ter premici $p^*$ in $q^*$. S sivo barvo je ozna\IeC {\v c}eno obmo\IeC {\v c}je (oziroma del njega), sestavljeno iz mno\IeC {\v z}ice takih to\IeC {\v c}k, pri katerih njim dualne premice sekajo $s$.\relax }}{38}}
 \newlabel{dual-ex}{{3.10}{38}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.2.3}Hitrej\IeC {\v s}i algoritem}{38}}
 \newlabel{compact}{{3.2.3}{38}}
@@ -147,20 +150,20 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.2.1}Prilagoditev drevesa SSSP}{54}}
 \@writefile{lof}{\contentsline {figure}{\numberline {4.2}{\ignorespaces Vozli\IeC {\v s}\IeC {\v c}a drevesa SSSP, ki so ozna\IeC {\v c}ena glede na skupino, v katero so uvr\IeC {\v s}\IeC {\v c}ena glede na daljico $\sigma $. S krogi so ozna\IeC {\v c}ena vozli\IeC {\v s}\IeC {\v c}a $L0$, s polnimi krogi vozli\IeC {\v s}\IeC {\v c}a $L1$, s kvadrati vozli\IeC {\v s}\IeC {\v c}a $R0$ in s polnimi kvadrati vozli\IeC {\v s}\IeC {\v c}a $R1$. \relax }}{55}}
 \newlabel{categorization}{{4.2}{55}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.2}ImagePoint - implementacija to\IeC {\v c}ke preslikave $\varphi $}{55}}
 \@writefile{lof}{\contentsline {figure}{\numberline {4.3}{\ignorespaces Pri ra\IeC {\v c}unanju vrednosti atributa \textit  {nr} moramo za vsako to\IeC {\v c}ko in njenega star\IeC {\v s}a preveriti tudi orientacijo glede na $\sigma $. Pri tem sta dovoljeni samo orientacijiski vrednosti -1 in 1, 0 (kolinearnost) pa moramo vedno obravnavati kot levo ali desno orientacijo. V nasprotnem primeru bi $p$ in $v$ imela razli\IeC {\v c}ni vrednosti atributa $nr$.\relax }}{56}}
 \newlabel{pq-left-right}{{4.3}{56}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.2}ImagePoint - implementacija to\IeC {\v c}ke preslikave $\varphi $}{56}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.2.3}Kd drevo}{56}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.2.4}Obmo\IeC {\v c}no drevo}{58}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.4}{\ignorespaces Shema zgradbe sekundarnega obmo\IeC {\v c}nega drevesa, ki v vsakem vozli\IeC {\v s}\IeC {\v c}u kot vrednost hrani kd drevo.\relax }}{59}}
-\newlabel{range-dual-kd}{{4.4}{59}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {4.2.4.1}Poizvedbe v obmo\IeC {\v c}nem drevesu}{59}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.5}Celotna struktura algoritma}{60}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.5}{\ignorespaces Celotna shema algoritma za minimalno lo\IeC {\v c}itev.\relax }}{61}}
-\newlabel{fig:sep-overall-1}{{4.5}{61}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.6}Izgradnja minimalnega cikla}{62}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.4}{\ignorespaces Shema zgradbe sekundarnega obmo\IeC {\v c}nega drevesa, ki v vsakem vozli\IeC {\v s}\IeC {\v c}u kot vrednost hrani kd drevo.\relax }}{60}}
+\newlabel{range-dual-kd}{{4.4}{60}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.5}Celotna struktura algoritma}{61}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.5}{\ignorespaces Celotna shema algoritma za minimalno lo\IeC {\v c}itev.\relax }}{62}}
+\newlabel{fig:sep-overall-1}{{4.5}{62}}
 \@writefile{lof}{\contentsline {figure}{\numberline {4.6}{\ignorespaces Pomo\IeC {\v z}na funkcija algoritma za iskanje minimalne lo\IeC {\v c}itve nad ustreznimi pari s kd drevesom.\relax }}{63}}
 \newlabel{fig:sep-overall-2}{{4.6}{63}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.6}Izgradnja minimalnega cikla}{63}}
 \@writefile{toc}{\contentsline {chapter}{\numberline {5}Eksperimenti in rezultati}{65}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}

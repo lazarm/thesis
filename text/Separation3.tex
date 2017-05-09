@@ -529,10 +529,10 @@ Naj bo $G(P)$ graf z množico vozlišč $P$ in s povezavo med točkama $p,q \in 
 \section{Drevo najkrajših poti v grafu enotskih krogov}
 V nadaljevanju bomo opisali tri algoritme za izgradnjo drevesa najkrajših poti v grafu enotskih krogov. Tretji algoritem, ki ima najboljšo časovno zahtevnost v najslabšem primeru, je sestavni del našega izboljšanega algoritma za minimalno ločitev v grafu enotskih krogov, opisanega v poglavju~\ref{compact}.
 
-\subsection{Eksplicitna uporaba preiskovanja v širino (BFS)}
+\subsection{Eksplicitna uporaba iskanja v širino (BFS)}
 \label{bfs-theory}
 
-Najenostavnejši način izgradnje drevesa najkrajših poti nad množico točk $P$ je uporabiti preiskovanje v širino nad grafom $G$. V vrsti hranimo še ne obiskane točke, ki so sosedne že obiskanim (na začetku je to izbrani koren). Vsaki točki, ki jo obiščemo, nastavimo za starša sosedno točko, prek katere smo do nje prišli, in ji nastavimo razdaljo, ki je za 1 večja od razdalje njenega starša. Prav tako jo označimo kot obiskano točko in s tem preprečimo, da bi neko točko dodali v vrsto več kot enkrat. Psevdokoda algoritma je prikazana na sliki~\ref{fig:genericBfs}. 
+Najenostavnejši način izgradnje drevesa najkrajših poti nad množico točk $P$ je uporabiti iskanje v širino nad grafom $G$. V vrsti hranimo še ne obiskane točke, ki so sosedne že obiskanim (na začetku je to izbrani koren). Vsaki točki, ki jo obiščemo, nastavimo za starša sosedno točko, prek katere smo do nje prišli, in ji nastavimo razdaljo, ki je za 1 večja od razdalje njenega starša. Prav tako jo označimo kot obiskano točko in s tem preprečimo, da bi neko točko dodali v vrsto več kot enkrat. Psevdokoda algoritma je prikazana na sliki~\ref{fig:genericBfs}. 
 \begin{figure}[htp]
 \begin{center}
 \ovalbox{~~~~
@@ -565,17 +565,17 @@ Najenostavnejši način izgradnje drevesa najkrajših poti nad množico točk $P
 \end{codebox}
 \end{varwidth}
 ~~~~}\end{center}
-\caption{Psevdokoda eksplicitnega (splošnega) algoritma za izgradnjo drevesa najkrajših poti s preiskovanjem v širino.}
+\caption{Psevdokoda eksplicitnega (splošnega) algoritma za izgradnjo drevesa najkrajših poti z iskanjem v širino.}
 \label{fig:genericBfs}
 \end{figure}
-Očitna slabost algoritma je nujnost izgradnje grafa $G$, ki ima časovno zahtevnost $\OO(n^2)$ v najslabšem primeru. Časovna zahtevnost izgradnje drevesa najkrajših poti je $\OO(n + |E|)$, kjer $|E|$ predstavlja število povezav v grafu. To pomeni, da je izgradnja drevesa časovno odvisna od gostote grafa (ker povezave v grafu $G$ obstajajo samo med točkami z razdaljo največ 1), in v najslabšem primeru je čas izgradnje kvadratičen. Prednost uporabe algoritma s preiskovanjem v širino je enostavnost rešitve (in implementacije). V situacijah, kjer ima graf $G$ malo povezav in je vnaprej znan ali ga je treba izračunati v vsakem primeru, ima tak algoritem tudi očitno prednost pred ostalimi rešitvami. 
+Očitna slabost algoritma je nujnost izgradnje grafa $G$, ki ima časovno zahtevnost $\OO(n^2)$ v najslabšem primeru. Časovna zahtevnost izgradnje drevesa najkrajših poti je $\OO(n + |E|)$, kjer $|E|$ predstavlja število povezav v grafu. To pomeni, da je izgradnja drevesa časovno odvisna od gostote grafa (ker povezave v grafu $G$ obstajajo samo med točkami z razdaljo največ 1), in v najslabšem primeru je čas izgradnje kvadratičen. Prednost uporabe algoritma z iskanjem v širino je enostavnost rešitve (in implementacije). V situacijah, kjer ima graf $G$ malo povezav in je vnaprej znan ali ga je treba izračunati v vsakem primeru, ima tak algoritem tudi očitno prednost pred ostalimi rešitvami. 
 
 %\afterpage{\FloatBarrier}
 
-\subsection{Preiskovanje v širino z uporabo kvadratne mreže (grid)}
+\subsection{Iskanje v širino z uporabo kvadratne mreže (grid)}
 \label{grid-chapter}
 %\afterpage{\FloatBarrier}
-Graf enotske kvadratne mreže je lahko za preiskovanje v širino uporabljen kot alternativa klasičnemu algoritmu BFS nad grafom enotskih razdalj. Vsaki točki iz dane množice $P$ lahko izračunamo njen ključ tako, da poiščemo spodnje levo vozlišče celice grafa kvadratne mreže, v kateri se točka nahaja (glej sliko~\ref{grid-fig}). Graf $G$ lahko tako predstavimo s slovarjem, kjer ključi predstavljajo vozlišča grafa kvadratne mreže, kot vrednosti pa hranijo seznam vseh točk v celici, ki se nahaja zgoraj desno od ključa. Preiskovanje v širino nad takim grafom poteka tako, da za dano točko preverimo samo tiste kandidate, ki se nahajajo v isti ali eni izmed sosednjih celic grafa kvadratne mreže, točki pa povežemo, če je njuna razdalja največ 1.
+Graf enotske kvadratne mreže je lahko za iskanje v širino uporabljen kot alternativa klasičnemu algoritmu BFS nad grafom enotskih razdalj. Vsaki točki iz dane množice $P$ lahko izračunamo njen ključ tako, da poiščemo spodnje levo vozlišče celice grafa kvadratne mreže, v kateri se točka nahaja (glej sliko~\ref{grid-fig}). Graf $G$ lahko tako predstavimo s slovarjem, kjer ključi predstavljajo vozlišča grafa kvadratne mreže, kot vrednosti pa hranijo seznam vseh točk v celici, ki se nahaja zgoraj desno od ključa. Iskanje v širino nad takim grafom poteka tako, da za dano točko preverimo samo tiste kandidate, ki se nahajajo v isti ali eni izmed sosednjih celic grafa kvadratne mreže, točki pa povežemo, če je njuna razdalja največ 1.
 
 \begin{figure}[htp]
 \centerline{\includegraphics[scale=1.2]{pics/grid.pdf}}
@@ -585,9 +585,9 @@ Graf enotske kvadratne mreže je lahko za preiskovanje v širino uporabljen kot 
 
 Graf v taki obliki lahko zgradimo v linearnem času. Za vsako točko porabimo $\OO(1)$ časa, da izračunamo njen ključ in $\OO(1)$ časa, da jo vstavimo v seznam ključa. Ker graf med gradnjo drevesa najkrajših poti spreminjamo, ga moramo za vsako drevo zgraditi na novo. V tem smislu je od navadnega algoritma BFS bistveno hitrejši. Po drugi strani je tako kot pri BFS časovna zahtevnost izgradnje drevesa odvisna od porazdelitve točk. Večja kot je gostota točk, manj celic vsebuje točke oziroma je povprečje točk, ki jih posamezna celica vsebuje, višje.
 
-\subsection{Prilagojen algoritem za enotske kroge (SSSP)}
+\subsection{Prilagojen algoritem za enotske kroge (CJ)}
 \label{sssp-tree}
-V tem poglavju je opisan algoritem za izgradnjo drevesa SSSP (angl. \textit{single source shortest path}) iz~\cite{CJ15}. Gre za preiskovanje v širino nad grafom $G$ brez dejanske izgradnje grafa. Vhod algoritma je torej $P$, pri izgradnji drevesa pa se uporablja abstrakten graf $G$. Primer drevesa je prikazan na sliki~\ref{sssp-tree-ex}.
+V tem poglavju je opisan algoritem za izgradnjo drevesa SSSP (angl. \textit{single source shortest path}) iz~\cite{CJ15}. Gre za iskanje v širino nad grafom $G$ brez dejanske izgradnje grafa. Vhod algoritma je torej $P$, pri izgradnji drevesa pa se uporablja abstrakten graf $G$. Primer drevesa je prikazan na sliki~\ref{sssp-tree-ex}.
 
 \begin{figure}[htp]
 \centerline{\includegraphics[scale=0.6,page=6]{pics/unitdisks.pdf}}
@@ -715,7 +715,7 @@ Da dobimo odgovor na vprašanje, ali je nek kandidat $p$ vsebovan v $W_i$, upora
 
 \begin{lema}
 \label{lema3}
-Algoritem \textit{Unweigh\-ted\-Shor\-test\-Path(P,s)} zgradi drevo SSSP v času $\OO(n\log n)$, kjer je $n$ velikost množice $P$.
+Algoritem \textit{Unweigh\-ted\-Shor\-test\-Path(P,r)} zgradi drevo SSSP v času $\OO(n\log n)$, kjer je $n$ velikost množice $P$.
 \end{lema}
 
 \begin{proof}
@@ -757,13 +757,16 @@ Z uporabo leme~\ref{lema2}, ki pravi, da so množice $W_0,W_1,...$ parno disjunk
 \end{proof}
 
 \begin{izrek}
-Naj bo $P$ množica $n$ točk v ravnini in naj bo $s$ točka v $P$. V času $\OO(n\log n)$ lahko v neuteženem grafu $G$ izračunamo drevo najkrajših poti s podanim korenom $r$.
+\label{ssspIzrek}
+Naj bo $P$ množica $n$ točk v ravnini in naj bo $r$ točka v $P$. Drevo najkrajših poti s podanim korenom $r$ v neuteženem grafu $G$ lahko izračunamo v času $\OO(n\log n)$.
 \end{izrek}
 
 \begin{proof}
-Zaradi leme~\ref{lema3} porabi algoritem \textit{UnweightedShortestPath(P,r)} $\OO(n\log n)$ časa. Zaradi leme~\ref{lema2} tabela $\pi[\cdot]$ pravilno opisuje drevo najkrajših poti v $G$ s korenom $r$ in $dist[\cdot]$ pravilno opisuje razdalje najkrajših poti v $G$.
+Zaradi leme~\ref{lema3} porabi algoritem \textit{UnweightedShortestPath(P,r)} $\OO(n\log n)$ časa. Zaradi leme~\ref{lema2} tabela $\pi[\cdot]$ pravilno opisuje drevo najkrajših poti v $G$ s korenom $r$ in tabela $dist[\cdot]$ pravilno opisuje razdalje najkrajših poti v $G$.
 \end{proof}
 \afterpage{\FloatBarrier}
+
+Izrek~\ref{ssspIzrek} drži tudi za algoritma iz~\cite{eik-01} in~\cite{ChanS16}, ki smo ju omenili v uvodu.
 
 \section{Minimalna ločitev z enotskimi krogi}
 Ponovimo opis problema minimalne ločitve z enotskimi krogi.
@@ -862,11 +865,11 @@ Določene lastnosti, ki držijo v primarnem, držijo tudi v  dualnem prostoru. N
 \item Ohranja vrstni red: $p$ leži nad $l$ natanko takrat, ko $l^*$ leži nad $p^*$.  
 \end{itemize}
 
-Dualno transformacijo se lahko uporabi tudi na drugih objektih, kot so recimo daljice. Smiselna izbira za $s^*$, kjer je $s$ daljica $pq$, bi bila unija vseh dvojnikov točk na $s$. Rezultat je neskončna množica premic, ki se sekajo v eni točki. Grafično si to lahko predstavljamo kot unijo dveh območij $s^*$, ki sta omejeni s premicama $p^*$ in $q^*$ in se stikata v točki njunega presečišča (glej sliko~\ref{dual-ex})~\cite[poglavje 8.2]{bkos-08-all}.
+Dualno transformacijo se lahko uporabi tudi na drugih objektih, kot so recimo daljice. Smiselna izbira za $s^*$, kjer je $s$ daljica $pq$, bi bila unija vseh dualnih objektov premic, ki sekajo $s$. Rezultat je neskončna množica premic, ki se sekajo v eni točki. Grafično si to lahko predstavljamo kot unijo dveh območij $s^*$, ki sta omejeni s premicama $p^*$ in $q^*$ in se stikata v točki njunega presečišča (glej sliko~\ref{dual-ex})~\cite[poglavje 8.2]{bkos-08-all}.
 
 \begin{figure}[htp]
 \centerline{\includegraphics[scale=1]{pics/dual-lines-example.pdf}}
-\caption{Na levi sliki sta prikazani točki $p$ in $q$ ter premica $m$ v primarnem prostoru. Desno so v dualnem prostoru prikazani dualni elementi: točka $m*$ ter premici $p*$ in $q*$. S sivo barvo je označeno območje (oziroma del njega), ki jo sestavlja množica točk, ki v primarnem prostoru predstavljajo premice, ki sekajo $s$.} 
+\caption{Na levi sliki sta prikazani točki $p$ in $q$ ter premica $m$ v primarnem prostoru. Desno so v dualnem prostoru prikazani dualni elementi: točka $m^*$ ter premici $p^*$ in $q^*$. S sivo barvo je označeno območje (oziroma del njega), sestavljeno iz množice takih točk, pri katerih njim dualne premice sekajo $s$.} 
 \label{dual-ex}
 \end{figure}
 
@@ -1140,7 +1143,7 @@ V nadaljevanju sta opisani implementaciji algoritma za drevo najkrajših poti v 
 
 \section{Drevo najkrajših poti v grafu enotskih krogov}
 
-Algoritem SSSP za izgradnjo drevesa najkrajših poti smo implementirali z mislijo na možnost njegove neposredne uporabe v algoritmu za ločevanje s krogi. Posledično smo spustili nekaj funkcionalnosti dreves, ki jih kasneje v programu ne potrebujemo, po drugi strani pa dodali funkcionalnosti, ki se ne tičejo drevesa, so pa potrebne kasneje pri ločevanju. Tako na primer ne moremo dostopati do otrok vozlišč drevesa, po drugi strani pa imamo pri dodajanju točk v drevo slednje možnost shraniti v množice $L_i^j, D_i^j$, itd.
+Algoritem CJ za izgradnjo drevesa najkrajših poti smo implementirali z mislijo na možnost njegove neposredne uporabe v algoritmu za ločevanje s krogi. Posledično smo spustili nekaj funkcionalnosti dreves, ki jih kasneje v programu ne potrebujemo, po drugi strani pa dodali funkcionalnosti, ki se ne tičejo drevesa, so pa potrebne kasneje pri ločevanju. Tako na primer ne moremo dostopati do otrok vozlišč drevesa, po drugi strani pa imamo pri dodajanju točk v drevo slednje možnost shraniti v množice $L_i^j, D_i^j$, itd.
 
 Za implementacijo smo napisali razred \textit{SSSPTree}, ki kot notranje stanje v enem izmed svojih atributov hrani DT. Slednjo zgradi natanko enkrat pri inicializaciji. Konstruktor kot argument sprejme seznam točk $P$, z metodo \textit{createTreeFromRoot(Point\U 2 r)} pa zgradi drevo.
 
@@ -1166,12 +1169,12 @@ Kot smo omenili pri teoretičnem opisu algoritma v poglavju~\ref{sssp-tree}, pri
 V praksi se pri uporabi knjižnice CGAL izkaže, da je za iskanje najbližjega soseda bolje uporabiti DT. Do tega sklepa smo prišli z analizo implementacije obeh struktur:
 
 \begin{itemize}
-\item Za iskanje najbližjega soseda z VD uporabimo funkcijo \textit{locate(Point q)}, ki za rezultat vrne Voronoijevo celico, rob ali vozlišče. V našem primeru vedno iščemo najbližje Voronoijevo središče, tako da v primeru, da je rezultat vozlišče ali rob, vrnemo enega od enako oddaljenih središč. Ker v CGAL-u objekt VD interno hrani strukturo DT, v praksi potemtakem pravzaprav iščemo vozlišče v DT. Funkcija \textit{locate} za izračun uporablja funktor za iskanje najbližjega Delaunayevega vozlišča, ki je definiran z drugo predlogo VD-ja. Imenuje se \textit{Delaunay\U triangulation\U nearest\U site\U 2}. Ta nato kliče funkcijo \textit{nearest\U vertex (Point q)} v DT. Rezultat slednje je pravzaprav tisto, kar iščemo od samega začetka, zato se lahko znebimo VD kot vmesnika in direktno uporabljamo DT. 
-\item Poleg poenostavitve kode in rešitve je pomemben faktor tudi optimizacija. Problem najbližjega soseda je rešljiv v času $\OO(\log n)$, vendar ne z uporabo DT. Povprečna časovna zahtevnost funkcije \textit{nearest\U vertex(Point q)}, ki za iskanje najbližjega vozlišča uporablja sprehod po povezavah triangulacije (angl. \textit{line walk}), je $\OO(\sqrt{n})$. DT pa v CGAL-u vsebuje tudi funkcijo \textit{nearest\U vertex(Point q, Face\U handle hint)}, kateri kot drugi argument podamo lice v DT, pri katerem se iskanje začne. Če znamo podati dobro začetno lice, se časovna zahtevnost bistveno zmanjša (na $k$ korakov, kjer $k << n$). Problem pri uporabi VD je potem tudi ta, da njena funkcija \textit{locate} ne podpira dodatnega argumenta za začetno lice. Tudi če bi tako funkcijo napisali sami, bi nastal problem pri tem, kako najti primerno lice VD-ja oziroma kako dostopati do njega. 
+\item Za iskanje najbližjega soseda z VD uporabimo funkcijo \textit{locate(Point q)}, ki za rezultat vrne Voronoijevo celico, rob ali vozlišče. V našem primeru vedno iščemo najbližje Voronoijevo središče, tako da v primeru, da je rezultat vozlišče ali rob, vrnemo enega od enako oddaljenih središč. Ker v CGAL-u objekt VD interno hrani strukturo DT, v praksi potemtakem pravzaprav iščemo vozlišče v DT. Funkcija \textit{locate} za izračun uporablja funktor za iskanje najbližjega Delaunayevega vozlišča, ki je definiran z drugo predlogo VD-ja. Imenuje se \textit{Delaunay\U triangulation\U nearest\U site\U 2}. Ta nato kliče funkcijo \textit{nearest\U vertex (Point q)} v DT. Rezultat slednje je pravzaprav tisto, kar iščemo od samega začetka, zato se lahko znebimo VD kot vmesnika in direktno uporabljamo DT.
+\item Poleg poenostavitve kode in rešitve je pomemben faktor tudi optimizacija. Problem najbližjega soseda je rešljiv v času $\OO(\log n)$, vendar ne z uporabo DT. Povprečna časovna zahtevnost funkcije \textit{nearest\U vertex(Point\U 2 q)}, ki za iskanje najbližjega vozlišča uporablja sprehod po povezavah triangulacije (angl. \textit{line walk}), je $\OO(\sqrt{n})$. DT pa v CGAL-u vsebuje tudi funkcijo \textit{nearest\U vertex(Point q, Face\U handle hint)}, kateri kot drugi argument podamo lice v DT, pri katerem se iskanje začne. Če znamo podati dobro začetno lice, se časovna zahtevnost bistveno zmanjša (na $k$ korakov, kjer $k << n$). Problem pri uporabi VD je potem tudi ta, da njena funkcija \textit{locate} ne podpira dodatnega argumenta za začetno lice. Tudi če bi tako funkcijo napisali sami, bi nastal problem pri tem, kako najti primerno lice VD-ja oziroma kako dostopati do njega. 
 \item Sama izbira lica v DT je očitna. Za točko $q$, ki jo dobimo iz vrste, in točko $p$, s katero tvorita povezavo v DT(P) (glej psevdokodo~\ref{fig:SSSP}), imamo za poizvedbo točki $p$ najbližjega vozlišča dve možnosti za dobrega kandidata za začetno lice. Če $q\in DT(W_{i-1})$, je smiselen kandidat katerokoli lice vozlišča $q$, sicer pa je to katerokoli lice starša točke $q$ v drevesu SSSP, ker je starš zagotovo vsebovan v $DT(W_{i-1})$. 
 \end{itemize}
 
-Za razliko od VD, ki ima samo metodo za vstavljanje ene točke v strukturo, DT vsebuje tudi metodo, ki kot argument sprejme seznam točk. Te nato prostorsko sortira, preden jih eno po eno doda v strukturo~\cite{cgal:dd-ss-15a}. Prednost sortiranja je v tem, da so bili deli strukture, ki so obravnavani med vstavljanjem, z veliko verjetnostjo obravnavani tudi pri prejšnjem vstavljanju, in se zato z večjo verjetnostjo nahajajo v predpomnilniku kot v glavnem pomnilniku. Uporaba sortiranja ni optimalna izbira na vseh primerih vhodnih podatkov. Pri našem algoritmu se je izkazalo, da algoritem deluje počasneje, zato smo metodo prilagodili tako, da točk ne sortira. To niti ni toliko presenetljivo: vhodne točke, ki jih DT v $i$-ti iteraciji dobi iz seznama $W_{i-1}$, so deloma že smiselno sortirane. Poglejmo si, kako je zgrajen seznam $W_1$, ki vsebuje točke z razdaljo 1 od korena $r$. Za iskanje sosedov vozlišča $r$  uporabimo krožni iterator, ki se začne pri poljubnem sosedu in se nato s pomočjo lic premika do naslednjega. Sosedi si zato sledijo v smiselnem zaporedju, v katerem so tudi shranjeni v seznam $W_1$. Ko obiščemo vse sosede, moramo obiskati še vse sosede sosedov. Začnemo pri prvem obiskanem sosedu, in zopet s krožnim iteratorjem pogledamo vse sosede, in tako naprej do ostalih. V splošnem velja, da bodo sosedje soseda $i$ bližje sosedom soseda $i+1$ kot soseda $i+2$, in s prvimi bolj verjetno tvorili povezavo v $DT(W_i)$ kot z drugimi. Za novonastali trikotnik, ki je dodan v triangulacijo, lahko tako pričakujemo, da meji na trikotnik, dodan v prejšnjem koraku.
+Za razliko od VD, ki ima samo metodo za vstavljanje ene točke v strukturo, DT vsebuje tudi metodo, ki kot argument sprejme seznam točk. Te nato prostorsko sortira, preden jih eno po eno doda v strukturo~\cite{cgal:dd-ss-15a}. Prednost sortiranja je v tem, da so bili deli strukture, ki so obravnavani med vstavljanjem, z veliko verjetnostjo obravnavani tudi pri prejšnjem vstavljanju, in se zato z večjo verjetnostjo nahajajo v predpomnilniku kot v glavnem pomnilniku. Uporaba sortiranja ni optimalna izbira na vseh primerih vhodnih podatkov. Pri našem algoritmu se je izkazalo, da algoritem deluje počasneje, zato smo metodo prilagodili tako, da točk ne sortira. To niti ni toliko presenetljivo: vhodne točke, ki jih DT v $i$-ti iteraciji dobi iz seznama $W_{i-1}$, so deloma že smiselno sortirane. Poglejmo si, kako je zgrajen seznam $W_1$, ki vsebuje točke z razdaljo 1 od korena $r$. Za iskanje sosedov vozlišča $r$  uporabimo krožni iterator, ki se začne pri poljubnem sosedu in se nato s pomočjo lic premika do naslednjega. Sosedje si zato sledijo v smiselnem zaporedju, v katerem so tudi shranjeni v seznam $W_1$. Ko obiščemo vse sosede, moramo obiskati še vse sosede sosedov. Začnemo pri prvem obiskanem sosedu, in zopet s krožnim iteratorjem pogledamo vse sosede, in tako naprej do ostalih. V splošnem za tri zaporedne sosede $u, v, w$ korena $r$ velja, da bodo sosedje vozlišča $u$ bližje sosedom vozlišča $v$ kot sosedom vozlišča $w$, in s prvimi bolj verjetno tvorili povezavo v $DT(W_1)$ kot z drugimi. Ko gradimo $DT(W_i)$, lahko zato za trikotnik, dodan v triangulacijo z $j$-to točko iz seznama $W_i$, pričakujemo, da bo mejil na trikotnik, dodan z $(j-1)$-to točko seznama.
 
 \bigbreak
 
@@ -1211,6 +1214,7 @@ Za vsak $q\in Q$ poiščemo lice $f$, ki ga bomo uporabili kot namig pri iskanju
 Povezave oziroma sosede $q$ najdemo s krožnim iteratorjem, ki ga vrne metoda \textit{incident\U vertices(q)} v DT. Ker ima DT v knjižnici CGAL poleg standardnih vozlišč še eno neskončno vozlišče, moramo takega soseda ignorirati. Za ostale sosede $p$ najprej preverimo, če je njena točka bila že obiskana. Če ni, poiščemo njenega najbližjega soseda $w$ v $W_{i-1}$ z metodo \textit{nearestVertex}, ki ji kot argument podamo $p$ in lice $f$. Če $|pw|\le 1$, ustvarimo objekt tipa \textit{shared\U ptr\textless Point\U 2 \textgreater}, ki hrani kazalec na $w$. Ta objekt nato nastavimo kot starša točki v $p$. Točko tudi označimo kot obiskano in ji nastavimo razdaljo $i$, vozlišče $p$ pa vstavimo v seznam $W_i$. Na koncu iteracije $i$ seznam $W_{i-1}$ zamenjamo z $W_i$.
 
 \section{Minimalna ločitev z enotskimi krogi}
+Pri implementaciji minimalne ločitve je definicija daljice $\sigma$ ohlapnejša. Za veljavno vhodno daljico programa je dovolj, da je navpična ter da je $s$ spodnje in $t$ zgornje oglišče. Za daljico torej ni potrebno, da leži na ordinatni osi ali da so koordinate oglišča $s$ enake $(0, 0)$. V splošnem položaju nobena izmed vhodnih točk iz $P$ nima enake vrednosti koordinate $y$ kot krajišča daljice $\sigma$.
 \subsection{Prilagoditev drevesa SSSP}
 
 Pri uporabi prvega konstruktorja SSSPTree vsem danim točkam vozlišč v DT samo nastavi kazalec na njihovega starša, ki ga hranijo kot atribut. Drugi konstruktor razreda SSSPTree sprejme kot tretji argument še daljico $\sigma$, za katero program vedno predpostavi, da je navpična in da je krajišče daljice $s$ pod krajiščem $t$. Z uporabo konstruktorja s tremi argumenti metoda za izgradnjo drevesa poleg staršev točkam nastavi še vrednosti $N[\cdot]$ v atribut $nr$ in jih kategorizira tako, da jih doda v enega od štirih seznamov tipa \textit{vector}, ki jih razred SSSPTree hrani kot zasebne atribute. Seznami se imenujejo $L0, L1, R0, R1$, kjer za $L0$ velja $L0[i] = L_0^i$, za $R0$ pa $R0[i] = D_0^i$. Ti seznami kot elemente tako hranijo zopet sezname, šele ti pa dejansko hranijo točke glede na njihovo razdaljo od korena drevesa. Primer kategorizacije je prikazan na sliki~\ref{categorization}.
@@ -1221,7 +1225,7 @@ Pri uporabi prvega konstruktorja SSSPTree vsem danim točkam vozlišč v DT samo
 \label{categorization}
 \end{figure}
 
-Za točko $p$ izračunamo $nr$ tako, da prevzamemo vrednost $nr$ njegovega starša $q$ in jo spremenimo samo v primeru, če daljica $qp$ seka $\sigma$. Za to uporabimo funkcijo v CGAL-u \textit{do\U intersect(seg1, seg2)}. Ker obstaja možnost, da $p$ ali $q$ ležita na daljici $\sigma$ ali sta kolinearna s krajiščema $\sigma$ (ker je $\sigma$ vedno navpična daljica, to pomeni, da imajo vse tri enako vrednost koordinate $y$), je potrebno definirati, kaj storiti v takem primeru. Za točke s tako lego vedno določimo, da so desno od $\sigma$.  V primeru, da $p$ leži na $\sigma$, moramo zato za spremembo njenega atributa $nr$ poleg presečišč preveriti tudi, da se $q$ in $p$ nahajata na različni strani. $p.nr\neq q.nr$, kjer $p\in \sigma$, velja torej natanko takrat, ko se $q$ nahaja levo od $p$. S tem dodatnim pogojem zagotovimo konsistentno obnašanje algoritma (glej tudi sliko~\ref{pq-left-right}).
+Za točko $p$ izračunamo $nr$ tako, da prevzamemo vrednost $nr$ njegovega starša $q$ in jo spremenimo samo v primeru, če daljica $qp$ seka $\sigma$. Za to uporabimo funkcijo v CGAL-u \textit{do\U intersect(seg1, seg2)}. V primeru degeneracije, kjer $p$ ali $q$  ležita na daljici $\sigma$ ali sta kolinearna s krajiščema $\sigma$, za točke s tako lego vedno določimo, da so desno od $\sigma$.  V primeru, da $p$ leži na $\sigma$, moramo zato za spremembo njenega atributa $nr$ poleg presečišč preveriti tudi, da se $q$ in $p$ nahajata na različni strani. $p.nr\neq q.nr$, kjer $p\in \sigma$, velja torej natanko takrat, ko se $q$ nahaja levo od $p$. S tem dodatnim pogojem zagotovimo konsistentno obnašanje algoritma (glej tudi sliko~\ref{pq-left-right}).
 
 \begin{figure}[htp]
 \centerline{\includegraphics[scale=1]{pics/nrSideExample.pdf}}
@@ -1244,7 +1248,7 @@ Kot osnovo smo za poizvedbe najbližjega soseda uporabili funkcijo \textit{searc
 Za dvodimenzionalna območna drevesa smo uporabili implementacijo v knjiž\-ni\-ci CGAL, ki jo predstavlja razred \textit{Range\texttt{\_}tree\texttt{\_}2}. Vsako vozlišče hrani par, kjer prva komponenta hrani ključ, druga pa vrednost vozlišča. Slednja dodatno opisuje vozlišče in je lahko tudi odsotna, ključ pa se uporablja pri izgradnji drevesa in poizvedbah. Oba argumenta sta predlogi, kar pomeni, da moramo pri konstrukciji drevesa zanju podati konkretna tipa. 
 Za ključ smo uporabili naš razred \textit{ImagePoint}, kot vrednost pa vsako vozlišče hrani svoje kd drevo. Zaradi tega smo morali vnesti nekaj sprememb v CGAL-u. Razred za značilnosti območnih dreves \textit{Range\U tree\U map\U traits\U 2} je parametriziran z modelom predstavitve dvodimenzionalnih točk tipa \textit{Point\U 2} in s tipom za vrednost vozlišča. Drevo torej kot ključ vedno uporabi objekt tipa \textit{Point\U 2 \textless K \textgreater}, kjer je $K$ model predstavitve (v naši implementaciji je ta vedno \textit{Cartesian \textless double \textgreater}). Iz razreda značilnosti smo zato odstranili prvi parameter in namesto tega samodejno nastavili tip ključa na \textit{ImagePoint}. Spremeniti smo morali tudi operatorja za primerjavo ključev v razredih \textit{C\U Compare\U 1} (za primarno drevo) in \textit{C\U Compare\U 2} (za sekundarno drevo). Funkciji kličeta predikata \textit{compare\U x} oziroma \textit{compare\U y} neposredno nad objekti obeh ključev. Ker so objekti v našem primeru tipa \textit{ImagePoint}, smo funkciji spremenili tako, da predikatoma poda atribut ključev \textit{point}, ki je tipa \textit{Point\U 2} in hrani preslikano točko.
 
-Pri inicializaciji drevesu podamo seznam slik tipa \textit{ImagePoint} in praznih kd dreves. Nato se iterativno sprehodimo (tako kot pri preiskovanju v širino) po prvem nivoju drevesa - primarnem drevesu - s funkcijo \textit{traverse\U and\U popu\-la\-te\U with\U data}. Za vsako vozlišče pokličemo funkcijo \textit{build\U Kd\U on\U la\-yer2}, ki z rekurzivnim \textit{postorder} sprehodom za vsako vozlišče v sekundarnem drevesu, na katerega kaže vozlišče v primarnem drevesu, vstavi v (do tistega trenutka prazno) njegovo kd drevo točke, ki jih hranita kd drevesi njegovih otrok. V listih kd drevesa vsebujejo samo točko v primarnem prostoru, pri čemer je njej pripadajoča točka preslikave $\varphi$ uporabljena kot ključ vozlišča. Rekurzivni klic funkcije se torej kliče pred vstavljanjem točk v kd drevo. S pomočjo rekurzije je vsakemu notranjemu vozlišču v sekundarnem drevesu seznam točk v njegovem poddrevesu, ki ga potrebujemo za izgradnjo njegovega kd drevesa, direktno podan preko kd dreves njegovih otrok. Če bi kd drevesa gradili od zgoraj navzdol v sekundarnem drevesu, bi morali za vsako vozlišče narediti sprehod po njegovem poddrevesu. Primarno drevo za razliko od sekundarnih ne hrani nobenih dreves kot vrednosti v svojih vozliščih oziroma so ta prazna. Shema zgradbe sekundarnega drevesa je prikazana na sliki~\ref{range-dual-kd}.
+Pri inicializaciji drevesu podamo seznam slik tipa \textit{ImagePoint} in praznih kd dreves. Nato se iterativno sprehodimo (tako kot pri iskanju v širino) po prvem nivoju drevesa - primarnem drevesu - s funkcijo \textit{traverse\U and\U popu\-la\-te\U with\U data}. Za vsako vozlišče pokličemo funkcijo \textit{build\U Kd\U on\U la\-yer2}, ki z rekurzivnim \textit{postorder} sprehodom za vsako vozlišče v sekundarnem drevesu, na katerega kaže vozlišče v primarnem drevesu, vstavi v (do tistega trenutka prazno) njegovo kd drevo točke, ki jih hranita kd drevesi njegovih otrok. V listih kd drevesa vsebujejo samo točko v primarnem prostoru, pri čemer je njej pripadajoča točka preslikave $\varphi$ uporabljena kot ključ vozlišča. Rekurzivni klic funkcije se torej kliče pred vstavljanjem točk v kd drevo. S pomočjo rekurzije je vsakemu notranjemu vozlišču v sekundarnem drevesu seznam točk v njegovem poddrevesu, ki ga potrebujemo za izgradnjo njegovega kd drevesa, direktno podan preko kd dreves njegovih otrok. Če bi kd drevesa gradili od zgoraj navzdol v sekundarnem drevesu, bi morali za vsako vozlišče narediti sprehod po njegovem poddrevesu. Primarno drevo za razliko od sekundarnih ne hrani nobenih dreves kot vrednosti v svojih vozliščih oziroma so ta prazna. Shema zgradbe sekundarnega drevesa je prikazana na sliki~\ref{range-dual-kd}.
 
 \begin{figure}[htp]
 \centerline{\includegraphics[scale=1]{pics/range-dual-kd-2.pdf}}
@@ -1255,7 +1259,7 @@ Pri inicializaciji drevesu podamo seznam slik tipa \textit{ImagePoint} in prazni
 \subsubsection{Poizvedbe v območnem drevesu}
 Razredu \textit{Range\U tree\U d} smo za poizvedbe dodali funkcijo \textit{window\U que\-ry\U im\-pl\U mo\-di\-fied}, ki  kot osnovo uporablja obstoječo funkcijo v CGAL-u \textit{window\U que\-ry\U impl}. Argumenta funkcije sta interval $I$ in točka $q$, ki jo uporabimo za poizvedbe najbližjega soseda v kd drevesih. Interval $I$ je odvisen od $\varphi (a)$ in je zaprt. Metoda vrne par vrednosti, kjer je prva logičnega tipa, druga pa tipa \textit{Point\U 2}. Pri originalni CGAL metodi sta argumenta interval $I$ in množica $it$, kamor se shranjujejo vsi rezultati območne poizvedbe.
 
-Če za vozlišče $w$ v primarnem drevesu ugotovimo, da njegovo celotno poddrevo ustreza pogojem poizvedbe, nadaljujemo s preiskovanjem v njegovem sekundarnem drevesu. Če za vozlišče $v$ v sekundarnem vozlišču ugotovimo, da so vsa vozlišča v njegovem poddrevesu vsebovana v intervalu $I$, ne dodamo vso poddrevo v rezultat, kot je to storjeno v izvirni metodi, temveč opravimo še poizvedbo najbližjega soseda (z območnim iskanjem) točke $a$ v kd drevesu vozlišča $v$. Če nas poizvedba nad območnim drevesom pripelje do lista primarnega ali sekundarnega drevesa, potem preverimo, če je to vozlišče vsebovano v intervalu $I$. Če je temu tako, primarno točko, iz katere izhaja točka preslikave $\varphi$, ki predstavlja ključ vozlišča $w$, vrnemo kot rezultat.
+Če za vozlišče $w$ v primarnem drevesu ugotovimo, da njegovo celotno poddrevo ustreza pogojem poizvedbe, nadaljujemo z iskanjem v njegovem sekundarnem drevesu. Če za vozlišče $v$ v sekundarnem vozlišču ugotovimo, da so vsa vozlišča v njegovem poddrevesu vsebovana v intervalu $I$, ne dodamo vso poddrevo v rezultat, kot je to storjeno v izvirni metodi, temveč opravimo še poizvedbo najbližjega soseda (z območnim iskanjem) točke $a$ v kd drevesu vozlišča $v$. Če nas poizvedba nad območnim drevesom pripelje do lista primarnega ali sekundarnega drevesa, potem preverimo, če je to vozlišče vsebovano v intervalu $I$. Če je temu tako, primarno točko, iz katere izhaja točka preslikave $\varphi$, ki predstavlja ključ vozlišča $w$, vrnemo kot rezultat.
 
 Interval $I$ je poleg slike $\varphi (a)$ odvisen tudi od tega, ali v drevesu iščemo tako točko $b$, da $ab$ seka $\sigma$ ali ne. Če ja, potem je območje iskanja drugi kvadrant v $\varphi$-ravnini (glej sliko~\ref{dualp2}), sicer sta to prvi in tretji kvadrant. Za te potrebe smo napisali metodi \textit{rangeTree\U query} in \textit{rangeTree\U query\U complement}. Pri prvi je iz točke poizvedbe $a$ interval zgrajen kot pravokotnik s spodnjim levim ogliščem $(a.x, -\infty)$ in zgornjim desnim ogliščem $(\infty, a.y)$. Pri drugi metodi sta zgrajena dva intervala: prvi ima za levo krajišče točko $(-\infty, -\infty)$ in za desno krajišče točko $a$, drugi pa za levo krajišče točko $a$, za desno pa točko $(\infty, \infty)$. Najprej se naredi poizvedba s prvim intervalom in le če slednja ne vrne nobenega rezultata, se poizvedba naredi tudi z drugim intervalom.
 
@@ -1399,9 +1403,9 @@ Točke smo generirali naključno znotraj sledečih poligonskih domen: pravokotni
 Pri večjih domenah in manjših vhodnih podatkih je bil izziv zapolniti prostor, ki je pogoj za obstoj rešitve minimalnega problema, saj so točke bolj razpršene. Za vhodne podatke sicer nismo zahtevali pogoja, da je njihov graf $G$ povezan, smo pa želeli, da je velikost največje komponente $G$ dovolj podobna velikosti celotnega grafa $G$. S tem smo povečali možnost obstoja rešitve in dosegli, da smo dejansko testirali želeno število vhodnih podatkov. Nekatere kombinacije (na primer $1000$ točk na domeni z zunanjim pravokotnikom $128\times 32$) smo zato izpustili, pri drugih pa smo problem rešili tako, da smo za generirane točke preverili, da imajo $1 << m << k$ sosedov (točk, od katerih so oddaljene za največ $1$) med trenutnimi vhodnimi podatki. Če pogoj ni bil izpolnjen, smo generirano točko zavrgli. S spodnjo mejo smo zagotovili povezanost grafa, z zgornjo mejo pa določili intenzivnost zapolnjevanja prostora domene. Minimalno vrednost za $k$, ki še dovolj zapolni domeno tako, da je luknja obdana s točkami iz vseh strani, smo za vsako kombinacijo posebej dobili s poskušanjem različnih vrednosti. $k$ se je ponavadi gibal med $3$ in $5$ (manjši $k$ pomeni hitrejše zapolnjevanje prostora, zato smo ga uporabili pri večjih domenah). Smiselno zaporedje generiranih točk smo pri eksperimentih nevtralizirali tako, da so točke pred uporabo algoritmov naključno sortirane.
 
 \section{Drevo najkrajših poti v grafu enotskih krogov}
-Implementacijo algoritma SSSP smo primerjali z dvema očitnima alternativnima algoritmoma za drevesa najkrajših poti. Pri prvi eksplicitno zgradimo graf $G=\GG(P)$ tako, da za vse možne pare $p, q\in P$ dodamo povezavo $pq$ v strukturo grafa, če je razdalja med $p$ in $q$ največ 1 (glej odsek~\ref{bfs-theory}). Za vsako točko iz vhodnega seznama, ki ga nespremenjenega hranimo ves čas, zgradimo vozlišče. Za vozlišče grafa smo napisali strukturo \textit{GraphNode}, ki hrani točko tipa \textit{Point\U 2}, kazalec na starša in sosede kot seznam indeksov, ki določajo položaj soseda/točke v vhodnem seznamu. Za vsako vozlišče preverimo razdaljo do ostalih vozlišč (brez simetričnih primerov; skupno preverimo torej $\frac{n(n-1)}{2}$ parov) in za vsak par vozlišč z razdaljo največ 1 dodamo drug drugega v seznam sosedov. Drevo najkrajših poti potem zgradimo s klasičnim algoritmom za preiskovanje v širino (glej sliko~\ref{fig:genericBfs}). 
+Implementacijo algoritma CJ smo primerjali z dvema očitnima alternativnima algoritmoma za drevesa najkrajših poti. Pri prvi eksplicitno zgradimo graf $G=\GG(P)$ tako, da za vse možne pare $p, q\in P$ dodamo povezavo $pq$ v strukturo grafa, če je razdalja med $p$ in $q$ največ 1 (glej odsek~\ref{bfs-theory}). Za vsako točko iz vhodnega seznama, ki ga nespremenjenega hranimo ves čas, zgradimo vozlišče. Za vozlišče grafa smo napisali strukturo \textit{GraphNode}, ki hrani točko tipa \textit{Point\U 2}, kazalec na starša in sosede kot seznam indeksov, ki določajo položaj soseda/točke v vhodnem seznamu. Za vsako vozlišče preverimo razdaljo do ostalih vozlišč (brez simetričnih primerov; skupno preverimo torej $\frac{n(n-1)}{2}$ parov) in za vsak par vozlišč z razdaljo največ 1 dodamo drug drugega v seznam sosedov. Drevo najkrajših poti potem zgradimo s klasičnim algoritmom za iskanje v širino (glej sliko~\ref{fig:genericBfs}). 
 
-Kot drugo alternativo uporabimo mrežo enotskih razdalj (glej odsek~\ref{grid-chapter}). Dve točki $(x,y)$ in $(x',y')$ se nahajata v isti celici mreže natanko takrat, ko velja $(\lfloor x\rfloor ,\lfloor y\rfloor)=(\lfloor x'\rfloor ,\lfloor y'\rfloor)$. Vse točke v celici $c$ shranimo v seznam $\ell(c)$. Vse neprazne sezname $\ell(c)$ shranimo v razpršeno tabelo, v kateri je kot ključ uporabljeno spodnje levo oglišče celice. S tako strukturo nato izvedemo nekakšno preiskovanje v širino. Seznam $\ell(c)$ celice $c$ hrani točke, ki še niso bile obiskane z drevesom najkrajših poti. Ko procesiramo točko $p$ v celici $c$, moramo kot kandidate obravnavati vse ostale točke v $\ell(c)$ in točke v seznamih osmih sosednih celic. Vsaka točka, ki je sosedna $p$, je nato odstranjena iz seznama svoje celice. Enostavno se da najti primere, kjer bi bila časovna zahtevnost izgradnje drevesa kvadratična. Za vsako najkrajše drevo razpršeno tabelo zgradimo od začetka. Ker je čas, ki ga porabimo za to, zanemarljiv, čas predprocesiranja za mrežo ni prikazan med rezultati. Za seznam točk v celicah smo pri implementaciji uporabili strukturo \textit{list} in ne \textit{vector}. Razlog za to je ta, da je vsaka točka slej ko prej odstranjena iz seznama svoje celice. \textit{vector} v C++ omogoča samo brisanje vsebine elementa seznama na $i$-tem mestu, ne pa brisanja samega elementa oziroma je časovna zahtevnost tega $O(n)$. Po drugi strani \textit{list} porabi nekaj več spomina, ker vsak element hrani še kazalca na prejšnji in naslednji element, ima enak čas vstavljanja elementa na konec seznama kot \textit{vector}, vendar je časovna zahtevnost brisanja (in vstavljanja) elementa sredi seznama $O(1)$, ker samo preveže skupaj njegovega predhodnika in naslednika (velika prednost tipa \textit{vector} pred \textit{list} je sicer v tem, da je časovna zahtevnost dostopa do naključnega elementa seznama $\OO(1)$). Za razpršeno tabelo celic smo uporabili strukturo \textit{unordered\U map}, ki kot ključ hrani par celih števil, ki predstavljajo spodnje levo oglišče celice. Za ključ smo morali definirati tudi dobro \textit{hash} funkcijo, odporno na trke (angl. \textit{collisions}). Uporabili smo Cantorjevo funkcijo $\pi (k_1, k_2) = \frac{1}{2}(k_1+k_2)(k_1+k_2+1) + k_2$.
+Kot drugo alternativo uporabimo mrežo enotskih razdalj (glej odsek~\ref{grid-chapter}). Dve točki $(x,y)$ in $(x',y')$ se nahajata v isti celici mreže natanko takrat, ko velja $(\lfloor x\rfloor ,\lfloor y\rfloor)=(\lfloor x'\rfloor ,\lfloor y'\rfloor)$. Vse točke v celici $c$ shranimo v seznam $\ell(c)$. Vse neprazne sezname $\ell(c)$ shranimo v razpršeno tabelo, v kateri je kot ključ uporabljeno spodnje levo oglišče celice. S tako strukturo nato izvedemo nekakšno iskanje v širino. Seznam $\ell(c)$ celice $c$ hrani točke, ki še niso bile obiskane z drevesom najkrajših poti. Ko procesiramo točko $p$ v celici $c$, moramo kot kandidate obravnavati vse ostale točke v $\ell(c)$ in točke v seznamih osmih sosednih celic. Vsaka točka, ki je sosedna $p$, je nato odstranjena iz seznama svoje celice. Enostavno se da najti primere, kjer bi bila časovna zahtevnost izgradnje drevesa kvadratična. Za vsako najkrajše drevo razpršeno tabelo zgradimo od začetka. Ker je čas, ki ga porabimo za to, zanemarljiv, čas predprocesiranja za mrežo ni prikazan med rezultati. Za seznam točk v celicah smo pri implementaciji uporabili strukturo \textit{list} in ne \textit{vector}. Razlog za to je ta, da je vsaka točka slej ko prej odstranjena iz seznama svoje celice. \textit{vector} v C++ omogoča samo brisanje vsebine elementa seznama na $i$-tem mestu, ne pa brisanja samega elementa oziroma je časovna zahtevnost tega $O(n)$. Po drugi strani \textit{list} porabi nekaj več spomina, ker vsak element hrani še kazalca na prejšnji in naslednji element, ima enak čas vstavljanja elementa na konec seznama kot \textit{vector}, vendar je časovna zahtevnost brisanja (in vstavljanja) elementa sredi seznama $O(1)$, ker samo preveže skupaj njegovega predhodnika in naslednika (velika prednost tipa \textit{vector} pred \textit{list} je sicer v tem, da je časovna zahtevnost dostopa do naključnega elementa seznama $\OO(1)$). Za razpršeno tabelo celic smo uporabili strukturo \textit{unordered\U map}, ki kot ključ hrani par celih števil, ki predstavljajo spodnje levo oglišče celice. Za ključ smo morali definirati tudi dobro \textit{hash} funkcijo, odporno na trke (angl. \textit{collisions}). Uporabili smo Cantorjevo funkcijo $\pi (k_1, k_2) = \frac{1}{2}(k_1+k_2)(k_1+k_2+1) + k_2$.
 
 Časi izvajanja za vse tri algoritme v različnih domenah in z različno velikostjo vhodnih podatkov so prikazani v tabelah~\ref{table1},~\ref{table2},~\ref{table4} in~\ref{table5}, poraba spomina pa v tabelah~\ref{table-ram-tree-1} in~\ref{table-ram-tree-2}.
 
@@ -1411,16 +1415,16 @@ Kot drugo alternativo uporabimo mrežo enotskih razdalj (glej odsek~\ref{grid-ch
 \textbf{Brez lukenj} & \multicolumn{3}{c}{20K točk}\\						
 dimenzije pravokotnika	&	$4\times 1$	&	$8\times 2$	&	$16\times 4$ \\
 \hline
-predprocesiranje SSSP	&	0,025	&	0,027	&	0,025		\\
-povprečje za koren s SSSP	&	0,131	&	0,130	&	0,127		\\
+predprocesiranje CJ	&	0,025	&	0,027	&	0,025		\\
+povprečje za koren s CJ	&	0,131	&	0,130	&	0,127		\\
 predprocesiranje BFS 	&	25,057	&	20,433	&	17,773		\\
 povprečje za koren z BFS	&	3,406	&	1,359	&	0,404		\\
 grid	&	1,605	&	1,647	&	0,695	\vspace{.2cm}	\\
 
 &	$32\times 8$	&	$64\times 16$	&	$128\times 32$	\\
 \hline
-predprocesiranje SSSP &	0,025	&	0,025	&	0,026 \\
-povprečje za koren s SSSP &	0,126	&	0,129	&	0,136 \\
+predprocesiranje CJ &	0,025	&	0,025	&	0,026 \\
+povprečje za koren s CJ &	0,126	&	0,129	&	0,136 \\
 predprocesiranje BFS &	17,734	&	17,347	&	17,179 \\
 povprečje za koren z BFS &	0,088	&	0,025	&	0,009 \\
 grid &	0,227	&	0,089	&	0,053 \vspace{.2cm} \\
@@ -1428,16 +1432,16 @@ grid &	0,227	&	0,089	&	0,053 \vspace{.2cm} \\
   & \multicolumn{3}{c}{50K točk}  \\						
 &	$4\times 1$	&	$8\times 2$	&	$16\times 4$ \\
 \hline
-predprocesiranje SSSP	&	0,091	&	0,091	&	0,070		\\
-povprečje za koren s SSSP	&	0,592	&	0,562	&	0,375		\\
+predprocesiranje CJ	&	0,091	&	0,091	&	0,070		\\
+povprečje za koren s CJ	&	0,592	&	0,562	&	0,375		\\
 predprocesiranje BFS	&	$>$3min	&	159,812	&	144,965		\\
 povprečje za koren z BFS	& omejitev RAM-a & 9,378	&	2,789		\\
 grid				&	11,567	&	13,660	&	4,592	\\
 
 &	$32\times 8$	&	$64\times 16$	&	$128\times 32$	\\
 \hline
-predprocesiranje SSSP &	0,071	&	0,070	&	0,069 \\
-povprečje za koren s SSSP &	0,377	&	0,372	&	0,366 \\
+predprocesiranje CJ &	0,071	&	0,070	&	0,069 \\
+povprečje za koren s CJ &	0,377	&	0,372	&	0,366 \\
 predprocesiranje BFS &	140,404	&	131,854	&	132,475 \\
 povprečje za koren z BFS &	0,584	&	0,144	&	0,044 \\
 grid &	1,346	&	0,432	&	0,187
@@ -1453,14 +1457,14 @@ grid &	1,346	&	0,432	&	0,187
 \textbf{Ena manjša luknja} & \multicolumn{3}{c}{10K točk}\\						
 dimenzije pravokotnika	&	$4\times 1$	&	$8\times 2$	&	$16\times 4$		\\
 \hline
-predprocesiranje SSSP	&	0,021	&	0,012	&	0,012		\\
-povprečje za koren s SSSP	&	0,104	&	0,059	&	0,060		\\
+predprocesiranje CJ	&	0,021	&	0,012	&	0,012		\\
+povprečje za koren s CJ	&	0,104	&	0,059	&	0,060		\\
 predprocesiranje BFS	&	8,500	&	4,300	&	4,100		\\
 povprečje za koren z BFS	&	1,183	&	0,318	&	0,091		\\
 grid	&	0,486	&	0,513	&	0,168  \vspace{.2cm}	\\
 &	$32\times 8$	&	$64\times 16$	&	$128\times 32$ \\
-predprocesiranje SSSP &	0,012	&	0,012	&	0,012 \\
-povprečje za koren s SSSP &	0,061	&	0,064	&	0,070 \\
+predprocesiranje CJ &	0,012	&	0,012	&	0,012 \\
+povprečje za koren s CJ &	0,061	&	0,064	&	0,070 \\
 predprocesiranje BFS &	4,100	&	4,000	&	4,000 \\
 povprečje za koren z BFS &	0,026	&	0,008	&	0,003 \\
 grid &	0,072	&	0,035	&	0,026\vspace{.2cm} \\
@@ -1468,14 +1472,14 @@ grid &	0,072	&	0,035	&	0,026\vspace{.2cm} \\
   & \multicolumn{3}{c}{20K točk}\\
   &	$4\times 1$	&	$8\times 2$	&	$16\times 4$		\\  			
 \hline
-predprocesiranje SSSP	&	0,027	&	0,026	&	0,025	\\
-povprečje za koren s SSSP	&	0,142	&	0,137	&	0,136	\\
+predprocesiranje CJ	&	0,027	&	0,026	&	0,025	\\
+povprečje za koren s CJ	&	0,142	&	0,137	&	0,136	\\
 predprocesiranje BFS	&	24,813	&	19,817	&	18,396	\\
 povprečje za koren z BFS	&	3,253	&	1,328	&	0,467	\\
 grid				&	2,181	&	2,627	&	0,668	\\
 &	$32\times 8$	&	$64\times 16$	&	$128\times 32$ \\
-predprocesiranje SSSP &	0,025	&	0,025	&	0,025	\\
-povprečje za koren s SSSP &	0,136	&	0,138	&	0,145	\\
+predprocesiranje CJ &	0,025	&	0,025	&	0,025	\\
+povprečje za koren s CJ &	0,136	&	0,138	&	0,145	\\
 predprocesiranje BFS &	17,976	&	17,542	&	17,313	\\
 povprečje za koren z BFS &	0,108	&	0,031	&	0,011	\\
 grid &	0,262	&	0,104	&	0,060 
@@ -1491,16 +1495,16 @@ grid &	0,262	&	0,104	&	0,060
 \textbf{Štiri manjše luknje} & \multicolumn{3}{c}{10K točk} \\
 dimenzije pravokotnika	&	$32\times 8$	&	$64\times 16$	&	$128\times 32$	\\						
 \hline
-predprocesiranje SSSP &	0,021	&	0,018	&	0,018	\\
-povprečje za koren s SSSP	&	0,056	&	0,058	&	0,064	\\
+predprocesiranje CJ &	0,021	&	0,018	&	0,018	\\
+povprečje za koren s CJ	&	0,056	&	0,058	&	0,064	\\
 predprocesiranje BFS	&	6,291	&	6,102	&	6,364	\\
 povprečje za koren z BFS	&	0,033	&	0,010	&	0,004	\\
 grid				&	0,064	&	0,031	&	0,023	\\
 \hline
 & \multicolumn{3}{c}{20K točk} \\
 \hline
-predprocesiranje SSSP &  0,027	&	0,026	&	0,026 \\
-povprečje za koren s SSSP &	0,125	&	0,126	&	0,131 \\
+predprocesiranje CJ &  0,027	&	0,026	&	0,026 \\
+povprečje za koren s CJ &	0,125	&	0,126	&	0,131 \\
 predprocesiranje BFS &	18,325	&	17,887	&	17,256	\\
 povprečje za koren z BFS & 0,102	&	0,031	&	0,010 \\
 grid &	0,230	&	0,096	&	0,055 
@@ -1516,16 +1520,16 @@ grid &	0,230	&	0,096	&	0,055
 \textbf{Štiri večje luknje} & \multicolumn{3}{c}{5K točk} \\
 dimenzije pravokotnika	&	$32\times 8$	&	$64\times 16$	&	$128\times 32$ \\						
 \hline
-predprocesiranje SSSP	&	0,007	&	0,009	&	0,009	\\
-povprečje za koren s SSSP	&	0,027	&	0,028	&	0,026	\\
+predprocesiranje CJ	&	0,007	&	0,009	&	0,009	\\
+povprečje za koren s CJ	&	0,027	&	0,028	&	0,026	\\
 predprocesiranje BFS	&	1,420	&	1,420	&	1,390	\\
 povprečje za koren z BFS	&	0,007	&	0,003	&	0,002	\\
 grid				&	0,019	&	0,013	&	0,010	\\
 \hline
 & \multicolumn{3}{c}{10K točk} \\
 \hline
-predprocesiranje SSSP &	0,012	&	0,018	&	0,019	\\
-povprečje za koren s SSSP &	0,057	&	0,054	&	0,053	\\
+predprocesiranje CJ &	0,012	&	0,018	&	0,019	\\
+povprečje za koren s CJ &	0,057	&	0,054	&	0,053	\\
 predprocesiranje BFS &	5,740	&	5,660	&	5,720	\\
 povprečje za koren z BFS &	0,028	&	0,013	&	0,007	\\
 grid &	0,060	&	0,038	&	0,027 
@@ -1541,12 +1545,12 @@ grid &	0,060	&	0,038	&	0,027
 \textbf{Brez lukenj} & \multicolumn{3}{c}{50K točk}\\						
 dimenzije pravokotnika	&	$4\times 1$	&	$8\times 2$	&	$16\times 4$ \\
 \hline
-SSSP	&	25,2	&	22,3	&	20,1		\\
+CJ	&	25,2	&	22,3	&	20,1		\\
 grid	&	23,2	&	22,4	&	22,2	\vspace{.2cm}	\\
 
 &	$32\times 8$	&	$64\times 16$	&	$128\times 32$	\\
 \hline
-SSSP &	19,3	&	19	&	18,7 \\
+CJ &	19,3	&	19	&	18,7 \\
 BFS &	204,2	&	68,8	&	28,5 \\
 grid &	21,9	&	22	&	23 \vspace{.2cm} \\
 \end{tabular}
@@ -1561,13 +1565,13 @@ grid &	21,9	&	22	&	23 \vspace{.2cm} \\
 \textbf{Štiri večje luknje} & \multicolumn{3}{c}{5K točk}\\						
 dimenzije pravokotnika	&	$32\times 8$	&	$64\times 16$	&	$128\times 32$	\\
 \hline
-SSSP	&	3,1	&	2,8	&	2,5		\\
+CJ	&	3,1	&	2,8	&	2,5		\\
 BFS &	4,2	&	2,9	&	2,3 \\
 grid	&	2,7	&	2,7	&	2,9	\vspace{.2cm}	\\
 \hline
 & \multicolumn{3}{c}{10K točk} \\
 \hline
-SSSP	&	5,6	 &	5,0	&	4,5		\\
+CJ	&	5,6	 &	5,0	&	4,5		\\
 BFS &	12,6	&	7,6	&	5,3 \\
 grid	&	4,9	&	4,9	&	5,1	\vspace{.2cm}	\\
 \end{tabular}
@@ -1644,7 +1648,7 @@ splošni algoritem	&	8,7	&	6	&	4,2	\vspace{.2cm}	\\
 \subsection{Analiza}
 \label{analiza}
 
-Za razliko od algoritma SSSP algoritma BFS in \textit{grid} nimata nikakršne garancije za najslabši primer. Za oba lahko zgradimo takšne vhodne množice $P$, pri katerih bo njuna izvedba zelo počasna. Kot primer smo testirali $P$ z 10000 točkami v pravokotniku, ki ima dimenzije $32\times 8$ in majhno luknjo. Med krajiščema daljice $\sigma$ smo nato v majhnem zgoščenem prostoru dodali še dodatnih 1000 točk (glej sliko~\ref{sep-stuffed}). Širina tega prostora je $1$, tako da se število povezav v grafu $G$ bistveno poveča. Čas izvajanja je glede na prvotno instanco najmanj narastel za SSSP, največ pa za BFS (glej tabelo~\ref{table-increase}).
+Za razliko od algoritma CJ algoritma BFS in \textit{grid} nimata nikakršne garancije za najslabši primer. Za oba lahko zgradimo takšne vhodne množice $P$, pri katerih bo njuna izvedba zelo počasna. Kot primer smo testirali $P$ z 10000 točkami v pravokotniku, ki ima dimenzije $32\times 8$ in majhno luknjo. Med krajiščema daljice $\sigma$ smo nato v majhnem zgoščenem prostoru dodali še dodatnih 1000 točk (glej sliko~\ref{sep-stuffed}). Širina tega prostora je $1$, tako da se število povezav v grafu $G$ bistveno poveča. Čas izvajanja je glede na prvotno instanco najmanj narastel za CJ, največ pa za BFS (glej tabelo~\ref{table-increase}).
 
 \begin{figure}[htp]
 \centerline{\includegraphics[scale=0.3]{pics/32-1-5000-stuffed.png}}
@@ -1657,8 +1661,8 @@ Za razliko od algoritma SSSP algoritma BFS in \textit{grid} nimata nikakršne ga
 \begin{tabular}{l*{1}{c}}
 (10+1)K točk, ena manjša luknja & \multicolumn{1}{c}{Časovna porast} \\
 \hline
-predprocesiranje SSSP &	9,7\%		\\
-povprečje za koren s SSSP &	13,6\%	\\
+predprocesiranje CJ &	9,7\%		\\
+povprečje za koren s CJ &	13,6\%	\\
 predprocesiranje BFS & 21,9\%	\\
 povprečje za koren z BFS &	56,5\% \\
 grid &	25\%
@@ -1671,7 +1675,7 @@ grid &	25\%
 
 Podobno smo storili z algoritmom za minimalno ločevanje. Uporabili smo enako območje s 500 in 1000 dodatnimi točkami. V prvem primeru nov algoritem porabi 94 sekund (skoraj trikrat več kot brez dodatnih točk), splošni algoritem pa 435 (šestkrat več kot brez dodatnih točk). V drugem primeru nov algoritem porabi 173 sekund, splošni algoritem pa več kot 15 minut. Podobno kot pri eksperimentih z drevesi najkrajših poti se tudi tukaj nov algoritem izkaže bolje v primerih, kjer so točke bolj gosto poseljene in je med njimi več povezav. Delež dreves, ki jih moramo zgraditi, da naletimo na najkrajši cikel, je odvisen od velikosti lukenj oziroma širine območja, kjer se točke nahajajo, kar vpliva na dolžino cikla. Pri ožjih območjih je manjše število možnih poti in verjetnost, da naletimo na tako drevo, čigar koren je del najkrajšega cikla, je s tem večja. Zaradi večjih lukenj je tudi dolžina cikla večja in je tako razmerje med številom točk v ciklu in številom vseh točk večji.
 
-Pri porabi spomina se SSSP v povprečju odreže najbolje. Splošni BFS se odreže bistveno slabše pri manjših območjih, kjer je število povezav v grafu $G$ večje. Rezultati mreže ne odstopajo znatno. Pri bolj gostih območjih se izkaže malenkost bolje kot SSSP, najmanjšo porabo pa ima pri srednje velikih območjih. Je edini od algoritmov, ki mu poraba spomina malenkost naraste pri največjem območju. To gre pripisati temu, da je zaradi enakomerne razporeditve točk potrebno zgraditi več celic v večjih območjih. 
+Pri porabi spomina se CJ v povprečju odreže najbolje. Splošni algoritem BFS se odreže bistveno slabše pri manjših območjih, kjer je število povezav v grafu $G$ večje. Rezultati mreže ne odstopajo znatno. Pri bolj gostih območjih se izkaže malenkost bolje kot CJ, najmanjšo porabo pa ima pri srednje velikih območjih. Je edini od algoritmov, ki mu poraba spomina malenkost naraste pri največjem območju. To gre pripisati temu, da je zaradi enakomerne razporeditve točk potrebno zgraditi več celic v večjih območjih. 
 
 Poraba spomina novega algoritma za ločevanje je po drugi strani nekoliko večja kot pri splošnem algoritmu. Razmerje sicer malenkost pade pri 5K točkah glede na 2K točk. Porabo spomina smo približno izmerili tudi na območju $32\times 8$ z eno luknjo in 20K točk (približno zato, ker porabe nismo merili celotni čas izvajanja, ki bi bil precej dolg). Novi algoritem porabi 45MB spomina, splošni pa 85MB. Razlog za večjo porabo spomina novega algoritma pri manj točkah najbrž leži v tem, da kljub manjši prostorski zahtevnosti nekaj dodatnega spomina zasede sama izgradnja CGAL struktur območnih in kd dreves. 
 
