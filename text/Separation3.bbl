@@ -17,9 +17,11 @@ S.~Cabello and M.~Jej{\v c}i{\v c}.
 \newblock Shortest paths in intersection graphs of unit disks.
 \newblock {\em Comput. Geom.}, 48(4):360--367, 2015.
 
-\bibitem{CM}
-S.~Cabello and L.~Milinković.
-\newblock Two optimization problems for unit disks, 2017.
+\bibitem{CM2}
+S.~Cabello and L.~Milinkovic.
+\newblock Two optimization problems for unit disks.
+\newblock {\em CoRR}, abs/1702.03266, 2017.
+\newblock Dostopno na http://arxiv.org/abs/1702.03266.
 
 \bibitem{ChanS16}
 T.~M. Chan and D.~Skrepetos.
