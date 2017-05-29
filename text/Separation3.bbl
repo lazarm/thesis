@@ -18,7 +18,7 @@ S.~Cabello and M.~Jej{\v c}i{\v c}.
 \newblock {\em Comput. Geom.}, 48(4):360--367, 2015.
 
 \bibitem{CM2}
-S.~Cabello and L.~Milinkovic.
+S.~Cabello and L.~Milinkovi\'c.
 \newblock Two optimization problems for unit disks.
 \newblock {\em CoRR}, abs/1702.03266, 2017.
 \newblock Dostopno na http://arxiv.org/abs/1702.03266.
@@ -70,6 +70,18 @@ M.~Karavelas.
 \newblock In {\em {CGAL} User and Reference Manual}. {CGAL Editorial Board},
   {4.6} edition, 2015.
 
+\bibitem{cgal:n-rstd-15a}
+G.~Neyer.
+\newblock {dD} range and segment trees.
+\newblock In {\em {CGAL} User and Reference Manual}. {CGAL Editorial Board},
+  {4.6} edition, 2015.
+
+\bibitem{cgal:tf-ssd-15a}
+H.~Tangelder and A.~Fabri.
+\newblock {dD} spatial searching.
+\newblock In {\em {CGAL} User and Reference Manual}. {CGAL Editorial Board},
+  {4.6} edition, 2015.
+
 \bibitem{WGM06}
 Y.~Wang, J.~Gao, and J.~S. Mitchell.
 \newblock Boundary recognition in sensor networks by topological methods.
@@ -80,7 +92,7 @@ Y.~Wang, J.~Gao, and J.~S. Mitchell.
 G.~Xia.
 \newblock The stretch factor of the {Delaunay} triangulation is less than
   1.998.
-\newblock 2011.
+\newblock {\em SIAM Journal on Computing}, 42(4):1620--1659, 2013.
 
 \bibitem{cgal:y-t2-16b}
 M.~Yvinec.

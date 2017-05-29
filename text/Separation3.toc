@@ -1,5 +1,6 @@
 \select@language {english}
 \select@language {slovene}
+\contentsline {chapter}{Program dela}{}
 \contentsline {chapter}{Povzetek}{}
 \select@language {english}
 \contentsline {chapter}{Abstract}{}
@@ -24,13 +25,13 @@
 \contentsline {section}{\numberline {2.6}Voronoijev diagram}{18}
 \contentsline {subsection}{\numberline {2.6.1}Voronoijev diagram v CGAL-u}{19}
 \contentsline {chapter}{\numberline {3}Teoreti\IeC {\v c}ni opis algoritmov}{23}
-\contentsline {section}{\numberline {3.1}Drevo najkraj\IeC {\v s}ih poti v grafu enotskih krogov}{24}
+\contentsline {section}{\numberline {3.1}Drevo najkraj\IeC {\v s}ih poti v grafu enotskih krogov}{23}
 \contentsline {subsection}{\numberline {3.1.1}Eksplicitna uporaba iskanja v \IeC {\v s}irino (BFS)}{24}
 \contentsline {subsection}{\numberline {3.1.2}Iskanje v \IeC {\v s}irino z uporabo kvadratne mre\IeC {\v z}e (grid)}{26}
-\contentsline {subsection}{\numberline {3.1.3}Prilagojen algoritem za enotske kroge (CJ)}{26}
+\contentsline {subsection}{\numberline {3.1.3}Prilagojen algoritem za enotske kroge (CJ)}{27}
 \contentsline {section}{\numberline {3.2}Minimalna lo\IeC {\v c}itev z enotskimi krogi}{33}
 \contentsline {subsection}{\numberline {3.2.1}Splo\IeC {\v s}ni algoritem za lo\IeC {\v c}evanje s krogi}{34}
-\contentsline {subsection}{\numberline {3.2.2}Dualnost in dualni prostor}{36}
+\contentsline {subsection}{\numberline {3.2.2}Dualnost in dualni prostor}{37}
 \contentsline {subsection}{\numberline {3.2.3}Hitrej\IeC {\v s}i algoritem}{38}
 \contentsline {chapter}{\numberline {4}Implementacija algoritmov}{49}
 \contentsline {section}{\numberline {4.1}Drevo najkraj\IeC {\v s}ih poti v grafu enotskih krogov}{49}
@@ -40,15 +41,15 @@
 \contentsline {section}{\numberline {4.2}Minimalna lo\IeC {\v c}itev z enotskimi krogi}{56}
 \contentsline {subsection}{\numberline {4.2.1}Prilagoditev drevesa SSSP}{56}
 \contentsline {subsection}{\numberline {4.2.2}ImagePoint - implementacija to\IeC {\v c}ke preslikave $\varphi $}{58}
-\contentsline {subsection}{\numberline {4.2.3}Kd drevo}{58}
+\contentsline {subsection}{\numberline {4.2.3}Kd drevo}{59}
 \contentsline {subsection}{\numberline {4.2.4}Obmo\IeC {\v c}no drevo}{60}
 \contentsline {subsubsection}{\numberline {4.2.4.1}Poizvedbe v obmo\IeC {\v c}nem drevesu}{61}
 \contentsline {subsection}{\numberline {4.2.5}Celotna struktura algoritma}{63}
-\contentsline {subsection}{\numberline {4.2.6}Izgradnja minimalnega cikla}{65}
+\contentsline {subsection}{\numberline {4.2.6}Izgradnja minimalnega cikla}{66}
 \contentsline {chapter}{\numberline {5}Eksperimenti in rezultati}{67}
 \contentsline {section}{\numberline {5.1}Uporaba kd dreves namesto VD}{67}
 \contentsline {section}{\numberline {5.2}Generator vhodnih podatkov}{68}
 \contentsline {section}{\numberline {5.3}Drevo najkraj\IeC {\v s}ih poti v grafu enotskih krogov}{70}
 \contentsline {section}{\numberline {5.4}Minimalna lo\IeC {\v c}itev z enotskimi krogi}{71}
-\contentsline {subsection}{\numberline {5.4.1}Analiza}{76}
+\contentsline {subsection}{\numberline {5.4.1}Analiza}{78}
 \contentsline {chapter}{\numberline {6}Sklepne ugotovitve}{81}
