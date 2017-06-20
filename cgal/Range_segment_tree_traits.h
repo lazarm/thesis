@@ -149,18 +149,15 @@ template<class Key_2,class Key>
 
 
 
-template <class T>
+ template <class Rep, class T>
 class Range_tree_map_traits_2{
  public:
   typedef   T Value;
-  //typedef typename Rep::Point_2 Point_2; //lazar
-  //typedef Point_2 Pure_key; // lazar
-  typedef DualPoint Pure_key; //lazar
+  typedef typename Rep::Point_2 Point_2;
+  typedef Point_2 Pure_key;
   typedef std::pair<Pure_key,  T> Key;
-  //typedef Point_2 Key_1;//Lazar
-  //typedef Point_2 Key_2;//Lazar
-  typedef DualPoint Key_1;//lazar
-  typedef DualPoint Key_2;//Lazar
+  typedef Point_2 Key_1;
+  typedef Point_2 Key_2;
   typedef std::pair<Pure_key, Pure_key> Interval;
 
   typedef C_Compare_1<Key_1> compare_1;
@@ -171,6 +168,27 @@ class Range_tree_map_traits_2{
   typedef C_Low_2<Key_2,Interval> low_2;
   typedef C_High_2<Key_2,Interval> high_2;
   typedef T_Key_2<Key_2,Key> key_2;
+
+};
+
+template <class T>
+class Range_tree_map_traits_2_dual{
+public:
+	typedef   T Value;
+	typedef DualPoint Pure_key;
+	typedef std::pair<Pure_key, T> Key;
+	typedef DualPoint Key_1;
+	typedef DualPoint Key_2;
+	typedef std::pair<Pure_key, Pure_key> Interval;
+
+	typedef C_Compare_1<Key_1> compare_1;
+	typedef C_Compare_2<Key_2> compare_2;
+	typedef C_Low_1<Key_1, Interval> low_1;
+	typedef C_High_1<Key_1, Interval> high_1;
+	typedef T_Key_1<Key_1, Key> key_1;
+	typedef C_Low_2<Key_2, Interval> low_2;
+	typedef C_High_2<Key_2, Interval> high_2;
+	typedef T_Key_2<Key_2, Key> key_2;
 
 };
 

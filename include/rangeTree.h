@@ -12,7 +12,7 @@
 #include <psapi.h>
 
 
-typedef CGAL::Range_tree_map_traits_2<NNTree> rangeTraits;
+typedef CGAL::Range_tree_map_traits_2_dual<NNTree> rangeTraits;
 typedef rangeTraits::Key RangeKey;
 typedef rangeTraits::Pure_key RangePure_key;
 typedef rangeTraits::Interval Interval;
@@ -56,10 +56,10 @@ RangeTree buildRangeTree(Iterator begin, Iterator end, Segment_2 st)
 	vector<RangeKey> inputList;
 	for (Iterator it = begin; it != end; ++it)
 	{
-		NNTree voronoiTree;
+		NNTree kdTree;
 		Point_2 pt = *it;
 		unique_ptr < RangePure_key> dp(new RangePure_key(it._Ptr, st));
-		inputList.push_back(RangeKey(*dp, voronoiTree));
+		inputList.push_back(RangeKey(*dp, kdTree));
 	}
 	RangeTree rangeTree(inputList.begin(), inputList.end());
 	traverse_and_populate_with_data(rangeTree.range_tree_2->root());
@@ -76,11 +76,10 @@ query is run and some site/point is returned, we can retrieve its original point
 void build_VD_trees_on_layer2(RangeNode1* node)
 {
 	if (node->left_link == 0) {
-		// leaf node, leave nn tree empty, only key is accessed?
 		DualPoint point = node->object.first;
-		vector<Point_2> vdSites;
-		vdSites.push_back(*point.originalPoint);
-		node->object.second.insert(vdSites.begin(), vdSites.end());
+		vector<Point_2> kdPoints;
+		kdPoints.push_back(*point.originalPoint);
+		node->object.second.insert(kdPoints.begin(), kdPoints.end());
 		return;
 	}
 	// recursively construct NNTree structures for both childs of node
@@ -101,9 +100,6 @@ Recursively does the same for its left and right child.
 */
 void traverse_and_populate_with_data(RangeNode* node)
 {
-	//rekurzivno klici left in right node, prej ali po node, nima veze
-	// za node klici sublayer, dobis range_tree_d=1
-	// potem lahko klices zgornjo funkcijo
 	if (node->left_link == 0) { return; }
 	queue<RangeNode*> nodes_to_visit;
 	nodes_to_visit.push(node);
@@ -135,7 +131,7 @@ original point). That point is contained in the iterator (result).
 At the end we are left with a set of points s.t. dist(a,b) <= 1 and ab intersects the segment st. We choose b* with minimum
 w_a + w_b*. 
 */
-void rangeTree_query(RangeTree* rangeTree, DualPoint* a, vector<Point_2> queryResults)
+tuple<bool, Point_2> rangeTree_query(RangeTree* rangeTree, DualPoint* a)
 {
 	DualPoint xinf = DualPoint();
 	DualPoint infy = DualPoint();
@@ -144,10 +140,10 @@ void rangeTree_query(RangeTree* rangeTree, DualPoint* a, vector<Point_2> queryRe
 
 	Interval second_quadrant = Interval(xinf, infy);
 	Point_2 a_orig = *(a->originalPoint);
-	rangeTree->window_query_modified(second_quadrant, a_orig, back_inserter(queryResults));
+	return rangeTree->window_query_modified(second_quadrant, a_orig);
 }
 
-void rangeTree_query_complement(RangeTree* rangeTree, DualPoint* a, vector<Point_2> queryResults)
+tuple<bool, Point_2> rangeTree_query_complement(RangeTree* rangeTree, DualPoint* a)
 {
 	DualPoint infinfNeg = DualPoint();
 	DualPoint xy = DualPoint();
@@ -161,11 +157,11 @@ void rangeTree_query_complement(RangeTree* rangeTree, DualPoint* a, vector<Point
 	Interval third_quadrant = Interval(infinfNeg, xy);
 
 	Point_2 a_orig = *(a->originalPoint);
-	rangeTree->window_query_modified(first_quadrant, a_orig, back_inserter(queryResults));
-	if (queryResults.size() > 0) {
-		return;
+	tuple<bool, Point_2> res = rangeTree->window_query_modified(first_quadrant, a_orig);
+	if (get<0>(res)) {
+		return res;
 	}
-	rangeTree->window_query_modified(third_quadrant, a_orig, back_inserter(queryResults));
+	return rangeTree->window_query_modified(third_quadrant, a_orig);
 }
 
 

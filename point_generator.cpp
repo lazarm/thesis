@@ -134,7 +134,6 @@ void writeToFile(vector<Point_2> points, int space, int holes, bool narrow)
 }
 
 int main(int argc, char* argv[]) {
-	//generateClutteredData(500);
 	istringstream ss(argv[1]);
 	int numPoints;
 	if (!(ss >> numPoints))
@@ -154,38 +153,6 @@ int main(int argc, char* argv[]) {
 	bool buildNarrow = narrow == 1;
 
 	vector<Point_2> fixed;
-	//// za x med 10 in 69 nafilaj zgornjo in srednjo vrsto
-	//double offset = 0.35;
-	//double offset2 = 0.2;
-	//for (int i = 10; i < 69; i++) {
-	//	fixed.push_back(Point_2(i, 16 + ((double)rand() / (RAND_MAX))*offset));
-	//	fixed.push_back(Point_2(i + 0.5 + ((double)rand() / (RAND_MAX))*offset2, 16 - ((double)rand() / (RAND_MAX))*offset));
-	//	fixed.push_back(Point_2(i, 28 + ((double)rand() / (RAND_MAX))*offset));
-	//	fixed.push_back(Point_2(i + 0.5 + ((double)rand() / (RAND_MAX))*offset2, 28 - ((double)rand() / (RAND_MAX))*offset));
-	//}
-	//// za y = 16 do 28 nafilaj levo in srednjo vrsto
-	//for (int i = 16; i < 28; i++) {
-	//	fixed.push_back(Point_2(15 + ((double)rand() / (RAND_MAX))*offset, i));
-	//	fixed.push_back(Point_2(15 - ((double)rand() / (RAND_MAX))*offset, i + 0.5 + ((double)rand() / (RAND_MAX))*offset2));
-	//	fixed.push_back(Point_2(68 + ((double)rand() / (RAND_MAX))*offset, i));
-	//	fixed.push_back(Point_2(68 - ((double)rand() / (RAND_MAX))*offset, i + 0.5 + ((double)rand() / (RAND_MAX))*offset2));
-	//	//fixed.push_back(Point_2(118 + ((double)rand() / (RAND_MAX)), i));
-	//}
-
-	//for (int i = 10; i < 118; i = i+4) {
-	//	fixed.push_back(Point_2(i, 4));
-	//	if (i > 70) {
-	//		fixed.push_back(Point_2(i, 29));
-	//		fixed.push_back(Point_2(i, 17));
-	//	}
-	//}
-	//for (int i = 5; i < 30; i = i + 4) {
-	//	fixed.push_back(Point_2(118, i));
-	//	if (i < 15) {
-	//		fixed.push_back(Point_2(63, i));
-	//		fixed.push_back(Point_2(9, i));
-	//	}
-	//}
 	vector<Point_2> gend = pointGenerator(exp, holes, buildNarrow, numPoints, true, fixed);
 	writeToFile(gend, pow(2, exp+2), holes, buildNarrow);
 }

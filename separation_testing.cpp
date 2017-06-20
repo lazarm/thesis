@@ -56,8 +56,6 @@ int main(int argc, char* argv[]) {
 	int repeats;
 	if (!(ss2 >> repeats))
 		cerr << "Invalid number " << argv[3] << '\n';
-	// TODO: test method for separation algorithm
-	cout << "start" << endl;
 	/*for (int i = 0; i < repeats; i++) {
 		testSepGeneral(readPoints, st);
 	}*/

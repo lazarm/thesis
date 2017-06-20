@@ -133,7 +133,6 @@ namespace CGAL {
 			if (node->size()>0)
 				for (iterator i = node->begin(); i != node->end(); i++)
 				{
-					//if (q.contains(*i))
 					return tuple<bool, Point_2<EK>> {true, *i};
 				}
 			else return tuple<bool, Point_2<EK>> {false, Point_2<EK>(0,0)};

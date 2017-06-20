@@ -31,44 +31,34 @@ vector<Point_2> make_cycle(tuple<Point_2, Point_2, int> pair, vector<Point_2> cy
 tuple<Point_2, Point_2, int> findminpairRiWithTree(vector<Point_2> li, vector<Point_2> lj, Segment_2 st,
 	tuple<Point_2, Point_2, int> bestR, RangeTree* rangeTreei)
 {
-	/*if (r0t - r0s == 0) { return bestR; }
-	if (li.size() == 0 && lj.size() == 0) { return bestR; }*/
 	int minWeight = get<2>(bestR);
 	for (auto a = li.begin(); a != li.end(); ++a)
 	{
-		vector<Point_2> queryResults;
 		int weight_a = (*a).getDist();
 		// weight_b is at least 1. If weight_a+1 is already >= minWeight, we know point a won't give us better result
 		if (weight_a + 1 >= minWeight) { continue; }
 		DualPoint* a_dual = new DualPoint(a._Ptr, st);
-		rangeTree_query(rangeTreei, a_dual, queryResults);
+		tuple<bool, Point_2> res = rangeTree_query(rangeTreei, a_dual);
 		delete(a_dual);
-		//cout << "query res size: " << queryResults.size() << endl;
-		for (vector<Point_2>::iterator pointB = queryResults.begin(); pointB != queryResults.end(); ++pointB)
-		{
-			if (weight_a + pointB->getDist() < minWeight) {
-				minWeight = weight_a + pointB->getDist();
-				bestR = make_tuple(*a, *pointB, minWeight);
-				return bestR;
-			}
+		Point_2 nearest = get<1>(res);
+		if (get<0>(res) && weight_a + nearest.getDist() < minWeight) {
+			minWeight = weight_a + nearest.getDist();
+			return make_tuple(*a, nearest, minWeight);
 		}
 	}
 
 	for (auto a = lj.begin(); a != lj.end(); ++a)
 	{
-		vector<Point_2> queryResults;
 		int weight_a = (*a).getDist();
 		if (weight_a + 1 >= minWeight) { continue; }
 		DualPoint* a_dual = new DualPoint(a._Ptr, st);
-		rangeTree_query_complement(rangeTreei, a_dual, queryResults);
+		tuple<bool, Point_2> res = rangeTree_query_complement(rangeTreei, a_dual);
 		delete(a_dual);
-		for (vector<Point_2>::iterator pointB = queryResults.begin(); pointB != queryResults.end(); ++pointB)
-		{
-			if (weight_a + pointB->getDist() < minWeight) {
-				minWeight = weight_a + pointB->getDist();
-				bestR = make_tuple(*a, *pointB, minWeight);
-				return bestR;
-			}
+
+		Point_2 nearest = get<1>(res);
+		if (get<0>(res) && weight_a + nearest.getDist() < minWeight) {
+			minWeight = weight_a + nearest.getDist();
+			return make_tuple(*a, nearest, minWeight);
 		}
 	}
 	return bestR;
@@ -80,29 +70,21 @@ tuple<Point_2, Point_2, int> querySetOnTree(vector<Point_2> l, RangeTree* rangeT
 	int minWeight = get<2>(bestR);
 	for (auto a = l.begin(); a != l.end(); ++a)
 	{
-		vector<Point_2> queryResults;
 		int weight_a = (*a).getDist();
 		DualPoint* a_dual = new DualPoint(a._Ptr, st);
-		rangeTree_query(rangeTree0, a_dual, queryResults);
-		for (vector<Point_2>::iterator pointB = queryResults.begin(); pointB != queryResults.end(); ++pointB)
-		{
-			if (weight_a + pointB->getDist() < minWeight) {
-				minWeight = weight_a + pointB->getDist();
-				bestR = make_tuple(*a, *pointB, minWeight);
-				return bestR;
-			}
+		tuple<bool, Point_2> res = rangeTree_query(rangeTree0, a_dual);
+		Point_2 nearest = get<1>(res);
+		if (get<0>(res) && weight_a + nearest.getDist() < minWeight) {
+			minWeight = weight_a + nearest.getDist();
+			return make_tuple(*a, nearest, minWeight);
 		}
-		vector<Point_2> queryComplementResults;
 		// najprej preveri rezultate iz queryResults, preden naredis query complement
-		rangeTree_query_complement(rangeTree1, a_dual, queryComplementResults);
+		res = rangeTree_query_complement(rangeTree1, a_dual);
 		delete(a_dual);
-		for (vector<Point_2>::iterator pointB = queryComplementResults.begin(); pointB != queryComplementResults.end(); ++pointB)
-		{
-			if (weight_a + pointB->getDist() < minWeight) {
-				minWeight = weight_a + pointB->getDist();
-				bestR = make_tuple(*a, *pointB, minWeight);
-				return bestR;
-			}
+		nearest = get<1>(res);
+		if (get<0>(res) && weight_a + nearest.getDist() < minWeight) {
+			minWeight = weight_a + nearest.getDist();
+			return make_tuple(*a, nearest, minWeight);
 		}
 	}
 	return bestR;
@@ -265,7 +247,6 @@ tuple<Point_2, Point_2, int> nnSeparation(vector<vector<Point_2>>* l0, vector<ve
 	vector<Point_2> r1i = (*r1)[i];
 	vector<Point_2> r1i1 = (*r1)[i - 1];
 	vector<Point_2> r0i1 = (*r0)[i - 1];
-	// skrajsaj tako, da uporabis zgornje vektorje direkt v groups tabeli
 	vector<vector<Point_2>> groups{ l0i1, l1i, l0i, l1i1, r0i1, r1i, r0i, r1i1 };
 	vector<tuple<int, int>> pairs{ tuple<int, int>(0, 1), tuple<int, int>(2, 3), tuple<int, int>(4, 5),
 		tuple<int, int>(6, 7)};

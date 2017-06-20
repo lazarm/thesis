@@ -35,7 +35,7 @@ namespace CGAL {
 
     typedef typename SearchTraits::FT FT;
     typedef typename SearchTraits::Dimension Dimension;
-    public: //lazar -> change back to private
+    private: 
 
     Point_d c;
     FT r;
