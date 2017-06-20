@@ -357,31 +357,25 @@ public:
     return it;
   }
 
-  template <class OutputIterator, class FuzzyQueryItem>
-  OutputIterator search_exists(OutputIterator it, const FuzzyQueryItem& q) const
+  template <class FuzzyQueryItem>
+  tuple<bool, Point_2<EK>> search_exists(const FuzzyQueryItem& q) const
   {
 	  if (!pts.empty()) {
 		  if (!is_built()){
 			  const_build();
 		  }
 		  Kd_tree_rectangle<FT, D> b(*bbox);
-		  return tree_root->search_exists(it, q, b);
+		  return tree_root->search_exists(q, b);
 	  }
-	  return it;
+	  return tuple<bool, Point_2<EK>>(false, Point_2<EK>(0,0));
   }
 
   tuple<bool, Point_2<EK>> kd_query(Point_2<EK> q)
   {
 	  Fuzzy_circle exact_range(q, 1);
 	  list<Point_2<EK>> result;
-	  search_exists(back_inserter(result), exact_range);
-	  if (result.size() == 0) {
-		  return tuple<bool, Point_2<EK>> {false, Point_2<EK>(0, 0)};
-	  }
-	  else {
-		  Point_2<EK> first = result.front();
-		  return tuple<bool, Point_2<EK>> {true, first};
-	  }
+	  tuple<bool, Point_2<EK>> res = search_exists(exact_range);
+	  return res;
   }
 
   ~Kd_tree() {

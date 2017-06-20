@@ -58,6 +58,7 @@ public:
   int Nr;
   bool visited;
   std::shared_ptr<Point_2> parent;
+  std::vector<Point_2*> neighbours;
 
   const Rep& rep() const
   {

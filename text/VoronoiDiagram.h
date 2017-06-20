@@ -12,32 +12,29 @@
 #include <CGAL/Direction_2.h>
 #include <CGAL/spatial_sort.h>
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
-#include <CGAL/Exact_predicates_exact_constructions_kernel.h>
 #include <CGAL/Delaunay_triangulation_2.h>
 #include <CGAL/Voronoi_diagram_2.h>
 #include <CGAL/Delaunay_triangulation_adaptation_traits_2.h>
 #include <CGAL/Delaunay_triangulation_adaptation_policies_2.h>
 #include <CGAL/squared_distance_2.h>
-#include <CGAL/Lazy_exact_nt.h>
 
 //typedef CGAL::Homogeneous<long> Rep_class;
-typedef CGAL::Cartesian<double> EK;
-typedef CGAL::Lazy_exact_nt<CGAL::Gmpq>  NT;
+typedef CGAL::Cartesian<double> Rep_class;
 
 // typedefs for defining the adaptor
-//typedef CGAL::Exact_predicates_exact_constructions_kernel                  EK;
-typedef CGAL::Delaunay_triangulation_2<EK>                                    DT;
+typedef CGAL::Exact_predicates_inexact_constructions_kernel                  K;
+typedef CGAL::Delaunay_triangulation_2<Rep_class>                            DT;
 typedef CGAL::Delaunay_triangulation_adaptation_traits_2<DT>                 AT;
 typedef CGAL::Delaunay_triangulation_caching_degeneracy_removal_policy_2<DT> AP;
 typedef CGAL::Voronoi_diagram_2<DT, AT, AP>                                    VD;
 // typedef for the result type of the point location
 
 //typedef CGAL::Point_2<Rep_class> Point;
-typedef EK::Segment_2		  Segment_2;
-typedef EK::Line_2			  Line_2;
-typedef EK::Direction_2		  Direction_2;
+typedef Rep_class::Segment_2		  Segment_2;
+typedef Rep_class::Line_2			  Line_2;
+typedef Rep_class::Direction_2		  Direction_2;
 typedef AT::Site_2                    Site_2;
-typedef EK::Point_2             Point_2;
+typedef Rep_class::Point_2             Point_2;
 typedef VD::Locate_result             Locate_result;
 typedef VD::Vertex_handle             Vertex_handle;
 typedef VD::Face_handle               Face_handle;
@@ -57,34 +54,34 @@ class VoronoiDiagram: public VD
 public:
 	VoronoiDiagram() {};
 	~VoronoiDiagram() {};
-	template <class Iterator>
-	VoronoiDiagram(Iterator a, Iterator b) : VD(a, b) {}
+	//VoronoiDiagram(Iterator, Iterator);
 	std::tuple<bool, Point_2*> query(Point_2 q);
-	size_t size() { return number_of_faces(); }
-	Face_handle insert(const Delaunay_vertex_handle& t);
-	Face_handle insert(const Site_2& t);
-	template<class Iterator>
-	size_type insert(Iterator first, Iterator beyond);
-
+	int size() { return number_of_faces(); }
 };
 
 
-tuple<bool, Point_2*> VoronoiDiagram::query(Point_2 q) {
+std::tuple<bool, Point_2*> VoronoiDiagram::query(Point_2 q) {
 	
 	Locate_result lr = locate(q);
+	// delaunay vertex == voronoi site
 	Delaunay_vertex_handle df;
 	if (Vertex_handle* v = boost::get<Vertex_handle>(&lr)) {
+		// query point coincides with a voronoi vertex
+		// vertex is built based on at most three sites, return the first one
 		df = (*v)->site(0);
 	}
 	else if (Face_handle* f = boost::get<Face_handle>(&lr)) {
+		// if query point lies on Voronoi face, return DT vertex inside that face
 		df = (*f)->dual();
 	}
 	else if (Halfedge_handle* e = boost::get<Halfedge_handle>(&lr)) {
+		// query point lies on Voronoi edge, return the site above it
 		df = (*e)->up();
 	}
 	Point_2 faceSitePoint = df->point();
 	Point_2 *fcp = &df->point();
-	NT dist = CGAL::squared_distance(*fcp, q);
+	// use squared distance
+	double dist = CGAL::squared_distance(*fcp, q);
 	
 	if (dist <= 1) {
 		return std::tuple<bool, Point_2*> {true, fcp};
@@ -92,23 +89,4 @@ tuple<bool, Point_2*> VoronoiDiagram::query(Point_2 q) {
 	else {
 		return std::tuple<bool, Point_2*> {false, fcp};
 	}
-}
-
-inline Face_handle VoronoiDiagram::insert(const Delaunay_vertex_handle& t) {
-
-    return VD::insert(t->point(), Has_site_inserter());
-}
-
-inline Face_handle VoronoiDiagram::insert(const Site_2& t) {
-
-    return VD::insert(t, Has_site_inserter());
-}
-
-template<class Iterator>
-inline VD::size_type VoronoiDiagram::insert(Iterator first, Iterator beyond) {
-	VD::size_type counter = 0;
-	for (Iterator it = first; it != beyond; ++it, ++counter) {
-		insert(*it);
-	}
-	return counter;
 }

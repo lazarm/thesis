@@ -1,0 +1,31 @@
+\begin{thebibliography}{1}
+
+\bibitem{bkos-08}
+M.~d. Berg, O.~Cheong, M.~v. Kreveld, and M.~Overmars.
+\newblock {\em Computational Geometry: Algorithms and Applications}.
+\newblock Springer-Verlag, 3rd ed. edition, 2008.
+
+\bibitem{CG16}
+S.~Cabello and P.~Giannopoulos.
+\newblock The complexity of separating points in the plane.
+\newblock {\em Algorithmica}, 74(2):643--663, 2016.
+
+\bibitem{Olivier}
+O.~Devillers.
+\newblock Improved incremental randomized delaunay triangulation.
+\newblock In {\em Proceedings of the 14th Annual ACM Symposium on Computation
+  Geometry}, pages 106--115, 1998.
+
+\bibitem{FGG06}
+Q.~Fang, J.~Gao, and L.~J. Guibas.
+\newblock Locating and bypassing routing holes in sensor networks.
+\newblock In {\em Proc. Mobile Networks and Applications}, volume~11, pages
+  187--200, 2006.
+
+\bibitem{WGM06}
+Y.~Wang, J.~Gao, and J.~S. Mitchell.
+\newblock Boundary recognition in sensor networks by topological methods.
+\newblock In {\em Proceedings of the 12th Annual International Conference on
+  Mobile Computing and Networking}, MobiCom '06, pages 122--133, 2006.
+
+\end{thebibliography}

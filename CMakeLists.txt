@@ -26,6 +26,9 @@ if ( CGAL_FOUND )
     include_directories (BEFORE "include")
 
   create_single_source_cgal_program( "ds1_example.cpp" )
+  create_single_source_cgal_program( "tree_testing.cpp" )
+  create_single_source_cgal_program( "point_generator.cpp" )
+  create_single_source_cgal_program( "separation_testing.cpp" )
 
 else()
   
