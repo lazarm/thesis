@@ -147,8 +147,6 @@ namespace CGAL {
 		}
 	}
 
-
-
      void 
     indent(int d) const
     {

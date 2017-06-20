@@ -528,17 +528,7 @@ class Range_tree_d: public Tree_base< C_Data,  C_Window>
 	        Tree_base<C_Data, C_Window> *T= (w)->sublayer;
 	        if(T->is_anchor())
 			{
-		      //shared_ptr<Node< vector<Site_2>::iterator>> ds2LeftRootNode = (w)->object.second.getRoot();
-			  //cout << "evo ga!" << endl;
-			  //cout << (w)->object.second.getSize() << endl;
-			  //cout << "size: " << ds2LeftRootNode->value.size() << endl;
-			  //vector<Site_2> at1(ds2LeftRootNode->value.sites_begin(), ds2LeftRootNode->value.sites_end());  // lazar
-			  //cout << "ds2size: " << at1.size() << endl;
-			  //for (vector<Site_2>::iterator it = at1.begin(); it != at1.end(); ++it) { //lazar
-			    //cout << (*it).x() << "  |+|  " << (*it).y() << endl; //lazar
-				//(*result++)=(*it).dual;
-			  //}
-	          //report_subtree(w,result); lazar zakomentiral
+	          report_subtree(w,result); lazar zakomentiral
 			}
 	        else
 	          T->window_query(win, result);
@@ -546,7 +536,6 @@ class Range_tree_d: public Tree_base< C_Data,  C_Window>
 	      else
 	        if(is_inside(win,w->object))
 	          (*result++)=(w)->object;
-			  //(*result++)=(w)->object.first.originalPoint;
 	      v = left(v);
 	    }
 	    else
@@ -554,7 +543,6 @@ class Range_tree_d: public Tree_base< C_Data,  C_Window>
       }                 // end while
       if(is_inside(win,v->object))
 	    (*result++)=v->object;
-		//(*result++)=v->object.first.originalPoint;
       v = right(split_node);
       while(right(v)!=0)
       {
@@ -576,7 +564,6 @@ class Range_tree_d: public Tree_base< C_Data,  C_Window>
 	  {
 	    if(is_inside(win,left(v)->object))
 	      (*result++)=left(v)->object;
-		  //(*result++)=left(v)->object.first.originalPoint; 
 	  }
 	  v = right(v);
 	}
@@ -586,7 +573,6 @@ class Range_tree_d: public Tree_base< C_Data,  C_Window>
       if(is_inside(win,v->object))
       {
 	(*result++)=v->object; 
-	//(*result++)=v->object.first.originalPoint; 
       }
     }
     return result;
@@ -604,21 +590,21 @@ class Range_tree_d: public Tree_base< C_Data,  C_Window>
     return enclosing_query_impl(win,out);
   }
   
-
-  std::back_insert_iterator< std::vector< Point_2<EK> > > window_query_impl_modified( 
-	C_Window const &win, Point_2<EK> a, std::back_insert_iterator< std::vector< Point_2<EK> > > result, typename tbt::rbit * =0)
+  std::tuple<bool, Point_2<EK>> window_query_impl_modified(
+	C_Window const &win, Point_2<EK> a, typename tbt::rbit * =0)
   {
     if(is_less_equal(m_interface.get_right(win), m_interface.get_left(win)))
-       return result;
+		return tuple<bool, Point_2<EK>>(false, Point_2<EK>());
     if(root()==0)
-      return result;
+		return tuple<bool, Point_2<EK>>(false, Point_2<EK>());
     link_type split_node = findSplitNode(win);
     if(left(split_node)==0)
     {
-	  // leaf node with VD of size 1; because the only site is also the nearest one, we can check distance here directly
+	  // leaf node with Kd tree of size 1; because the only site is also the nearest one, we can check distance here directly
       if(is_inside(win,split_node->object)) {
 	    if (CGAL::squared_distance(*split_node->object.first.originalPoint, a) <= 1) {
-		  (*result++)=*(split_node->object.first.originalPoint);
+			Point_2<EK> res = *(split_node->object.first.originalPoint);
+			return tuple<bool, Point_2<EK>>(true, res);
 	    }
 	  }
     }	  
@@ -638,24 +624,19 @@ class Range_tree_d: public Tree_base< C_Data,  C_Window>
 			{
 				tuple<bool, Point_2<EK>> rez6 = (w)->object.second.search(a);
 				if (std::get<0>(rez6)==true) {
-					Point_2<EK> p6 = std::get<1>(rez6);
-					(*result++) = p6;
-					return result;
+					Point_2<EK> res = std::get<1>(rez6);
+					return rez6;
 				}
 				
 			}
 	        else
-	          T->window_query_impl_modified(win, a, result);
+	          T->window_query_impl_modified(win, a);
 	      }
 	      else
 	        if(is_inside(win,w->object)) {
-	          //(*result++)=(w)->object; lazar W JE V PRVEM LAYER-JU. MORAS DOBITI DOSTOP DO NJEGOVEGA PODDREVESA IN OD TEGA KORENA NAREDITI SPODNJE
-			  // IF W->SUBLAYER = ANCHOR, POTEM NAREDI TO, SICER NAJPREJ VZAMI W->SUBLAYER->SUBLAYER
-			  ////cout << "|+2|" << endl;
 			  if (CGAL::squared_distance(*w->object.first.originalPoint, a) <= 1) {
-				(*result++)=*((w)->object.first.originalPoint);
-				//cout << *w->object.first.originalPoint << "  -|-  " << a << endl;
-				return result;
+				  Point_2<EK > res = *((w)->object.first.originalPoint);
+				  return tuple<bool, Point_2<EK>>(true, res);
 			  }
 			}
 	      v = left(v);
@@ -664,10 +645,9 @@ class Range_tree_d: public Tree_base< C_Data,  C_Window>
 	      v = right(v);
       }                 // end while
       if(is_inside(win,v->object)) {
-	    //(*result++)=v->object; lazar
 		if (CGAL::squared_distance(*v->object.first.originalPoint, a) <= 1) {
-		  (*result++)=*(v->object.first.originalPoint);
-		  return result;
+			Point_2<EK > res = *(v->object.first.originalPoint);
+			return tuple<bool, Point_2<EK>>(true, res);
 		}
 	  }
       v = right(split_node);
@@ -683,23 +663,20 @@ class Range_tree_d: public Tree_base< C_Data,  C_Window>
 	    if(T->is_anchor())
 		{
 			tuple<bool, Point_2<EK>> rez4 = (left(v))->object.second.search(a);
-			//cout << "subtree1" << endl;
 			if (std::get<0>(rez4) == true) {
-				Point_2<EK> p4 = std::get<1>(rez4);
-				(*result++) = p4;
-				return result;
+				Point_2<EK> res = std::get<1>(rez4);
+				return rez4;
 			}
 		}
 	    else
-	      T->window_query_impl_modified(win, a, result);
+	      T->window_query_impl_modified(win, a);
 	  }
 	  else
 	  {
 	    if(is_inside(win,left(v)->object)) {
-	      //(*result++)=left(v)->object; lazar
 		  if (CGAL::squared_distance(*left(v)->object.first.originalPoint, a) <= 1) {
-		    (*result++)=*(left(v)->object.first.originalPoint);
-			return result;
+			  Point_2<EK> res = *(left(v)->object.first.originalPoint);
+			  return tuple<bool, Point_2<EK>>(true, res);
 		  }
 		}
 	  }
@@ -710,14 +687,13 @@ class Range_tree_d: public Tree_base< C_Data,  C_Window>
       }//end while
       if(is_inside(win,v->object))
       {
-	//(*result++)=v->object;
          if (CGAL::squared_distance(*v->object.first.originalPoint, a) <= 1) {	
-		   (*result++)=*(v->object.first.originalPoint);
-		   return result;
+			 Point_2<EK> res = *(v->object.first.originalPoint);
+			 return tuple<bool, Point_2<EK>>(true, res);
 		 }
       }
     }
-    return result;
+	return tuple<bool, Point_2<EK>>(false, Point_2<EK>());
   }
   
   std::back_insert_iterator< std::list< C_Data> > enclosing_query( C_Window const &win, 
