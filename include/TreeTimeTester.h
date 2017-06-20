@@ -34,29 +34,27 @@ void TreeTimeTester::testSSPT()
 	CGAL::Timer cost;
 	double totalQueryTime = 0;
 	double totalConstructionTime = 0;
-	Segment_2 st(Point_2(2, 0.3), Point_2(2, 0.7));
 	for (int k = 0; k < constructionRepeats; ++k) {
 		cost.reset(); cost.start();
 		SSSPTree tree(points.begin(), points.end());
 		cost.stop();
-		cout << "SSSP tree construction finished, dt size is " << tree.getDT().number_of_vertices() << ", time: " << cost.time() << endl;
 		totalConstructionTime += cost.time();
 		size_t pointsLength = points.size();
 		cost.reset();
+		if (k < constructionRepeats - 1) continue;
 		for (int i = 0; i < algorithmRepeats; ++i) {
 			int idx = ceil(rand()*pointsLength / RAND_MAX);
 			Point_2 p = points[idx];
 			cost.start();
-			tree.createTreeFromRoot(p, st);
+			tree.createTreeFromRoot(p);
 			cost.stop();
 
 			tree.resetSSSPTreeDTVertices();
-			tree.clearSets();
 		}
 		totalQueryTime += (cost.time() / double(algorithmRepeats));
 	}
-	cout << "Average time (5 iterations) for construction of DT: " << totalConstructionTime / double(constructionRepeats) << endl;
-	cout << "Average time (5 iterations) for running 50 iterations of bfs algortithm on DT: " << totalQueryTime / double(algorithmRepeats) << endl;
+	cout << totalConstructionTime / double(constructionRepeats) << endl;
+	cout << totalQueryTime / double(constructionRepeats) << endl;
 }
 
 void TreeTimeTester::testBfs()
@@ -75,6 +73,7 @@ void TreeTimeTester::testBfs()
 		totalConstructionTime += cost.time();
 
 		cost.reset();
+		if (k < constructionRepeats - 1) continue;
 		size_t nodesLength = nodes.size();
 		for (int i = 0; i < algorithmRepeats; ++i) {
 			int idx = ceil(rand()*nodesLength / RAND_MAX);
@@ -84,11 +83,11 @@ void TreeTimeTester::testBfs()
 			cost.stop();
 			resetGraphNodes(nodes);
 		}
-		totalQueryTime += cost.time() / 50.0;
+		totalQueryTime += cost.time() / double(algorithmRepeats);
 		resetGraph(nodes);
 	}
-	cout << "Average time (5 iterations) for construction of graph G: " << totalConstructionTime / 5.0 << endl;
-	cout << "Average time (5 iterations) for running 50 iterations of bfs algortithm on G: " << totalQueryTime / 5.0 << endl;
+	cout << totalConstructionTime / double(constructionRepeats) << endl;
+	cout << totalQueryTime / double(constructionRepeats) << endl;
 }
 
 void TreeTimeTester::testBfsGrid() {
@@ -99,7 +98,7 @@ void TreeTimeTester::testBfsGrid() {
 	CGAL::Timer cost;
 	size_t nodesLength = nodes.size();
 	double testTime = 0;
-	for (int i = 0; i < 50; i++) {
+	for (int i = 0; i < algorithmRepeats; i++) {
 		int idx = ceil(rand()*nodesLength / RAND_MAX);
 		nodePointerList::iterator it = nodes.begin();
 		advance(it, idx);
@@ -111,5 +110,5 @@ void TreeTimeTester::testBfsGrid() {
 		testTime += cost.time() + queryTime;
 		resetGridGraphNodes(nodes);
 	}
-	cout << "Average time (5 iterations) for running 50 iterations of bfs algorithm on grid graph: " << testTime / 50.0 << endl;
+	cout << testTime / double(algorithmRepeats) << endl;
 }

@@ -1,11 +1,11 @@
 # a script that reads output text file that is produced by c++ program
 # and contains st segment, edges, root, and a pair of points that form a cycle
 from matplotlib import pyplot as plt
-import os
+import os, sys
 
 
 ############### data extraction ################
-textFileDir = os.getcwd() + '\\program-out.txt'
+textFileDir = os.getcwd() + sys.argv[1]
 
 filea = open(textFileDir)
 a = filea.readlines()

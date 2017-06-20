@@ -62,9 +62,9 @@ void checkNeighbours(NodePointer v, deque<NodePointer>* Q, intPair cellOffset, G
 	if (g.getCells().count(l)) {
 		nodePointerList cands = g.getCells().at(l);
 		for (auto u : cands) {
-			if (CGAL::squared_distance(u->p, v->p) <= 1 && !u->visited) {
-				u->visited = true;
-				u->dist = v->dist + 1;
+			if (CGAL::squared_distance(u->p, v->p) <= 1 && !u->p.visited) {
+				u->p.visited = true;
+				u->p.dist = v->p.dist + 1;
 				u->parent = v;
 				Q->push_back(u);
 			}
@@ -76,8 +76,8 @@ double gridQuery(GridGraph g, NodePointer r)
 {
 	CGAL::Timer cost;
 	cost.start();
-	r->dist = 0;
-	r->visited = true;
+	r->p.dist = 0;
+	r->p.visited = true;
 	Unordered_map gCells = g.getCells();
 	deque <NodePointer> Q;
 	vector<intPair> neighbourCellOffsets{ intPair(0, 0), intPair(-1, 0),
@@ -102,9 +102,9 @@ double gridQuery(GridGraph g, NodePointer r)
 				nodePointerList neighbours{};
 				if (it != gCells.end()) {
 					for (auto u : it->second) {
-						if (CGAL::squared_distance(u->p, v->p) <= 1 && !u->visited) {
-							u->visited = true;
-							u->dist = v->dist + 1;
+						if (CGAL::squared_distance(u->p, v->p) <= 1 && !u->p.visited) {
+							u->p.visited = true;
+							u->p.dist = v->p.dist + 1;
 							u->parent = v;
 							Q.push_back(u);
 							it->second.remove(u);
@@ -120,31 +120,8 @@ double gridQuery(GridGraph g, NodePointer r)
 
 void resetGridGraphNodes(nodePointerList nodes) {
 	for (auto n : nodes) {
-		n->dist = (numeric_limits<int>::max)();
-		n->visited = false;
+		n->p.dist = (numeric_limits<int>::max)();
+		n->p.visited = false;
 		n->parent = nullptr;
 	}
-}
-
-void testBfsGrid(vector<Point_2> points) {
-	nodePointerList nodes;
-	for (auto p : points) {
-		nodes.push_back(NodePointer(new GraphNode(p)));
-	}
-	CGAL::Timer cost;
-	size_t nodesLength = nodes.size();
-	double testTime = 0;
-	for (int i = 0; i < 50; i++) {
-		int idx = ceil(rand()*nodesLength / RAND_MAX);
-		nodePointerList::iterator it = nodes.begin();
-		advance(it, idx);
-		NodePointer n = *it;
-		cost.reset(); cost.start();
-		GridGraph g(nodes.begin(), nodes.end());
-		cost.stop();
-		double queryTime = gridQuery(g, n);
-		testTime += cost.time() + queryTime;
-		resetGridGraphNodes(nodes);
-	}
-	cout << "Average time (5 iterations) for running 50 iterations of bfs algorithm on grid graph: " << testTime / 50.0 << endl;
 }

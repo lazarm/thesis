@@ -103,8 +103,8 @@ public:
   virtual std::back_insert_iterator< std::vector<C_Data> >
     window_query(C_Window const &win,  std::back_insert_iterator<
 		  std::vector<C_Data> > out,vbit *dummy=0) = 0;
-  virtual std::back_insert_iterator< std::vector< Point_2<EK> > > window_query_impl_modified( 
-	C_Window const &win, Point_2<EK> a, std::back_insert_iterator< std::vector< Point_2<EK> > > result, typename rbit *dummy =0) = 0; //lazar		  
+  virtual std::tuple<bool, Point_2<EK>> window_query_impl_modified(
+	C_Window const &win, Point_2<EK> a, typename rbit *dummy =0) = 0; //lazar		  
 #ifdef carray
   virtual C_Data * window_query( C_Window const &win, 
 			        C_Data * out) = 0; 
@@ -189,9 +189,9 @@ public:
     return out;
   }
   
-  std::back_insert_iterator< std::vector< Point_2<CGAL::Cartesian<double> > > > window_query_impl_modified( 
-	C_Window const &win, Point_2<CGAL::Cartesian<double> > a, std::back_insert_iterator< std::vector< Point_2<CGAL::Cartesian<double> > > > result, typename rbit *dummy =0) {
-	  return result;
+  std::tuple<bool, Point_2<EK>> window_query_impl_modified(
+	C_Window const &win, Point_2<CGAL::Cartesian<double> > a, typename rbit *dummy =0) {
+	  return tuple<bool, Point_2<EK>>(false, Point_2<EK>());
 	}; //lazar		  
 #ifdef carray
    C_Data * window_query( C_Window const &, 

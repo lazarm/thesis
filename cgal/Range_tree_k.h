@@ -187,10 +187,9 @@ public:
     return range_tree_2->window_query(win, result);
   }
   //lazar begin
-  std::back_insert_iterator< std::vector< Point_2<EK> > > window_query_modified
-          ( Interval const &win, Point_2<EK> a,
-	    std::back_insert_iterator< std::vector< Point_2<EK> > > out){
-    return range_tree_2->window_query_impl_modified(win, a, out);
+  std::tuple<bool, Point_2<EK>> window_query_modified
+          ( Interval const &win, Point_2<EK> a){
+    return range_tree_2->window_query_impl_modified(win, a);
   }
   //lazar end
 

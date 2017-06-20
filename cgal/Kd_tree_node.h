@@ -125,6 +125,27 @@ namespace CGAL {
       return it;
     }
 
+	template <class FuzzyQueryItem>
+	tuple<bool, Point_2<EK>> tree_items_exists(const FuzzyQueryItem& q) const {
+		if (is_leaf()) {
+			Leaf_node_const_handle node =
+				static_cast<Leaf_node_const_handle>(this);
+			if (node->size()>0)
+				for (iterator i = node->begin(); i != node->end(); i++)
+				{
+					return tuple<bool, Point_2<EK>> {true, *i};
+				}
+			else return tuple<bool, Point_2<EK>> {false, Point_2<EK>(0,0)};
+		}
+		else {
+			Internal_node_const_handle node =
+				static_cast<Internal_node_const_handle>(this);
+			tuple<bool, Point_2<EK>> left = node->lower()->tree_items_exists(q);
+			if (get<0>(left)) return left;
+			return node->upper()->tree_items_exists(q);
+		}
+	}
+
      void 
     indent(int d) const
     {
@@ -170,7 +191,6 @@ namespace CGAL {
         Leaf_node_const_handle node = 
           static_cast<Leaf_node_const_handle>(this);
 		if (node->size() > 0) {
-			cout << "leaf size: " << node->size() << endl;
 			for (iterator i = node->begin(); i != node->end(); i++)
 			if (q.contains(*i))
 			{
@@ -200,8 +220,8 @@ namespace CGAL {
       return it;				
     }
 
-	template <class OutputIterator, class FuzzyQueryItem>
-	OutputIterator search_exists(OutputIterator it, const FuzzyQueryItem& q,
+	template <class FuzzyQueryItem>
+	std::tuple<bool, Point_2<EK>> search_exists(const FuzzyQueryItem& q,
 		Kd_tree_rectangle<FT, D>& b) const
 	{
 		if (is_leaf()) {
@@ -211,8 +231,7 @@ namespace CGAL {
 			for (iterator i = node->begin(); i != node->end(); i++)
 			if (q.contains(*i))
 			{
-				*it = *i; ++it;
-				break;
+				return tuple<bool, Point_2<EK>> {true, *i};
 			}
 		}
 		else {
@@ -222,24 +241,23 @@ namespace CGAL {
 			Kd_tree_rectangle<FT, D> b_upper(b);
 			b.split(b_upper, node->cutting_dimension(),
 				node->cutting_value());
-
 			if (q.outer_range_contains(b)) {
-				it = node->lower()->search_exists(it, q, b);
-			}
-			else {
-				if (q.inner_range_intersects(b))
-					it = node->lower()->search_exists(it, q, b);
+				return node->lower()->tree_items_exists(q);
 			}
 			if (q.outer_range_contains(b_upper)) {
-					it = node->upper()->search_exists(it, q, b_upper);
+				return node->upper()->tree_items_exists(q);
 			}
 			else {
-				if (q.inner_range_intersects(b_upper))
-					it = node->upper()->search_exists(it, q, b_upper);
+				if (q.inner_range_intersects(b)) {
+					tuple<bool, Point_2<EK>> res = node->lower()->search_exists(q, b);
+					if (std::get<0>(res)) return res;
+				}
+				if (q.inner_range_intersects(b_upper)) {
+					return node->upper()->search_exists(q, b_upper);
+				}
 			}
-			
 		};
-		return it;
+		return tuple<bool, Point_2<EK>> {false, Point_2<EK>(0, 0)};;
 	}
 
   };

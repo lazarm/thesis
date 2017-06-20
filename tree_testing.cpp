@@ -29,8 +29,4 @@ int main(int argc, char* argv[]) {
 		cerr << "Invalid number " << argv[3] << '\n';
 	TreeTimeTester tester(readPoints, constructions, repeats);
 	tester.test();
-	//testSSSPT(readPoints);
-	//testBfs(readPoints);
-	//testBfsGrid(readPoints);
-
 }
